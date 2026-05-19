@@ -4,10 +4,11 @@ import { UserNameVO } from "../../domain/valueObject/username.vo";
 import { UserMapper } from "../../infrastructure/mappers/user.mapper";
 import { UpdateUserUseCase } from "./updateUser.usecase";
 import { EmailVO } from "../../../../shared/valueObject/email.vo";
+import { UserOutput } from "../../domain/dtos/user.output";
 
 describe('UseCase: update user use case', () => {
     const repository = {
-        findById: async (id: string): Promise<User> => {
+        findById: async (id: number): Promise<User> => {
             return UserMapper.toDomain({
                 id: '1',
                 firstName: 'Test',
@@ -30,13 +31,13 @@ describe('UseCase: update user use case', () => {
     const updateUserUseCase = new UpdateUserUseCase(repository);
 
     const user = await updateUserUseCase.execute({
-      id: '1',
+      id: 1,
       firstName: 'John',
       lastName: 'Doe',
       email: 'update@test.com',
     });
 
-    expect(user).toBeInstanceOf(User);
+    expect(user).toBeInstanceOf(UserOutput);
     expect(user.email).toBe('update@test.com');
     expect(user.firstName).toBe('John');
     expect(user.lastName).toBe('Doe');
@@ -48,7 +49,7 @@ describe('UseCase: update user use case', () => {
     vi.spyOn(repository, 'findById').mockResolvedValue(null);
 
     await expect(updateUserUseCase.execute({
-      id: '2',
+      id: 2,
       firstName: 'John',
       lastName: 'Doe',
       email: 'update@test.com',

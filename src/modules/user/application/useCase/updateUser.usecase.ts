@@ -1,11 +1,14 @@
-import { IUserRepository } from "../../domain/repositories/user.repository";
+import type { IUserRepository } from "../../domain/repositories/user.repository";
 import { User } from "../../domain/entities/user.entity";
 import { UpdateUserDto } from "../../domain/dtos/createUser.dto";
+import { Inject } from "@nestjs/common";
+import { USER_REPOSITORY } from "../../infrastructure/repositories/user.repository";
+import { UserOutput } from "../../domain/dtos/user.output";
 
 export class UpdateUserUseCase {
-    constructor(private readonly repository: IUserRepository) {}
+    constructor(@Inject(USER_REPOSITORY) private readonly repository: IUserRepository) {}
 
-    async execute(updateUserDto: UpdateUserDto): Promise<User> {
+    async execute(updateUserDto: UpdateUserDto): Promise<UserOutput> {
         const user = await this.repository.findById(updateUserDto.id);
 
         if (!user) {
@@ -16,6 +19,6 @@ export class UpdateUserUseCase {
         user.lastName = updateUserDto.lastName;
         user.email = updateUserDto.email;
 
-        return this.repository.update(user);
+        return UserOutput.fromDomain(await this.repository.update(user));
     }
 }

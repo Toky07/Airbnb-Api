@@ -1,10 +1,16 @@
+import { Inject, Injectable } from "@nestjs/common";
 import { User } from "../../domain/entities/user.entity";
-import { IUserRepository } from "../../domain/repositories/user.repository";
+import type { IUserRepository } from "../../domain/repositories/user.repository";
+import { USER_REPOSITORY } from "../../infrastructure/repositories/user.repository";
+import { UserOutput } from "../../domain/dtos/user.output";
 
+@Injectable()
 export class ListUsersUseCase {
-    constructor(private readonly repository: IUserRepository) {}
+    constructor(@Inject(USER_REPOSITORY) private readonly repository: IUserRepository) {}
 
-    async execute(): Promise<User[]> {
-        return this.repository.findAll();
+    async execute(): Promise<UserOutput[]> {
+        const users = await this.repository.findAll();
+
+        return users.map(user => UserOutput.fromDomain(user));
     }
 }

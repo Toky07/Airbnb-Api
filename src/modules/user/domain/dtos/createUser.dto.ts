@@ -6,7 +6,7 @@ export type CreateUserDto = {
 }
 
 export type UpdateUserDto = {
-    id: string;
+    id: number;
     firstName: string;
     lastName: string;
     email: string;

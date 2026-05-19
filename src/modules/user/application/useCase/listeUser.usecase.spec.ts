@@ -3,6 +3,7 @@ import { User } from "../../domain/entities/user.entity";
 import { EmailVO } from "../../../../shared/valueObject/email.vo";
 import { IUserRepository } from "../../domain/repositories/user.repository";
 import { ListUsersUseCase } from "./listeUser.usecase";
+import { UserOutput } from "../../domain/dtos/user.output";
 
 const repository = {
     findAll: async (): Promise<User[]> => {
@@ -22,8 +23,9 @@ describe('UseCase: list users use case', () => {
     const listUsersUseCase = new ListUsersUseCase(repository);
 
     const users = await listUsersUseCase.execute();
+    
     expect(users).toBeInstanceOf(Array);
     expect(users.length).toBe(1);
-    expect(users[0]).toBeInstanceOf(User);
+    expect(users[0]).toBeInstanceOf(UserOutput);
   });
 });

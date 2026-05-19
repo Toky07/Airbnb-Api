@@ -3,7 +3,7 @@ import { User } from "../entities/user.entity";
 export interface IUserRepository {
     create(user: User): Promise<User>;
     update(user: User): Promise<User>;
-    findById(id: string): Promise<User|null>;
+    findById(id: number): Promise<User|null>;
     findAll(): Promise<User[]>;
-    delete(id: string): Promise<boolean>;
+    delete(id: number): Promise<boolean>;
 }

@@ -7,12 +7,12 @@ export class User {
         public _lastName: UserNameVO,
         public _email: EmailVO,
         public readonly password: string,
-        public _id?: string,
+        public _id?: number,
         public _createdAt?: Date,
         public _updatedAt?: Date,
     ) {}
 
-    public get id(): string|undefined {
+    public get id(): number|undefined {
         return this._id;
     }
 
@@ -30,6 +30,10 @@ export class User {
 
     public get lastName(): string {
         return this._lastName.value;
+    }
+
+    public set id(id: number) {
+        this._id = id;
     }
 
     public set firstName(firstName: string) {

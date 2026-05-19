@@ -1,8 +1,7 @@
 import { User } from "../../domain/entities/user.entity";
 import { CreateUserUseCase } from "./createuser.usecase";
 import { IUserRepository } from "../../domain/repositories/user.repository";
-import { UserNameVO } from "../../domain/valueObject/username.vo";
-import { EmailVO } from "../../../../shared/valueObject/email.vo";
+import { UserOutput } from "../../domain/dtos/user.output";
 
 const repository = {
     create: async (user: User): Promise<User> => {
@@ -20,7 +19,7 @@ describe('UseCase: create user use case', () => {
       password: 'password',
     });
 
-    expect(user).toBeInstanceOf(User);
+    expect(user).toBeInstanceOf(UserOutput);
     expect(user.email).toBe('test@test.com');
     expect(user.firstName).toBe('John');
     expect(user.lastName).toBe('Doe');
