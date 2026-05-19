@@ -1,0 +1,33 @@
+Modules principaux:
+
+Authentification
+    • inscription 
+    • connexion 
+    • OAuth Google 
+    • reset password 
+    • gestion rôles 
+Gestion utilisateur
+    • profil 
+    • avatar 
+    • vérification identité 
+    • favoris 
+Hébergement
+    • création logement 
+    • photos 
+    • équipements 
+    • prix 
+    • disponibilité 
+    • géolocalisation 
+Réservation
+    • calendrier 
+    • paiement 
+    • annulation 
+    • historique 
+Avis
+    • notation 
+    • commentaire 
+Administration
+    • dashboard 
+    • validation annonces 
+    • gestion utilisateurs 
+    • statistiques

@@ -1,0 +1,139 @@
+User
+----
+id
+firstname
+lastname
+email
+password
+phone
+avatar
+role
+createdAt
+updatedAt
+
+Relations :
+    • possède plusieurs logements 
+    • possède plusieurs réservations 
+    • possède plusieurs avis
+
+
+Property (Hotel)
+--------
+id
+name
+description
+type
+address
+city
+country
+latitude
+longitude
+checkInTime
+checkOutTime
+ownerId
+createdAt
+updatedAt
+
+Relations :
+    • appartient à un User 
+    • possède plusieurs Room 
+    • possède plusieurs Images 
+    • possède plusieurs Reservations 
+    • possède plusieurs Reviews
+
+
+Room
+----
+id
+propertyId
+name
+description
+pricePerNight
+maxGuests
+bedrooms
+bathrooms
+beds
+quantity
+size
+status
+createdAt
+updatedAt
+
+PropertyImage
+-------------
+id
+url
+propertyId
+
+RoomImage
+---------
+id
+roomId
+url
+
+Reservation
+-----------
+id
+roomId
+userId
+startDate
+endDate
+guestCount
+totalPrice
+status
+createdAt
+
+Payment
+-------
+id
+amount
+currency
+status
+provider
+transactionId
+reservationId
+createdAt
+
+Review
+------
+id
+rating
+comment
+userId
+propertyId
+createdAt
+
+Amenity (Equipement: wifi, TV, etc... Pour les hotel on a parking, restaurant, Piscine)
+-------
+id
+name
+icon
+
+PropertyAmenity
+---------------
+propertyId
+amenityId
+
+RoomAmenity
+---------------
+propertyId
+amenityId
+
+
+Relations UML simplifiees
+User
+ ├── Properties
+ └── Reservations
+
+Property
+ ├── Rooms
+ ├── PropertyImages
+ └── PropertyAmenities
+
+Room
+ ├── Reservations
+ ├── RoomImages
+ └── RoomAmenities
+
+Reservation
+ └── Payment
