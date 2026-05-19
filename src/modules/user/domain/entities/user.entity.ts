@@ -1,15 +1,15 @@
 import { UserNameVO } from "../valueObject/username.vo";
-import { EmailVO } from "src/shared/valueObject/email.vo";
+import { EmailVO } from "../../../../shared/valueObject/email.vo";
 
 export class User {
     constructor(
-        public readonly _firstName: UserNameVO,
-        public readonly _lastName: UserNameVO,
-        public readonly _email: EmailVO,
+        public _firstName: UserNameVO,
+        public _lastName: UserNameVO,
+        public _email: EmailVO,
         public readonly password: string,
-        public readonly _id?: string,
-        public readonly _createdAt?: Date,
-        public readonly _updatedAt?: Date,
+        public _id?: string,
+        public _createdAt?: Date,
+        public _updatedAt?: Date,
     ) {}
 
     public get id(): string|undefined {
@@ -30,5 +30,17 @@ export class User {
 
     public get lastName(): string {
         return this._lastName.value;
+    }
+
+    public set firstName(firstName: string) {
+        this._firstName = new UserNameVO(firstName);
+    }
+
+    public set lastName(lastName: string) {
+        this._lastName = new UserNameVO(lastName);
+    }
+
+    public set email(email: string) {
+        this._email = new EmailVO(email);
     }
 }
