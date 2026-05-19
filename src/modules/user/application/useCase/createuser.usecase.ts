@@ -6,16 +6,18 @@ import { CreateUserDto } from "../../domain/dtos/createUser.dto";
 import { UserOutput } from "../../domain/dtos/user.output";
 import { USER_REPOSITORY } from "../../infrastructure/repositories/user.repository";
 import { Inject } from "@nestjs/common/decorators/core/inject.decorator";
+import * as bcrypt from 'bcrypt';
 
 export class CreateUserUseCase {
     constructor(@Inject(USER_REPOSITORY) private readonly repository: IUserRepository) {}
 
     async execute(createUserDto: CreateUserDto): Promise<UserOutput> {
+        const password = await bcrypt.hash(createUserDto.password, 10);
         const user = new User(
             new UserNameVO(createUserDto.firstName),
             new UserNameVO(createUserDto.lastName),
             new EmailVO(createUserDto.email),
-            createUserDto.password,
+            password,
         );
         
         return UserOutput.fromDomain(await this.repository.create(user));

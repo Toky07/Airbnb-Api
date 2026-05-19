@@ -23,5 +23,5 @@ describe('UseCase: create user use case', () => {
     expect(user.email).toBe('test@test.com');
     expect(user.firstName).toBe('John');
     expect(user.lastName).toBe('Doe');
-  });
+  });      
 });

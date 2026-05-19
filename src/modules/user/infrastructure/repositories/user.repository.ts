@@ -13,9 +13,11 @@ export class UserRepository implements IUserRepository {
     constructor(@InjectRepository(UserEntity) private readonly repository: Repository<UserEntity>) {}
 
     async create(user: User): Promise<User> {
-        const data = await this.repository.save(user);
+        const data = this.repository.create(user);
+        
+        const newUser = await this.repository.save(data);
 
-        return UserMapper.toDomain(data);
+        return UserMapper.toDomain(newUser);
     }
 
     async update(user: User): Promise<User> {
