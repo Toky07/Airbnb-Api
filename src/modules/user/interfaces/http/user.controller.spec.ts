@@ -58,7 +58,7 @@ describe('Cats', () => {
     }]);
   });
 
-  it.only('/POST users', async () => {
+  it('/POST users', async () => {
     const response = await request(app.getHttpServer())
       .post('/users')
       .send({
