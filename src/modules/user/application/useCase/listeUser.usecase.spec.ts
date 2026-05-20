@@ -12,7 +12,6 @@ const repository = {
                 new UserNameVO('John'),
                 new UserNameVO('Doe'),
                 new EmailVO('john.doe@example.com'),
-                'password',
             ),
         ];
     },

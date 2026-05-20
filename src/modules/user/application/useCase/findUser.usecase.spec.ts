@@ -5,13 +5,12 @@ import { User } from "../../domain/entities/user.entity";
 import { FindUserUseCase } from "./findUser.usecase";
 
 const repository = {
-    findById: async (id: string): Promise<User> => {
+    findById: async (id: number): Promise<User|null> => {
         return new User(
             new UserNameVO('John'),
             new UserNameVO('Doe'),
             new EmailVO('john.doe@example.com'),
-            'password',
-            '1',
+            1,
         );
     }
 } as IUserRepository;
@@ -19,10 +18,10 @@ const repository = {
 describe('UseCase: find user use case', () => {
   it('should find user', async () => {
     const findUserUseCase = new FindUserUseCase(repository);
-    const user = await findUserUseCase.execute('1');
+    const user = await findUserUseCase.execute(1);
 
     expect(user).toBeInstanceOf(User);
-    expect(user.id).toBe('1');
+    expect(user.id).toBe(1);
     expect(user.email).toBe('john.doe@example.com');
     expect(user.firstName).toBe('John');
     expect(user.lastName).toBe('Doe');
@@ -33,6 +32,6 @@ describe('UseCase: find user use case', () => {
 
     vi.spyOn(repository, 'findById').mockResolvedValue(null);
 
-    await expect(findUserUseCase.execute('2')).rejects.toThrow(new Error('User not found'));
+    await expect(findUserUseCase.execute(2)).rejects.toThrow(new Error('User not found'));
   });
 });

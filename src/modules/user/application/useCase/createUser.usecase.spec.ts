@@ -16,7 +16,6 @@ describe('UseCase: create user use case', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'test@test.com',
-      password: 'password',
     });
 
     expect(user).toBeInstanceOf(UserOutput);

@@ -9,7 +9,6 @@ export class UserMapper {
             new UserNameVO(user.firstName),
             new UserNameVO(user.lastName),
             new EmailVO(user.email),
-            user.password,
             user.id,
             user.createdAt,
             user.updatedAt,
@@ -22,7 +21,6 @@ export class UserMapper {
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
-            password: user.password,
             createdAt: user._createdAt!,
             updatedAt: user._updatedAt!,
         };

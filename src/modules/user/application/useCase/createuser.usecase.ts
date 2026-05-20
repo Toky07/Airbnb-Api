@@ -12,12 +12,10 @@ export class CreateUserUseCase {
     constructor(@Inject(USER_REPOSITORY) private readonly repository: IUserRepository) {}
 
     async execute(createUserDto: CreateUserDto): Promise<UserOutput> {
-        const password = await bcrypt.hash(createUserDto.password, 10);
         const user = new User(
             new UserNameVO(createUserDto.firstName),
             new UserNameVO(createUserDto.lastName),
             new EmailVO(createUserDto.email),
-            password,
         );
         
         return UserOutput.fromDomain(await this.repository.create(user));

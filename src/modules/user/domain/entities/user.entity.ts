@@ -6,7 +6,6 @@ export class User {
         public _firstName: UserNameVO,
         public _lastName: UserNameVO,
         public _email: EmailVO,
-        public readonly password: string,
         public _id?: number,
         public _createdAt?: Date,
         public _updatedAt?: Date,

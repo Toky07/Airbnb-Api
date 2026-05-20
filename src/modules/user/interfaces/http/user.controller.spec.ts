@@ -39,7 +39,6 @@ describe('Cats', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'test@test.com',
-      password: 'password',
     };
 
     await repository.save({ ...data });
@@ -65,7 +64,6 @@ describe('Cats', () => {
         firstName: 'John',
         lastName: 'Doe',
         email: 'test@test.com',
-        password: 'password',
       })
       .expect(201);
 
@@ -85,7 +83,6 @@ describe('Cats', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'test@test.com',
-      password: 'password',
     };
 
     const user = await repository.save({ ...data });
@@ -106,7 +103,6 @@ describe('Cats', () => {
       firstName: 'Updated',
       lastName: 'Updated',
       email: 'updated@test.com',
-      password: undefined,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     });
@@ -118,7 +114,6 @@ describe('Cats', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'test@test.com',
-      password: 'password',
     };
 
     const user = await repository.save({ ...data });

@@ -14,7 +14,6 @@ describe('UseCase: update user use case', () => {
                 firstName: 'Test',
                 lastName: 'Test',
                 email: 'test@test.com',
-                password: 'password',
             });
         },
         update: async (user: User): Promise<User> => {
@@ -22,7 +21,6 @@ describe('UseCase: update user use case', () => {
                 new UserNameVO(user.firstName),
                 new UserNameVO(user.lastName),
                 new EmailVO(user.email),
-                user.password,
             );
         }
     } as IUserRepository;
