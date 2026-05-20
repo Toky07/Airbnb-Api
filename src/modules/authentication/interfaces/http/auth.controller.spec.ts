@@ -55,7 +55,7 @@ describe('Cats', () => {
     expect(await bcrypt.compare(data.password, auth?.password)).toBe(true);
   });
 
-  it.only(`/POST auth/login login with valid credentials`, async () => {
+  it(`/POST auth/login login with valid credentials`, async () => {
     const repository = dataSource.getRepository(AuthEntity);
     const data = {
       email: 'test@test.com',
@@ -72,6 +72,19 @@ describe('Cats', () => {
       .expect(200);
 
     expect(response.body).toStrictEqual({ token: expect.any(String) });
+  });
+
+  it(`/POST auth/login login with invalid credentials`, async () => {
+    const repository = dataSource.getRepository(AuthEntity);
+    const data = {
+      email: 'test@test.com',
+      password: 'password',
+    };
+    
+    const response = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send(data)
+      .expect(401);
   });
 
   afterAll(async () => {
