@@ -4,7 +4,7 @@ import { IUserRepository } from "../../domain/repositories/user.repository";
 export class FindUserUseCase {
     constructor(private readonly repository: IUserRepository) {}
 
-    async execute(id: string): Promise<User> {
+    async execute(id: number): Promise<User> {
         const user = await this.repository.findById(id);
 
         if (!user) {
