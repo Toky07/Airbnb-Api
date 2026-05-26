@@ -5,8 +5,11 @@ import type { CreateUserDto, UpdateUserDto } from "../../domain/dtos/createUser.
 import { CreateUserUseCase } from "../../application/useCase/createuser.usecase";
 import { UpdateUserUseCase } from "../../application/useCase/updateUser.usecase";
 import { DeleteUserUseCase } from "../../application/useCase/deleteUser.usecase";
+import { AuthGuard } from "../../../authentication/interfaces/guard/auth.guard";
+import { UseGuards } from "@nestjs/common";
 
 @Controller('users')
+@UseGuards(AuthGuard)
 export class UserController {
     constructor(
         private readonly listUsersUseCase: ListUsersUseCase,
