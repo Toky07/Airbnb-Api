@@ -22,7 +22,7 @@ describe('Cats', () => {
       imports: [
         TypeOrmModule.forRoot({
           type: 'sqlite',
-          database: 'test.sqlite',
+          database: ':memory:',
           entities: [UserEntity, AuthEntity],
           synchronize: true,
         }),
@@ -30,7 +30,7 @@ describe('Cats', () => {
           global: true,
           secret: '1234',
           secretOrPrivateKey: '1234',
-          signOptions: { expiresIn: '1h' },
+          signOptions: { expiresIn: '5h' },
         }),
         UserModule,
         AuthModule,
@@ -38,18 +38,9 @@ describe('Cats', () => {
     }).compile();
 
     dataSource = moduleRef.get(DataSource);
+
     app = moduleRef.createNestApplication();
     await app.init();
-  });
-
-  beforeEach(async () => {
-
-    const authRepository = dataSource.getRepository(AuthEntity);
-    const admin = await authRepository.create(new Auth(
-      new EmailVO('test@test.com'),
-      await bcrypt.hash('123456', 10),
-    ));
-    authRepository.save(admin);
 
     const login = async () => {
       const response = await request(app.getHttpServer())
@@ -62,8 +53,17 @@ describe('Cats', () => {
       return response.body.token;
     };
 
-    token = await login();
+    const authRepository = dataSource.getRepository(AuthEntity);
+    const admin = authRepository.create(new Auth(
+      new EmailVO('test@test.com'),
+      await bcrypt.hash('123456', 10),
+    ));
+    await authRepository.save(admin);
 
+    token = await login();
+  });
+
+  beforeEach(async () => {
     const repository = dataSource.getRepository(UserEntity);
     await repository.clear();
   });
@@ -91,6 +91,29 @@ describe('Cats', () => {
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
     }]);
+  });
+
+  it(`/GET users/:id`, async () => {
+    const repository = dataSource.getRepository(UserEntity);
+    const data = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'test@test.com',
+    };
+
+    const user = await repository.save({ ...data });
+
+    const response = await request(app.getHttpServer())
+      .get(`/users/${user.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    expect(response.body).toEqual({
+      id: user.id,
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'test@test.com',
+    });
   });
 
   it('/POST users', async () => {
@@ -164,7 +187,7 @@ describe('Cats', () => {
     const deletedUser = await repository.findOne({ where: { id: user.id } });
     expect(deletedUser).toBeNull();
 
-    request(app.getHttpServer())
+    await request(app.getHttpServer())
       .get(`/users/${user.id}`)
       .set('Authorization', `Bearer ${token}`)
       .expect(404);

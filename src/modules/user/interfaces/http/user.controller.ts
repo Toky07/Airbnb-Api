@@ -7,6 +7,7 @@ import { UpdateUserUseCase } from "../../application/useCase/updateUser.usecase"
 import { DeleteUserUseCase } from "../../application/useCase/deleteUser.usecase";
 import { AuthGuard } from "../../../authentication/interfaces/guard/auth.guard";
 import { UseGuards } from "@nestjs/common";
+import { FindUserUseCase } from "../../application/useCase/findUser.usecase";
 
 @Controller('users')
 @UseGuards(AuthGuard)
@@ -16,11 +17,17 @@ export class UserController {
         private readonly createUserUseCase: CreateUserUseCase,
         private readonly updateUserUseCase: UpdateUserUseCase,
         private readonly deleteUserUseCase: DeleteUserUseCase,
+        private readonly findUserUseCase: FindUserUseCase,
     ) {}
 
     @Get()
     async findAll(): Promise<UserOutput[]> {
         return this.listUsersUseCase.execute();
+    }
+
+    @Get(':id')
+    async findById(@Param('id') id: string): Promise<UserOutput> {
+        return this.findUserUseCase.execute(Number(id)) as unknown as UserOutput;
     }
 
     @Post()

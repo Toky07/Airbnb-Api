@@ -18,7 +18,7 @@ describe('Cats', () => {
       imports: [
         TypeOrmModule.forRoot({
           type: 'sqlite',
-          database: 'test.sqlite',
+          database: ':memory:',
           entities: [AuthEntity],
           synchronize: true,
         }),

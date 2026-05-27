@@ -1,16 +1,20 @@
+import { Inject, NotFoundException } from "@nestjs/common";
+import { UserOutput } from "../../domain/dtos/user.output";
 import { User } from "../../domain/entities/user.entity";
-import { IUserRepository } from "../../domain/repositories/user.repository";
+import { type IUserRepository } from "../../domain/repositories/user.repository";
+import { UserMapper } from "../../infrastructure/mappers/user.mapper";
+import { USER_REPOSITORY } from "../../infrastructure/repositories/user.repository";
 
 export class FindUserUseCase {
-    constructor(private readonly repository: IUserRepository) {}
+    constructor(@Inject(USER_REPOSITORY) private readonly repository: IUserRepository) {}
 
-    async execute(id: number): Promise<User> {
+    async execute(id: number): Promise<UserOutput> {
         const user = await this.repository.findById(id);
 
         if (!user) {
-            throw new Error('User not found');
+            throw new NotFoundException('User not found');
         }
 
-        return user;
+        return UserOutput.fromDomain(UserMapper.toDomain(user as User));
     }
 }
