@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Role } from "./role.entity";
 
 @Entity({ name: 'auth' })
 export class AuthEntity {
@@ -16,4 +17,10 @@ export class AuthEntity {
 
   @UpdateDateColumn({ nullable: true })
   updatedAt: Date;
+
+  @ManyToMany(() => Role)
+  @JoinTable({
+    name: 'auth_roles',
+  })
+  roles?: Role[] | null;
 }

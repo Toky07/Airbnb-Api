@@ -8,7 +8,10 @@ import { AuthEntity } from '../../infrastructure/entity/auth.entity';
 import * as bcrypt from 'bcrypt';
 import { EmailVO } from '../../../../shared/valueObject/email.vo';
 import { Auth } from '../../domain/entities/user.entity';
+import { Role } from '../../infrastructure/entity/role.entity';
+import { UserNameVO } from '../../../user/domain/valueObject/username.vo';
 import { RoleEntity } from '../../domain/entities/role.entity';
+import { RoleMapper } from '../../infrastructure/mappers/role.mappers';
 
 describe('Auth', () => {
   let app: INestApplication;
@@ -20,7 +23,7 @@ describe('Auth', () => {
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [AuthEntity, RoleEntity],
+          entities: [AuthEntity, Role],
           synchronize: true,
         }),
         AuthModule,
@@ -86,6 +89,30 @@ describe('Auth', () => {
       .post('/auth/login')
       .send(data)
       .expect(401);
+  });
+
+  it(`/POST auth/assign-role`, async () => {
+    const userRepository = dataSource.getRepository(AuthEntity);
+    const roleRepository = dataSource.getRepository(Role);
+    const user = await userRepository.save(
+      userRepository.create(new Auth(new EmailVO('test@example.com'), await bcrypt.hash('password', 10)))
+    );
+  
+    const role = await roleRepository.save(
+      roleRepository.create(RoleMapper.toEntity(new RoleEntity(new UserNameVO('test'))))
+    );
+    
+    const data = {
+      userId: user.id,
+      roleId: [role.id!],
+    };
+    
+    const response = await request(app.getHttpServer())
+      .post('/auth/assign-role')
+      .send(data)
+      .expect(200);
+
+    expect(response.body).toStrictEqual({ success: true });
   });
 
   afterAll(async () => {

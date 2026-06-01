@@ -17,6 +17,7 @@ import { Role } from './infrastructure/entity/role.entity';
 import { ListRolesUseCase } from './useCase/list-role.usecase';
 import { UpdateRoleUseCase } from './useCase/update-role.usecase';
 import { DeleteRoleUseCase } from './useCase/delete-role.usecase';
+import { AssignRoleUseCase } from './useCase/assign-role.usecase';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { DeleteRoleUseCase } from './useCase/delete-role.usecase';
     ListRolesUseCase,
     UpdateRoleUseCase,
     DeleteRoleUseCase,
+    AssignRoleUseCase,
     {
         provide: AUTH_REPOSITORY,
         useClass: AuthRepository,

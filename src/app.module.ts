@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './modules/authentication/auth.module';
 import { AuthEntity } from './modules/authentication/infrastructure/entity/auth.entity';
 import { UserEntity } from './modules/user/infrastructure/entities/user.entity';
+import { Role } from './modules/authentication/infrastructure/entity/role.entity';
 
 @Module({
   imports: [
@@ -11,7 +12,7 @@ import { UserEntity } from './modules/user/infrastructure/entities/user.entity';
       type: 'sqlite',
       database: 'database.sqlite',
       synchronize: true,
-      entities: [AuthEntity, UserEntity],
+      entities: [AuthEntity, UserEntity, Role],
     }),
     UserModule,
     AuthModule,

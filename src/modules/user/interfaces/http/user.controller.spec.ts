@@ -11,6 +11,8 @@ import { Auth } from '../../../authentication/domain/entities/user.entity';
 import { EmailVO } from '../../../../shared/valueObject/email.vo';
 import * as bcrypt from 'bcrypt';
 import { AuthModule } from '../../../authentication/auth.module';
+import { AuthMapper } from '../../../authentication/infrastructure/mappers/auth.mappers';
+import { Role } from '../../../authentication/infrastructure/entity/role.entity';
 
 describe('Cats', () => {
   let app: INestApplication;
@@ -23,7 +25,7 @@ describe('Cats', () => {
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [UserEntity, AuthEntity],
+          entities: [UserEntity, AuthEntity, Role],
           synchronize: true,
         }),
         JwtModule.register({
@@ -54,10 +56,13 @@ describe('Cats', () => {
     };
 
     const authRepository = dataSource.getRepository(AuthEntity);
-    const admin = authRepository.create(new Auth(
+  
+    const auth = new Auth(
       new EmailVO('test@test.com'),
       await bcrypt.hash('123456', 10),
-    ));
+    );
+    const admin = authRepository.create(AuthMapper.toEntity(auth));
+
     await authRepository.save(admin);
 
     token = await login();
