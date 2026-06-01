@@ -4,6 +4,7 @@ import { EmailVO } from "../../../../shared/valueObject/email.vo";
 import { IUserRepository } from "../../domain/repositories/user.repository";
 import { ListUsersUseCase } from "./listeUser.usecase";
 import { UserOutput } from "../../domain/dtos/user.output";
+import { PhoneNumberVO } from "../../../../shared/valueObject/phone.vo";
 
 const repository = {
     findAll: async (): Promise<User[]> => {
@@ -12,6 +13,11 @@ const repository = {
                 new UserNameVO('John'),
                 new UserNameVO('Doe'),
                 new EmailVO('john.doe@example.com'),
+                new PhoneNumberVO('+1234567890'),
+                'avatar.png',
+                1,
+                new Date(),
+                new Date(),
             ),
         ];
     },

@@ -1,11 +1,14 @@
 import { UserNameVO } from "../valueObject/username.vo";
 import { EmailVO } from "../../../../shared/valueObject/email.vo";
+import { PhoneNumberVO } from "../../../../shared/valueObject/phone.vo";
 
 export class User {
     constructor(
         public _firstName: UserNameVO,
         public _lastName: UserNameVO,
         public _email: EmailVO,
+        public _phoneNumber: PhoneNumberVO,
+        public _avatar?: string,
         public _id?: number,
         public _createdAt?: Date,
         public _updatedAt?: Date,
@@ -31,6 +34,14 @@ export class User {
         return this._lastName.value;
     }
 
+    public get phoneNumber(): string {
+        return this._phoneNumber.value;
+    }
+
+    public get avatar(): string {
+        return this._avatar || '';
+    }
+
     public set id(id: number) {
         this._id = id;
     }
@@ -45,5 +56,13 @@ export class User {
 
     public set email(email: string) {
         this._email = new EmailVO(email);
+    }
+
+    public set phoneNumber(phoneNumber: string) {
+        this._phoneNumber = new PhoneNumberVO(phoneNumber);
+    }
+
+    public set avatar(avatar: string) {
+        this._avatar = avatar;
     }
 }

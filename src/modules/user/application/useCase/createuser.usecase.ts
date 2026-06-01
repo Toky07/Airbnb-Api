@@ -6,6 +6,7 @@ import { CreateUserDto } from "../../domain/dtos/createUser.dto";
 import { UserOutput } from "../../domain/dtos/user.output";
 import { USER_REPOSITORY } from "../../infrastructure/repositories/user.repository";
 import { Inject } from "@nestjs/common/decorators/core/inject.decorator";
+import { PhoneNumberVO } from "../../../../shared/valueObject/phone.vo";
 
 export class CreateUserUseCase {
     constructor(@Inject(USER_REPOSITORY) private readonly repository: IUserRepository) {}
@@ -15,6 +16,8 @@ export class CreateUserUseCase {
             new UserNameVO(createUserDto.firstName),
             new UserNameVO(createUserDto.lastName),
             new EmailVO(createUserDto.email),
+            new PhoneNumberVO(createUserDto.phoneNumber),
+            createUserDto.avatar || '',
         );
         
         return UserOutput.fromDomain(await this.repository.create(user));

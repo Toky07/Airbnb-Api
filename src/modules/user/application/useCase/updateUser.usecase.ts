@@ -18,7 +18,9 @@ export class UpdateUserUseCase {
         user.firstName = updateUserDto.firstName;
         user.lastName = updateUserDto.lastName;
         user.email = updateUserDto.email;
-
+        user.phoneNumber = updateUserDto.phoneNumber;
+        user.avatar = updateUserDto.avatar || '';
+        
         return UserOutput.fromDomain(await this.repository.update(user));
     }
 }

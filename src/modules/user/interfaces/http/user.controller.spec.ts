@@ -79,6 +79,8 @@ describe('Cats', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'test@test.com',
+      phoneNumber: '+1234567890',
+      avatar: 'avatar.png',
     };
 
     await repository.save({ ...data });
@@ -93,6 +95,8 @@ describe('Cats', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'test@test.com',
+      phoneNumber: '+1234567890',
+      avatar: 'avatar.png',
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
     }]);
@@ -104,6 +108,8 @@ describe('Cats', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'test@test.com',
+      phoneNumber: '+1234567890',
+      avatar: 'avatar.png',
     };
 
     const user = await repository.save({ ...data });
@@ -118,6 +124,8 @@ describe('Cats', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'test@test.com',
+      phoneNumber: '+1234567890',
+      avatar: 'avatar.png',
     });
   });
 
@@ -128,6 +136,8 @@ describe('Cats', () => {
         firstName: 'John',
         lastName: 'Doe',
         email: 'test@test.com',
+        phoneNumber: '+1234567890',
+        avatar: 'avatar.png',
       })
       .set('Authorization', `Bearer ${token}`)
       .expect(201);
@@ -137,6 +147,8 @@ describe('Cats', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'test@test.com',
+      phoneNumber: '+1234567890',
+      avatar: 'avatar.png',
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
     });
@@ -148,6 +160,8 @@ describe('Cats', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'test@test.com',
+      phoneNumber: '+1234567890',
+      avatar: 'avatar.png',
     };
 
     const user = await repository.save({ ...data });
@@ -158,6 +172,8 @@ describe('Cats', () => {
         firstName: 'Updated',
         lastName: 'Updated',
         email: 'updated@test.com',
+        phoneNumber: '+1234567891',
+        avatar: 'avatar.png',
       })
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
@@ -169,6 +185,8 @@ describe('Cats', () => {
       firstName: 'Updated',
       lastName: 'Updated',
       email: 'updated@test.com',
+      phoneNumber: '+1234567891',
+      avatar: 'avatar.png',
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     });
@@ -180,6 +198,8 @@ describe('Cats', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'test@test.com',
+      phoneNumber: '+1234567890',
+      avatar: 'avatar.png',
     };
 
     const user = await repository.save({ ...data });

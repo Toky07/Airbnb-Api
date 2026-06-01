@@ -9,18 +9,22 @@ const repository = {
     }
 } as IUserRepository;
 
-describe('UseCase: create user use case', () => {
+describe.only('UseCase: create user use case', () => {
   it('should create user', async () => {
     const createUserUseCase = new CreateUserUseCase(repository);
+    
     const user = await createUserUseCase.execute({
       firstName: 'John',
       lastName: 'Doe',
       email: 'test@test.com',
+      phoneNumber: '+1234567890',
     });
+
 
     expect(user).toBeInstanceOf(UserOutput);
     expect(user.email).toBe('test@test.com');
     expect(user.firstName).toBe('John');
     expect(user.lastName).toBe('Doe');
+    expect(user.phoneNumber).toBe('+1234567890');
   });      
 });

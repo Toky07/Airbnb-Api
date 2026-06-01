@@ -14,6 +14,12 @@ export class UserEntity {
     @Column({ unique: true })
     email: string;
 
+    @Column()
+    phoneNumber: string;
+
+    @Column()
+    avatar: string;
+
     @CreateDateColumn({ nullable: true })
     createdAt: Date;
 

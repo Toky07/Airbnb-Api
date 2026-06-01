@@ -6,6 +6,8 @@ export class UserOutput {
         public readonly firstName: string,
         public readonly lastName: string,
         public readonly email: string,
+        public readonly phoneNumber: string,
+        public readonly avatar: string = '',
         public readonly createdAt: Date,
         public readonly updatedAt: Date,
     ) {}
@@ -16,6 +18,8 @@ export class UserOutput {
             user.firstName,
             user.lastName,
             user.email,
+            user.phoneNumber,
+            user.avatar || '',
             user._createdAt!,
             user._updatedAt!,
         );

@@ -5,6 +5,7 @@ import { UserMapper } from "../../infrastructure/mappers/user.mapper";
 import { UpdateUserUseCase } from "./updateUser.usecase";
 import { EmailVO } from "../../../../shared/valueObject/email.vo";
 import { UserOutput } from "../../domain/dtos/user.output";
+import { PhoneNumberVO } from "../../../../shared/valueObject/phone.vo";
 
 describe('UseCase: update user use case', () => {
     const repository = {
@@ -14,6 +15,7 @@ describe('UseCase: update user use case', () => {
                 firstName: 'Test',
                 lastName: 'Test',
                 email: 'test@test.com',
+                phoneNumber: '+1234567890',
             });
         },
         update: async (user: User): Promise<User> => {
@@ -21,6 +23,7 @@ describe('UseCase: update user use case', () => {
                 new UserNameVO(user.firstName),
                 new UserNameVO(user.lastName),
                 new EmailVO(user.email),
+                new PhoneNumberVO(user.phoneNumber),
             );
         }
     } as IUserRepository;
@@ -33,6 +36,7 @@ describe('UseCase: update user use case', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'update@test.com',
+      phoneNumber: '+1234567890',
     });
 
     expect(user).toBeInstanceOf(UserOutput);
@@ -51,6 +55,7 @@ describe('UseCase: update user use case', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'update@test.com',
+      phoneNumber: '+1234567890',
     })).rejects.toThrow(new Error('User not found'));
   });
 });
