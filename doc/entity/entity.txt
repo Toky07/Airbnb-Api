@@ -4,7 +4,6 @@ id
 firstname
 lastname
 email
-password
 phone
 avatar
 role
@@ -16,6 +15,11 @@ Relations :
     • possède plusieurs réservations 
     • possède plusieurs avis
 
+Auth:
+----
+id
+email
+password
 
 Property (Hotel)
 --------
