@@ -6,7 +6,6 @@ import { CreateUserDto } from "../../domain/dtos/createUser.dto";
 import { UserOutput } from "../../domain/dtos/user.output";
 import { USER_REPOSITORY } from "../../infrastructure/repositories/user.repository";
 import { Inject } from "@nestjs/common/decorators/core/inject.decorator";
-import * as bcrypt from 'bcrypt';
 
 export class CreateUserUseCase {
     constructor(@Inject(USER_REPOSITORY) private readonly repository: IUserRepository) {}

@@ -4,7 +4,7 @@ import type { IAuthRepository } from "../../domain/repositories/auth.repository"
 import { AuthEntity } from "../entity/auth.entity";
 import { AuthMapper } from "../mappers/auth.mappers";
 import { Auth } from "../../domain/entities/user.entity";
-import { Inject, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class AuthRepository implements IAuthRepository {

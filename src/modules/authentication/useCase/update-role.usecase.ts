@@ -1,13 +1,13 @@
 import { Inject, NotFoundException } from "@nestjs/common";
 import { type IRoleRepository, ROLE_REPOSITORY } from "../domain/repositories/role.repository";
-import { RoleEntity } from "../domain/entities/role.entity";
 import { UpdateRoleDto } from "../application/dto/update-role.dto";
 import { UserNameVO } from "../../user/domain/valueObject/username.vo";
+import { RoleOutput } from "../application/dto/role.output";
 
 export class UpdateRoleUseCase {
   constructor(@Inject(ROLE_REPOSITORY) private readonly repository: IRoleRepository) {}
 
-  async execute(updateRoleDto: UpdateRoleDto): Promise<RoleEntity> {
+  async execute(updateRoleDto: UpdateRoleDto): Promise<RoleOutput> {
     const role = await this.repository.findById(updateRoleDto.id);
     
     if (!role) {
@@ -15,6 +15,8 @@ export class UpdateRoleUseCase {
     }
     role.name = new UserNameVO(updateRoleDto.name);
 
-    return this.repository.update(role);
+    const updatedRole = await this.repository.update(role);
+    
+    return RoleOutput.fromDomain(updatedRole);
   }
 }

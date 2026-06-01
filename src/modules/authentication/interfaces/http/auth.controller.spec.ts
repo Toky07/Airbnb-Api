@@ -8,8 +8,9 @@ import { AuthEntity } from '../../infrastructure/entity/auth.entity';
 import * as bcrypt from 'bcrypt';
 import { EmailVO } from '../../../../shared/valueObject/email.vo';
 import { Auth } from '../../domain/entities/user.entity';
+import { RoleEntity } from '../../domain/entities/role.entity';
 
-describe('Cats', () => {
+describe('Auth', () => {
   let app: INestApplication;
   let dataSource: DataSource;
 
@@ -19,7 +20,7 @@ describe('Cats', () => {
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [AuthEntity],
+          entities: [AuthEntity, RoleEntity],
           synchronize: true,
         }),
         AuthModule,
