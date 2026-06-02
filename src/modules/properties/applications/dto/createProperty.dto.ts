@@ -10,4 +10,7 @@ export type CreatePropertyDto = {
     checkInTime: string;
     checkOutTime: string;
     ownerId: number;
+    createdAt?: Date;
+    updatedAt?: Date;
+    id?: number;
 }

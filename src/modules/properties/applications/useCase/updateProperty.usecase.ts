@@ -1,9 +1,11 @@
 import { PropertyOutput } from "../dto/property.outup";
-import { IPropertyRepository } from "../../domain/repositories/property.repository";
+import type { IPropertyRepository } from "../../domain/repositories/property.repository";
 import { CreatePropertyDto } from "../dto/createProperty.dto";
+import { Inject } from "@nestjs/common";
+import { PROPERTY_REPOSITORY } from "../../infrastructure/repositories/property.repository";
 
 export class UpdatePropertyUseCase {
-    constructor(private readonly repository: IPropertyRepository) {}
+    constructor(@Inject(PROPERTY_REPOSITORY) private readonly repository: IPropertyRepository) {}
 
     async execute(id: number, updatePropertyDto: CreatePropertyDto): Promise<PropertyOutput> {
         const property = await this.repository.findById(id);

@@ -1,10 +1,12 @@
 import { CreatePropertyDto } from "../dto/createProperty.dto";
-import { IPropertyRepository } from "../../domain/repositories/property.repository";
+import type { IPropertyRepository } from "../../domain/repositories/property.repository";
 import { Property } from "../../domain/entities/property.entity";
 import { PropertyOutput } from "../dto/property.outup";
+import { PROPERTY_REPOSITORY } from "../../infrastructure/repositories/property.repository";
+import { Inject } from "@nestjs/common";
 
 export class CreatePropertyUseCase {
-    constructor(private readonly repository: IPropertyRepository) {}
+    constructor(@Inject(PROPERTY_REPOSITORY) private readonly repository: IPropertyRepository) {}
 
     async execute(createPropertyDto: CreatePropertyDto): Promise<PropertyOutput> {
         const property = new Property(createPropertyDto);

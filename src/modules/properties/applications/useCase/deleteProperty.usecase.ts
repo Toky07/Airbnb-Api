@@ -1,7 +1,9 @@
-import { IPropertyRepository } from "../../domain/repositories/property.repository";
+import { Inject } from "@nestjs/common";
+import type { IPropertyRepository } from "../../domain/repositories/property.repository";
+import { PROPERTY_REPOSITORY } from "../../infrastructure/repositories/property.repository";
 
 export class DeletePropertyUseCase {
-    constructor(private readonly repository: IPropertyRepository) {}
+    constructor(@Inject(PROPERTY_REPOSITORY) private readonly repository: IPropertyRepository) {}
 
     async execute(id: number): Promise<boolean> {
         const property = await this.repository.findById(id);
