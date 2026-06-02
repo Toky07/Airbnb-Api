@@ -1,4 +1,12 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { RoomEntity } from "../../../rooms/infrastructure/entities/room.entity";
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from "typeorm";
 
 @Entity({ name: 'properties' })
 export class PropertyEntity {
@@ -34,6 +42,9 @@ export class PropertyEntity {
 
     @Column()
     ownerId: number;
+
+    @OneToMany(() => RoomEntity, (room) => room.property)
+    rooms: RoomEntity[];
 
     @CreateDateColumn()
     createdAt: Date;

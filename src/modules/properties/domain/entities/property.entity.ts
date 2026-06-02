@@ -1,9 +1,9 @@
 import { CreatePropertyDto } from "../../applications/dto/createProperty.dto";
+import { Room } from "../../../rooms/domain/entities/room.entity";
 
 export class Property {
     public name: string;
     public description: string;
-    public type: string;
     public address: string;
     public city: string;
     public country: string;
@@ -12,6 +12,7 @@ export class Property {
     public checkInTime: string;
     public checkOutTime: string;
     public ownerId: number;
+    public rooms: Room[];
     public id?: number;
     public createdAt?: Date;
     public updatedAt?: Date;
@@ -19,7 +20,6 @@ export class Property {
     constructor({
         name,
         description,
-        type,
         address,
         city,
         country,
@@ -29,12 +29,12 @@ export class Property {
         checkOutTime,
         ownerId,
         id,
+        rooms,
         createdAt,
         updatedAt,
-    }: CreatePropertyDto & { id?: number, createdAt?: Date, updatedAt?: Date }) {
+    }: CreatePropertyDto & { id?: number, createdAt?: Date, updatedAt?: Date, rooms?: Room[] }) {
         this.name = name;
         this.description = description;
-        this.type = type;
         this.address = address;
         this.city = city;
         this.country = country;
@@ -43,6 +43,7 @@ export class Property {
         this.checkInTime = checkInTime;
         this.checkOutTime = checkOutTime;
         this.ownerId = ownerId;
+        this.rooms = rooms || [];
         this.id = id;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;

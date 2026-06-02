@@ -15,6 +15,7 @@ import { RoomsModule } from './modules/rooms/room.module';
       type: 'sqlite',
       database: 'database.sqlite',
       synchronize: true,
+      autoLoadEntities: true,
       entities: [AuthEntity, UserEntity, Role, PropertyEntity],
     }),
     UserModule,

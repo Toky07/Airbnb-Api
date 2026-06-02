@@ -11,7 +11,10 @@ export class PropertyRepository implements IPropertyRepository {
     constructor(@InjectRepository(PropertyEntity) private readonly repository: Repository<PropertyEntity>) {}
 
     async findAll(): Promise<Property[]> {
-        const properties = await this.repository.find();
+        const properties = await this.repository.find({
+            relations: ['rooms'],
+        });
+        
         return properties.map(property => PropertyMapper.toDomain(property));
     }
 

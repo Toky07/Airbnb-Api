@@ -3,6 +3,7 @@ import { Room } from "../../domain/entities/room.entity";
 import { RoomOutput } from "../dto/room.output";
 import { CreateRoomDto } from "../dto/createRoom.dto";
 import { UpdateRoomUseCase } from "./updateRoom.usecase";
+import { Property } from "../../../properties/domain/entities/property.entity";
 
 const repository = {
     findById: async (id: number): Promise<RoomOutput|null> => {
@@ -35,7 +36,19 @@ describe('UseCase: update room use case', () => {
             quantity: 2,
             size: 2,
             status: 'available',
-            propertyId: 1,
+            property: new Property({
+                name: 'Room 2',
+                description: 'Room 2 description',
+                type: 'Room 2 type',
+                address: 'Room 2 address',
+                city: 'Room 2 city',
+                country: 'Room 2 country',
+                latitude: 0,
+                longitude: 0,
+                checkInTime: 'Room 2 checkInTime',
+                checkOutTime: 'Room 2 checkOutTime',
+                ownerId: 1,
+            }),
         }
 
         const updatedRoom = await updateRoomUseCase.execute(1,{

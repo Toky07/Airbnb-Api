@@ -14,7 +14,7 @@ export class RoomMapper {
             quantity: room.quantity,
             size: room.size,
             status: room.status,
-            propertyId: room.propertyId,
+            property: room.property,
             createdAt: room.createdAt,
             updatedAt: room.updatedAt,
             id: room.id,
@@ -33,7 +33,6 @@ export class RoomMapper {
             quantity: room.quantity,
             size: room.size,
             status: room.status,
-            propertyId: room.propertyId,
         } as RoomEntity;
     }
 }

@@ -1,3 +1,5 @@
+import { Property } from "src/modules/properties/domain/entities/property.entity";
+
 export type CreateRoomDto = {
     name: string;
     description: string;
@@ -9,7 +11,7 @@ export type CreateRoomDto = {
     quantity: number;
     size: number;
     status: string;
-    propertyId: number;
+    property: Property;
     id?: number;
     createdAt?: Date;
     updatedAt?: Date;

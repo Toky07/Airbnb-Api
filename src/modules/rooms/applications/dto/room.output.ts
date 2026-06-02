@@ -1,3 +1,4 @@
+import { Property } from "src/modules/properties/domain/entities/property.entity";
 import { Room } from "../../domain/entities/room.entity";
 
 export class RoomOutput {
@@ -13,7 +14,7 @@ export class RoomOutput {
         public readonly quantity: number,
         public readonly size: number,
         public readonly status: string,
-        public readonly propertyId: number,
+        public readonly property: Property,
         public readonly createdAt: Date,
         public readonly updatedAt: Date,
     ) {}
@@ -31,7 +32,7 @@ export class RoomOutput {
             room.quantity,
             room.size,
             room.status,
-            room.propertyId,
+            room.property,
             room.createdAt!,
             room.updatedAt!,
         );

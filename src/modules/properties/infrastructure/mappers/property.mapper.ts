@@ -1,5 +1,8 @@
+import { Room } from "src/modules/rooms/domain/entities/room.entity";
 import { CreatePropertyDto } from "../../applications/dto/createProperty.dto";
 import { Property } from "../../domain/entities/property.entity";
+import { RoomMapper } from "../../../rooms/infrastructure/mappers/room.mapper";
+import { RoomEntity } from "../../../rooms/infrastructure/entities/room.entity";
 
 export class PropertyMapper {
     static toDomain(property: any): Property {
@@ -17,7 +20,8 @@ export class PropertyMapper {
             createdAt: property.createdAt,
             updatedAt: property.updatedAt,
             id: property.id,
-        } as CreatePropertyDto);
+            rooms: property.rooms?.map((r: RoomEntity) => RoomMapper.toDomain(r)) || [],
+        } as CreatePropertyDto & { id?: number | undefined; createdAt?: Date | undefined; updatedAt?: Date | undefined; rooms?: Room[] | undefined; });
     }
 
     static toEntity(property: Property): any {

@@ -6,12 +6,25 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { RoomEntity } from '../../infrastructure/entities/room.entity';
-import { Room } from '../../domain/entities/room.entity';
+import { PropertyEntity } from '../../../properties/infrastructure/entities/property-entity.entity';
 
 describe('Cats', () => {
   let app: INestApplication;
   let dataSource: DataSource;
   let token: string;
+
+  const defaultProperty = {
+    name: 'Test Property',
+    description: 'Test Description',
+    address: 'Test Address',
+    city: 'Test City',
+    country: 'Test Country',
+    latitude: 0,
+    longitude: 0,
+    checkInTime: 'Test CheckInTime',
+    checkOutTime: 'Test CheckOutTime',
+    ownerId: 1,
+  } as const;
 
   const defaultRoom = {
     name: 'Test Room',
@@ -24,7 +37,6 @@ describe('Cats', () => {
     quantity: 1,
     size: 1,
     status: 'available',
-    propertyId: 1,
   } as const;
 
   beforeAll(async () => {
@@ -33,7 +45,7 @@ describe('Cats', () => {
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [RoomEntity],
+          entities: [RoomEntity, PropertyEntity],
           synchronize: true,
         }),
         JwtModule.register({
@@ -54,8 +66,9 @@ describe('Cats', () => {
 
   it(`/GET rooms`, async () => {
     const repository = dataSource.getRepository(RoomEntity);
+    const property = await dataSource.getRepository(PropertyEntity).save({ ...defaultProperty });
 
-    await repository.save({ ...defaultRoom });
+    await repository.save({ ...defaultRoom, propertyId: property.id });
 
     const response = await request(app.getHttpServer())
       .get('/rooms')
@@ -104,6 +117,7 @@ describe('Cats', () => {
 
   it('/PUT rooms/:id', async () => {
     const repository = dataSource.getRepository(RoomEntity);
+    const property = await dataSource.getRepository(PropertyEntity).save({ ...defaultProperty });
     const updatedData = {
         name: 'Updated Room',
         description: 'Updated Description',
@@ -115,10 +129,9 @@ describe('Cats', () => {
         quantity: 2,
         size: 2,
         status: 'available',
-        propertyId: 1,
     };
 
-    const room = await repository.save({ ...defaultRoom });
+    const room = await repository.save({ ...defaultRoom, propertyId: property.id });
 
     await request(app.getHttpServer())
       .put(`/rooms/${room.id}`)

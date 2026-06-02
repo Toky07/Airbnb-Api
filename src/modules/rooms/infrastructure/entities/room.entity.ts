@@ -1,4 +1,13 @@
-import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { PropertyEntity } from "../../../properties/infrastructure/entities/property-entity.entity";
+import {
+    PrimaryGeneratedColumn,
+    Column,
+    Entity,
+    CreateDateColumn,
+    UpdateDateColumn,
+    JoinColumn,
+    ManyToOne,
+} from "typeorm";
 
 @Entity({ name: 'rooms' })
 export class RoomEntity {
@@ -35,8 +44,9 @@ export class RoomEntity {
     @Column()
     status: string;
 
-    @Column()
-    propertyId: number;
+    @ManyToOne(() => PropertyEntity, (property) => property.rooms)
+    @JoinColumn({ name: 'propertyId' })
+    property: PropertyEntity;
 
     @CreateDateColumn()
     createdAt: Date;

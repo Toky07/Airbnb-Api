@@ -6,11 +6,25 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { PropertyEntity } from '../../infrastructure/entities/property-entity.entity';
+import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
 
 describe('Cats', () => {
   let app: INestApplication;
   let dataSource: DataSource;
   let token: string;
+
+  const room = {
+    name: 'Test Room',
+    description: 'Test Description',
+    pricePerNight: 100,
+    maxGuests: 2,
+    bedrooms: 1,
+    bathrooms: 1,
+    beds: 2,
+    quantity: 1,
+    size: 100,
+    status: 'Test Status',
+  } as const;
 
   const defaultProperty = {
     name: 'Test Property',
@@ -31,7 +45,7 @@ describe('Cats', () => {
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [PropertyEntity],
+          entities: [PropertyEntity, RoomEntity],
           synchronize: true,
         }),
         JwtModule.register({
@@ -52,8 +66,9 @@ describe('Cats', () => {
 
   it(`/GET properties`, async () => {
     const repository = dataSource.getRepository(PropertyEntity);
+    const property = await repository.save({ ...defaultProperty });
 
-    await repository.save({ ...defaultProperty });
+    await dataSource.getRepository(RoomEntity).save({ ...room, property });
 
     const response = await request(app.getHttpServer())
       .get('/properties')
@@ -63,6 +78,14 @@ describe('Cats', () => {
     expect(response.body).toEqual([{
       id: expect.any(Number),
       ...defaultProperty,
+      rooms: [
+        {
+          ...room,
+          id: expect.any(Number),
+          createdAt: expect.any(String),
+          updatedAt: expect.any(String),
+        }
+      ],
       ownerId: expect.any(Number),
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
@@ -81,6 +104,7 @@ describe('Cats', () => {
     expect(response.body).toEqual({
       id: property.id,
       ...defaultProperty,
+      rooms: [],
       ownerId: expect.any(Number),
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
@@ -93,10 +117,11 @@ describe('Cats', () => {
       .send({...defaultProperty})
       .set('Authorization', `Bearer ${token}`)
       .expect(201);
-
+    
     expect(response.body).toEqual({
       id: expect.any(Number),
       ...defaultProperty,
+      rooms: [],
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
     });

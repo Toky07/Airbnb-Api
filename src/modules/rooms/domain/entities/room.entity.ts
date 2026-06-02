@@ -1,3 +1,5 @@
+import { Property } from "src/modules/properties/domain/entities/property.entity";
+
 export class Room {
     public name: string;
     public description: string;
@@ -9,7 +11,7 @@ export class Room {
     public quantity: number;
     public size: number;
     public status: string;
-    public propertyId: number;
+    public property: Property;
     public createdAt?: Date;
     public updatedAt?: Date;
     public id?: number;
@@ -25,7 +27,7 @@ export class Room {
         quantity,
         size,
         status,
-        propertyId,
+        property,
         createdAt,
         updatedAt,
         id,
@@ -40,7 +42,7 @@ export class Room {
         quantity: number;
         size: number;
         status: string;
-        propertyId: number;
+        property: Property;
         createdAt?: Date;
         updatedAt?: Date;
         id?: number;
@@ -55,7 +57,7 @@ export class Room {
         this.quantity = quantity;
         this.size = size;
         this.status = status;
-        this.propertyId = propertyId;
+        this.property = property;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.id = id;
