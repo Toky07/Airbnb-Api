@@ -9,7 +9,7 @@ const repository = {
             id: 1,
             name: 'Test Property',
             description: 'Test Description',
-            type: 'Test Type',
+            rooms: [],
             address: 'Test Address',
             city: 'Test City',
             country: 'Test Country',
@@ -31,7 +31,6 @@ describe('UpdatePropertyUseCase', () => {
         const result = await updatePropertyUseCase.execute(1, {
             name: 'Test Property',
             description: 'Test Description',
-            type: 'Test Type',
             address: 'Test Address',
             city: 'Test City',
             country: 'Test Country',
@@ -45,7 +44,6 @@ describe('UpdatePropertyUseCase', () => {
         expect(result).toBeInstanceOf(PropertyOutput);
         expect(result.name).toBe('Test Property');
         expect(result.description).toBe('Test Description');
-        expect(result.type).toBe('Test Type');
         expect(result.address).toBe('Test Address');
         expect(result.city).toBe('Test City');
         expect(result.country).toBe('Test Country');

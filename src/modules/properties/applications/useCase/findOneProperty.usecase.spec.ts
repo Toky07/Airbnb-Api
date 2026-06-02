@@ -9,7 +9,6 @@ const repository = {
             id: 1,
             name: 'Test Property',
             description: 'Test Description',
-            type: 'Test Type',
             address: 'Test Address',
             city: 'Test City',
             country: 'Test Country',
@@ -18,6 +17,7 @@ const repository = {
             checkInTime: 'Test CheckInTime',
             checkOutTime: 'Test CheckOutTime',
             ownerId: 1,
+            rooms: [],
             createdAt: new Date(),
             updatedAt: new Date(),
         };

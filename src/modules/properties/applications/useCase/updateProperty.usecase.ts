@@ -15,7 +15,6 @@ export class UpdatePropertyUseCase {
 
         property.name = updatePropertyDto.name;
         property.description = updatePropertyDto.description;
-        property.type = updatePropertyDto.type;
         property.address = updatePropertyDto.address;
         property.city = updatePropertyDto.city;
         property.country = updatePropertyDto.country;

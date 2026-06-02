@@ -15,7 +15,6 @@ describe('CreatePropertyUseCase', () => {
         const result = await createPropertyUseCase.execute({
             name: 'Test Property',
             description: 'Test Description',
-            type: 'Test Type',
             address: 'Test Address',
             city: 'Test City',
             country: 'Test Country',
@@ -29,7 +28,6 @@ describe('CreatePropertyUseCase', () => {
         expect(result).toBeInstanceOf(PropertyOutput);
         expect(result.name).toBe('Test Property');
         expect(result.description).toBe('Test Description');
-        expect(result.type).toBe('Test Type');
         expect(result.address).toBe('Test Address');
         expect(result.city).toBe('Test City');
         expect(result.country).toBe('Test Country');

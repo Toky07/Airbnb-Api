@@ -9,7 +9,6 @@ describe('ListPropertyUseCase', () => {
                 id: 1,
                 name: 'Test Property',
                 description: 'Test Description',
-                type: 'Test Type',
                 address: 'Test Address',
                 city: 'Test City',
                 country: 'Test Country',
@@ -17,6 +16,7 @@ describe('ListPropertyUseCase', () => {
                 longitude: 0,
                 checkInTime: 'Test CheckInTime',
                 checkOutTime: 'Test CheckOutTime',
+                rooms: [],
                 ownerId: 1,
                 createdAt: new Date(),
                 updatedAt: new Date(),
@@ -32,7 +32,6 @@ describe('ListPropertyUseCase', () => {
         expect(result[0].id).toBe(1);
         expect(result[0].name).toBe('Test Property');
         expect(result[0].description).toBe('Test Description');
-        expect(result[0].type).toBe('Test Type');
         expect(result[0].address).toBe('Test Address');
         expect(result[0].city).toBe('Test City');
         expect(result[0].country).toBe('Test Country');
