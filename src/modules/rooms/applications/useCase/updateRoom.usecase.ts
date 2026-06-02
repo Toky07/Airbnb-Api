@@ -3,11 +3,23 @@ import { ROOM_REPOSITORY } from "../../domain/repositories/room.repository";
 import { RoomOutput } from "../dto/room.output";
 import type { IRoomRepository } from "../../domain/repositories/room.repository";
 import { CreateRoomDto } from "../dto/createRoom.dto";
+import { ENTITY_TYPE } from "../../../media/constant";
+import { SaveEntityMediasUseCase } from "../../../media/applications/useCase/saveEntityMedias.usecase";
+import { RoomMediaPresenter } from "../presenters/room-media.presenter";
+import type { UploadFile } from "../../../media/types/upload-file";
 
 export class UpdateRoomUseCase {
-    constructor(@Inject(ROOM_REPOSITORY) private readonly repository: IRoomRepository) {}
+    constructor(
+        @Inject(ROOM_REPOSITORY) private readonly repository: IRoomRepository,
+        private readonly saveEntityMedias: SaveEntityMediasUseCase,
+        private readonly presenter: RoomMediaPresenter,
+    ) {}
 
-    async execute(id: number, updateRoomDto: CreateRoomDto): Promise<RoomOutput> {
+    async execute(
+        id: number,
+        updateRoomDto: CreateRoomDto,
+        images?: UploadFile[],
+    ): Promise<RoomOutput> {
         const room = await this.repository.findById(id);
 
         if (!room) {
@@ -28,6 +40,14 @@ export class UpdateRoomUseCase {
 
         const updatedRoom = await this.repository.update(room);
 
-        return RoomOutput.fromDomain(updatedRoom);
+        if (images?.length) {
+            await this.saveEntityMedias.execute(
+                ENTITY_TYPE.ROOM,
+                updatedRoom.id!,
+                images,
+            );
+        }
+
+        return this.presenter.toOutput(updatedRoom);
     }
 }

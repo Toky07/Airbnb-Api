@@ -17,9 +17,10 @@ export class RoomOutput {
         public readonly property: Property,
         public readonly createdAt: Date,
         public readonly updatedAt: Date,
+        public readonly images: string[],
     ) {}
 
-    public static fromDomain(room: Room): RoomOutput {
+    public static fromDomain(room: Room, images: string[] = []): RoomOutput {
         return new RoomOutput(
             room.id!,
             room.name,
@@ -35,6 +36,7 @@ export class RoomOutput {
             room.property,
             room.createdAt!,
             room.updatedAt!,
+            images,
         );
     }
 }

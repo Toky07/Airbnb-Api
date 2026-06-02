@@ -8,6 +8,7 @@ import { Role } from './modules/authentication/infrastructure/entity/role.entity
 import { PropertiesModule } from './modules/properties/properties.module';
 import { PropertyEntity } from './modules/properties/infrastructure/entities/property-entity.entity';
 import { RoomsModule } from './modules/rooms/room.module';
+import { MediaOrmEntity } from './modules/media/infrastructure/entities/media-orm.entity';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { RoomsModule } from './modules/rooms/room.module';
       database: 'database.sqlite',
       synchronize: true,
       autoLoadEntities: true,
-      entities: [AuthEntity, UserEntity, Role, PropertyEntity],
+      entities: [AuthEntity, UserEntity, Role, PropertyEntity, MediaOrmEntity],
     }),
     UserModule,
     AuthModule,

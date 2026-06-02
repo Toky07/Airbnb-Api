@@ -2,6 +2,7 @@ import { Property } from "../../domain/entities/property.entity";
 import { IPropertyRepository } from "../../domain/repositories/property.repository";
 import { PropertyOutput } from "../dto/property.outup";
 import { FindOnePropertyUseCase } from "./findOneProperty.usecase";
+import { mockPropertyMediaPresenter } from "./test-helpers/property-usecase.mocks";
 
 const repository = {
     findById: async (id: number): Promise<Property|null> => {
@@ -26,14 +27,20 @@ const repository = {
 
 describe('FindOnePropertyUseCase', () => {
     it('should find a property', async () => {
-        const findOnePropertyUseCase = new FindOnePropertyUseCase(repository);
+        const findOnePropertyUseCase = new FindOnePropertyUseCase(
+            repository,
+            mockPropertyMediaPresenter,
+        );
         const result = await findOnePropertyUseCase.execute(1);
         expect(result).toBeInstanceOf(PropertyOutput);
     });
 
     it('should throw an error if the property is not found', async () => {
         vi.spyOn(repository, 'findById').mockResolvedValue(null);
-        const findOnePropertyUseCase = new FindOnePropertyUseCase(repository);
+        const findOnePropertyUseCase = new FindOnePropertyUseCase(
+            repository,
+            mockPropertyMediaPresenter,
+        );
         await expect(findOnePropertyUseCase.execute(2)).rejects.toThrow('Property not found');
         expect(repository.findById).toHaveBeenCalledWith(2);
     });

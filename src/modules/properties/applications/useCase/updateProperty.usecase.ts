@@ -3,11 +3,23 @@ import type { IPropertyRepository } from "../../domain/repositories/property.rep
 import { CreatePropertyDto } from "../dto/createProperty.dto";
 import { Inject } from "@nestjs/common";
 import { PROPERTY_REPOSITORY } from "../../infrastructure/repositories/property.repository";
+import { ENTITY_TYPE } from "../../../media/constant";
+import { SaveEntityMediasUseCase } from "../../../media/applications/useCase/saveEntityMedias.usecase";
+import { PropertyMediaPresenter } from "../presenters/property-media.presenter";
+import type { UploadFile } from "../../../media/types/upload-file";
 
 export class UpdatePropertyUseCase {
-    constructor(@Inject(PROPERTY_REPOSITORY) private readonly repository: IPropertyRepository) {}
+    constructor(
+        @Inject(PROPERTY_REPOSITORY) private readonly repository: IPropertyRepository,
+        private readonly saveEntityMedias: SaveEntityMediasUseCase,
+        private readonly presenter: PropertyMediaPresenter,
+    ) {}
 
-    async execute(id: number, updatePropertyDto: CreatePropertyDto): Promise<PropertyOutput> {
+    async execute(
+        id: number,
+        updatePropertyDto: CreatePropertyDto,
+        image?: UploadFile,
+    ): Promise<PropertyOutput> {
         const property = await this.repository.findById(id);
         if (!property) {
             throw new Error('Property not found');
@@ -25,6 +37,15 @@ export class UpdatePropertyUseCase {
         property.ownerId = updatePropertyDto.ownerId;
 
         const updatedProperty = await this.repository.update(property);
-        return PropertyOutput.fromDomain(updatedProperty);
+
+        if (image) {
+            await this.saveEntityMedias.execute(
+                ENTITY_TYPE.PROPERTY,
+                updatedProperty.id!,
+                [image],
+            );
+        }
+
+        return this.presenter.toOutput(updatedProperty);
     }
 }

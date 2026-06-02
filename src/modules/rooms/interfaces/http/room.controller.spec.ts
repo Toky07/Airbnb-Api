@@ -7,8 +7,10 @@ import { DataSource } from 'typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { RoomEntity } from '../../infrastructure/entities/room.entity';
 import { PropertyEntity } from '../../../properties/infrastructure/entities/property-entity.entity';
+import { MediaOrmEntity } from '../../../media/infrastructure/entities/media-orm.entity';
+import { rm } from 'fs/promises';
 
-describe('Cats', () => {
+describe('RoomController', () => {
   let app: INestApplication;
   let dataSource: DataSource;
   let token: string;
@@ -45,7 +47,7 @@ describe('Cats', () => {
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [RoomEntity, PropertyEntity],
+          entities: [RoomEntity, PropertyEntity, MediaOrmEntity],
           synchronize: true,
         }),
         JwtModule.register({
@@ -78,6 +80,7 @@ describe('Cats', () => {
     expect(response.body).toEqual([{
       id: expect.any(Number),
       ...defaultRoom,
+      images: [],
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
     }]);
@@ -95,6 +98,7 @@ describe('Cats', () => {
     expect(response.body).toEqual({
       id: room.id,
       ...defaultRoom,
+      images: [],
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
     });
@@ -110,9 +114,37 @@ describe('Cats', () => {
     expect(response.body).toEqual({
       id: expect.any(Number),
       ...defaultRoom,
+      images: [],
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
     });
+  });
+
+  it('/POST rooms with images', async () => {
+    const property = await dataSource
+      .getRepository(PropertyEntity)
+      .save({ ...defaultProperty });
+
+    const response = await request(app.getHttpServer())
+      .post('/rooms')
+      .field('name', defaultRoom.name)
+      .field('description', defaultRoom.description)
+      .field('pricePerNight', String(defaultRoom.pricePerNight))
+      .field('maxGuests', String(defaultRoom.maxGuests))
+      .field('bedrooms', String(defaultRoom.bedrooms))
+      .field('bathrooms', String(defaultRoom.bathrooms))
+      .field('beds', String(defaultRoom.beds))
+      .field('quantity', String(defaultRoom.quantity))
+      .field('size', String(defaultRoom.size))
+      .field('status', defaultRoom.status)
+      .field('property', JSON.stringify({ id: property.id }))
+      .attach('images', Buffer.from('room-1'), 'room1.jpg')
+      .attach('images', Buffer.from('room-2'), 'room2.jpg')
+      .expect(201);
+
+    expect(response.body.images).toHaveLength(2);
+    expect(response.body.images[0]).toMatch(/uploads\/rooms\/\d+\/.+\.jpg$/);
+    expect(response.body.images[1]).toMatch(/uploads\/rooms\/\d+\/.+\.jpg$/);
   });
 
   it('/PUT rooms/:id', async () => {
@@ -165,5 +197,6 @@ describe('Cats', () => {
 
   afterAll(async () => {
     await app.close();
+    await rm('uploads', { recursive: true, force: true });
   });
 });

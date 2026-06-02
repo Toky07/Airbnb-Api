@@ -1,10 +1,24 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Post,
+    Put,
+    UploadedFiles,
+    UseInterceptors,
+} from "@nestjs/common";
+import { FilesInterceptor } from "@nestjs/platform-express";
+import { ENTITY_MEDIA_LIMITS, ENTITY_TYPE } from "../../../media/constant";
 import { ListRoomsUseCase } from "../../applications/useCase/listRoom.usecase";
 import { FindOneRoomUseCase } from "../../applications/useCase/findOneRoom.usecase";
 import type { CreateRoomDto } from "../../applications/dto/createRoom.dto";
 import { CreateRoomUseCase } from "../../applications/useCase/createRoom.usecase";
 import { UpdateRoomUseCase } from "../../applications/useCase/updateRoom.usecase";
 import { DeleteRoomUseCase } from "../../applications/useCase/deleteRoom.usecase";
+import { parseRoomBody } from "./parse-room-body";
+import type { UploadFile } from "../../../media/types/upload-file";
 
 @Controller('rooms')
 export class RoomController {
@@ -27,13 +41,30 @@ export class RoomController {
     }
 
     @Post()
-    async create(@Body() createRoomDto: CreateRoomDto) {
-        return this.createRoomUseCase.execute(createRoomDto);
+    @UseInterceptors(FilesInterceptor('images', ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM]))
+    async create(
+        @Body() body: CreateRoomDto | Record<string, unknown>,
+        @UploadedFiles() images?: UploadFile[],
+    ) {
+        const createRoomDto =
+            typeof (body as CreateRoomDto).pricePerNight === 'number'
+                ? (body as CreateRoomDto)
+                : parseRoomBody(body as Record<string, unknown>);
+        return this.createRoomUseCase.execute(createRoomDto, images);
     }
 
     @Put(':id')
-    async update(@Param('id') id: number, @Body() updateRoomDto: CreateRoomDto) {
-        return this.updateRoomUseCase.execute(id, updateRoomDto);
+    @UseInterceptors(FilesInterceptor('images', ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM]))
+    async update(
+        @Param('id') id: number,
+        @Body() body: CreateRoomDto | Record<string, unknown>,
+        @UploadedFiles() images?: UploadFile[],
+    ) {
+        const updateRoomDto =
+            typeof (body as CreateRoomDto).pricePerNight === 'number'
+                ? (body as CreateRoomDto)
+                : parseRoomBody(body as Record<string, unknown>);
+        return this.updateRoomUseCase.execute(id, updateRoomDto, images);
     }
 
     @Delete(':id')

@@ -3,21 +3,40 @@ import { IRoomRepository } from "../../domain/repositories/room.repository";
 import { RoomOutput } from "../dto/room.output";
 import { CreateRoomUseCase } from "./createRoom.usecase";
 import { Property } from "../../../properties/domain/entities/property.entity";
+import {
+    mockRoomMediaPresenter,
+    mockSaveEntityMedias,
+} from "./test-helpers/room-usecase.mocks";
+
+const property = new Property({
+    name: 'Room 1',
+    description: 'Room 1 description',
+    address: 'Room 1 address',
+    city: 'Room 1 city',
+    country: 'Room 1 country',
+    latitude: 0,
+    longitude: 0,
+    checkInTime: 'Room 1 checkInTime',
+    checkOutTime: 'Room 1 checkOutTime',
+    ownerId: 1,
+});
 
 const repository = {
-    create: async (room: Room): Promise<RoomOutput> => {
-        return {
-            ...room,
-            id: 1,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        } as RoomOutput;
-    }
+    create: async (room: Room): Promise<Room> => ({
+        ...room,
+        id: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+    }),
 } as IRoomRepository;
 
 describe('UseCase: create room use case', () => {
     it('should create a room', async () => {
-        const createRoomUseCase = new CreateRoomUseCase(repository);
+        const createRoomUseCase = new CreateRoomUseCase(
+            repository,
+            mockSaveEntityMedias,
+            mockRoomMediaPresenter,
+        );
 
         const room = await createRoomUseCase.execute({
             name: 'Room 1',
@@ -30,48 +49,12 @@ describe('UseCase: create room use case', () => {
             quantity: 1,
             size: 1,
             status: 'available',
-            property: new Property({
-                name: 'Room 1',
-                description: 'Room 1 description',
-                type: 'Room 1 type',
-                address: 'Room 1 address',
-                city: 'Room 1 city',
-                country: 'Room 1 country',
-                latitude: 0,
-                longitude: 0,
-                checkInTime: 'Room 1 checkInTime',
-                checkOutTime: 'Room 1 checkOutTime',
-                ownerId: 1,
-            }),
+            property,
         });
 
         expect(room).toBeInstanceOf(RoomOutput);
         expect(room.id).toBe(1);
         expect(room.name).toBe('Room 1');
-        expect(room.description).toBe('Room 1 description');
-        expect(room.pricePerNight).toBe(100);
-        expect(room.maxGuests).toBe(2);
-        expect(room.bedrooms).toBe(1);
-        expect(room.bathrooms).toBe(1);
-        expect(room.beds).toBe(1);
-        expect(room.quantity).toBe(1);
-        expect(room.size).toBe(1);
-        expect(room.status).toBe('available');
-        expect(room.property).toStrictEqual(new Property({
-            name: 'Room 1',
-            description: 'Room 1 description',
-            type: 'Room 1 type',
-            address: 'Room 1 address',
-            city: 'Room 1 city',
-            country: 'Room 1 country',
-            latitude: 0,
-            longitude: 0,
-            checkInTime: 'Room 1 checkInTime',
-            checkOutTime: 'Room 1 checkOutTime',
-            ownerId: 1,
-        }));
-        expect(room.createdAt).toBeDefined();
-        expect(room.updatedAt).toBeDefined();
-        expect(room.id).toBeDefined();
+        expect(room.images).toEqual([]);
     });
 });

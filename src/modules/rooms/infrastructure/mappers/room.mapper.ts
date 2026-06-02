@@ -33,6 +33,9 @@ export class RoomMapper {
             quantity: room.quantity,
             size: room.size,
             status: room.status,
+            ...(room.property?.id
+                ? { property: { id: room.property.id } as RoomEntity['property'] }
+                : {}),
         } as RoomEntity;
     }
 }

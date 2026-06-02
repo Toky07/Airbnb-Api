@@ -7,8 +7,10 @@ import { DataSource } from 'typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { PropertyEntity } from '../../infrastructure/entities/property-entity.entity';
 import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
+import { MediaOrmEntity } from '../../../media/infrastructure/entities/media-orm.entity';
+import { rm } from 'fs/promises';
 
-describe('Cats', () => {
+describe('PropertyController', () => {
   let app: INestApplication;
   let dataSource: DataSource;
   let token: string;
@@ -45,7 +47,7 @@ describe('Cats', () => {
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [PropertyEntity, RoomEntity],
+          entities: [PropertyEntity, RoomEntity, MediaOrmEntity],
           synchronize: true,
         }),
         JwtModule.register({
@@ -78,10 +80,12 @@ describe('Cats', () => {
     expect(response.body).toEqual([{
       id: expect.any(Number),
       ...defaultProperty,
+      image: null,
       rooms: [
         {
           ...room,
           id: expect.any(Number),
+          images: [],
           createdAt: expect.any(String),
           updatedAt: expect.any(String),
         }
@@ -104,6 +108,7 @@ describe('Cats', () => {
     expect(response.body).toEqual({
       id: property.id,
       ...defaultProperty,
+      image: null,
       rooms: [],
       ownerId: expect.any(Number),
       createdAt: expect.any(String),
@@ -117,14 +122,35 @@ describe('Cats', () => {
       .send({...defaultProperty})
       .set('Authorization', `Bearer ${token}`)
       .expect(201);
-    
+
     expect(response.body).toEqual({
       id: expect.any(Number),
       ...defaultProperty,
+      image: null,
       rooms: [],
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
     });
+  });
+
+  it('/POST properties with image', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/properties')
+      .field('name', defaultProperty.name)
+      .field('description', defaultProperty.description)
+      .field('address', defaultProperty.address)
+      .field('city', defaultProperty.city)
+      .field('country', defaultProperty.country)
+      .field('latitude', String(defaultProperty.latitude))
+      .field('longitude', String(defaultProperty.longitude))
+      .field('checkInTime', defaultProperty.checkInTime)
+      .field('checkOutTime', defaultProperty.checkOutTime)
+      .field('ownerId', String(defaultProperty.ownerId))
+      .attach('image', Buffer.from('property-image'), 'property.jpg')
+      .expect(201);
+
+    expect(response.body.image).toMatch(/uploads\/properties\/\d+\/.+\.jpg$/);
+    expect(response.body.name).toBe(defaultProperty.name);
   });
 
   it('/PUT properties/:id', async () => {
@@ -162,6 +188,29 @@ describe('Cats', () => {
     });
   });
 
+  it('/PUT properties/:id with image', async () => {
+    const repository = dataSource.getRepository(PropertyEntity);
+    const property = await repository.save({ ...defaultProperty });
+
+    const response = await request(app.getHttpServer())
+      .put(`/properties/${property.id}`)
+      .field('name', 'Updated With Image')
+      .field('description', defaultProperty.description)
+      .field('address', defaultProperty.address)
+      .field('city', defaultProperty.city)
+      .field('country', defaultProperty.country)
+      .field('latitude', String(defaultProperty.latitude))
+      .field('longitude', String(defaultProperty.longitude))
+      .field('checkInTime', defaultProperty.checkInTime)
+      .field('checkOutTime', defaultProperty.checkOutTime)
+      .field('ownerId', String(defaultProperty.ownerId))
+      .attach('image', Buffer.from('updated-image'), 'updated.jpg')
+      .expect(200);
+
+    expect(response.body.image).toMatch(/uploads\/properties\/\d+\/.+\.jpg$/);
+    expect(response.body.name).toBe('Updated With Image');
+  });
+
   it('/DELETE properties/:id', async () => {
     const repository = dataSource.getRepository(PropertyEntity);
 
@@ -178,5 +227,6 @@ describe('Cats', () => {
 
   afterAll(async () => {
     await app.close();
+    await rm('uploads', { recursive: true, force: true });
   });
 });

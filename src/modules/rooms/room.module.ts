@@ -9,9 +9,11 @@ import { FindOneRoomUseCase } from './applications/useCase/findOneRoom.usecase';
 import { CreateRoomUseCase } from './applications/useCase/createRoom.usecase';
 import { UpdateRoomUseCase } from './applications/useCase/updateRoom.usecase';
 import { DeleteRoomUseCase } from './applications/useCase/deleteRoom.usecase';
+import { MediaModule } from '../media/media.module';
+import { RoomMediaPresenter } from './applications/presenters/room-media.presenter';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([RoomEntity])],
+  imports: [TypeOrmModule.forFeature([RoomEntity]), MediaModule],
   controllers: [RoomController],
   providers: [
     ListRoomsUseCase,
@@ -19,6 +21,7 @@ import { DeleteRoomUseCase } from './applications/useCase/deleteRoom.usecase';
     CreateRoomUseCase,
     UpdateRoomUseCase,
     DeleteRoomUseCase,
+    RoomMediaPresenter,
     {
       provide: ROOM_REPOSITORY,
       useClass: RoomRepository,

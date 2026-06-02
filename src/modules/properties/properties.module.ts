@@ -8,9 +8,11 @@ import { FindOnePropertyUseCase } from './applications/useCase/findOneProperty.u
 import { CreatePropertyUseCase } from './applications/useCase/createProperty.usecase';
 import { UpdatePropertyUseCase } from './applications/useCase/updateProperty.usecase';
 import { DeletePropertyUseCase } from './applications/useCase/deleteProperty.usecase';
+import { MediaModule } from '../media/media.module';
+import { PropertyMediaPresenter } from './applications/presenters/property-media.presenter';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PropertyEntity])],
+  imports: [TypeOrmModule.forFeature([PropertyEntity]), MediaModule],
   controllers: [PropertyController],
   providers: [
     ListPropertyUseCase,
@@ -18,6 +20,7 @@ import { DeletePropertyUseCase } from './applications/useCase/deleteProperty.use
     CreatePropertyUseCase,
     UpdatePropertyUseCase,
     DeletePropertyUseCase,
+    PropertyMediaPresenter,
     {
       provide: PROPERTY_REPOSITORY,
       useClass: PropertyRepository,

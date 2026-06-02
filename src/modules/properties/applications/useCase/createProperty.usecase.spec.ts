@@ -2,16 +2,24 @@ import { Property } from "../../domain/entities/property.entity";
 import { IPropertyRepository } from "../../domain/repositories/property.repository";
 import { CreatePropertyUseCase } from "./createProperty.usecase";
 import { PropertyOutput } from "../dto/property.outup";
+import {
+    mockPropertyMediaPresenter,
+    mockSaveEntityMedias,
+} from './test-helpers/property-usecase.mocks';
 
 const repository = {
     create: async (property: Property): Promise<Property> => {
-        return property;
+        return { ...property, id: 1, createdAt: new Date(), updatedAt: new Date() };
     }
 } as IPropertyRepository;
 
 describe('CreatePropertyUseCase', () => {
     it('should create a property', async () => {
-        const createPropertyUseCase = new CreatePropertyUseCase(repository);
+        const createPropertyUseCase = new CreatePropertyUseCase(
+            repository,
+            mockSaveEntityMedias,
+            mockPropertyMediaPresenter,
+        );
         const result = await createPropertyUseCase.execute({
             name: 'Test Property',
             description: 'Test Description',
@@ -36,5 +44,6 @@ describe('CreatePropertyUseCase', () => {
         expect(result.checkInTime).toBe('Test CheckInTime');
         expect(result.checkOutTime).toBe('Test CheckOutTime');
         expect(result.ownerId).toBe(1);
+        expect(result.image).toBeNull();
     });
 });

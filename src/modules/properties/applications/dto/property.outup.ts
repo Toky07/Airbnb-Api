@@ -18,9 +18,14 @@ export class PropertyOutput {
         public rooms: RoomOutput[],
         public createdAt: Date,
         public updatedAt: Date,
+        public image: string | null,
     ) {}
 
-    static fromDomain(property: Property): PropertyOutput {
+    static fromDomain(
+        property: Property,
+        image: string | null = null,
+        rooms?: RoomOutput[],
+    ): PropertyOutput {
         return new PropertyOutput(
             property.id!,
             property.name,
@@ -33,9 +38,11 @@ export class PropertyOutput {
             property.checkInTime,
             property.checkOutTime,
             property.ownerId,
-            property.rooms.map((r: Room) => RoomOutput.fromDomain(r)),
+            rooms ??
+                property.rooms.map((r: Room) => RoomOutput.fromDomain(r)),
             property.createdAt!,
             property.updatedAt!,
+            image,
         );
     }
 }

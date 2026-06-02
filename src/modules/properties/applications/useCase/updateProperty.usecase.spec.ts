@@ -2,6 +2,10 @@ import { Property } from "../../domain/entities/property.entity";
 import { IPropertyRepository } from "../../domain/repositories/property.repository";
 import { PropertyOutput } from "../dto/property.outup";
 import { UpdatePropertyUseCase } from "./updateProperty.usecase";
+import {
+    mockPropertyMediaPresenter,
+    mockSaveEntityMedias,
+} from "./test-helpers/property-usecase.mocks";
 
 const repository = {
     findById: async (id: number): Promise<Property|null> => {
@@ -27,7 +31,11 @@ const repository = {
 
 describe('UpdatePropertyUseCase', () => {
     it('should update a property', async () => {
-        const updatePropertyUseCase = new UpdatePropertyUseCase(repository);
+        const updatePropertyUseCase = new UpdatePropertyUseCase(
+            repository,
+            mockSaveEntityMedias,
+            mockPropertyMediaPresenter,
+        );
         const result = await updatePropertyUseCase.execute(1, {
             name: 'Test Property',
             description: 'Test Description',
@@ -47,5 +55,6 @@ describe('UpdatePropertyUseCase', () => {
         expect(result.address).toBe('Test Address');
         expect(result.city).toBe('Test City');
         expect(result.country).toBe('Test Country');
+        expect(result.image).toBeNull();
     });
 });

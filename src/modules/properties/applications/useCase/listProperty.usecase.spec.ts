@@ -1,6 +1,7 @@
 import { Property } from "../../domain/entities/property.entity";
 import { ListPropertyUseCase } from "./listProperty.usecase";
 import { IPropertyRepository } from "../../domain/repositories/property.repository";
+import { mockPropertyMediaPresenter } from "./test-helpers/property-usecase.mocks";
 
 describe('ListPropertyUseCase', () => {
     const repository = {
@@ -25,9 +26,12 @@ describe('ListPropertyUseCase', () => {
     } as IPropertyRepository;
 
     it('should list properties', async () => {
-        const listPropertyUseCase = new ListPropertyUseCase(repository);
+        const listPropertyUseCase = new ListPropertyUseCase(
+            repository,
+            mockPropertyMediaPresenter,
+        );
         const result = await listPropertyUseCase.execute();
-    
+
         expect(result).toHaveLength(1);
         expect(result[0].id).toBe(1);
         expect(result[0].name).toBe('Test Property');
@@ -42,5 +46,6 @@ describe('ListPropertyUseCase', () => {
         expect(result[0].ownerId).toBe(1);
         expect(result[0].createdAt).toBeInstanceOf(Date);
         expect(result[0].updatedAt).toBeInstanceOf(Date);
+        expect(result[0].image).toBeNull();
     });
 });

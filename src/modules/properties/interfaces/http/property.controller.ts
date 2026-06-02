@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Post,
+    Put,
+    UploadedFile,
+    UseInterceptors,
+} from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
 import { ListPropertyUseCase } from "../../applications/useCase/listProperty.usecase";
 import { PropertyOutput } from "../../applications/dto/property.outup";
 import { FindOnePropertyUseCase } from "../../applications/useCase/findOneProperty.usecase";
@@ -6,12 +17,14 @@ import type { CreatePropertyDto } from "../../applications/dto/createProperty.dt
 import { CreatePropertyUseCase } from "../../applications/useCase/createProperty.usecase";
 import { UpdatePropertyUseCase } from "../../applications/useCase/updateProperty.usecase";
 import { DeletePropertyUseCase } from "../../applications/useCase/deleteProperty.usecase";
+import { parsePropertyBody } from "./parse-property-body";
+import type { UploadFile } from "../../../media/types/upload-file";
 
 @Controller('properties')
 export class PropertyController {
     constructor(
         private readonly listePropertyUseCase: ListPropertyUseCase,
-        private readonly findPropertyUseCase: FindOnePropertyUseCase, 
+        private readonly findPropertyUseCase: FindOnePropertyUseCase,
         private readonly createPropertyUseCase: CreatePropertyUseCase,
         private readonly updatePropertyUseCase: UpdatePropertyUseCase,
         private readonly deletePropertyUseCase: DeletePropertyUseCase,
@@ -28,13 +41,30 @@ export class PropertyController {
     }
 
     @Post()
-    create(@Body() createPropertyDto: CreatePropertyDto): Promise<PropertyOutput> {
-        return this.createPropertyUseCase.execute(createPropertyDto);
+    @UseInterceptors(FileInterceptor('image'))
+    create(
+        @Body() body: CreatePropertyDto | Record<string, unknown>,
+        @UploadedFile() image?: UploadFile,
+    ): Promise<PropertyOutput> {
+        const createPropertyDto =
+            typeof (body as CreatePropertyDto).latitude === 'number'
+                ? (body as CreatePropertyDto)
+                : parsePropertyBody(body as Record<string, unknown>);
+        return this.createPropertyUseCase.execute(createPropertyDto, image);
     }
 
     @Put(':id')
-    update(@Param('id') id: number, @Body() updatePropertyDto: CreatePropertyDto): Promise<PropertyOutput> {
-        return this.updatePropertyUseCase.execute(id, updatePropertyDto);
+    @UseInterceptors(FileInterceptor('image'))
+    update(
+        @Param('id') id: number,
+        @Body() body: CreatePropertyDto | Record<string, unknown>,
+        @UploadedFile() image?: UploadFile,
+    ): Promise<PropertyOutput> {
+        const updatePropertyDto =
+            typeof (body as CreatePropertyDto).latitude === 'number'
+                ? (body as CreatePropertyDto)
+                : parsePropertyBody(body as Record<string, unknown>);
+        return this.updatePropertyUseCase.execute(id, updatePropertyDto, image);
     }
 
     @Delete(':id')
