@@ -28,6 +28,19 @@ describe('LocalStorageService', () => {
     expect(content.toString()).toBe('test-image');
   });
 
+  it('should save a user avatar under uploads/users', async () => {
+    const file = {
+      buffer: Buffer.from('user-avatar'),
+      originalname: 'avatar.jpg',
+      mimetype: 'image/jpeg',
+    } as UploadFile;
+
+    const relativePath = await service.save(file, ENTITY_TYPE.USER, 7);
+
+    expect(relativePath).toContain('uploads/users/7/');
+    expect(relativePath).toMatch(/\.jpg$/);
+  });
+
   it('should delete a saved file', async () => {
     await mkdir(testDir, { recursive: true });
     const relativePath = join('uploads', 'properties', '99999', 'to-delete.jpg');

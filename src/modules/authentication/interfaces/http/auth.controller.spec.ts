@@ -40,7 +40,7 @@ describe('Auth', () => {
     await repository.clear();
   });
 
-  it(`/POST auth/create`, async () => {
+  it(`/POST auth/register`, async () => {
     const repository = dataSource.getRepository(AuthEntity);
     const data = {
         email: 'test@test.com',
@@ -48,7 +48,7 @@ describe('Auth', () => {
       };
     
     const response = await request(app.getHttpServer())
-      .post('/auth/create')
+      .post('/auth/register')
       .send(data)
       .expect(201);
 

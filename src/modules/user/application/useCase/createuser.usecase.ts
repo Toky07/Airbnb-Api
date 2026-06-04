@@ -7,19 +7,38 @@ import { UserOutput } from "../../domain/dtos/user.output";
 import { USER_REPOSITORY } from "../../infrastructure/repositories/user.repository";
 import { Inject } from "@nestjs/common/decorators/core/inject.decorator";
 import { PhoneNumberVO } from "../../../../shared/valueObject/phone.vo";
+import type { UploadFile } from "../../../media/types/upload-file";
+import { SaveUserAvatarUseCase } from "./saveUserAvatar.usecase";
 
 export class CreateUserUseCase {
-    constructor(@Inject(USER_REPOSITORY) private readonly repository: IUserRepository) {}
+    constructor(
+        @Inject(USER_REPOSITORY) private readonly repository: IUserRepository,
+        private readonly saveUserAvatar: SaveUserAvatarUseCase,
+    ) {}
 
-    async execute(createUserDto: CreateUserDto): Promise<UserOutput> {
+    async execute(
+        createUserDto: CreateUserDto,
+        avatarFile?: UploadFile,
+    ): Promise<UserOutput> {
         const user = new User(
             new UserNameVO(createUserDto.firstName),
             new UserNameVO(createUserDto.lastName),
             new EmailVO(createUserDto.email),
             new PhoneNumberVO(createUserDto.phoneNumber),
-            createUserDto.avatar || '',
+            '',
         );
-        
-        return UserOutput.fromDomain(await this.repository.create(user));
+
+        const created = await this.repository.create(user);
+        const avatar = await this.saveUserAvatar.resolve(created.id!, '', {
+            file: avatarFile,
+            avatarFromDto: createUserDto.avatar,
+        });
+
+        if (avatar !== created.avatar) {
+            created.avatar = avatar;
+            return UserOutput.fromDomain(await this.repository.update(created));
+        }
+
+        return UserOutput.fromDomain(created);
     }
 }

@@ -13,8 +13,10 @@ import * as bcrypt from 'bcrypt';
 import { AuthModule } from '../../../authentication/auth.module';
 import { AuthMapper } from '../../../authentication/infrastructure/mappers/auth.mappers';
 import { Role } from '../../../authentication/infrastructure/entity/role.entity';
+import { MediaOrmEntity } from '../../../media/infrastructure/entities/media-orm.entity';
+import { rm } from 'fs/promises';
 
-describe('Cats', () => {
+describe('UserController', () => {
   let app: INestApplication;
   let dataSource: DataSource;
   let token: string;
@@ -25,7 +27,7 @@ describe('Cats', () => {
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [UserEntity, AuthEntity, Role],
+          entities: [UserEntity, AuthEntity, Role, MediaOrmEntity],
           synchronize: true,
         }),
         JwtModule.register({
@@ -154,6 +156,40 @@ describe('Cats', () => {
     });
   });
 
+  it('/POST users with avatar file', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/users')
+      .field('firstName', 'Jane')
+      .field('lastName', 'Doe')
+      .field('email', 'jane@test.com')
+      .field('phoneNumber', '+1234567890')
+      .attach('avatar', Buffer.from('user-avatar'), 'avatar.jpg')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(201);
+
+    expect(response.body.avatar).toMatch(/uploads\/users\/\d+\/.+\.jpg$/);
+    expect(response.body.firstName).toBe('Jane');
+  });
+
+  it('/POST users with avatar data URL', async () => {
+    const buffer = Buffer.from('data-url-avatar');
+    const dataUrl = `data:image/png;base64,${buffer.toString('base64')}`;
+
+    const response = await request(app.getHttpServer())
+      .post('/users')
+      .send({
+        firstName: 'Alex',
+        lastName: 'Smith',
+        email: 'alex@test.com',
+        phoneNumber: '+1234567891',
+        avatar: dataUrl,
+      })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(201);
+
+    expect(response.body.avatar).toMatch(/uploads\/users\/\d+\/.+\.png$/);
+  });
+
   it('/PUT users/:id', async () => {
     const repository = dataSource.getRepository(UserEntity);
     const data = {
@@ -192,6 +228,29 @@ describe('Cats', () => {
     });
   });
 
+  it('/PUT users/:id with avatar file', async () => {
+    const repository = dataSource.getRepository(UserEntity);
+    const user = await repository.save({
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'test@test.com',
+      phoneNumber: '+1234567890',
+      avatar: '',
+    });
+
+    const response = await request(app.getHttpServer())
+      .put(`/users/${user.id}`)
+      .field('firstName', 'John')
+      .field('lastName', 'Doe')
+      .field('email', 'test@test.com')
+      .field('phoneNumber', '+1234567890')
+      .attach('avatar', Buffer.from('updated-avatar'), 'updated.jpg')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    expect(response.body.avatar).toMatch(/uploads\/users\/\d+\/.+\.jpg$/);
+  });
+
   it('/DELETE users/:id', async () => {
     const repository = dataSource.getRepository(UserEntity);
     const data = {
@@ -220,5 +279,6 @@ describe('Cats', () => {
 
   afterAll(async () => {
     await app.close();
+    await rm('uploads', { recursive: true, force: true });
   });
 });

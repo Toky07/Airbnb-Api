@@ -11,7 +11,7 @@ export class AuthController {
     private readonly assignRoleUseCase: AssignRoleUseCase,
   ) {}
 
-  @Post('create')
+  @Post('register')
   async create(@Body() createCredentialsDto: { email: string, password: string }): Promise<{ success: boolean }> {
     const response = await this.createCredentialsUseCase.execute(createCredentialsDto);
     if (response) {

@@ -20,7 +20,7 @@ const repository = {
     }
 } as IUserRepository;
 
-describe.only('UseCase: find user use case', () => {
+describe('UseCase: find user use case', () => {
   it('should find user', async () => {
     const findUserUseCase = new FindUserUseCase(repository);
     const user = await findUserUseCase.execute(1);

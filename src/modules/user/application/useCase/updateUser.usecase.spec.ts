@@ -6,6 +6,12 @@ import { UpdateUserUseCase } from "./updateUser.usecase";
 import { EmailVO } from "../../../../shared/valueObject/email.vo";
 import { UserOutput } from "../../domain/dtos/user.output";
 import { PhoneNumberVO } from "../../../../shared/valueObject/phone.vo";
+import { SaveUserAvatarUseCase } from "./saveUserAvatar.usecase";
+
+const saveUserAvatar = {
+    resolve: async (_userId, current) => current,
+    deleteStored: async () => undefined,
+} as SaveUserAvatarUseCase;
 
 describe('UseCase: update user use case', () => {
     const repository = {
@@ -16,6 +22,7 @@ describe('UseCase: update user use case', () => {
                 lastName: 'Test',
                 email: 'test@test.com',
                 phoneNumber: '+1234567890',
+                avatar: 'uploads/users/1/old.jpg',
             });
         },
         update: async (user: User): Promise<User> => {
@@ -24,12 +31,13 @@ describe('UseCase: update user use case', () => {
                 new UserNameVO(user.lastName),
                 new EmailVO(user.email),
                 new PhoneNumberVO(user.phoneNumber),
+                user.avatar,
             );
         }
     } as IUserRepository;
 
   it('should update user', async () => {
-    const updateUserUseCase = new UpdateUserUseCase(repository);
+    const updateUserUseCase = new UpdateUserUseCase(repository, saveUserAvatar);
 
     const user = await updateUserUseCase.execute({
       id: 1,
@@ -46,7 +54,7 @@ describe('UseCase: update user use case', () => {
   });
 
   it ('should throw an error if the user is not found', async () => {
-    const updateUserUseCase = new UpdateUserUseCase(repository);
+    const updateUserUseCase = new UpdateUserUseCase(repository, saveUserAvatar);
 
     vi.spyOn(repository, 'findById').mockResolvedValue(null);
 

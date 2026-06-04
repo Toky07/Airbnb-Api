@@ -33,6 +33,7 @@ import {
     GetMediasByEntityUseCase,
     DeleteMediasByEntityUseCase,
     SaveEntityMediasUseCase,
+    LOCAL_STORAGE_SERVICE,
   ],
 })
 export class MediaModule {}
