@@ -2,6 +2,8 @@ import { UserNameVO } from '../valueObject/username.vo';
 import { EmailVO } from '../../../../shared/valueObject/email.vo';
 import { PhoneNumberVO } from '../../../../shared/valueObject/phone.vo';
 import type { UserRoleSummary } from '../dtos/user.output';
+import type { AccountStatus } from '../../../account-activation/domain/constants/account-status.constant';
+import { ACCOUNT_STATUS } from '../../../account-activation/domain/constants/account-status.constant';
 
 export class User {
   constructor(
@@ -16,6 +18,7 @@ export class User {
     public _authId?: number | null,
     public roles: UserRoleSummary[] = [],
     public authLinked = false,
+    public status: AccountStatus = ACCOUNT_STATUS.PENDING,
   ) {}
 
   public get id(): number | undefined {

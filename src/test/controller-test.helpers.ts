@@ -1,6 +1,7 @@
 import type { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import type { DataSource } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 import { SUPERADMIN_ROLE_SLUG } from '../modules/authentication/domain/constants/permissions.constant';
 import { AuthEntity } from '../modules/authentication/infrastructure/entity/auth.entity';
 import { PermissionEntity } from '../modules/authentication/infrastructure/entity/permission.entity';
@@ -12,6 +13,8 @@ import { PropertyEntity } from '../modules/properties/infrastructure/entities/pr
 import { RoomTypeEntity } from '../modules/rooms/infrastructure/entities/room-type.entity';
 import { RoomEntity } from '../modules/rooms/infrastructure/entities/room.entity';
 import { UserEntity } from '../modules/user/infrastructure/entities/user.entity';
+import { ACCOUNT_STATUS } from '../modules/account-activation/domain/constants/account-status.constant';
+import { PasswordSetupTokenOrmEntity } from '../modules/account-activation/infrastructure/entities/password-setup-token.orm-entity';
 
 export type RegisterPayload = {
   email: string;
@@ -34,6 +37,7 @@ export const AUTH_TEST_ENTITIES = [
   Role,
   PermissionEntity,
   UserEntity,
+  PasswordSetupTokenOrmEntity,
 ] as const;
 
 export const DOMAIN_TEST_ENTITIES = [
@@ -68,12 +72,46 @@ export async function assignSuperAdminRole(
   await authRepo.save(auth);
 }
 
+export async function activateAuthAccountForTests(
+  dataSource: DataSource,
+  email: string,
+  password: string,
+): Promise<void> {
+  const authRepo = dataSource.getRepository(AuthEntity);
+  const userRepo = dataSource.getRepository(UserEntity);
+  const normalizedEmail = email.trim().toLowerCase();
+  const auth = await authRepo.findOne({ where: { email: normalizedEmail } });
+
+  if (!auth?.id) {
+    return;
+  }
+
+  await authRepo.update(auth.id, {
+    password: await bcrypt.hash(password, 10),
+    status: ACCOUNT_STATUS.ACTIVE,
+  });
+
+  await userRepo.update({ email: normalizedEmail }, { status: ACCOUNT_STATUS.ACTIVE });
+}
+
 export async function registerAndLoginAsSuperAdmin(
   app: INestApplication,
   dataSource: DataSource,
   payload: RegisterPayload = DEFAULT_REGISTER,
 ): Promise<string> {
-  await request(app.getHttpServer()).post('/auth/register').send(payload).expect(201);
+  process.env.MAIL_TRANSPORT = process.env.MAIL_TRANSPORT ?? 'console';
+
+  await request(app.getHttpServer())
+    .post('/auth/register')
+    .send({
+      email: payload.email,
+      firstName: payload.firstName,
+      lastName: payload.lastName,
+      phoneNumber: payload.phoneNumber,
+    })
+    .expect(201);
+
+  await activateAuthAccountForTests(dataSource, payload.email, payload.password);
   await assignSuperAdminRole(dataSource, payload.email);
 
   const login = await request(app.getHttpServer())

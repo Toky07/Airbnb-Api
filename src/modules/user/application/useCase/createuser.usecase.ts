@@ -5,16 +5,20 @@ import { EmailVO } from "../../../../shared/valueObject/email.vo";
 import { CreateUserDto } from "../../domain/dtos/createUser.dto";
 import { UserOutput } from "../../domain/dtos/user.output";
 import { USER_REPOSITORY } from "../../infrastructure/repositories/user.repository";
-import { Inject } from "@nestjs/common/decorators/core/inject.decorator";
+import { Inject, Injectable } from '@nestjs/common';
 import { PhoneNumberVO } from "../../../../shared/valueObject/phone.vo";
 import type { UploadFile } from "../../../media/types/upload-file";
 import { SaveUserAvatarUseCase } from "./saveUserAvatar.usecase";
 import { validateUserFields } from "../validation/validate-user-fields";
+import { ACCOUNT_STATUS } from "../../../account-activation/domain/constants/account-status.constant";
+import { SendAccountInvitationUseCase } from "../../../account-activation/application/useCase/send-account-invitation.usecase";
 
+@Injectable()
 export class CreateUserUseCase {
     constructor(
         @Inject(USER_REPOSITORY) private readonly repository: IUserRepository,
         private readonly saveUserAvatar: SaveUserAvatarUseCase,
+        private readonly sendAccountInvitation: SendAccountInvitationUseCase,
     ) {}
 
     async execute(
@@ -29,6 +33,13 @@ export class CreateUserUseCase {
             new EmailVO(createUserDto.email),
             new PhoneNumberVO(createUserDto.phoneNumber),
             '',
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            [],
+            false,
+            ACCOUNT_STATUS.PENDING,
         );
 
         const created = await this.repository.create(user);
@@ -37,11 +48,17 @@ export class CreateUserUseCase {
             avatarFromDto: createUserDto.avatar,
         });
 
+        let saved = created;
         if (avatar !== created.avatar) {
             created.avatar = avatar;
-            return UserOutput.fromDomain(await this.repository.update(created));
+            saved = await this.repository.update(created);
         }
 
-        return UserOutput.fromDomain(created);
+        await this.sendAccountInvitation.execute({
+            userId: saved.id!,
+            sourceModule: 'admin-user-create',
+        });
+
+        return UserOutput.fromDomain(await this.repository.findById(saved.id!) ?? saved);
     }
 }

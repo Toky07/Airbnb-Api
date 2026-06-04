@@ -6,16 +6,15 @@ import type { IRoleRepository } from '../../../authentication/domain/repositorie
 import { USER_REPOSITORY } from '../../infrastructure/repositories/user.repository';
 import type { IUserRepository } from '../../domain/repositories/user.repository';
 import { EmailVO } from '../../../../shared/valueObject/email.vo';
-import { Auth } from '../../../authentication/domain/entities/user.entity';
 import { HOST_ROLE_SLUG } from '../../../authentication/domain/constants/permissions.constant';
 import { User } from '../../domain/entities/user.entity';
 import { UserNameVO } from '../../domain/valueObject/username.vo';
 import { PhoneNumberVO } from '../../../../shared/valueObject/phone.vo';
-import * as bcrypt from 'bcrypt';
+import { ACCOUNT_STATUS } from '../../../account-activation/domain/constants/account-status.constant';
+import { SendAccountInvitationUseCase } from '../../../account-activation/application/useCase/send-account-invitation.usecase';
 
 export type RegisterHostDto = {
   email: string;
-  password: string;
   firstName: string;
   lastName: string;
   phoneNumber: string;
@@ -27,41 +26,22 @@ export class RegisterHostUseCase {
     @Inject(AUTH_REPOSITORY) private readonly authRepository: IAuthRepository,
     @Inject(ROLE_REPOSITORY) private readonly roleRepository: IRoleRepository,
     @Inject(USER_REPOSITORY) private readonly userRepository: IUserRepository,
+    private readonly sendAccountInvitation: SendAccountInvitationUseCase,
   ) {}
 
   async execute(dto: RegisterHostDto): Promise<boolean> {
     const email = dto.email.trim().toLowerCase();
-    const password = dto.password?.trim();
     const firstName = dto.firstName?.trim();
     const lastName = dto.lastName?.trim();
     const phoneNumber = dto.phoneNumber?.trim();
 
-    if (!email || !password || !firstName || !lastName || !phoneNumber) {
+    if (!email || !firstName || !lastName || !phoneNumber) {
       throw new BadRequestException('Tous les champs sont obligatoires.');
     }
 
     const existingAuth = await this.authRepository.findByEmail(email);
     if (existingAuth) {
       throw new BadRequestException('Cet email est déjà utilisé.');
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const created = await this.authRepository.create(
-      new Auth(undefined, new EmailVO(email), hashedPassword),
-    );
-
-    if (!created) {
-      return false;
-    }
-
-    const auth = await this.authRepository.findByEmail(email);
-    if (!auth?.id) {
-      return created;
-    }
-
-    const hostRole = await this.roleRepository.findBySlug(HOST_ROLE_SLUG);
-    if (hostRole?.id) {
-      await this.authRepository.assignRoles(auth.id, [hostRole.id]);
     }
 
     const user = new User(
@@ -73,10 +53,34 @@ export class RegisterHostUseCase {
       undefined,
       undefined,
       undefined,
-      auth.id,
+      undefined,
+      [],
+      false,
+      ACCOUNT_STATUS.PENDING,
     );
 
-    await this.userRepository.create(user);
+    const createdUser = await this.userRepository.create(user);
+    if (!createdUser.id) {
+      return false;
+    }
+
+    const pendingAuth = await this.authRepository.createPending(email);
+    if (!pendingAuth?.id) {
+      throw new BadRequestException('Impossible de créer le compte de connexion.');
+    }
+
+    await this.userRepository.linkAuthAccount(createdUser.id, pendingAuth.id);
+
+    const hostRole = await this.roleRepository.findBySlug(HOST_ROLE_SLUG);
+    if (hostRole?.id) {
+      await this.authRepository.assignRoles(pendingAuth.id, [hostRole.id]);
+    }
+
+    await this.sendAccountInvitation.execute({
+      userId: createdUser.id,
+      sourceModule: 'host-registration',
+    });
+
     return true;
   }
 }

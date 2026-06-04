@@ -22,7 +22,13 @@ export class JwtTokenGenerator implements TokenGenerator {
   }): Promise<string> {
     const auth = await this.authRepository.findByEmail(email);
 
-    if (!auth || !(await bcrypt.compare(password, auth.password))) {
+    if (!auth || !auth.password || auth.status !== 'active') {
+      throw new UnauthorizedException(
+        'Compte non activé. Consultez votre email pour définir votre mot de passe.',
+      );
+    }
+
+    if (!(await bcrypt.compare(password, auth.password))) {
       throw new UnauthorizedException('Invalid credentials');
     }
 

@@ -15,6 +15,10 @@ import { UserEntity } from '../../../user/infrastructure/entities/user.entity';
 import { HOST_ROLE_SLUG } from '../../../authentication/domain/constants/permissions.constant';
 import { MediaOrmEntity } from '../../../media/infrastructure/entities/media-orm.entity';
 import { MediaModule } from '../../../media/media.module';
+import {
+  activateAuthAccountForTests,
+  AUTH_TEST_ENTITIES,
+} from '../../../../test/controller-test.helpers';
 
 describe('MailController', () => {
   let app: INestApplication;
@@ -31,7 +35,7 @@ describe('MailController', () => {
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [EmailOrmEntity, AuthEntity, Role, PermissionEntity, UserEntity, MediaOrmEntity],
+          entities: [...AUTH_TEST_ENTITIES, EmailOrmEntity, MediaOrmEntity],
           synchronize: true,
         }),
         JwtModule.register({
@@ -56,12 +60,13 @@ describe('MailController', () => {
       .post('/auth/register')
       .send({
         email: 'mail-host@test.com',
-        password: '123456',
         firstName: 'Mail',
         lastName: 'Host',
         phoneNumber: '+33601020304',
       })
       .expect(201);
+
+    await activateAuthAccountForTests(dataSource, 'mail-host@test.com', '123456');
 
     const login = await request(app.getHttpServer())
       .post('/auth/login')

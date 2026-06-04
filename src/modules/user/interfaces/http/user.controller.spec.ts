@@ -18,6 +18,7 @@ import { MediaOrmEntity } from '../../../media/infrastructure/entities/media-orm
 import { rm } from 'fs/promises';
 import {
   AUTH_TEST_ENTITIES,
+  DOMAIN_TEST_ENTITIES,
   registerAndLoginAsSuperAdmin,
 } from '../../../../test/controller-test.helpers';
 
@@ -27,12 +28,14 @@ describe('UserController', () => {
   let token: string;
 
   beforeAll(async () => {
+    process.env.MAIL_TRANSPORT = 'console';
+
     const moduleRef = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [...AUTH_TEST_ENTITIES, MediaOrmEntity],
+          entities: [...AUTH_TEST_ENTITIES, ...DOMAIN_TEST_ENTITIES],
           synchronize: true,
         }),
         JwtModule.register({
@@ -91,6 +94,7 @@ describe('UserController', () => {
       avatar: 'avatar.png',
       roles: expect.any(Array),
       authLinked: expect.any(Boolean),
+      status: expect.any(String),
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
     }));
@@ -122,6 +126,7 @@ describe('UserController', () => {
       avatar: 'avatar.png',
       roles: expect.any(Array),
       authLinked: expect.any(Boolean),
+      status: expect.any(String),
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
     });
@@ -133,7 +138,7 @@ describe('UserController', () => {
       .send({
         firstName: 'John',
         lastName: 'Doe',
-        email: 'test@test.com',
+        email: 'newuser@test.com',
         phoneNumber: '+1234567890',
         avatar: 'avatar.png',
       })
@@ -144,11 +149,12 @@ describe('UserController', () => {
       id: expect.any(Number),
       firstName: 'John',
       lastName: 'Doe',
-      email: 'test@test.com',
+      email: 'newuser@test.com',
       phoneNumber: '+1234567890',
       avatar: 'avatar.png',
       roles: expect.any(Array),
       authLinked: expect.any(Boolean),
+      status: expect.any(String),
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
     });

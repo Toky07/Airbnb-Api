@@ -13,8 +13,10 @@ import { RoleEntity } from '../../domain/entities/role.entity';
 import { RoleMapper } from '../../infrastructure/mappers/role.mappers';
 import { UserEntity } from '../../../user/infrastructure/entities/user.entity';
 import {
+  activateAuthAccountForTests,
   assignSuperAdminRole,
   AUTH_TEST_ENTITIES,
+  DOMAIN_TEST_ENTITIES,
 } from '../../../../test/controller-test.helpers';
 
 describe('Auth', () => {
@@ -22,12 +24,14 @@ describe('Auth', () => {
   let dataSource: DataSource;
 
   beforeAll(async () => {
+    process.env.MAIL_TRANSPORT = 'console';
+
     const moduleRef = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [...AUTH_TEST_ENTITIES],
+          entities: [...AUTH_TEST_ENTITIES, ...DOMAIN_TEST_ENTITIES],
           synchronize: true,
         }),
         AuthModule,
@@ -40,15 +44,15 @@ describe('Auth', () => {
   });
 
   beforeEach(async () => {
-    const repository = dataSource.getRepository(AuthEntity);
-    await repository.clear();
+    await dataSource.getRepository(AuthEntity).clear();
+    await dataSource.getRepository(UserEntity).clear();
   });
 
   it(`/POST auth/register`, async () => {
+    process.env.MAIL_TRANSPORT = 'console';
     const repository = dataSource.getRepository(AuthEntity);
     const data = {
         email: 'test@test.com',
-        password: 'password',
         firstName: 'Test',
         lastName: 'User',
         phoneNumber: '+33601020304',
@@ -63,7 +67,8 @@ describe('Auth', () => {
 
     const auth = await repository.findOne({ where: { email: data.email } });
     expect(auth).toBeDefined();
-    expect(await bcrypt.compare(data.password, auth?.password)).toBe(true);
+    expect(auth?.status).toBe('pending');
+    expect(auth?.password).toBeNull();
   });
 
   it(`/POST auth/login login with valid credentials`, async () => {
@@ -77,6 +82,7 @@ describe('Auth', () => {
       repository.create({
         email: data.email,
         password: await bcrypt.hash(data.password, 10),
+        status: 'active',
       }),
     );
 
@@ -108,13 +114,13 @@ describe('Auth', () => {
       .post('/auth/register')
       .send({
         email: 'admin@test.com',
-        password: 'password',
         firstName: 'Admin',
         lastName: 'User',
         phoneNumber: '+33601020304',
       })
       .expect(201);
 
+    await activateAuthAccountForTests(dataSource, 'admin@test.com', 'password');
     await assignSuperAdminRole(dataSource, 'admin@test.com');
 
     const loginResponse = await request(app.getHttpServer())
@@ -127,6 +133,7 @@ describe('Auth', () => {
       userRepository.create({
         email: 'staff@test.com',
         password: await bcrypt.hash('password', 10),
+        status: 'active',
       }),
     );
 

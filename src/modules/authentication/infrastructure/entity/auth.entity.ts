@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Role } from "./role.entity";
+import { ACCOUNT_STATUS } from "../../../account-activation/domain/constants/account-status.constant";
 
 @Entity({ name: 'auth' })
 export class AuthEntity {
@@ -9,8 +10,11 @@ export class AuthEntity {
   @Column()
   email: string;
 
-  @Column()
-  password: string;
+  @Column({ type: 'varchar', nullable: true })
+  password: string | null;
+
+  @Column({ default: ACCOUNT_STATUS.PENDING })
+  status: string;
 
   @CreateDateColumn({ nullable: true })
   createdAt: Date;

@@ -10,7 +10,7 @@ import { UserNameVO } from '../../../user/domain/valueObject/username.vo';
 import { RoleEntity } from '../../domain/entities/role.entity';
 import { RoleMapper } from '../../infrastructure/mappers/role.mappers';
 import { PermissionEntity } from '../../infrastructure/entity/permission.entity';
-import { AUTH_TEST_ENTITIES, registerAndLoginAsSuperAdmin } from '../../../../test/controller-test.helpers';
+import { AUTH_TEST_ENTITIES, DOMAIN_TEST_ENTITIES, registerAndLoginAsSuperAdmin } from '../../../../test/controller-test.helpers';
 
 describe('Roles', () => {
   let app: INestApplication;
@@ -29,12 +29,14 @@ describe('Roles', () => {
   };
 
   beforeAll(async () => {
+    process.env.MAIL_TRANSPORT = 'console';
+
     const moduleRef = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [...AUTH_TEST_ENTITIES],
+          entities: [...AUTH_TEST_ENTITIES, ...DOMAIN_TEST_ENTITIES],
           synchronize: true,
         }),
         AuthModule,

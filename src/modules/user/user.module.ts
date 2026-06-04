@@ -1,5 +1,6 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { AuthModule } from '../authentication/auth.module';
+import { AccountActivationModule } from '../account-activation/account-activation.module';
 import { AssignUserRolesUseCase } from './application/useCase/assignUserRoles.usecase';
 import { RegisterHostUseCase } from './application/useCase/register-host.usecase';
 import { CreateUserUseCase } from './application/useCase/createuser.usecase';
@@ -21,6 +22,7 @@ import { MediaModule } from '../media/media.module';
     TypeOrmModule.forFeature([UserEntity, AuthEntity]),
     MediaModule,
     forwardRef(() => AuthModule),
+    forwardRef(() => AccountActivationModule),
   ],
   controllers: [UserController],
   providers: [

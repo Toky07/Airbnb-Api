@@ -1,30 +1,24 @@
 import {
-  BadRequestException,
   Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
-import { EmailVO } from '../../../../shared/valueObject/email.vo';
 import { AUTH_REPOSITORY } from '../../../authentication/domain/repositories/auth.repository';
 import type { IAuthRepository } from '../../../authentication/domain/repositories/auth.repository';
-import { Auth } from '../../../authentication/domain/entities/user.entity';
 import { UserOutput } from '../../domain/dtos/user.output';
 import { USER_REPOSITORY } from '../../infrastructure/repositories/user.repository';
 import type { IUserRepository } from '../../domain/repositories/user.repository';
+import { SendAccountInvitationUseCase } from '../../../account-activation/application/useCase/send-account-invitation.usecase';
 
 @Injectable()
 export class AssignUserRolesUseCase {
   constructor(
     @Inject(USER_REPOSITORY) private readonly userRepository: IUserRepository,
     @Inject(AUTH_REPOSITORY) private readonly authRepository: IAuthRepository,
+    private readonly sendAccountInvitation: SendAccountInvitationUseCase,
   ) {}
 
-  async execute(
-    userId: number,
-    roleIds: number[],
-    password?: string,
-  ): Promise<UserOutput> {
+  async execute(userId: number, roleIds: number[]): Promise<UserOutput> {
     const user = await this.userRepository.findById(userId);
 
     if (!user?.id) {
@@ -37,30 +31,15 @@ export class AssignUserRolesUseCase {
         : await this.authRepository.findByEmail(user.email);
 
     if (!auth?.id) {
-      const trimmedPassword = password?.trim();
-      if (!trimmedPassword) {
-        throw new BadRequestException(
-          'Aucun compte de connexion pour cet utilisateur. Indiquez un mot de passe pour le créer.',
-        );
-      }
-
-      const created = await this.authRepository.create(
-        new Auth(undefined, new EmailVO(user.email), await bcrypt.hash(trimmedPassword, 10)),
-      );
-
-      if (!created) {
-        throw new BadRequestException(
-          'Impossible de créer le compte de connexion (email peut-être déjà utilisé).',
-        );
-      }
-
-      auth = await this.authRepository.findByEmail(user.email);
-
+      auth = await this.authRepository.createPending(user.email);
       if (!auth?.id) {
-        throw new BadRequestException('Compte de connexion introuvable après création.');
+        throw new NotFoundException('Impossible de créer le compte de connexion.');
       }
-
       await this.userRepository.linkAuthAccount(userId, auth.id);
+      await this.sendAccountInvitation.execute({
+        userId,
+        sourceModule: 'admin-role-assign',
+      });
     } else if (user.authId == null) {
       await this.userRepository.linkAuthAccount(userId, auth.id);
     }

@@ -85,7 +85,6 @@ export class UserController {
     return this.assignUserRolesUseCase.execute(
       Number(id),
       body.roleIds ?? [],
-      body.password,
     );
   }
 

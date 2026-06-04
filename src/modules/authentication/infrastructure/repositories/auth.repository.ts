@@ -6,6 +6,7 @@ import { AuthMapper } from '../mappers/auth.mappers';
 import { Auth } from '../../domain/entities/user.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Role } from '../entity/role.entity';
+import { ACCOUNT_STATUS } from '../../../account-activation/domain/constants/account-status.constant';
 
 @Injectable()
 export class AuthRepository implements IAuthRepository {
@@ -24,9 +25,28 @@ export class AuthRepository implements IAuthRepository {
     return Boolean(isSaved);
   }
 
+  async createPending(email: string): Promise<Auth | null> {
+    const normalizedEmail = email.trim().toLowerCase();
+    const entity = this.repository.create({
+      email: normalizedEmail,
+      password: null,
+      status: ACCOUNT_STATUS.PENDING,
+    });
+    const saved = await this.repository.save(entity);
+    return this.findById(saved.id);
+  }
+
+  async activateWithPassword(authId: number, passwordHash: string): Promise<void> {
+    await this.repository.update(authId, {
+      password: passwordHash,
+      status: ACCOUNT_STATUS.ACTIVE,
+    });
+  }
+
   async findByEmail(email: string): Promise<Auth | null> {
+    const normalizedEmail = email.trim().toLowerCase();
     const auth = await this.repository.findOne({
-      where: { email },
+      where: { email: normalizedEmail },
       relations: [...this.relations],
     });
     return auth ? AuthMapper.toDomain(auth) : null;

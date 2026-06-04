@@ -1,4 +1,5 @@
 import { User } from '../entities/user.entity';
+import type { AccountStatus } from '../../../account-activation/domain/constants/account-status.constant';
 
 export type UserRoleSummary = {
   slug: string;
@@ -17,6 +18,7 @@ export class UserOutput {
     public readonly updatedAt: Date,
     public readonly roles: UserRoleSummary[] = [],
     public readonly authLinked: boolean = false,
+    public readonly status: AccountStatus = 'active',
   ) {}
 
   public static fromDomain(user: User): UserOutput {
@@ -31,6 +33,7 @@ export class UserOutput {
       user._updatedAt!,
       user.roles,
       user.authLinked,
+      user.status,
     );
   }
 }

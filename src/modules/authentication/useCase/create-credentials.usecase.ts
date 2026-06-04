@@ -4,6 +4,7 @@ import type { IAuthRepository } from '../domain/repositories/auth.repository';
 import { EmailVO } from '../../../shared/valueObject/email.vo';
 import { Auth } from '../domain/entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { ACCOUNT_STATUS } from '../../account-activation/domain/constants/account-status.constant';
 
 @Injectable()
 export class CreateCredentialsUseCase {
@@ -17,7 +18,13 @@ export class CreateCredentialsUseCase {
   }): Promise<boolean> {
     const password = await bcrypt.hash(credentials.password, 10);
     const created = await this.repository.create(
-      new Auth(undefined, new EmailVO(credentials.email), password),
+      new Auth(
+        undefined,
+        new EmailVO(credentials.email),
+        password,
+        [],
+        ACCOUNT_STATUS.ACTIVE,
+      ),
     );
 
     if (!created) {

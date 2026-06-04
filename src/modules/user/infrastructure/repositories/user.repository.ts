@@ -119,6 +119,13 @@ export class UserRepository implements IUserRepository {
     return UserMapper.toDomain(enriched);
   }
 
+  async updateStatus(userId: number, status: 'pending' | 'active'): Promise<void> {
+    const result = await this.repository.update(Number(userId), { status });
+    if (!result.affected) {
+      throw new NotFoundException('User not found');
+    }
+  }
+
   private async loadById(id: number): Promise<User | null> {
     const user = await this.repository.findOne({
       where: { id },

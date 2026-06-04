@@ -6,6 +6,7 @@ import {
   Get,
   Req,
   UnauthorizedException,
+  Query,
 } from '@nestjs/common';
 import { CreateCredentialsUseCase } from '../../useCase/create-credentials.usecase';
 import { RegisterHostUseCase } from '../../../user/application/useCase/register-host.usecase';
@@ -16,6 +17,8 @@ import { Public } from '../decorators/public.decorator';
 import { RequirePermissions } from '../decorators/require-permissions.decorator';
 import type { JwtPayload } from '../../domain/types/jwt-payload';
 import type { MeOutput } from '../../application/dto/me.output';
+import { ValidatePasswordSetupTokenUseCase } from '../../../account-activation/application/useCase/validate-password-setup-token.usecase';
+import { SetPasswordWithTokenUseCase } from '../../../account-activation/application/useCase/set-password-with-token.usecase';
 
 @Controller('auth')
 export class AuthController {
@@ -25,6 +28,8 @@ export class AuthController {
     private readonly loginUseCase: LoginUseCase,
     private readonly assignRoleUseCase: AssignRoleUseCase,
     private readonly getMeUseCase: GetMeUseCase,
+    private readonly validatePasswordSetupTokenUseCase: ValidatePasswordSetupTokenUseCase,
+    private readonly setPasswordWithTokenUseCase: SetPasswordWithTokenUseCase,
   ) {}
 
   @Public()
@@ -33,7 +38,6 @@ export class AuthController {
     @Body()
     registerHostDto: {
       email: string;
-      password: string;
       firstName: string;
       lastName: string;
       phoneNumber: string;
@@ -51,6 +55,22 @@ export class AuthController {
   ): Promise<{ token: string | null }> {
     const response = await this.loginUseCase.execute(loginCredentialsDto);
     return { token: response };
+  }
+
+  @Public()
+  @Get('password-setup/validate')
+  async validatePasswordSetup(@Query('token') token: string) {
+    return this.validatePasswordSetupTokenUseCase.execute(token);
+  }
+
+  @Public()
+  @Post('password-setup')
+  @HttpCode(200)
+  async setPassword(
+    @Body() body: { token: string; password: string },
+  ): Promise<{ success: boolean }> {
+    await this.setPasswordWithTokenUseCase.execute(body.token, body.password);
+    return { success: true };
   }
 
   @Get('me')

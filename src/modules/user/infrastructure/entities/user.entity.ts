@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { AuthEntity } from '../../../authentication/infrastructure/entity/auth.entity';
+import { ACCOUNT_STATUS } from '../../../account-activation/domain/constants/account-status.constant';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -28,6 +29,9 @@ export class UserEntity {
 
   @Column()
   avatar: string;
+
+  @Column({ default: ACCOUNT_STATUS.PENDING })
+  status: string;
 
   @Column({ type: 'integer', nullable: true })
   authId: number | null = null;

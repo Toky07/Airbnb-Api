@@ -1,4 +1,5 @@
 import type { PaginatedResult, PaginationParams } from '../../../../shared/pagination/pagination.types';
+import type { AccountStatus } from '../../../account-activation/domain/constants/account-status.constant';
 import { User } from '../entities/user.entity';
 
 export interface IUserRepository {
@@ -10,4 +11,5 @@ export interface IUserRepository {
   delete(id: number): Promise<boolean>;
   linkAuthAccount(userId: number, authId: number): Promise<void>;
   findByAuthId(authId: number): Promise<User | null>;
+  updateStatus(userId: number, status: AccountStatus): Promise<void>;
 }
