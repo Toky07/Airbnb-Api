@@ -1,9 +1,11 @@
 import type {
   ImportCategoryTypeRowDto,
   ImportPropertyRowDto,
+  ImportRoleRowDto,
   ImportRoomRowDto,
   ImportUserRowDto,
 } from '../dto/import-batch.dto';
+import { ALL_PERMISSION_KEYS } from '../../../authentication/domain/constants/permissions.constant';
 import { DomainValidationException } from '../../../../shared/exceptions/domain-validation.exception';
 import { validateUserFields } from '../../../user/application/validation/validate-user-fields';
 
@@ -98,6 +100,53 @@ export function validateImportCategoryTypeRow(
   if (!Number.isFinite(row.sortOrder)) {
     return { ok: false, field: 'sortOrder', message: 'Ordre invalide.' };
   }
+  return { ok: true };
+}
+
+const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+export function parseRolePermissionKeys(raw?: string): string[] {
+  const trimmed = raw?.trim() ?? '';
+  if (!trimmed || trimmed === '*' || trimmed.toLowerCase() === 'all') {
+    return [...ALL_PERMISSION_KEYS];
+  }
+
+  return trimmed
+    .split(';')
+    .map((key) => key.trim())
+    .filter(Boolean);
+}
+
+export function validateImportRoleRow(
+  row: ImportRoleRowDto,
+): { ok: true } | { ok: false; field: string; message: string } {
+  if (!row.name?.trim() || row.name.trim().length < 2) {
+    return { ok: false, field: 'name', message: 'Nom du rôle requis.' };
+  }
+
+  const slug = row.slug?.trim();
+  if (!slug) {
+    return { ok: false, field: 'slug', message: 'Slug requis.' };
+  }
+
+  if (!SLUG_PATTERN.test(slug)) {
+    return {
+      ok: false,
+      field: 'slug',
+      message: 'Slug invalide (lettres minuscules, chiffres et tirets).',
+    };
+  }
+
+  const keys = parseRolePermissionKeys(row.permissionKeys);
+  const unknown = keys.filter((key) => !ALL_PERMISSION_KEYS.includes(key));
+  if (unknown.length > 0) {
+    return {
+      ok: false,
+      field: 'permissionKeys',
+      message: `Permission inconnue : ${unknown[0]}`,
+    };
+  }
+
   return { ok: true };
 }
 

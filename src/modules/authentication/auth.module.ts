@@ -28,12 +28,14 @@ import { SetRolePermissionsUseCase } from './useCase/set-role-permissions.usecas
 import { GetMeUseCase } from './useCase/get-me.usecase';
 import { UserModule } from '../user/user.module';
 import { AccountActivationModule } from '../account-activation/account-activation.module';
+import { PropertiesModule } from '../properties/properties.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([AuthEntity, Role, PermissionEntity]),
     forwardRef(() => UserModule),
     forwardRef(() => AccountActivationModule),
+    PropertiesModule,
     JwtModule.register({
       global: true,
       secret: '1234',
@@ -53,6 +55,7 @@ import { AccountActivationModule } from '../account-activation/account-activatio
     ListPermissionsUseCase,
     SetRolePermissionsUseCase,
     GetMeUseCase,
+    EnsurePropertyOwnerHostRoleService,
     AuthRbacSeedService,
     {
       provide: AUTH_REPOSITORY,
@@ -75,6 +78,13 @@ import { AccountActivationModule } from '../account-activation/account-activatio
       useClass: PermissionsGuard,
     },
   ],
-  exports: [AUTH_REPOSITORY, ROLE_REPOSITORY],
+  exports: [
+    AUTH_REPOSITORY,
+    ROLE_REPOSITORY,
+    CreateRoleUseCase,
+    UpdateRoleUseCase,
+    SetRolePermissionsUseCase,
+    EnsurePropertyOwnerHostRoleService,
+  ],
 })
 export class AuthModule {}

@@ -41,16 +41,24 @@ export type ImportRoomRowDto = {
   imageUrls?: string;
 };
 
+export type ImportRoleRowDto = {
+  name: string;
+  slug: string;
+  description?: string;
+  permissionKeys: string;
+};
+
 export type ImportBatchDto = {
   users?: ImportUserRowDto[];
   properties?: ImportPropertyRowDto[];
   rooms?: ImportRoomRowDto[];
   propertyTypes?: ImportCategoryTypeRowDto[];
   roomTypes?: ImportCategoryTypeRowDto[];
+  roles?: ImportRoleRowDto[];
 };
 
 export type ImportRowError = {
-  entity: 'user' | 'property' | 'room' | 'propertyType' | 'roomType';
+  entity: 'user' | 'property' | 'room' | 'propertyType' | 'roomType' | 'role';
   index: number;
   field?: string;
   message: string;
@@ -63,6 +71,7 @@ export type ImportBatchResult = {
     rooms: number;
     propertyTypes: number;
     roomTypes: number;
+    roles: number;
   };
   errors: ImportRowError[];
 };

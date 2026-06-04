@@ -3,6 +3,7 @@ import {
   parseImageUrlList,
   validateImportCategoryTypeRow,
   validateImportPropertyRow,
+  validateImportRoleRow,
   validateImportRoomRow,
   validateImportUserRow,
 } from './validate-import-rows';
@@ -75,6 +76,25 @@ describe('validate-import-rows', () => {
       size: 25,
       status: 'invalid',
       propertyName: 'Hotel',
+    });
+    expect(result.ok).toBe(false);
+  });
+
+  it('valide un rôle avec permissions', () => {
+    expect(
+      validateImportRoleRow({
+        name: 'Support',
+        slug: 'support',
+        permissionKeys: 'users.read;users.update',
+      }).ok,
+    ).toBe(true);
+  });
+
+  it('rejette une permission inconnue', () => {
+    const result = validateImportRoleRow({
+      name: 'Support',
+      slug: 'support',
+      permissionKeys: 'unknown.permission',
     });
     expect(result.ok).toBe(false);
   });

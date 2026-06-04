@@ -4,12 +4,18 @@ import {
   Body,
   HttpCode,
   Get,
+  Put,
   Req,
   UnauthorizedException,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateCredentialsUseCase } from '../../useCase/create-credentials.usecase';
 import { RegisterHostUseCase } from '../../../user/application/useCase/register-host.usecase';
+import { UpdateMyProfileUseCase } from '../../../user/application/useCase/update-my-profile.usecase';
+import { parseMyProfileBody } from '../../../user/interfaces/http/parse-my-profile-body';
 import { LoginUseCase } from '../../useCase/login.usecase';
 import { AssignRoleUseCase } from '../../useCase/assign-role.usecase';
 import { GetMeUseCase } from '../../useCase/get-me.usecase';
@@ -17,6 +23,8 @@ import { Public } from '../decorators/public.decorator';
 import { RequirePermissions } from '../decorators/require-permissions.decorator';
 import type { JwtPayload } from '../../domain/types/jwt-payload';
 import type { MeOutput } from '../../application/dto/me.output';
+import type { UploadFile } from '../../../media/types/upload-file';
+import { UserOutput } from '../../../user/domain/dtos/user.output';
 import { ValidatePasswordSetupTokenUseCase } from '../../../account-activation/application/useCase/validate-password-setup-token.usecase';
 import { SetPasswordWithTokenUseCase } from '../../../account-activation/application/useCase/set-password-with-token.usecase';
 
@@ -28,6 +36,7 @@ export class AuthController {
     private readonly loginUseCase: LoginUseCase,
     private readonly assignRoleUseCase: AssignRoleUseCase,
     private readonly getMeUseCase: GetMeUseCase,
+    private readonly updateMyProfileUseCase: UpdateMyProfileUseCase,
     private readonly validatePasswordSetupTokenUseCase: ValidatePasswordSetupTokenUseCase,
     private readonly setPasswordWithTokenUseCase: SetPasswordWithTokenUseCase,
   ) {}
@@ -79,6 +88,24 @@ export class AuthController {
       throw new UnauthorizedException();
     }
     return this.getMeUseCase.execute(request.user.sub);
+  }
+
+  @Put('profile')
+  @UseInterceptors(FileInterceptor('avatar'))
+  async updateProfile(
+    @Req() request: { user?: JwtPayload },
+    @Body() body: Record<string, unknown>,
+    @UploadedFile() avatar?: UploadFile,
+  ): Promise<UserOutput> {
+    if (!request.user?.sub) {
+      throw new UnauthorizedException();
+    }
+
+    return this.updateMyProfileUseCase.execute(
+      request.user.sub,
+      parseMyProfileBody(body),
+      avatar,
+    );
   }
 
   @Post('assign-role')

@@ -23,6 +23,9 @@ describe('ImportDataUseCase — catégories', () => {
       { execute: vi.fn() } as never,
       createPropertyType as never,
       { execute: vi.fn() } as never,
+      { execute: vi.fn() } as never,
+      { execute: vi.fn() } as never,
+      { execute: vi.fn() } as never,
       { findAll: async () => [] } as never,
       { findAll: async () => [], findById: async () => null } as never,
       {
@@ -37,6 +40,7 @@ describe('ImportDataUseCase — catégories', () => {
         ],
       } as never,
       { findAll: async () => [] } as never,
+      { findBySlug: async () => null } as never,
     );
 
     const result = await useCase.execute({

@@ -1,6 +1,7 @@
 import {
   CanActivate,
   ExecutionContext,
+  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -8,12 +9,16 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
+import { AUTH_REPOSITORY } from '../../domain/repositories/auth.repository';
+import type { IAuthRepository } from '../../domain/repositories/auth.repository';
+import { buildJwtPayload } from '../../domain/utils/build-jwt-payload';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
     private readonly reflector: Reflector,
+    @Inject(AUTH_REPOSITORY) private readonly authRepository: IAuthRepository,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -34,9 +39,23 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const payload = await this.jwtService.verifyAsync(token);
-      request['user'] = payload;
-    } catch {
+      const payload = await this.jwtService.verifyAsync<{ sub?: number }>(token);
+      const authId = payload.sub;
+
+      if (typeof authId !== 'number') {
+        throw new UnauthorizedException();
+      }
+
+      const auth = await this.authRepository.findById(authId);
+      if (!auth?.id) {
+        throw new UnauthorizedException();
+      }
+
+      request['user'] = buildJwtPayload(auth);
+    } catch (error) {
+      if (error instanceof UnauthorizedException) {
+        throw error;
+      }
       throw new UnauthorizedException();
     }
 

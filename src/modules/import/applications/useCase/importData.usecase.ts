@@ -14,6 +14,14 @@ import { slugify } from '../../../../shared/utils/slug.util';
 import { USER_REPOSITORY } from '../../../user/infrastructure/repositories/user.repository';
 import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
 import { fetchImageFromUrl } from '../../../media/utils/fetch-image-from-url';
+import { CreateRoleUseCase } from '../../../authentication/useCase/create-role.usecase';
+import { UpdateRoleUseCase } from '../../../authentication/useCase/update-role.usecase';
+import { SetRolePermissionsUseCase } from '../../../authentication/useCase/set-role-permissions.usecase';
+import { ROLE_REPOSITORY } from '../../../authentication/domain/repositories/role.repository';
+import type { IRoleRepository } from '../../../authentication/domain/repositories/role.repository';
+import {
+  SUPERADMIN_ROLE_SLUG,
+} from '../../../authentication/domain/constants/permissions.constant';
 import type {
   ImportBatchDto,
   ImportBatchResult,
@@ -23,8 +31,10 @@ import {
   parseImageUrlList,
   validateImportCategoryTypeRow,
   validateImportPropertyRow,
+  validateImportRoleRow,
   validateImportRoomRow,
   validateImportUserRow,
+  parseRolePermissionKeys,
 } from '../validation/validate-import-rows';
 
 @Injectable()
@@ -35,6 +45,9 @@ export class ImportDataUseCase {
     private readonly createRoom: CreateRoomUseCase,
     private readonly createPropertyType: CreatePropertyTypeUseCase,
     private readonly createRoomType: CreateRoomTypeUseCase,
+    private readonly createRole: CreateRoleUseCase,
+    private readonly updateRole: UpdateRoleUseCase,
+    private readonly setRolePermissions: SetRolePermissionsUseCase,
     @Inject(USER_REPOSITORY) private readonly userRepository: IUserRepository,
     @Inject(PROPERTY_REPOSITORY)
     private readonly propertyRepository: IPropertyRepository,
@@ -42,6 +55,7 @@ export class ImportDataUseCase {
     private readonly propertyTypeRepository: IPropertyTypeRepository,
     @Inject(ROOM_TYPE_REPOSITORY)
     private readonly roomTypeRepository: IRoomTypeRepository,
+    @Inject(ROLE_REPOSITORY) private readonly roleRepository: IRoleRepository,
   ) {}
 
   async execute(batch: ImportBatchDto): Promise<ImportBatchResult> {
@@ -77,6 +91,7 @@ export class ImportDataUseCase {
     let roomsCreated = 0;
     let propertyTypesCreated = 0;
     let roomTypesCreated = 0;
+    let rolesCreated = 0;
 
     for (let index = 0; index < (batch.users?.length ?? 0); index++) {
       const row = batch.users![index]!;
@@ -341,6 +356,71 @@ export class ImportDataUseCase {
       }
     }
 
+    for (let index = 0; index < (batch.roles?.length ?? 0); index++) {
+      const row = batch.roles![index]!;
+      const validation = validateImportRoleRow(row);
+      if (!validation.ok) {
+        errors.push({
+          entity: 'role',
+          index,
+          field: validation.field,
+          message: validation.message,
+        });
+        continue;
+      }
+
+      const slug = row.slug.trim();
+      const permissionKeys = parseRolePermissionKeys(row.permissionKeys);
+      const existing = await this.roleRepository.findBySlug(slug);
+
+      try {
+        if (slug === SUPERADMIN_ROLE_SLUG) {
+          if (existing?.id) {
+            if (row.description?.trim()) {
+              await this.updateRole.execute({
+                id: existing.id,
+                description: row.description.trim(),
+              });
+            }
+            rolesCreated += 1;
+          } else {
+            errors.push({
+              entity: 'role',
+              index,
+              field: 'slug',
+              message: 'Le rôle super administrateur doit exister avant import.',
+            });
+          }
+          continue;
+        }
+
+        if (existing?.id) {
+          await this.updateRole.execute({
+            id: existing.id,
+            name: row.name.trim(),
+            description: row.description?.trim() || null,
+          });
+          await this.setRolePermissions.execute(existing.id, permissionKeys);
+          rolesCreated += 1;
+          continue;
+        }
+
+        const created = await this.createRole.execute({
+          name: row.name.trim(),
+          slug,
+          description: row.description?.trim() || null,
+        });
+        await this.setRolePermissions.execute(created.id, permissionKeys);
+        rolesCreated += 1;
+      } catch (cause) {
+        errors.push({
+          entity: 'role',
+          index,
+          message: cause instanceof Error ? cause.message : 'Import impossible.',
+        });
+      }
+    }
+
     return {
       created: {
         users: usersCreated,
@@ -348,6 +428,7 @@ export class ImportDataUseCase {
         rooms: roomsCreated,
         propertyTypes: propertyTypesCreated,
         roomTypes: roomTypesCreated,
+        roles: rolesCreated,
       },
       errors,
     };

@@ -9,6 +9,7 @@ import { FindUserUseCase } from './application/useCase/findUser.usecase';
 import { ListUsersUseCase } from './application/useCase/listeUser.usecase';
 import { ListUserOptionsUseCase } from './application/useCase/listUserOptions.usecase';
 import { UpdateUserUseCase } from './application/useCase/updateUser.usecase';
+import { UpdateMyProfileUseCase } from './application/useCase/update-my-profile.usecase';
 import { SaveUserAvatarUseCase } from './application/useCase/saveUserAvatar.usecase';
 import { UserController } from './interfaces/http/user.controller';
 import { USER_REPOSITORY, UserRepository } from './infrastructure/repositories/user.repository';
@@ -33,6 +34,7 @@ import { MediaModule } from '../media/media.module';
     FindUserUseCase,
     CreateUserUseCase,
     UpdateUserUseCase,
+    UpdateMyProfileUseCase,
     DeleteUserUseCase,
     SaveUserAvatarUseCase,
     UserRepository,
@@ -41,6 +43,12 @@ import { MediaModule } from '../media/media.module';
       useClass: UserRepository,
     },
   ],
-  exports: [USER_REPOSITORY, CreateUserUseCase, SaveUserAvatarUseCase, RegisterHostUseCase],
+  exports: [
+    USER_REPOSITORY,
+    CreateUserUseCase,
+    SaveUserAvatarUseCase,
+    RegisterHostUseCase,
+    UpdateMyProfileUseCase,
+  ],
 })
 export class UserModule {}

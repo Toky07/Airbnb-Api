@@ -1,5 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from '../authentication/auth.module';
+import { Role } from '../authentication/infrastructure/entity/role.entity';
+import { PermissionEntity } from '../authentication/infrastructure/entity/permission.entity';
 import { PropertyEntity } from '../properties/infrastructure/entities/property-entity.entity';
 import { PropertyTypeEntity } from '../properties/infrastructure/entities/property-type.entity';
 import { CreatePropertyUseCase } from '../properties/applications/useCase/createProperty.usecase';
@@ -25,9 +28,12 @@ import { ImportDataUseCase } from './applications/useCase/importData.usecase';
 
 @Module({
   imports: [
+    AuthModule,
     MediaModule,
     UserModule,
     TypeOrmModule.forFeature([
+      Role,
+      PermissionEntity,
       PropertyEntity,
       PropertyTypeEntity,
       RoomEntity,

@@ -22,6 +22,9 @@ describe('ImportDataUseCase', () => {
       { execute: vi.fn() } as never,
       { execute: vi.fn() } as never,
       { execute: vi.fn() } as never,
+      { execute: vi.fn() } as never,
+      { execute: vi.fn() } as never,
+      { execute: vi.fn() } as never,
       {
         findAll: async () => [
           {
@@ -33,6 +36,7 @@ describe('ImportDataUseCase', () => {
       { findAll: async () => [], findById: async () => null } as never,
       { findAll: async () => [] } as never,
       { findAll: async () => [] } as never,
+      { findBySlug: async () => null } as never,
     );
 
     const result = await useCase.execute({

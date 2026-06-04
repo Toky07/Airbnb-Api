@@ -106,10 +106,31 @@ export class UserRepository implements IUserRepository {
   }
 
   async findByAuthId(authId: number): Promise<User | null> {
-    const user = await this.repository.findOne({
+    let user = await this.repository.findOne({
       where: { authId: Number(authId) },
       relations: [...this.authRelations],
     });
+
+    if (!user) {
+      const auth = await this.authRepository.findOne({
+        where: { id: Number(authId) },
+      });
+
+      if (auth?.email) {
+        const normalizedEmail = auth.email.trim().toLowerCase();
+        user = await this.repository.findOne({
+          where: { email: normalizedEmail },
+          relations: [...this.authRelations],
+        });
+
+        if (!user) {
+          user = await this.repository.findOne({
+            where: { email: auth.email },
+            relations: [...this.authRelations],
+          });
+        }
+      }
+    }
 
     if (!user) {
       return null;
