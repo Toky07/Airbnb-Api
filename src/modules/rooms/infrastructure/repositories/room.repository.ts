@@ -16,12 +16,15 @@ export class RoomRepository implements IRoomRepository {
     }
 
     async findAll(): Promise<Room[]> {
-        const rooms = await this.repository.find();
+        const rooms = await this.repository.find({ relations: ['property'] });
         return rooms.map(room => RoomMapper.toDomain(room));
     }
 
     async findById(id: number): Promise<Room|null> {
-        const room = await this.repository.findOne({ where: { id: Number(id) } });
+        const room = await this.repository.findOne({
+            where: { id: Number(id) },
+            relations: ['property'],
+        });
 
         return room ? RoomMapper.toDomain(room) : null;
     }

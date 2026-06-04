@@ -1,8 +1,29 @@
+import { Property } from "../../../properties/domain/entities/property.entity";
+import { PropertyMapper } from "../../../properties/infrastructure/mappers/property.mapper";
 import { Room } from "../../domain/entities/room.entity";
 import { RoomEntity } from "../entities/room.entity";
 
+function mapRoomProperty(room: RoomEntity): Property {
+    if (room.property?.id != null) {
+        return PropertyMapper.toDomain(room.property);
+    }
+
+    return new Property({
+        name: '',
+        description: '',
+        address: '',
+        city: '',
+        country: '',
+        latitude: 0,
+        longitude: 0,
+        checkInTime: '',
+        checkOutTime: '',
+        ownerId: 0,
+    });
+}
+
 export class RoomMapper {
-    static toDomain(room: any): Room {
+    static toDomain(room: RoomEntity): Room {
         return new Room({
             name: room.name,
             description: room.description,
@@ -14,7 +35,7 @@ export class RoomMapper {
             quantity: room.quantity,
             size: room.size,
             status: room.status,
-            property: room.property,
+            property: mapRoomProperty(room),
             createdAt: room.createdAt,
             updatedAt: room.updatedAt,
             id: room.id,

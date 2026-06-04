@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DeleteMediasByEntityUseCase } from './applications/useCase/deleteMediasByEntity.usecase';
 import { GetMediasByEntityUseCase } from './applications/useCase/getMediasByEntity.usecase';
 import { SaveEntityMediasUseCase } from './applications/useCase/saveEntityMedias.usecase';
+import { SyncEntityMediasUseCase } from './applications/useCase/syncEntityMedias.usecase';
 import { MediaOrmEntity } from './infrastructure/entities/media-orm.entity';
 import {
   MEDIA_REPOSITORY,
@@ -20,6 +21,7 @@ import {
     GetMediasByEntityUseCase,
     DeleteMediasByEntityUseCase,
     SaveEntityMediasUseCase,
+    SyncEntityMediasUseCase,
     {
       provide: MEDIA_REPOSITORY,
       useClass: MediaRepository,
@@ -33,6 +35,7 @@ import {
     GetMediasByEntityUseCase,
     DeleteMediasByEntityUseCase,
     SaveEntityMediasUseCase,
+    SyncEntityMediasUseCase,
     LOCAL_STORAGE_SERVICE,
   ],
 })

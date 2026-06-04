@@ -17,6 +17,7 @@ import type { CreateRoomDto } from "../../applications/dto/createRoom.dto";
 import { CreateRoomUseCase } from "../../applications/useCase/createRoom.usecase";
 import { UpdateRoomUseCase } from "../../applications/useCase/updateRoom.usecase";
 import { DeleteRoomUseCase } from "../../applications/useCase/deleteRoom.usecase";
+import { parseKeptImages } from "./parse-kept-images";
 import { parseRoomBody } from "./parse-room-body";
 import type { UploadFile } from "../../../media/types/upload-file";
 
@@ -60,11 +61,13 @@ export class RoomController {
         @Body() body: CreateRoomDto | Record<string, unknown>,
         @UploadedFiles() images?: UploadFile[],
     ) {
+        const rawBody = body as Record<string, unknown>;
         const updateRoomDto =
             typeof (body as CreateRoomDto).pricePerNight === 'number'
                 ? (body as CreateRoomDto)
-                : parseRoomBody(body as Record<string, unknown>);
-        return this.updateRoomUseCase.execute(id, updateRoomDto, images);
+                : parseRoomBody(rawBody);
+        const keptImages = parseKeptImages(rawBody);
+        return this.updateRoomUseCase.execute(id, updateRoomDto, images, keptImages);
     }
 
     @Delete(':id')

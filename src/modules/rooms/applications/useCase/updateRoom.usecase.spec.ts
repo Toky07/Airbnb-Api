@@ -4,7 +4,7 @@ import { UpdateRoomUseCase } from "./updateRoom.usecase";
 import { Property } from "../../../properties/domain/entities/property.entity";
 import {
     mockRoomMediaPresenter,
-    mockSaveEntityMedias,
+    mockSyncEntityMedias,
 } from "./test-helpers/room-usecase.mocks";
 
 const property = new Property({
@@ -43,7 +43,7 @@ describe('UseCase: update room use case', () => {
     it('should update a room', async () => {
         const updateRoomUseCase = new UpdateRoomUseCase(
             repository,
-            mockSaveEntityMedias,
+            mockSyncEntityMedias,
             mockRoomMediaPresenter,
         );
 
@@ -68,7 +68,7 @@ describe('UseCase: update room use case', () => {
     it('should throw an error if the room is not found', async () => {
         const updateRoomUseCase = new UpdateRoomUseCase(
             repository,
-            mockSaveEntityMedias,
+            mockSyncEntityMedias,
             mockRoomMediaPresenter,
         );
 
