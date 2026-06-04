@@ -60,6 +60,11 @@ export class AuthRepository implements IAuthRepository {
     return auth ? AuthMapper.toDomain(auth) : null;
   }
 
+  async delete(id: number): Promise<boolean> {
+    const result = await this.repository.delete(Number(id));
+    return Boolean(result.affected && result.affected > 0);
+  }
+
   async assignRoles(userId: number, roleIds: number[]): Promise<boolean> {
     const auth = await this.repository.findOne({
       where: { id: userId },

@@ -30,7 +30,7 @@ export class ResendMailTransport implements IMailTransport {
       content: attachment.content,
       contentType: attachment.contentType,
     }));
-
+    
     const baseOptions = {
       from: this.from,
       to: message.to,

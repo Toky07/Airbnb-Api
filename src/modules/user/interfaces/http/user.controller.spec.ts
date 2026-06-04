@@ -278,15 +278,21 @@ describe('UserController', () => {
 
   it('/DELETE users/:id', async () => {
     const repository = dataSource.getRepository(UserEntity);
+    const authRepository = dataSource.getRepository(AuthEntity);
     const data = {
       firstName: 'John',
       lastName: 'Doe',
-      email: 'test@test.com',
+      email: 'delete-user@test.com',
       phoneNumber: '+1234567890',
       avatar: 'avatar.png',
     };
 
-    const user = await repository.save({ ...data });
+    const auth = await authRepository.save({
+      email: data.email,
+      password: 'hashed-password',
+      status: 'active',
+    });
+    const user = await repository.save({ ...data, authId: auth.id });
 
     await request(app.getHttpServer())
       .delete(`/users/${user.id}`)
@@ -295,6 +301,9 @@ describe('UserController', () => {
 
     const deletedUser = await repository.findOne({ where: { id: user.id } });
     expect(deletedUser).toBeNull();
+
+    const deletedAuth = await authRepository.findOne({ where: { id: auth.id } });
+    expect(deletedAuth).toBeNull();
 
     await request(app.getHttpServer())
       .get(`/users/${user.id}`)
