@@ -12,6 +12,8 @@ import { RoomsModule } from './modules/rooms/room.module';
 import { MediaOrmEntity } from './modules/media/infrastructure/entities/media-orm.entity';
 import { ImportModule } from './modules/import/import.module';
 import { HostModule } from './modules/host/host.module';
+import { MailModule } from './modules/mail/mail.module';
+import { EmailOrmEntity } from './modules/mail/infrastructure/entities/email.orm-entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -26,6 +28,7 @@ import { HostModule } from './modules/host/host.module';
         PermissionEntity,
         PropertyEntity,
         MediaOrmEntity,
+        EmailOrmEntity,
       ],
     }),
     UserModule,
@@ -34,6 +37,7 @@ import { HostModule } from './modules/host/host.module';
     RoomsModule,
     ImportModule,
     HostModule,
+    MailModule,
   ],
   controllers: [],
   providers: [],

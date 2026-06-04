@@ -11,6 +11,11 @@ import { PermissionEntity } from '../../infrastructure/entity/permission.entity'
 import { UserNameVO } from '../../../user/domain/valueObject/username.vo';
 import { RoleEntity } from '../../domain/entities/role.entity';
 import { RoleMapper } from '../../infrastructure/mappers/role.mappers';
+import { UserEntity } from '../../../user/infrastructure/entities/user.entity';
+import {
+  assignSuperAdminRole,
+  AUTH_TEST_ENTITIES,
+} from '../../../../test/controller-test.helpers';
 
 describe('Auth', () => {
   let app: INestApplication;
@@ -22,7 +27,7 @@ describe('Auth', () => {
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [AuthEntity, Role, PermissionEntity],
+          entities: [...AUTH_TEST_ENTITIES],
           synchronize: true,
         }),
         AuthModule,
@@ -44,6 +49,9 @@ describe('Auth', () => {
     const data = {
         email: 'test@test.com',
         password: 'password',
+        firstName: 'Test',
+        lastName: 'User',
+        phoneNumber: '+33601020304',
       };
     
     const response = await request(app.getHttpServer())
@@ -98,8 +106,16 @@ describe('Auth', () => {
 
     await request(app.getHttpServer())
       .post('/auth/register')
-      .send({ email: 'admin@test.com', password: 'password' })
+      .send({
+        email: 'admin@test.com',
+        password: 'password',
+        firstName: 'Admin',
+        lastName: 'User',
+        phoneNumber: '+33601020304',
+      })
       .expect(201);
+
+    await assignSuperAdminRole(dataSource, 'admin@test.com');
 
     const loginResponse = await request(app.getHttpServer())
       .post('/auth/login')

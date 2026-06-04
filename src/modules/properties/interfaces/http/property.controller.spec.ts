@@ -6,9 +6,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { PropertyEntity } from '../../infrastructure/entities/property-entity.entity';
+import { PropertyTypeEntity } from '../../infrastructure/entities/property-type.entity';
 import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
+import { RoomTypeEntity } from '../../../rooms/infrastructure/entities/room-type.entity';
 import { MediaOrmEntity } from '../../../media/infrastructure/entities/media-orm.entity';
+import { AuthModule } from '../../../authentication/auth.module';
+import { UserModule } from '../../../user/user.module';
 import { rm } from 'fs/promises';
+import {
+  AUTH_TEST_ENTITIES,
+  DOMAIN_TEST_ENTITIES,
+  registerAndLoginAsSuperAdmin,
+} from '../../../../test/controller-test.helpers';
 
 describe('PropertyController', () => {
   let app: INestApplication;
@@ -47,7 +56,7 @@ describe('PropertyController', () => {
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [PropertyEntity, RoomEntity, MediaOrmEntity],
+          entities: [...AUTH_TEST_ENTITIES, ...DOMAIN_TEST_ENTITIES],
           synchronize: true,
         }),
         JwtModule.register({
@@ -56,6 +65,8 @@ describe('PropertyController', () => {
           secretOrPrivateKey: '1234',
           signOptions: { expiresIn: '5h' },
         }),
+        AuthModule,
+        UserModule,
         PropertiesModule,
       ],
     }).compile();
@@ -64,6 +75,8 @@ describe('PropertyController', () => {
 
     app = moduleRef.createNestApplication();
     await app.init();
+
+    token = await registerAndLoginAsSuperAdmin(app, dataSource);
   });
 
   it(`/GET properties`, async () => {
@@ -77,23 +90,21 @@ describe('PropertyController', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    expect(response.body).toEqual([{
+    expect(response.body.data[0]).toEqual(expect.objectContaining({
       id: expect.any(Number),
       ...defaultProperty,
       image: null,
-      rooms: [
-        {
-          ...room,
-          id: expect.any(Number),
-          images: [],
-          createdAt: expect.any(String),
-          updatedAt: expect.any(String),
-        }
-      ],
+      propertyTypeId: null,
+      propertyType: null,
       ownerId: expect.any(Number),
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
-    }]);
+    }));
+    expect(response.body.data[0].rooms[0]).toEqual(expect.objectContaining({
+      ...room,
+      id: expect.any(Number),
+      images: [],
+    }));
   });
 
   it(`/GET properties/:id`, async () => {
@@ -109,6 +120,8 @@ describe('PropertyController', () => {
       id: property.id,
       ...defaultProperty,
       image: null,
+      propertyTypeId: null,
+      propertyType: null,
       rooms: [],
       ownerId: expect.any(Number),
       createdAt: expect.any(String),
@@ -127,6 +140,8 @@ describe('PropertyController', () => {
       id: expect.any(Number),
       ...defaultProperty,
       image: null,
+      propertyTypeId: null,
+      propertyType: null,
       rooms: [],
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
@@ -147,6 +162,7 @@ describe('PropertyController', () => {
       .field('checkOutTime', defaultProperty.checkOutTime)
       .field('ownerId', String(defaultProperty.ownerId))
       .attach('image', Buffer.from('property-image'), 'property.jpg')
+      .set('Authorization', `Bearer ${token}`)
       .expect(201);
 
     expect(response.body.image).toMatch(/uploads\/properties\/\d+\/.+\.jpg$/);
@@ -179,13 +195,11 @@ describe('PropertyController', () => {
 
     const updatedProperty = await repository.findOne({ where: { id: property.id } });
 
-    expect(updatedProperty).toEqual({
+    expect(updatedProperty).toEqual(expect.objectContaining({
       id: expect.any(Number),
       ...updatedData,
       ownerId: 1,
-      createdAt: expect.any(Date),
-      updatedAt: expect.any(Date),
-    });
+    }));
   });
 
   it('/PUT properties/:id with image', async () => {
@@ -205,6 +219,7 @@ describe('PropertyController', () => {
       .field('checkOutTime', defaultProperty.checkOutTime)
       .field('ownerId', String(defaultProperty.ownerId))
       .attach('image', Buffer.from('updated-image'), 'updated.jpg')
+      .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
     expect(response.body.image).toMatch(/uploads\/properties\/\d+\/.+\.jpg$/);

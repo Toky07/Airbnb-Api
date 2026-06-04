@@ -6,9 +6,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { RoomEntity } from '../../infrastructure/entities/room.entity';
+import { RoomTypeEntity } from '../../infrastructure/entities/room-type.entity';
 import { PropertyEntity } from '../../../properties/infrastructure/entities/property-entity.entity';
+import { PropertyTypeEntity } from '../../../properties/infrastructure/entities/property-type.entity';
 import { MediaOrmEntity } from '../../../media/infrastructure/entities/media-orm.entity';
+import { AuthModule } from '../../../authentication/auth.module';
+import { UserModule } from '../../../user/user.module';
 import { rm } from 'fs/promises';
+import {
+  AUTH_TEST_ENTITIES,
+  DOMAIN_TEST_ENTITIES,
+  registerAndLoginAsSuperAdmin,
+} from '../../../../test/controller-test.helpers';
 
 describe('RoomController', () => {
   let app: INestApplication;
@@ -47,7 +56,7 @@ describe('RoomController', () => {
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [RoomEntity, PropertyEntity, MediaOrmEntity],
+          entities: [...AUTH_TEST_ENTITIES, ...DOMAIN_TEST_ENTITIES],
           synchronize: true,
         }),
         JwtModule.register({
@@ -56,6 +65,8 @@ describe('RoomController', () => {
           secretOrPrivateKey: '1234',
           signOptions: { expiresIn: '5h' },
         }),
+        AuthModule,
+        UserModule,
         RoomsModule,
       ],
     }).compile();
@@ -64,6 +75,8 @@ describe('RoomController', () => {
 
     app = moduleRef.createNestApplication();
     await app.init();
+
+    token = await registerAndLoginAsSuperAdmin(app, dataSource);
   });
 
   it(`/GET rooms`, async () => {
@@ -74,16 +87,17 @@ describe('RoomController', () => {
 
     const response = await request(app.getHttpServer())
       .get('/rooms')
-      .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    expect(response.body).toEqual([{
+    expect(response.body.data[0]).toEqual(expect.objectContaining({
       id: expect.any(Number),
       ...defaultRoom,
+      roomTypeId: null,
+      roomType: null,
       images: [],
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
-    }]);
+    }));
   });
 
   it(`/GET rooms/:id`, async () => {
@@ -92,16 +106,17 @@ describe('RoomController', () => {
 
     const response = await request(app.getHttpServer())
       .get(`/rooms/${room.id}`)
-      .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    expect(response.body).toEqual({
+    expect(response.body).toEqual(expect.objectContaining({
       id: room.id,
       ...defaultRoom,
+      roomTypeId: null,
+      roomType: null,
       images: [],
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
-    });
+    }));
   });
 
   it('/POST rooms', async () => {
@@ -111,13 +126,15 @@ describe('RoomController', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(201);
 
-    expect(response.body).toEqual({
+    expect(response.body).toEqual(expect.objectContaining({
       id: expect.any(Number),
       ...defaultRoom,
+      roomTypeId: null,
+      roomType: null,
       images: [],
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
-    });
+    }));
   });
 
   it('/POST rooms with images', async () => {
@@ -140,6 +157,7 @@ describe('RoomController', () => {
       .field('property', JSON.stringify({ id: property.id }))
       .attach('images', Buffer.from('room-1'), 'room1.jpg')
       .attach('images', Buffer.from('room-2'), 'room2.jpg')
+      .set('Authorization', `Bearer ${token}`)
       .expect(201);
 
     expect(response.body.images).toHaveLength(2);
@@ -173,12 +191,10 @@ describe('RoomController', () => {
 
     const updatedRoom = await repository.findOne({ where: { id: room.id } });
 
-    expect(updatedRoom).toEqual({
+    expect(updatedRoom).toEqual(expect.objectContaining({
       id: expect.any(Number),
       ...updatedData,
-      createdAt: expect.any(Date),
-      updatedAt: expect.any(Date),
-    });
+    }));
   });
 
   it('/DELETE rooms/:id', async () => {

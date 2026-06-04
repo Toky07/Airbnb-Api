@@ -9,18 +9,23 @@ import { DataSource } from 'typeorm';
 import { UserNameVO } from '../../../user/domain/valueObject/username.vo';
 import { RoleEntity } from '../../domain/entities/role.entity';
 import { RoleMapper } from '../../infrastructure/mappers/role.mappers';
+import { PermissionEntity } from '../../infrastructure/entity/permission.entity';
+import { AUTH_TEST_ENTITIES, registerAndLoginAsSuperAdmin } from '../../../../test/controller-test.helpers';
 
 describe('Roles', () => {
   let app: INestApplication;
   let dataSource: DataSource;
+  let token: string;
 
-  const createRole = async (name: string) => {
+  const createRole = async (name: string, slug = 'test-role') => {
     const repository = dataSource.getRepository(Role);
-    repository.clear();
-    
-    return await repository.save(repository.create(
-        RoleMapper.toEntity(new RoleEntity(new UserNameVO(name)))
-    ));
+    await repository.clear();
+
+    return repository.save(
+      repository.create(
+        RoleMapper.toEntity(new RoleEntity(new UserNameVO(name), slug)),
+      ),
+    );
   };
 
   beforeAll(async () => {
@@ -29,7 +34,7 @@ describe('Roles', () => {
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [AuthEntity, Role],
+          entities: [...AUTH_TEST_ENTITIES],
           synchronize: true,
         }),
         AuthModule,
@@ -39,17 +44,22 @@ describe('Roles', () => {
     dataSource = moduleRef.get(DataSource);
     app = moduleRef.createNestApplication();
     await app.init();
+    token = await registerAndLoginAsSuperAdmin(app, dataSource);
   });
 
-  it(`/POST auth/roles`, async () => {    
+  it(`/POST auth/roles`, async () => {
     const response = await request(app.getHttpServer())
       .post('/auth/roles')
+      .set('Authorization', `Bearer ${token}`)
       .send({ name: 'test' })
       .expect(201);
 
     expect(response.body).toStrictEqual({
-        id: expect.any(Number),
-        name: 'test',
+      id: expect.any(Number),
+      name: 'test',
+      slug: 'test',
+      description: null,
+      permissionKeys: [],
     });
   });
 
@@ -61,10 +71,17 @@ describe('Roles', () => {
 
     const response = await request(app.getHttpServer())
       .get('/auth/roles')
+      .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    expect(response.body).toStrictEqual([
-      { id: expect.any(Number), name: 'test' },
+    expect(response.body.data).toStrictEqual([
+      {
+        id: expect.any(Number),
+        name: 'test',
+        slug: 'test-role',
+        description: null,
+        permissionKeys: [],
+      },
     ]);
   });
 
@@ -76,10 +93,17 @@ describe('Roles', () => {
 
     const response = await request(app.getHttpServer())
       .put(`/auth/roles/${role.id}`)
+      .set('Authorization', `Bearer ${token}`)
       .send({ name: 'update'})
       .expect(200);
 
-      expect(response.body).toStrictEqual({ id: expect.any(Number), name: 'update' });
+      expect(response.body).toStrictEqual({
+        id: expect.any(Number),
+        name: 'update',
+        slug: 'test-role',
+        description: null,
+        permissionKeys: [],
+      });
   });
 
   it(`DELETE auth/roles/:id`, async () => {
@@ -90,6 +114,7 @@ describe('Roles', () => {
 
     await request(app.getHttpServer())
       .delete(`/auth/roles/${role.id}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
     const expectedRole = await dataSource.getRepository(Role).findOne({ where: { id: role.id } });

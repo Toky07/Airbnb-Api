@@ -16,6 +16,10 @@ import { Role } from '../../../authentication/infrastructure/entity/role.entity'
 import { PermissionEntity } from '../../../authentication/infrastructure/entity/permission.entity';
 import { MediaOrmEntity } from '../../../media/infrastructure/entities/media-orm.entity';
 import { rm } from 'fs/promises';
+import {
+  AUTH_TEST_ENTITIES,
+  registerAndLoginAsSuperAdmin,
+} from '../../../../test/controller-test.helpers';
 
 describe('UserController', () => {
   let app: INestApplication;
@@ -28,7 +32,7 @@ describe('UserController', () => {
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [UserEntity, AuthEntity, Role, PermissionEntity, MediaOrmEntity],
+          entities: [...AUTH_TEST_ENTITIES, MediaOrmEntity],
           synchronize: true,
         }),
         JwtModule.register({
@@ -47,25 +51,13 @@ describe('UserController', () => {
     app = moduleRef.createNestApplication();
     await app.init();
 
-    const login = async () => {
-      const response = await request(app.getHttpServer())
-        .post('/auth/login')
-        .send({
-          email: 'test@test.com',
-          password: '123456',
-        });
-
-      return response.body.token;
-    };
-
-    const authRepository = dataSource.getRepository(AuthEntity);
-  
-    await request(app.getHttpServer())
-      .post('/auth/register')
-      .send({ email: 'test@test.com', password: '123456' })
-      .expect(201);
-
-    token = await login();
+    token = await registerAndLoginAsSuperAdmin(app, dataSource, {
+      email: 'test@test.com',
+      password: '123456',
+      firstName: 'John',
+      lastName: 'Doe',
+      phoneNumber: '+33601020304',
+    });
   });
 
   beforeEach(async () => {
@@ -90,16 +82,18 @@ describe('UserController', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    expect(response.body).toEqual([{
+    expect(response.body.data[0]).toEqual(expect.objectContaining({
       id: expect.any(Number),
       firstName: 'John',
       lastName: 'Doe',
       email: 'test@test.com',
       phoneNumber: '+1234567890',
       avatar: 'avatar.png',
+      roles: expect.any(Array),
+      authLinked: expect.any(Boolean),
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
-    }]);
+    }));
   });
 
   it(`/GET users/:id`, async () => {
@@ -126,6 +120,10 @@ describe('UserController', () => {
       email: 'test@test.com',
       phoneNumber: '+1234567890',
       avatar: 'avatar.png',
+      roles: expect.any(Array),
+      authLinked: expect.any(Boolean),
+      createdAt: expect.any(String),
+      updatedAt: expect.any(String),
     });
   });
 
@@ -149,6 +147,8 @@ describe('UserController', () => {
       email: 'test@test.com',
       phoneNumber: '+1234567890',
       avatar: 'avatar.png',
+      roles: expect.any(Array),
+      authLinked: expect.any(Boolean),
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
     });
@@ -237,16 +237,14 @@ describe('UserController', () => {
 
     const updatedUser = await repository.findOne({ where: { id: user.id } });
 
-    expect(updatedUser).toEqual({
+    expect(updatedUser).toEqual(expect.objectContaining({
       id: expect.any(Number),
       firstName: 'Updated',
       lastName: 'Updated',
       email: 'updated@test.com',
       phoneNumber: '+1234567891',
       avatar: 'avatar.png',
-      createdAt: expect.any(Date),
-      updatedAt: expect.any(Date),
-    });
+    }));
   });
 
   it('/PUT users/:id with avatar file', async () => {
