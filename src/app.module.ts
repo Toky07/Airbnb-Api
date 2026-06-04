@@ -9,6 +9,7 @@ import { PropertiesModule } from './modules/properties/properties.module';
 import { PropertyEntity } from './modules/properties/infrastructure/entities/property-entity.entity';
 import { RoomsModule } from './modules/rooms/room.module';
 import { MediaOrmEntity } from './modules/media/infrastructure/entities/media-orm.entity';
+import { ImportModule } from './modules/import/import.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { MediaOrmEntity } from './modules/media/infrastructure/entities/media-or
     AuthModule,
     PropertiesModule,
     RoomsModule,
+    ImportModule,
   ],
   controllers: [],
   providers: [],

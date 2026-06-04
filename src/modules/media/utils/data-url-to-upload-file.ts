@@ -1,4 +1,5 @@
 import type { UploadFile } from '../types/upload-file';
+import { bufferToUploadFile } from './buffer-to-upload-file';
 
 const DATA_URL_PATTERN = /^data:([^;]+);base64,(.+)$/;
 
@@ -20,12 +21,9 @@ export function dataUrlToUploadFile(dataUrl: string): UploadFile {
   const buffer = Buffer.from(match[2], 'base64');
   const extension = extensionFromMimetype(mimetype);
 
-  return {
+  return bufferToUploadFile(buffer, {
     fieldname: 'avatar',
     originalname: `avatar${extension}`,
-    encoding: '7bit',
     mimetype,
-    size: buffer.length,
-    buffer,
-  };
+  });
 }

@@ -19,7 +19,10 @@ export class PropertyRepository implements IPropertyRepository {
     }
 
     async findById(id: number): Promise<Property|null> {
-        const property = await this.repository.findOne({ where: { id } });
+        const property = await this.repository.findOne({
+            where: { id },
+            relations: ['rooms'],
+        });
         return property ? PropertyMapper.toDomain(property) : null;
     }
 
