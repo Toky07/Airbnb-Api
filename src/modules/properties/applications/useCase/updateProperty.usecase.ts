@@ -35,6 +35,8 @@ export class UpdatePropertyUseCase {
         property.checkInTime = updatePropertyDto.checkInTime;
         property.checkOutTime = updatePropertyDto.checkOutTime;
         property.ownerId = updatePropertyDto.ownerId;
+        property.propertyTypeId = updatePropertyDto.propertyTypeId ?? null;
+        property.propertyType = null;
 
         const updatedProperty = await this.repository.update(property);
 

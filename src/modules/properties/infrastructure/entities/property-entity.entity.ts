@@ -1,8 +1,11 @@
 import { RoomEntity } from "../../../rooms/infrastructure/entities/room.entity";
+import { PropertyTypeEntity } from "./property-type.entity";
 import {
     Column,
     CreateDateColumn,
     Entity,
+    JoinColumn,
+    ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
@@ -42,6 +45,15 @@ export class PropertyEntity {
 
     @Column()
     ownerId: number;
+
+    @Column({ nullable: true })
+    propertyTypeId: number | null;
+
+    @ManyToOne(() => PropertyTypeEntity, (propertyType) => propertyType.properties, {
+        nullable: true,
+    })
+    @JoinColumn({ name: 'propertyTypeId' })
+    propertyType?: PropertyTypeEntity;
 
     @OneToMany(() => RoomEntity, (room) => room.property)
     rooms: RoomEntity[];

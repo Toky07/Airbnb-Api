@@ -36,5 +36,9 @@ export function parseRoomBody(body: Record<string, unknown>): CreateRoomDto {
     size: Number(body.size),
     status: String(body.status),
     property,
+    roomTypeId:
+      body.roomTypeId === undefined || body.roomTypeId === ''
+        ? null
+        : Number(body.roomTypeId),
   };
 }

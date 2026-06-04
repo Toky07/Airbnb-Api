@@ -14,5 +14,9 @@ export function parsePropertyBody(
     checkInTime: String(body.checkInTime),
     checkOutTime: String(body.checkOutTime),
     ownerId: Number(body.ownerId),
+    propertyTypeId:
+      body.propertyTypeId === undefined || body.propertyTypeId === ''
+        ? null
+        : Number(body.propertyTypeId),
   };
 }

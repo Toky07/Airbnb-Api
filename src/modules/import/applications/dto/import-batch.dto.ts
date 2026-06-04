@@ -20,6 +20,12 @@ export type ImportPropertyRowDto = {
   imageUrl?: string;
 };
 
+export type ImportCategoryTypeRowDto = {
+  name: string;
+  sortOrder: number;
+  isActive: boolean;
+};
+
 export type ImportRoomRowDto = {
   name: string;
   description: string;
@@ -39,16 +45,24 @@ export type ImportBatchDto = {
   users?: ImportUserRowDto[];
   properties?: ImportPropertyRowDto[];
   rooms?: ImportRoomRowDto[];
+  propertyTypes?: ImportCategoryTypeRowDto[];
+  roomTypes?: ImportCategoryTypeRowDto[];
 };
 
 export type ImportRowError = {
-  entity: 'user' | 'property' | 'room';
+  entity: 'user' | 'property' | 'room' | 'propertyType' | 'roomType';
   index: number;
   field?: string;
   message: string;
 };
 
 export type ImportBatchResult = {
-  created: { users: number; properties: number; rooms: number };
+  created: {
+    users: number;
+    properties: number;
+    rooms: number;
+    propertyTypes: number;
+    roomTypes: number;
+  };
   errors: ImportRowError[];
 };

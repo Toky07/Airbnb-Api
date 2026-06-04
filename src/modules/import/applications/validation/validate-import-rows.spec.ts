@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   parseImageUrlList,
+  validateImportCategoryTypeRow,
   validateImportPropertyRow,
   validateImportRoomRow,
   validateImportUserRow,
@@ -39,6 +40,26 @@ describe('validate-import-rows', () => {
 
   it('parse les URLs d’images de chambre', () => {
     expect(parseImageUrlList('https://a.jpg; https://b.jpg')).toHaveLength(2);
+  });
+
+  it('valide un type de catégorie', () => {
+    expect(
+      validateImportCategoryTypeRow({
+        name: 'Resort',
+        sortOrder: 0,
+        isActive: true,
+      }).ok,
+    ).toBe(true);
+  });
+
+  it('rejette un type sans nom', () => {
+    expect(
+      validateImportCategoryTypeRow({
+        name: '',
+        sortOrder: 0,
+        isActive: true,
+      }).ok,
+    ).toBe(false);
   });
 
   it('rejette un statut de chambre inconnu', () => {

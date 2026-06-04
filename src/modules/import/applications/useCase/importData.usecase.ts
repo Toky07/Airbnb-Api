@@ -3,7 +3,14 @@ import { CreatePropertyUseCase } from '../../../properties/applications/useCase/
 import { PROPERTY_REPOSITORY } from '../../../properties/infrastructure/repositories/property.repository';
 import type { IPropertyRepository } from '../../../properties/domain/repositories/property.repository';
 import { CreateRoomUseCase } from '../../../rooms/applications/useCase/createRoom.usecase';
+import { CreatePropertyTypeUseCase } from '../../../properties/applications/useCase/create-property-type.usecase';
+import { PROPERTY_TYPE_REPOSITORY } from '../../../properties/domain/repositories/property-type.repository';
+import type { IPropertyTypeRepository } from '../../../properties/domain/repositories/property-type.repository';
+import { CreateRoomTypeUseCase } from '../../../rooms/applications/useCase/create-room-type.usecase';
+import { ROOM_TYPE_REPOSITORY } from '../../../rooms/domain/repositories/room-type.repository';
+import type { IRoomTypeRepository } from '../../../rooms/domain/repositories/room-type.repository';
 import { CreateUserUseCase } from '../../../user/application/useCase/createuser.usecase';
+import { slugify } from '../../../../shared/utils/slug.util';
 import { USER_REPOSITORY } from '../../../user/infrastructure/repositories/user.repository';
 import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
 import { fetchImageFromUrl } from '../../../media/utils/fetch-image-from-url';
@@ -14,6 +21,7 @@ import type {
 } from '../dto/import-batch.dto';
 import {
   parseImageUrlList,
+  validateImportCategoryTypeRow,
   validateImportPropertyRow,
   validateImportRoomRow,
   validateImportUserRow,
@@ -25,9 +33,15 @@ export class ImportDataUseCase {
     private readonly createUser: CreateUserUseCase,
     private readonly createProperty: CreatePropertyUseCase,
     private readonly createRoom: CreateRoomUseCase,
+    private readonly createPropertyType: CreatePropertyTypeUseCase,
+    private readonly createRoomType: CreateRoomTypeUseCase,
     @Inject(USER_REPOSITORY) private readonly userRepository: IUserRepository,
     @Inject(PROPERTY_REPOSITORY)
     private readonly propertyRepository: IPropertyRepository,
+    @Inject(PROPERTY_TYPE_REPOSITORY)
+    private readonly propertyTypeRepository: IPropertyTypeRepository,
+    @Inject(ROOM_TYPE_REPOSITORY)
+    private readonly roomTypeRepository: IRoomTypeRepository,
   ) {}
 
   async execute(batch: ImportBatchDto): Promise<ImportBatchResult> {
@@ -48,9 +62,21 @@ export class ImportDataUseCase {
       propertyNameToId.set(property.name.trim(), property.id!);
     }
 
+    const propertyTypeSlugs = new Set<string>();
+    const roomTypeSlugs = new Set<string>();
+
+    for (const type of await this.propertyTypeRepository.findAll()) {
+      propertyTypeSlugs.add(type.slug);
+    }
+    for (const type of await this.roomTypeRepository.findAll()) {
+      roomTypeSlugs.add(type.slug);
+    }
+
     let usersCreated = 0;
     let propertiesCreated = 0;
     let roomsCreated = 0;
+    let propertyTypesCreated = 0;
+    let roomTypesCreated = 0;
 
     for (let index = 0; index < (batch.users?.length ?? 0); index++) {
       const row = batch.users![index]!;
@@ -233,11 +259,95 @@ export class ImportDataUseCase {
       }
     }
 
+    for (let index = 0; index < (batch.propertyTypes?.length ?? 0); index++) {
+      const row = batch.propertyTypes![index]!;
+      const validation = validateImportCategoryTypeRow(row);
+      if (!validation.ok) {
+        errors.push({
+          entity: 'propertyType',
+          index,
+          field: validation.field,
+          message: validation.message,
+        });
+        continue;
+      }
+
+      const slug = slugify(row.name.trim());
+      if (propertyTypeSlugs.has(slug)) {
+        errors.push({
+          entity: 'propertyType',
+          index,
+          field: 'name',
+          message: `Le type « ${row.name} » existe déjà.`,
+        });
+        continue;
+      }
+
+      try {
+        const created = await this.createPropertyType.execute({
+          name: row.name.trim(),
+          sortOrder: Number(row.sortOrder),
+          isActive: row.isActive,
+        });
+        propertyTypeSlugs.add(created.slug);
+        propertyTypesCreated += 1;
+      } catch (cause) {
+        errors.push({
+          entity: 'propertyType',
+          index,
+          message: cause instanceof Error ? cause.message : 'Création impossible.',
+        });
+      }
+    }
+
+    for (let index = 0; index < (batch.roomTypes?.length ?? 0); index++) {
+      const row = batch.roomTypes![index]!;
+      const validation = validateImportCategoryTypeRow(row);
+      if (!validation.ok) {
+        errors.push({
+          entity: 'roomType',
+          index,
+          field: validation.field,
+          message: validation.message,
+        });
+        continue;
+      }
+
+      const slug = slugify(row.name.trim());
+      if (roomTypeSlugs.has(slug)) {
+        errors.push({
+          entity: 'roomType',
+          index,
+          field: 'name',
+          message: `Le type « ${row.name} » existe déjà.`,
+        });
+        continue;
+      }
+
+      try {
+        const created = await this.createRoomType.execute({
+          name: row.name.trim(),
+          sortOrder: Number(row.sortOrder),
+          isActive: row.isActive,
+        });
+        roomTypeSlugs.add(created.slug);
+        roomTypesCreated += 1;
+      } catch (cause) {
+        errors.push({
+          entity: 'roomType',
+          index,
+          message: cause instanceof Error ? cause.message : 'Création impossible.',
+        });
+      }
+    }
+
     return {
       created: {
         users: usersCreated,
         properties: propertiesCreated,
         rooms: roomsCreated,
+        propertyTypes: propertyTypesCreated,
+        roomTypes: roomTypesCreated,
       },
       errors,
     };

@@ -12,6 +12,7 @@ export type CreateRoomDto = {
     size: number;
     status: string;
     property: Property;
+    roomTypeId?: number | null;
     id?: number;
     createdAt?: Date;
     updatedAt?: Date;

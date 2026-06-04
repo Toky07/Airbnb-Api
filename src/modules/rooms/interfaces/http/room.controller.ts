@@ -37,7 +37,7 @@ export class RoomController {
   ) {}
 
   @Get()
-  @RequirePermissions('rooms.read')
+  // @RequirePermissions('rooms.read')
   async findAll(
     @Query() query: Record<string, unknown>,
   ): Promise<PaginatedResult<RoomOutput>> {
@@ -45,7 +45,7 @@ export class RoomController {
   }
 
   @Get(':id')
-  @RequirePermissions('rooms.read')
+  // @RequirePermissions('rooms.read')
   async findById(@Param('id') id: number) {
     return this.findOneRoomUseCase.execute(id);
   }

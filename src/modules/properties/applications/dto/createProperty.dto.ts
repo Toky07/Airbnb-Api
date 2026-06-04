@@ -9,6 +9,7 @@ export type CreatePropertyDto = {
     checkInTime: string;
     checkOutTime: string;
     ownerId: number;
+    propertyTypeId?: number | null;
     createdAt?: Date;
     updatedAt?: Date;
     id?: number;

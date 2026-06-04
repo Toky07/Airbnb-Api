@@ -9,6 +9,7 @@ import { hasPermission } from '../../domain/utils/build-jwt-payload';
 import type { JwtPayload } from '../../domain/types/jwt-payload';
 import { PERMISSIONS_KEY } from '../decorators/require-permissions.decorator';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
+import { SUPER_ADMIN_ONLY_KEY } from '../decorators/require-superadmin.decorator';
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {
@@ -24,6 +25,21 @@ export class PermissionsGuard implements CanActivate {
       return true;
     }
 
+    const request = context.switchToHttp().getRequest<{ user?: JwtPayload }>();
+    const user = request.user;
+
+    const superAdminOnly = this.reflector.getAllAndOverride<boolean>(
+      SUPER_ADMIN_ONLY_KEY,
+      [context.getHandler(), context.getClass()],
+    );
+
+    if (superAdminOnly) {
+      if (!user?.isSuperAdmin) {
+        throw new ForbiddenException('Super administrateur requis');
+      }
+      return true;
+    }
+
     const required = this.reflector.getAllAndOverride<string[]>(
       PERMISSIONS_KEY,
       [context.getHandler(), context.getClass()],
@@ -32,9 +48,6 @@ export class PermissionsGuard implements CanActivate {
     if (!required?.length) {
       return true;
     }
-
-    const request = context.switchToHttp().getRequest<{ user?: JwtPayload }>();
-    const user = request.user;
 
     if (!user) {
       throw new ForbiddenException('Missing authentication context');

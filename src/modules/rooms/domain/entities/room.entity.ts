@@ -1,4 +1,5 @@
 import { Property } from "src/modules/properties/domain/entities/property.entity";
+import type { CategorySummary } from "../../../../shared/types/category-summary";
 
 export class Room {
     public name: string;
@@ -12,6 +13,8 @@ export class Room {
     public size: number;
     public status: string;
     public property: Property;
+    public roomTypeId: number | null;
+    public roomType: CategorySummary | null;
     public createdAt?: Date;
     public updatedAt?: Date;
     public id?: number;
@@ -28,6 +31,8 @@ export class Room {
         size,
         status,
         property,
+        roomTypeId,
+        roomType,
         createdAt,
         updatedAt,
         id,
@@ -43,6 +48,8 @@ export class Room {
         size: number;
         status: string;
         property: Property;
+        roomTypeId?: number | null;
+        roomType?: CategorySummary | null;
         createdAt?: Date;
         updatedAt?: Date;
         id?: number;
@@ -58,6 +65,8 @@ export class Room {
         this.size = size;
         this.status = status;
         this.property = property;
+        this.roomTypeId = roomTypeId ?? null;
+        this.roomType = roomType ?? null;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.id = id;

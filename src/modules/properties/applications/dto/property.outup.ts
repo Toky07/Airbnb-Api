@@ -1,4 +1,5 @@
 import { RoomOutput } from "../../../rooms/applications/dto/room.output";
+import type { CategorySummary } from '../../../../shared/types/category-summary';
 import { Property } from "../../domain/entities/property.entity";
 import { Room } from "../../../rooms/domain/entities/room.entity";
 
@@ -15,6 +16,8 @@ export class PropertyOutput {
         public checkInTime: string,
         public checkOutTime: string,
         public ownerId: number,
+        public propertyTypeId: number | null,
+        public propertyType: CategorySummary | null,
         public rooms: RoomOutput[],
         public createdAt: Date,
         public updatedAt: Date,
@@ -38,6 +41,8 @@ export class PropertyOutput {
             property.checkInTime,
             property.checkOutTime,
             property.ownerId,
+            property.propertyTypeId,
+            property.propertyType,
             rooms ??
                 property.rooms.map((r: Room) => RoomOutput.fromDomain(r)),
             property.createdAt!,

@@ -14,14 +14,19 @@ export class RoomRepository implements IRoomRepository {
     constructor(@InjectRepository(RoomEntity) private readonly repository: Repository<RoomEntity>) {}
 
     async create(room: Room): Promise<Room> {
-        const data = this.repository.create(room);
+        const data = this.repository.create(RoomMapper.toEntity(room));
         const newRoom = await this.repository.save(data);
-
-        return RoomMapper.toDomain(newRoom);
+        const reloaded = await this.findById(newRoom.id!);
+        if (!reloaded) {
+            throw new Error('Room not found after create');
+        }
+        return reloaded;
     }
 
     async findAll(): Promise<Room[]> {
-        const rooms = await this.repository.find({ relations: ['property'] });
+        const rooms = await this.repository.find({
+            relations: ['property', 'roomType'],
+        });
         return rooms.map(room => RoomMapper.toDomain(room));
     }
 
@@ -29,6 +34,7 @@ export class RoomRepository implements IRoomRepository {
         const qb = this.repository
             .createQueryBuilder('room')
             .leftJoinAndSelect('room.property', 'property')
+            .leftJoinAndSelect('room.roomType', 'roomType')
             .orderBy('room.name', 'ASC');
 
         if (params.propertyId) {
@@ -59,7 +65,7 @@ export class RoomRepository implements IRoomRepository {
     async findById(id: number): Promise<Room|null> {
         const room = await this.repository.findOne({
             where: { id: Number(id) },
-            relations: ['property'],
+            relations: ['property', 'roomType'],
         });
 
         return room ? RoomMapper.toDomain(room) : null;
@@ -75,9 +81,12 @@ export class RoomRepository implements IRoomRepository {
             throw new Error('Room not found');
         }
 
-        const newRoom = await this.repository.save(data);
-
-        return RoomMapper.toDomain(newRoom);
+        await this.repository.save(data);
+        const reloaded = await this.findById(room.id!);
+        if (!reloaded) {
+            throw new Error('Room not found after update');
+        }
+        return reloaded;
     }
 
     async delete(id: number): Promise<boolean> {

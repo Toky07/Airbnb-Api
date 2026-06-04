@@ -17,7 +17,7 @@ export class PropertyRepository implements IPropertyRepository {
 
     async findAll(): Promise<Property[]> {
         const properties = await this.repository.find({
-            relations: ['rooms'],
+            relations: ['rooms', 'propertyType'],
         });
         
         return properties.map(property => PropertyMapper.toDomain(property));
@@ -27,6 +27,7 @@ export class PropertyRepository implements IPropertyRepository {
         const qb = this.repository
             .createQueryBuilder('property')
             .leftJoinAndSelect('property.rooms', 'rooms')
+            .leftJoinAndSelect('property.propertyType', 'propertyType')
             .orderBy('property.name', 'ASC');
 
         if (params.search) {
@@ -51,16 +52,19 @@ export class PropertyRepository implements IPropertyRepository {
     async findById(id: number): Promise<Property|null> {
         const property = await this.repository.findOne({
             where: { id },
-            relations: ['rooms'],
+            relations: ['rooms', 'propertyType'],
         });
         return property ? PropertyMapper.toDomain(property) : null;
     }
 
     async create(property: Property): Promise<Property> {
-        const data = this.repository.create(property);
+        const data = this.repository.create(PropertyMapper.toEntity(property));
         const newProperty = await this.repository.save(data);
-
-        return PropertyMapper.toDomain(newProperty);
+        const reloaded = await this.findById(newProperty.id!);
+        if (!reloaded) {
+            throw new Error('Property not found after create');
+        }
+        return reloaded;
     }
 
     async update(property: Property): Promise<Property> {
@@ -73,9 +77,12 @@ export class PropertyRepository implements IPropertyRepository {
             throw new Error('Property not found');
         }
 
-        const newProperty = await this.repository.save(data);
-
-        return PropertyMapper.toDomain(newProperty);
+        await this.repository.save(data);
+        const reloaded = await this.findById(property.id!);
+        if (!reloaded) {
+            throw new Error('Property not found after update');
+        }
+        return reloaded;
     }
 
     async delete(id: number): Promise<boolean> {

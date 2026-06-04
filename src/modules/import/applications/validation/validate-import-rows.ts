@@ -1,4 +1,5 @@
 import type {
+  ImportCategoryTypeRowDto,
   ImportPropertyRowDto,
   ImportRoomRowDto,
   ImportUserRowDto,
@@ -84,6 +85,18 @@ export function validateImportRoomRow(
   }
   if (row.pricePerNight <= 0) {
     return { ok: false, field: 'pricePerNight', message: 'Prix invalide.' };
+  }
+  return { ok: true };
+}
+
+export function validateImportCategoryTypeRow(
+  row: ImportCategoryTypeRowDto,
+): { ok: true } | { ok: false; field: string; message: string } {
+  if (!row.name?.trim()) {
+    return { ok: false, field: 'name', message: 'Le nom est requis.' };
+  }
+  if (!Number.isFinite(row.sortOrder)) {
+    return { ok: false, field: 'sortOrder', message: 'Ordre invalide.' };
   }
   return { ok: true };
 }

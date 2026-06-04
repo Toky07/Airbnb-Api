@@ -1,62 +1,77 @@
-import { Property } from "../../../properties/domain/entities/property.entity";
-import { PropertyMapper } from "../../../properties/infrastructure/mappers/property.mapper";
-import { Room } from "../../domain/entities/room.entity";
-import { RoomEntity } from "../entities/room.entity";
+import { Property } from '../../../properties/domain/entities/property.entity';
+import { PropertyMapper } from '../../../properties/infrastructure/mappers/property.mapper';
+import type { CategorySummary } from '../../../../shared/types/category-summary';
+import { Room } from '../../domain/entities/room.entity';
+import { RoomEntity } from '../entities/room.entity';
+
+function mapRoomType(entity: RoomEntity): CategorySummary | null {
+  if (!entity.roomType) {
+    return null;
+  }
+  return {
+    id: entity.roomType.id,
+    name: entity.roomType.name,
+    slug: entity.roomType.slug,
+  };
+}
 
 function mapRoomProperty(room: RoomEntity): Property {
-    if (room.property?.id != null) {
-        return PropertyMapper.toDomain(room.property);
-    }
+  if (room.property?.id != null) {
+    return PropertyMapper.toDomain(room.property);
+  }
 
-    return new Property({
-        name: '',
-        description: '',
-        address: '',
-        city: '',
-        country: '',
-        latitude: 0,
-        longitude: 0,
-        checkInTime: '',
-        checkOutTime: '',
-        ownerId: 0,
-    });
+  return new Property({
+    name: '',
+    description: '',
+    address: '',
+    city: '',
+    country: '',
+    latitude: 0,
+    longitude: 0,
+    checkInTime: '',
+    checkOutTime: '',
+    ownerId: 0,
+  });
 }
 
 export class RoomMapper {
-    static toDomain(room: RoomEntity): Room {
-        return new Room({
-            name: room.name,
-            description: room.description,
-            pricePerNight: room.pricePerNight,
-            maxGuests: room.maxGuests,
-            bedrooms: room.bedrooms,
-            bathrooms: room.bathrooms,
-            beds: room.beds,
-            quantity: room.quantity,
-            size: room.size,
-            status: room.status,
-            property: mapRoomProperty(room),
-            createdAt: room.createdAt,
-            updatedAt: room.updatedAt,
-            id: room.id,
-        });
-    }
+  static toDomain(room: RoomEntity): Room {
+    return new Room({
+      name: room.name,
+      description: room.description,
+      pricePerNight: room.pricePerNight,
+      maxGuests: room.maxGuests,
+      bedrooms: room.bedrooms,
+      bathrooms: room.bathrooms,
+      beds: room.beds,
+      quantity: room.quantity,
+      size: room.size,
+      status: room.status,
+      property: mapRoomProperty(room),
+      roomTypeId: room.roomTypeId,
+      roomType: mapRoomType(room),
+      createdAt: room.createdAt,
+      updatedAt: room.updatedAt,
+      id: room.id,
+    });
+  }
 
-    static toEntity(room: Room): RoomEntity {
-        return {
-            name: room.name,
-            description: room.description,
-            pricePerNight: room.pricePerNight,
-            maxGuests: room.maxGuests,
-            bedrooms: room.bedrooms,
-            bathrooms: room.bathrooms,
-            beds: room.beds,
-            quantity: room.quantity,
-            size: room.size,
-            status: room.status,
-            ...(room.property?.id
-                ? { property: { id: room.property.id } as RoomEntity['property'] }
-                : {}),
-        } as RoomEntity;
-    }
+  static toEntity(room: Room): Partial<RoomEntity> {
+    return {
+      name: room.name,
+      description: room.description,
+      pricePerNight: room.pricePerNight,
+      maxGuests: room.maxGuests,
+      bedrooms: room.bedrooms,
+      bathrooms: room.bathrooms,
+      beds: room.beds,
+      quantity: room.quantity,
+      size: room.size,
+      status: room.status,
+      roomTypeId: room.roomTypeId,
+      ...(room.property?.id
+        ? { property: { id: room.property.id } as RoomEntity['property'] }
+        : {}),
+    };
+  }
 }

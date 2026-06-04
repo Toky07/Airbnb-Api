@@ -38,6 +38,8 @@ export class UpdateRoomUseCase {
         room.size = updateRoomDto.size;
         room.status = updateRoomDto.status;
         room.property = updateRoomDto.property;
+        room.roomTypeId = updateRoomDto.roomTypeId ?? null;
+        room.roomType = null;
 
         const updatedRoom = await this.repository.update(room);
 

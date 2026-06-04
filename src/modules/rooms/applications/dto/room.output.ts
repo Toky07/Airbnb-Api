@@ -1,4 +1,5 @@
 import { Property } from "src/modules/properties/domain/entities/property.entity";
+import type { CategorySummary } from "../../../../shared/types/category-summary";
 import { Room } from "../../domain/entities/room.entity";
 
 export class RoomOutput {
@@ -14,6 +15,8 @@ export class RoomOutput {
         public readonly quantity: number,
         public readonly size: number,
         public readonly status: string,
+        public readonly roomTypeId: number | null,
+        public readonly roomType: CategorySummary | null,
         public readonly property: Property,
         public readonly createdAt: Date,
         public readonly updatedAt: Date,
@@ -33,6 +36,8 @@ export class RoomOutput {
             room.quantity,
             room.size,
             room.status,
+            room.roomTypeId,
+            room.roomType,
             room.property,
             room.createdAt!,
             room.updatedAt!,
