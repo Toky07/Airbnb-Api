@@ -156,6 +156,29 @@ describe('UserController', () => {
     });
   });
 
+  it('/POST users returns 400 for invalid phone number', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/users')
+      .send({
+        firstName: 'Test',
+        lastName: 'User',
+        email: 'test@test.test',
+        phoneNumber: '0123456789',
+      })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(400);
+
+    expect(response.body.statusCode).toBe(400);
+    expect(response.body.errors).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          field: 'phoneNumber',
+          message: expect.stringContaining('téléphone'),
+        }),
+      ]),
+    );
+  });
+
   it('/POST users with avatar file', async () => {
     const response = await request(app.getHttpServer())
       .post('/users')

@@ -1,3 +1,4 @@
+import { NotFoundException } from "@nestjs/common";
 import { User } from "../../domain/entities/user.entity";
 import { IUserRepository } from "../../domain/repositories/user.repository";
 import { UserNameVO } from "../../domain/valueObject/username.vo";
@@ -64,6 +65,6 @@ describe('UseCase: update user use case', () => {
       lastName: 'Doe',
       email: 'update@test.com',
       phoneNumber: '+1234567890',
-    })).rejects.toThrow(new Error('User not found'));
+    })).rejects.toThrow(NotFoundException);
   });
 });

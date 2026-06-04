@@ -1,10 +1,11 @@
 import type { IUserRepository } from "../../domain/repositories/user.repository";
 import { UpdateUserDto } from "../../domain/dtos/createUser.dto";
-import { Inject } from "@nestjs/common";
+import { Inject, NotFoundException } from "@nestjs/common";
 import { USER_REPOSITORY } from "../../infrastructure/repositories/user.repository";
 import { UserOutput } from "../../domain/dtos/user.output";
 import type { UploadFile } from "../../../media/types/upload-file";
 import { SaveUserAvatarUseCase } from "./saveUserAvatar.usecase";
+import { validateUserFields } from "../validation/validate-user-fields";
 
 export class UpdateUserUseCase {
     constructor(
@@ -19,8 +20,10 @@ export class UpdateUserUseCase {
         const user = await this.repository.findById(updateUserDto.id);
 
         if (!user) {
-            throw new Error('User not found');
+            throw new NotFoundException('Utilisateur introuvable.');
         }
+
+        validateUserFields(updateUserDto);
 
         user.firstName = updateUserDto.firstName;
         user.lastName = updateUserDto.lastName;

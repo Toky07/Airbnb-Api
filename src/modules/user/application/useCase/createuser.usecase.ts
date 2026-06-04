@@ -9,6 +9,7 @@ import { Inject } from "@nestjs/common/decorators/core/inject.decorator";
 import { PhoneNumberVO } from "../../../../shared/valueObject/phone.vo";
 import type { UploadFile } from "../../../media/types/upload-file";
 import { SaveUserAvatarUseCase } from "./saveUserAvatar.usecase";
+import { validateUserFields } from "../validation/validate-user-fields";
 
 export class CreateUserUseCase {
     constructor(
@@ -20,6 +21,8 @@ export class CreateUserUseCase {
         createUserDto: CreateUserDto,
         avatarFile?: UploadFile,
     ): Promise<UserOutput> {
+        validateUserFields(createUserDto);
+
         const user = new User(
             new UserNameVO(createUserDto.firstName),
             new UserNameVO(createUserDto.lastName),
