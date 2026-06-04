@@ -5,6 +5,7 @@ import { CreateUserUseCase } from './application/useCase/createuser.usecase';
 import { DeleteUserUseCase } from './application/useCase/deleteUser.usecase';
 import { FindUserUseCase } from './application/useCase/findUser.usecase';
 import { ListUsersUseCase } from './application/useCase/listeUser.usecase';
+import { ListUserOptionsUseCase } from './application/useCase/listUserOptions.usecase';
 import { UpdateUserUseCase } from './application/useCase/updateUser.usecase';
 import { SaveUserAvatarUseCase } from './application/useCase/saveUserAvatar.usecase';
 import { UserController } from './interfaces/http/user.controller';
@@ -24,6 +25,7 @@ import { MediaModule } from '../media/media.module';
   providers: [
     AssignUserRolesUseCase,
     ListUsersUseCase,
+    ListUserOptionsUseCase,
     FindUserUseCase,
     CreateUserUseCase,
     UpdateUserUseCase,

@@ -6,12 +6,16 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ENTITY_MEDIA_LIMITS, ENTITY_TYPE } from '../../../media/constant';
 import { ListRoomsUseCase } from '../../applications/useCase/listRoom.usecase';
+import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
+import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
+import { RoomOutput } from '../../applications/dto/room.output';
 import { FindOneRoomUseCase } from '../../applications/useCase/findOneRoom.usecase';
 import type { CreateRoomDto } from '../../applications/dto/createRoom.dto';
 import { CreateRoomUseCase } from '../../applications/useCase/createRoom.usecase';
@@ -34,8 +38,10 @@ export class RoomController {
 
   @Get()
   @RequirePermissions('rooms.read')
-  async findAll() {
-    return this.listRoomUseCase.execute();
+  async findAll(
+    @Query() query: Record<string, unknown>,
+  ): Promise<PaginatedResult<RoomOutput>> {
+    return this.listRoomUseCase.execute(parsePaginationQuery(query));
   }
 
   @Get(':id')

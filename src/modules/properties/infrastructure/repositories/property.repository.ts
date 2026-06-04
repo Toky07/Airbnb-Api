@@ -4,6 +4,11 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Property } from "../../domain/entities/property.entity";
 import { PropertyMapper } from "../mappers/property.mapper";
+import {
+    buildPaginationMeta,
+    type PaginatedResult,
+    type PaginationParams,
+} from '../../../../shared/pagination/pagination.types';
 
 export const PROPERTY_REPOSITORY = 'PROPERTY_REPOSITORY';
 
@@ -16,6 +21,31 @@ export class PropertyRepository implements IPropertyRepository {
         });
         
         return properties.map(property => PropertyMapper.toDomain(property));
+    }
+
+    async findPaginated(params: PaginationParams): Promise<PaginatedResult<Property>> {
+        const qb = this.repository
+            .createQueryBuilder('property')
+            .leftJoinAndSelect('property.rooms', 'rooms')
+            .orderBy('property.name', 'ASC');
+
+        if (params.search) {
+            const term = `%${params.search}%`;
+            qb.andWhere(
+                '(property.name LIKE :term OR property.city LIKE :term OR property.country LIKE :term OR property.address LIKE :term OR property.description LIKE :term)',
+                { term },
+            );
+        }
+
+        const [entities, total] = await qb
+            .skip((params.page - 1) * params.limit)
+            .take(params.limit)
+            .getManyAndCount();
+
+        return {
+            data: entities.map((entity) => PropertyMapper.toDomain(entity)),
+            meta: buildPaginationMeta(total, params.page, params.limit),
+        };
     }
 
     async findById(id: number): Promise<Property|null> {

@@ -1,21 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
-import type { PaginatedResult, PaginationParams } from '../../../../shared/pagination/pagination.types';
 import type { IUserRepository } from '../../domain/repositories/user.repository';
 import { USER_REPOSITORY } from '../../infrastructure/repositories/user.repository';
 import { UserOutput } from '../../domain/dtos/user.output';
 
 @Injectable()
-export class ListUsersUseCase {
+export class ListUserOptionsUseCase {
   constructor(
     @Inject(USER_REPOSITORY) private readonly repository: IUserRepository,
   ) {}
 
-  async execute(params: PaginationParams): Promise<PaginatedResult<UserOutput>> {
-    const result = await this.repository.findPaginated(params);
-
-    return {
-      data: result.data.map((user) => UserOutput.fromDomain(user)),
-      meta: result.meta,
-    };
+  async execute(): Promise<UserOutput[]> {
+    const users = await this.repository.findAll();
+    return users.map((user) => UserOutput.fromDomain(user));
   }
 }

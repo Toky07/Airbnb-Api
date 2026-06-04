@@ -1,0 +1,36 @@
+import {
+  DEFAULT_PAGE_SIZE,
+  PAGE_SIZE_OPTIONS,
+  type PageSizeOption,
+  type PaginationParams,
+} from './pagination.types';
+
+export function parsePaginationQuery(
+  query: Record<string, unknown>,
+): PaginationParams {
+  const page = Math.max(1, Number.parseInt(String(query.page ?? '1'), 10) || 1);
+
+  const rawLimit = Number.parseInt(String(query.limit ?? DEFAULT_PAGE_SIZE), 10);
+  const limit = PAGE_SIZE_OPTIONS.includes(rawLimit as PageSizeOption)
+    ? (rawLimit as PageSizeOption)
+    : DEFAULT_PAGE_SIZE;
+
+  const search =
+    typeof query.search === 'string' ? query.search.trim() : undefined;
+
+  const propertyIdRaw = query.propertyId;
+  const propertyId =
+    propertyIdRaw !== undefined && propertyIdRaw !== ''
+      ? Number.parseInt(String(propertyIdRaw), 10)
+      : undefined;
+
+  return {
+    page,
+    limit,
+    search: search || undefined,
+    propertyId:
+      propertyId !== undefined && Number.isFinite(propertyId) && propertyId > 0
+        ? propertyId
+        : undefined,
+  };
+}

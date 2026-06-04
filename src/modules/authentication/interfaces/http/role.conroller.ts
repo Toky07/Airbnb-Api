@@ -1,4 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
+import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
 import { type CreateRoleDto } from '../../application/dto/create-role.dto';
 import { CreateRoleUseCase } from '../../useCase/create-role.usecase';
 import { RoleOutput } from '../../application/dto/role.output';
@@ -31,8 +33,10 @@ export class RoleController {
 
   @Get('roles')
   @RequirePermissions('roles.read')
-  list(): Promise<RoleOutput[]> {
-    return this.listRolesUseCase.execute();
+  list(
+    @Query() query: Record<string, unknown>,
+  ): Promise<PaginatedResult<RoleOutput>> {
+    return this.listRolesUseCase.execute(parsePaginationQuery(query));
   }
 
   @Post('roles')

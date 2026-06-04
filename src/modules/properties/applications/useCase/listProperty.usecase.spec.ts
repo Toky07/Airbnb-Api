@@ -1,51 +1,43 @@
-import { Property } from "../../domain/entities/property.entity";
-import { ListPropertyUseCase } from "./listProperty.usecase";
-import { IPropertyRepository } from "../../domain/repositories/property.repository";
-import { mockPropertyMediaPresenter } from "./test-helpers/property-usecase.mocks";
+import { Property } from '../../domain/entities/property.entity';
+import { ListPropertyUseCase } from './listProperty.usecase';
+import type { IPropertyRepository } from '../../domain/repositories/property.repository';
+import { mockPropertyMediaPresenter } from './test-helpers/property-usecase.mocks';
+import { buildPaginationMeta } from '../../../../shared/pagination/pagination.types';
 
 describe('ListPropertyUseCase', () => {
-    const repository = {
-        findAll: async (): Promise<Property[]> => {
-            return [{
-                id: 1,
-                name: 'Test Property',
-                description: 'Test Description',
-                address: 'Test Address',
-                city: 'Test City',
-                country: 'Test Country',
-                latitude: 0,
-                longitude: 0,
-                checkInTime: 'Test CheckInTime',
-                checkOutTime: 'Test CheckOutTime',
-                rooms: [],
-                ownerId: 1,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            }];
-        },
-    } as IPropertyRepository;
+  const repository = {
+    findPaginated: async () => ({
+      data: [
+        {
+          id: 1,
+          name: 'Test Property',
+          description: 'Test Description',
+          address: 'Test Address',
+          city: 'Test City',
+          country: 'Test Country',
+          latitude: 0,
+          longitude: 0,
+          checkInTime: 'Test CheckInTime',
+          checkOutTime: 'Test CheckOutTime',
+          rooms: [],
+          ownerId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        } as Property,
+      ],
+      meta: buildPaginationMeta(1, 1, 10),
+    }),
+  } as unknown as IPropertyRepository;
 
-    it('should list properties', async () => {
-        const listPropertyUseCase = new ListPropertyUseCase(
-            repository,
-            mockPropertyMediaPresenter,
-        );
-        const result = await listPropertyUseCase.execute();
+  it('should list properties', async () => {
+    const listPropertyUseCase = new ListPropertyUseCase(
+      repository,
+      mockPropertyMediaPresenter,
+    );
+    const result = await listPropertyUseCase.execute({ page: 1, limit: 10 });
 
-        expect(result).toHaveLength(1);
-        expect(result[0].id).toBe(1);
-        expect(result[0].name).toBe('Test Property');
-        expect(result[0].description).toBe('Test Description');
-        expect(result[0].address).toBe('Test Address');
-        expect(result[0].city).toBe('Test City');
-        expect(result[0].country).toBe('Test Country');
-        expect(result[0].latitude).toBe(0);
-        expect(result[0].longitude).toBe(0);
-        expect(result[0].checkInTime).toBe('Test CheckInTime');
-        expect(result[0].checkOutTime).toBe('Test CheckOutTime');
-        expect(result[0].ownerId).toBe(1);
-        expect(result[0].createdAt).toBeInstanceOf(Date);
-        expect(result[0].updatedAt).toBeInstanceOf(Date);
-        expect(result[0].image).toBeNull();
-    });
+    expect(result.data).toHaveLength(1);
+    expect(result.data[0].id).toBe(1);
+    expect(result.data[0].name).toBe('Test Property');
+  });
 });

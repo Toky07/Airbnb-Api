@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PropertyController } from './interfaces/http/property.controller';
 import { ListPropertyUseCase } from './applications/useCase/listProperty.usecase';
+import { ListPropertyOptionsUseCase } from './applications/useCase/listPropertyOptions.usecase';
 import { PROPERTY_REPOSITORY, PropertyRepository } from './infrastructure/repositories/property.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PropertyEntity } from './infrastructure/entities/property-entity.entity';
@@ -16,6 +17,7 @@ import { PropertyMediaPresenter } from './applications/presenters/property-media
   controllers: [PropertyController],
   providers: [
     ListPropertyUseCase,
+    ListPropertyOptionsUseCase,
     FindOnePropertyUseCase,
     CreatePropertyUseCase,
     UpdatePropertyUseCase,

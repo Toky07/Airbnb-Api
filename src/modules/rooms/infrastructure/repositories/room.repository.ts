@@ -4,6 +4,11 @@ import { IRoomRepository } from "../../domain/repositories/room.repository";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { RoomMapper } from "../mappers/room.mapper";
+import {
+    buildPaginationMeta,
+    type PaginatedResult,
+    type PaginationParams,
+} from '../../../../shared/pagination/pagination.types';
 
 export class RoomRepository implements IRoomRepository {
     constructor(@InjectRepository(RoomEntity) private readonly repository: Repository<RoomEntity>) {}
@@ -18,6 +23,37 @@ export class RoomRepository implements IRoomRepository {
     async findAll(): Promise<Room[]> {
         const rooms = await this.repository.find({ relations: ['property'] });
         return rooms.map(room => RoomMapper.toDomain(room));
+    }
+
+    async findPaginated(params: PaginationParams): Promise<PaginatedResult<Room>> {
+        const qb = this.repository
+            .createQueryBuilder('room')
+            .leftJoinAndSelect('room.property', 'property')
+            .orderBy('room.name', 'ASC');
+
+        if (params.propertyId) {
+            qb.andWhere('room.propertyId = :propertyId', {
+                propertyId: params.propertyId,
+            });
+        }
+
+        if (params.search) {
+            const term = `%${params.search}%`;
+            qb.andWhere(
+                '(room.name LIKE :term OR room.description LIKE :term OR property.name LIKE :term)',
+                { term },
+            );
+        }
+
+        const [entities, total] = await qb
+            .skip((params.page - 1) * params.limit)
+            .take(params.limit)
+            .getManyAndCount();
+
+        return {
+            data: entities.map((entity) => RoomMapper.toDomain(entity)),
+            meta: buildPaginationMeta(total, params.page, params.limit),
+        };
     }
 
     async findById(id: number): Promise<Room|null> {

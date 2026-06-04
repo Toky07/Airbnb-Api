@@ -6,6 +6,11 @@ import { RoleMapper } from '../mappers/role.mappers';
 import { Role } from '../entity/role.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PermissionEntity } from '../entity/permission.entity';
+import {
+  buildPaginationMeta,
+  type PaginatedResult,
+  type PaginationParams,
+} from '../../../../shared/pagination/pagination.types';
 
 @Injectable()
 export class RoleRepository implements IRoleRepository {
@@ -42,6 +47,33 @@ export class RoleRepository implements IRoleRepository {
       order: { name: 'ASC' },
     });
     return roles.map((role) => RoleMapper.toDomain(role));
+  }
+
+  async findPaginated(
+    params: PaginationParams,
+  ): Promise<PaginatedResult<RoleEntity>> {
+    const qb = this.repository
+      .createQueryBuilder('role')
+      .leftJoinAndSelect('role.permissions', 'permissions')
+      .orderBy('role.name', 'ASC');
+
+    if (params.search) {
+      const term = `%${params.search}%`;
+      qb.andWhere(
+        '(role.name LIKE :term OR role.slug LIKE :term OR role.description LIKE :term)',
+        { term },
+      );
+    }
+
+    const [entities, total] = await qb
+      .skip((params.page - 1) * params.limit)
+      .take(params.limit)
+      .getManyAndCount();
+
+    return {
+      data: entities.map((entity) => RoleMapper.toDomain(entity)),
+      meta: buildPaginationMeta(total, params.page, params.limit),
+    };
   }
 
   async findById(id: number): Promise<RoleEntity | null> {

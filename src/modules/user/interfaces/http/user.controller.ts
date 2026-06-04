@@ -6,11 +6,15 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ListUsersUseCase } from '../../application/useCase/listeUser.usecase';
+import { ListUserOptionsUseCase } from '../../application/useCase/listUserOptions.usecase';
+import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
+import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
 import { UserOutput } from '../../domain/dtos/user.output';
 import type {
   CreateUserDto,
@@ -30,6 +34,7 @@ import { RequirePermissions } from '../../../authentication/interfaces/decorator
 export class UserController {
   constructor(
     private readonly listUsersUseCase: ListUsersUseCase,
+    private readonly listUserOptionsUseCase: ListUserOptionsUseCase,
     private readonly createUserUseCase: CreateUserUseCase,
     private readonly updateUserUseCase: UpdateUserUseCase,
     private readonly deleteUserUseCase: DeleteUserUseCase,
@@ -37,10 +42,18 @@ export class UserController {
     private readonly assignUserRolesUseCase: AssignUserRolesUseCase,
   ) {}
 
+  @Get('options')
+  @RequirePermissions('users.read')
+  async listOptions(): Promise<UserOutput[]> {
+    return this.listUserOptionsUseCase.execute();
+  }
+
   @Get()
   @RequirePermissions('users.read')
-  async findAll(): Promise<UserOutput[]> {
-    return this.listUsersUseCase.execute();
+  async findAll(
+    @Query() query: Record<string, unknown>,
+  ): Promise<PaginatedResult<UserOutput>> {
+    return this.listUsersUseCase.execute(parsePaginationQuery(query));
   }
 
   @Get(':id')

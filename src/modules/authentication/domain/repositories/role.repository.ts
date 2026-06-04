@@ -1,9 +1,11 @@
+import type { PaginatedResult, PaginationParams } from '../../../../shared/pagination/pagination.types';
 import { RoleEntity } from '../entities/role.entity';
 
 export interface IRoleRepository {
   create(role: RoleEntity): Promise<RoleEntity>;
   update(role: RoleEntity): Promise<RoleEntity>;
   findAll(): Promise<RoleEntity[]>;
+  findPaginated(params: PaginationParams): Promise<PaginatedResult<RoleEntity>>;
   findById(id: number): Promise<RoleEntity | null>;
   findBySlug(slug: string): Promise<RoleEntity | null>;
   delete(id: number): Promise<boolean>;
