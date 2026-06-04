@@ -1,28 +1,44 @@
-import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { AuthEntity } from '../../../authentication/infrastructure/entity/auth.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    firstName: string;
+  @Column()
+  firstName: string;
 
-    @Column()
-    lastName: string;
+  @Column()
+  lastName: string;
 
-    @Column({ unique: true })
-    email: string;
+  @Column({ unique: true })
+  email: string;
 
-    @Column()
-    phoneNumber: string;
+  @Column()
+  phoneNumber: string;
 
-    @Column()
-    avatar: string;
+  @Column()
+  avatar: string;
 
-    @CreateDateColumn({ nullable: true })
-    createdAt: Date;
+  @Column({ type: 'integer', nullable: true })
+  authId: number | null = null;
 
-    @UpdateDateColumn({ nullable: true })
-    updatedAt: Date;
+  @ManyToOne(() => AuthEntity, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'authId' })
+  auth?: AuthEntity | null;
+
+  @CreateDateColumn({ nullable: true })
+  createdAt: Date;
+
+  @UpdateDateColumn({ nullable: true })
+  updatedAt: Date;
 }

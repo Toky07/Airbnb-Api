@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { AuthModule } from '../authentication/auth.module';
+import { AssignUserRolesUseCase } from './application/useCase/assignUserRoles.usecase';
 import { CreateUserUseCase } from './application/useCase/createuser.usecase';
 import { DeleteUserUseCase } from './application/useCase/deleteUser.usecase';
 import { FindUserUseCase } from './application/useCase/findUser.usecase';
@@ -9,12 +11,18 @@ import { UserController } from './interfaces/http/user.controller';
 import { USER_REPOSITORY, UserRepository } from './infrastructure/repositories/user.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './infrastructure/entities/user.entity';
+import { AuthEntity } from '../authentication/infrastructure/entity/auth.entity';
 import { MediaModule } from '../media/media.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity]), MediaModule],
+  imports: [
+    TypeOrmModule.forFeature([UserEntity, AuthEntity]),
+    MediaModule,
+    AuthModule,
+  ],
   controllers: [UserController],
   providers: [
+    AssignUserRolesUseCase,
     ListUsersUseCase,
     FindUserUseCase,
     CreateUserUseCase,
@@ -23,9 +31,10 @@ import { MediaModule } from '../media/media.module';
     SaveUserAvatarUseCase,
     UserRepository,
     {
-        provide: USER_REPOSITORY,
-        useClass: UserRepository,
-    }
+      provide: USER_REPOSITORY,
+      useClass: UserRepository,
+    },
   ],
+  exports: [USER_REPOSITORY, CreateUserUseCase, SaveUserAvatarUseCase],
 })
 export class UserModule {}

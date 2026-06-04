@@ -13,6 +13,7 @@ import * as bcrypt from 'bcrypt';
 import { AuthModule } from '../../../authentication/auth.module';
 import { AuthMapper } from '../../../authentication/infrastructure/mappers/auth.mappers';
 import { Role } from '../../../authentication/infrastructure/entity/role.entity';
+import { PermissionEntity } from '../../../authentication/infrastructure/entity/permission.entity';
 import { MediaOrmEntity } from '../../../media/infrastructure/entities/media-orm.entity';
 import { rm } from 'fs/promises';
 
@@ -27,7 +28,7 @@ describe('UserController', () => {
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [UserEntity, AuthEntity, Role, MediaOrmEntity],
+          entities: [UserEntity, AuthEntity, Role, PermissionEntity, MediaOrmEntity],
           synchronize: true,
         }),
         JwtModule.register({
@@ -59,13 +60,10 @@ describe('UserController', () => {
 
     const authRepository = dataSource.getRepository(AuthEntity);
   
-    const auth = new Auth(
-      new EmailVO('test@test.com'),
-      await bcrypt.hash('123456', 10),
-    );
-    const admin = authRepository.create(AuthMapper.toEntity(auth));
-
-    await authRepository.save(admin);
+    await request(app.getHttpServer())
+      .post('/auth/register')
+      .send({ email: 'test@test.com', password: '123456' })
+      .expect(201);
 
     token = await login();
   });

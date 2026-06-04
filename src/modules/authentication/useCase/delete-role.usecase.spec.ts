@@ -1,16 +1,14 @@
-import { UserNameVO } from "../../user/domain/valueObject/username.vo";
-import { RoleEntity } from "../domain/entities/role.entity";
-import { IRoleRepository } from "../domain/repositories/role.repository";
-import { DeleteRoleUseCase } from "./delete-role.usecase";
+import { NotFoundException } from '@nestjs/common';
+import { UserNameVO } from '../../user/domain/valueObject/username.vo';
+import { RoleEntity } from '../domain/entities/role.entity';
+import type { IRoleRepository } from '../domain/repositories/role.repository';
+import { DeleteRoleUseCase } from './delete-role.usecase';
 
 const repository = {
-  delete: async (id: number): Promise<boolean> => {
-    return true;
-  },
-  findById: async (id: number): Promise<RoleEntity> => {
-    return {id: 1, name: new UserNameVO('test'), createdAt: new Date(), updatedAt: new Date()};
-  },
-} as IRoleRepository;
+  delete: async (): Promise<boolean> => true,
+  findById: async (): Promise<RoleEntity> =>
+    new RoleEntity(new UserNameVO('test'), 'test', 1),
+} as unknown as IRoleRepository;
 
 describe('UseCase: delete role use case', () => {
   it('should delete a role', async () => {
@@ -19,9 +17,11 @@ describe('UseCase: delete role use case', () => {
     expect(isDeleted).toBe(true);
   });
 
-  it('should throw an error if the role is not found', async () => {
+  it('should throw if the role is not found', async () => {
     const deleteRoleUseCase = new DeleteRoleUseCase(repository);
     vi.spyOn(repository, 'findById').mockResolvedValue(null);
-    await expect(deleteRoleUseCase.execute(2)).rejects.toThrow(new Error('Role not found'));
+    await expect(deleteRoleUseCase.execute(2)).rejects.toBeInstanceOf(
+      NotFoundException,
+    );
   });
 });

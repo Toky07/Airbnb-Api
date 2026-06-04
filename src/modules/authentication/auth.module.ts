@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthEntity } from './infrastructure/entity/auth.entity';
 import { AuthController } from './interfaces/http/auth.controller';
@@ -18,17 +19,24 @@ import { ListRolesUseCase } from './useCase/list-role.usecase';
 import { UpdateRoleUseCase } from './useCase/update-role.usecase';
 import { DeleteRoleUseCase } from './useCase/delete-role.usecase';
 import { AssignRoleUseCase } from './useCase/assign-role.usecase';
+import { PermissionEntity } from './infrastructure/entity/permission.entity';
+import { AuthRbacSeedService } from './infrastructure/seed/auth-rbac.seed';
+import { AuthGuard } from './interfaces/guard/auth.guard';
+import { PermissionsGuard } from './interfaces/guard/permissions.guard';
+import { ListPermissionsUseCase } from './useCase/list-permissions.usecase';
+import { SetRolePermissionsUseCase } from './useCase/set-role-permissions.usecase';
+import { GetMeUseCase } from './useCase/get-me.usecase';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([AuthEntity, Role]),
+    TypeOrmModule.forFeature([AuthEntity, Role, PermissionEntity]),
     JwtModule.register({
       global: true,
       secret: '1234',
       secretOrPrivateKey: '1234',
-      signOptions: { expiresIn: '1h' },
+      signOptions: { expiresIn: '8h' },
     }),
-],
+  ],
   controllers: [AuthController, RoleController],
   providers: [
     CreateCredentialsUseCase,
@@ -38,18 +46,31 @@ import { AssignRoleUseCase } from './useCase/assign-role.usecase';
     UpdateRoleUseCase,
     DeleteRoleUseCase,
     AssignRoleUseCase,
+    ListPermissionsUseCase,
+    SetRolePermissionsUseCase,
+    GetMeUseCase,
+    AuthRbacSeedService,
     {
-        provide: AUTH_REPOSITORY,
-        useClass: AuthRepository,
+      provide: AUTH_REPOSITORY,
+      useClass: AuthRepository,
     },
     {
-        provide: TOKEN_GENERATOR,
-        useClass: JwtTokenGenerator,
+      provide: TOKEN_GENERATOR,
+      useClass: JwtTokenGenerator,
     },
     {
       provide: ROLE_REPOSITORY,
       useClass: RoleRepository,
-    }
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionsGuard,
+    },
   ],
+  exports: [AUTH_REPOSITORY, ROLE_REPOSITORY],
 })
 export class AuthModule {}

@@ -1,48 +1,69 @@
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import type { IAuthRepository } from "../../domain/repositories/auth.repository";
-import { AuthEntity } from "../entity/auth.entity";
-import { AuthMapper } from "../mappers/auth.mappers";
-import { Auth } from "../../domain/entities/user.entity";
-import { Injectable } from "@nestjs/common";
-import { Role } from "../entity/role.entity";
+import { InjectRepository } from '@nestjs/typeorm';
+import { In, Repository } from 'typeorm';
+import type { IAuthRepository } from '../../domain/repositories/auth.repository';
+import { AuthEntity } from '../entity/auth.entity';
+import { AuthMapper } from '../mappers/auth.mappers';
+import { Auth } from '../../domain/entities/user.entity';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { Role } from '../entity/role.entity';
 
 @Injectable()
 export class AuthRepository implements IAuthRepository {
-    constructor(
-        @InjectRepository(AuthEntity) private readonly repository: Repository<AuthEntity>,
-        @InjectRepository(Role) private readonly roleRepository: Repository<Role>
-    ) {}
+  constructor(
+    @InjectRepository(AuthEntity)
+    private readonly repository: Repository<AuthEntity>,
+    @InjectRepository(Role)
+    private readonly roleRepository: Repository<Role>,
+  ) {}
 
-    async create(credentials: Auth): Promise<boolean> {
-        const data = this.repository.create(AuthMapper.toEntity(credentials));
-        const isSaved = await this.repository.save(data);
-        return isSaved ? true : false;
+  private readonly relations = ['roles', 'roles.permissions'] as const;
+
+  async create(credentials: Auth): Promise<boolean> {
+    const data = this.repository.create(AuthMapper.toEntity(credentials));
+    const isSaved = await this.repository.save(data);
+    return Boolean(isSaved);
+  }
+
+  async findByEmail(email: string): Promise<Auth | null> {
+    const auth = await this.repository.findOne({
+      where: { email },
+      relations: [...this.relations],
+    });
+    return auth ? AuthMapper.toDomain(auth) : null;
+  }
+
+  async findById(id: number): Promise<Auth | null> {
+    const auth = await this.repository.findOne({
+      where: { id },
+      relations: [...this.relations],
+    });
+    return auth ? AuthMapper.toDomain(auth) : null;
+  }
+
+  async assignRoles(userId: number, roleIds: number[]): Promise<boolean> {
+    const auth = await this.repository.findOne({
+      where: { id: userId },
+      relations: ['roles'],
+    });
+
+    if (!auth) {
+      throw new NotFoundException('Auth not found');
     }
 
-    async findByEmail(email: string): Promise<Auth|null> {
-        const auth = await this.repository.findOne({ where: { email } });
-        return auth ? AuthMapper.toDomain(auth) : null;
+    const roles =
+      roleIds.length === 0
+        ? []
+        : await this.roleRepository.find({
+            where: { id: In(roleIds) },
+            relations: ['permissions'],
+          });
+
+    if (roles.length !== roleIds.length) {
+      throw new NotFoundException('Role not found');
     }
 
-    async assignRoles(userId: number, roleId: number[]): Promise<boolean> {
-        const auth = await this.repository.findOne({ where: { id: userId } });
-
-        if (!auth) {
-            throw new Error('Auth not found');
-        }
-
-        auth.roles = [];
-        roleId.forEach(async (id: number) => {
-            const role = await this.roleRepository.findOne({ where: { id } });
-            if (!role) {
-                throw new Error('Role not found');
-            }
-
-            auth.roles!.push(role);
-        });
-        
-        await this.repository.save(auth);
-        return true;
-    }
+    auth.roles = roles;
+    await this.repository.save(auth);
+    return true;
+  }
 }

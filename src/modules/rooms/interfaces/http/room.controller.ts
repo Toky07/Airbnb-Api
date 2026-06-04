@@ -1,78 +1,84 @@
 import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Param,
-    Post,
-    Put,
-    UploadedFiles,
-    UseInterceptors,
-} from "@nestjs/common";
-import { FilesInterceptor } from "@nestjs/platform-express";
-import { ENTITY_MEDIA_LIMITS, ENTITY_TYPE } from "../../../media/constant";
-import { ListRoomsUseCase } from "../../applications/useCase/listRoom.usecase";
-import { FindOneRoomUseCase } from "../../applications/useCase/findOneRoom.usecase";
-import type { CreateRoomDto } from "../../applications/dto/createRoom.dto";
-import { CreateRoomUseCase } from "../../applications/useCase/createRoom.usecase";
-import { UpdateRoomUseCase } from "../../applications/useCase/updateRoom.usecase";
-import { DeleteRoomUseCase } from "../../applications/useCase/deleteRoom.usecase";
-import { parseKeptImages } from "./parse-kept-images";
-import { parseRoomBody } from "./parse-room-body";
-import type { UploadFile } from "../../../media/types/upload-file";
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UploadedFiles,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { ENTITY_MEDIA_LIMITS, ENTITY_TYPE } from '../../../media/constant';
+import { ListRoomsUseCase } from '../../applications/useCase/listRoom.usecase';
+import { FindOneRoomUseCase } from '../../applications/useCase/findOneRoom.usecase';
+import type { CreateRoomDto } from '../../applications/dto/createRoom.dto';
+import { CreateRoomUseCase } from '../../applications/useCase/createRoom.usecase';
+import { UpdateRoomUseCase } from '../../applications/useCase/updateRoom.usecase';
+import { DeleteRoomUseCase } from '../../applications/useCase/deleteRoom.usecase';
+import { parseKeptImages } from './parse-kept-images';
+import { parseRoomBody } from './parse-room-body';
+import type { UploadFile } from '../../../media/types/upload-file';
+import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
 
 @Controller('rooms')
 export class RoomController {
-    constructor(
-        private readonly listRoomUseCase: ListRoomsUseCase,
-        private readonly findOneRoomUseCase: FindOneRoomUseCase,
-        private readonly createRoomUseCase: CreateRoomUseCase,
-        private readonly updateRoomUseCase: UpdateRoomUseCase,
-        private readonly deleteRoomUseCase: DeleteRoomUseCase,
-    ) {}
+  constructor(
+    private readonly listRoomUseCase: ListRoomsUseCase,
+    private readonly findOneRoomUseCase: FindOneRoomUseCase,
+    private readonly createRoomUseCase: CreateRoomUseCase,
+    private readonly updateRoomUseCase: UpdateRoomUseCase,
+    private readonly deleteRoomUseCase: DeleteRoomUseCase,
+  ) {}
 
-    @Get()
-    async findAll() {
-        return this.listRoomUseCase.execute();
-    }
+  @Get()
+  @RequirePermissions('rooms.read')
+  async findAll() {
+    return this.listRoomUseCase.execute();
+  }
 
-    @Get(':id')
-    async findById(@Param('id') id: number) {
-        return this.findOneRoomUseCase.execute(id);
-    }
+  @Get(':id')
+  @RequirePermissions('rooms.read')
+  async findById(@Param('id') id: number) {
+    return this.findOneRoomUseCase.execute(id);
+  }
 
-    @Post()
-    @UseInterceptors(FilesInterceptor('images', ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM]))
-    async create(
-        @Body() body: CreateRoomDto | Record<string, unknown>,
-        @UploadedFiles() images?: UploadFile[],
-    ) {
-        const createRoomDto =
-            typeof (body as CreateRoomDto).pricePerNight === 'number'
-                ? (body as CreateRoomDto)
-                : parseRoomBody(body as Record<string, unknown>);
-        return this.createRoomUseCase.execute(createRoomDto, images);
-    }
+  @Post()
+  @RequirePermissions('rooms.create')
+  @UseInterceptors(FilesInterceptor('images', ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM]))
+  async create(
+    @Body() body: CreateRoomDto | Record<string, unknown>,
+    @UploadedFiles() images?: UploadFile[],
+  ) {
+    const createRoomDto =
+      typeof (body as CreateRoomDto).pricePerNight === 'number'
+        ? (body as CreateRoomDto)
+        : parseRoomBody(body as Record<string, unknown>);
+    return this.createRoomUseCase.execute(createRoomDto, images);
+  }
 
-    @Put(':id')
-    @UseInterceptors(FilesInterceptor('images', ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM]))
-    async update(
-        @Param('id') id: number,
-        @Body() body: CreateRoomDto | Record<string, unknown>,
-        @UploadedFiles() images?: UploadFile[],
-    ) {
-        const rawBody = body as Record<string, unknown>;
-        const updateRoomDto =
-            typeof (body as CreateRoomDto).pricePerNight === 'number'
-                ? (body as CreateRoomDto)
-                : parseRoomBody(rawBody);
-        const keptImages = parseKeptImages(rawBody);
-        return this.updateRoomUseCase.execute(id, updateRoomDto, images, keptImages);
-    }
+  @Put(':id')
+  @RequirePermissions('rooms.update')
+  @UseInterceptors(FilesInterceptor('images', ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM]))
+  async update(
+    @Param('id') id: number,
+    @Body() body: CreateRoomDto | Record<string, unknown>,
+    @UploadedFiles() images?: UploadFile[],
+  ) {
+    const rawBody = body as Record<string, unknown>;
+    const updateRoomDto =
+      typeof (body as CreateRoomDto).pricePerNight === 'number'
+        ? (body as CreateRoomDto)
+        : parseRoomBody(rawBody);
+    const keptImages = parseKeptImages(rawBody);
+    return this.updateRoomUseCase.execute(id, updateRoomDto, images, keptImages);
+  }
 
-    @Delete(':id')
-    async delete(@Param('id') id: number): Promise<{ status: boolean }> {
-        const status = await this.deleteRoomUseCase.execute(id);
-        return { status };
-    }
+  @Delete(':id')
+  @RequirePermissions('rooms.delete')
+  async delete(@Param('id') id: number): Promise<{ status: boolean }> {
+    const status = await this.deleteRoomUseCase.execute(id);
+    return { status };
+  }
 }

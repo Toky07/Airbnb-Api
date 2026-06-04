@@ -1,29 +1,35 @@
-import { TokenGenerator } from "../../domain/generator/token.generator";
-import { JwtService } from "@nestjs/jwt";
+import { TokenGenerator } from '../../domain/generator/token.generator';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { Inject, UnauthorizedException } from "@nestjs/common";
-import type { IAuthRepository } from "../../domain/repositories/auth.repository";
-import { AUTH_REPOSITORY } from "../../domain/repositories/auth.repository";
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import type { IAuthRepository } from '../../domain/repositories/auth.repository';
+import { AUTH_REPOSITORY } from '../../domain/repositories/auth.repository';
+import { buildJwtPayload } from '../../domain/utils/build-jwt-payload';
 
+@Injectable()
 export class JwtTokenGenerator implements TokenGenerator {
-    constructor(
-        private readonly jwtService: JwtService,
-        @Inject(AUTH_REPOSITORY) private readonly authRepository: IAuthRepository,
-    ) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    @Inject(AUTH_REPOSITORY) private readonly authRepository: IAuthRepository,
+  ) {}
 
-    private async validateCredentials(email: string, password: string): Promise<{ isValid: boolean, id: number }> {
-        const auth = await this.authRepository.findByEmail(email);
+  async generate({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }): Promise<string> {
+    const auth = await this.authRepository.findByEmail(email);
 
-        return auth && await bcrypt.compare(password, auth.password);
+    if (!auth || !(await bcrypt.compare(password, auth.password))) {
+      throw new UnauthorizedException('Invalid credentials');
     }
 
-    async generate({ email, password }: { email: string, password: string }): Promise<string> {
-        const isValid = await this.validateCredentials(email, password);
-
-        if (!isValid) {
-            throw new UnauthorizedException('Invalid credentials');
-        }
-    
-        return this.jwtService.signAsync({ email, id: 1 });
+    if (!auth.id) {
+      throw new UnauthorizedException('Invalid credentials');
     }
+
+    return this.jwtService.signAsync(buildJwtPayload(auth));
+  }
 }

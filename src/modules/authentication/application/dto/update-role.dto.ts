@@ -1,4 +1,4 @@
 export type UpdateRoleDto = {
-    id: number;
-    name: string;
+  name?: string;
+  description?: string | null;
 };

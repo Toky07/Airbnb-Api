@@ -6,9 +6,8 @@ import { DataSource } from 'typeorm';
 import { AuthModule } from '../../auth.module';
 import { AuthEntity } from '../../infrastructure/entity/auth.entity';
 import * as bcrypt from 'bcrypt';
-import { EmailVO } from '../../../../shared/valueObject/email.vo';
-import { Auth } from '../../domain/entities/user.entity';
 import { Role } from '../../infrastructure/entity/role.entity';
+import { PermissionEntity } from '../../infrastructure/entity/permission.entity';
 import { UserNameVO } from '../../../user/domain/valueObject/username.vo';
 import { RoleEntity } from '../../domain/entities/role.entity';
 import { RoleMapper } from '../../infrastructure/mappers/role.mappers';
@@ -23,7 +22,7 @@ describe('Auth', () => {
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [AuthEntity, Role],
+          entities: [AuthEntity, Role, PermissionEntity],
           synchronize: true,
         }),
         AuthModule,
@@ -66,9 +65,12 @@ describe('Auth', () => {
       password: 'password',
     };
 
-    const created = repository.create(new Auth(new EmailVO(data.email), await bcrypt.hash(data.password, 10)));
-    
-    await repository.save(created);
+    await repository.save(
+      repository.create({
+        email: data.email,
+        password: await bcrypt.hash(data.password, 10),
+      }),
+    );
 
     const response = await request(app.getHttpServer())
       .post('/auth/login')
@@ -92,24 +94,45 @@ describe('Auth', () => {
   });
 
   it(`/POST auth/assign-role`, async () => {
-    const userRepository = dataSource.getRepository(AuthEntity);
     const roleRepository = dataSource.getRepository(Role);
-    const user = await userRepository.save(
-      userRepository.create(new Auth(new EmailVO('test@example.com'), await bcrypt.hash('password', 10)))
+
+    await request(app.getHttpServer())
+      .post('/auth/register')
+      .send({ email: 'admin@test.com', password: 'password' })
+      .expect(201);
+
+    const loginResponse = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({ email: 'admin@test.com', password: 'password' })
+      .expect(200);
+
+    const userRepository = dataSource.getRepository(AuthEntity);
+    await userRepository.save(
+      userRepository.create({
+        email: 'staff@test.com',
+        password: await bcrypt.hash('password', 10),
+      }),
     );
-  
+
+    const staff = await userRepository.findOne({
+      where: { email: 'staff@test.com' },
+    });
+
     const role = await roleRepository.save(
-      roleRepository.create(RoleMapper.toEntity(new RoleEntity(new UserNameVO('test'))))
+      roleRepository.create(
+        RoleMapper.toEntity(
+          new RoleEntity(new UserNameVO('Éditeur'), 'editeur'),
+        ),
+      ),
     );
-    
-    const data = {
-      userId: user.id,
-      roleId: [role.id!],
-    };
-    
+
     const response = await request(app.getHttpServer())
       .post('/auth/assign-role')
-      .send(data)
+      .set('Authorization', `Bearer ${loginResponse.body.token}`)
+      .send({
+        userId: staff!.id,
+        roleId: [role.id],
+      })
       .expect(200);
 
     expect(response.body).toStrictEqual({ success: true });

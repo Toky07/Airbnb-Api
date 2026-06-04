@@ -1,3 +1,5 @@
 export type CreateRoleDto = {
-    name: string;
+  name: string;
+  slug?: string;
+  description?: string;
 };
