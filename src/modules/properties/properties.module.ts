@@ -51,6 +51,13 @@ import { PropertyMediaPresenter } from './applications/presenters/property-media
       useClass: PropertyTypeRepository,
     },
   ],
-  exports: [PROPERTY_TYPE_REPOSITORY, ListPropertyTypeOptionsUseCase],
+  exports: [
+    PROPERTY_REPOSITORY,
+    PROPERTY_TYPE_REPOSITORY,
+    ListPropertyTypeOptionsUseCase,
+    CreatePropertyUseCase,
+    UpdatePropertyUseCase,
+    PropertyMediaPresenter,
+  ],
 })
 export class PropertiesModule {}

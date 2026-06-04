@@ -1,6 +1,7 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { AuthModule } from '../authentication/auth.module';
 import { AssignUserRolesUseCase } from './application/useCase/assignUserRoles.usecase';
+import { RegisterHostUseCase } from './application/useCase/register-host.usecase';
 import { CreateUserUseCase } from './application/useCase/createuser.usecase';
 import { DeleteUserUseCase } from './application/useCase/deleteUser.usecase';
 import { FindUserUseCase } from './application/useCase/findUser.usecase';
@@ -19,11 +20,12 @@ import { MediaModule } from '../media/media.module';
   imports: [
     TypeOrmModule.forFeature([UserEntity, AuthEntity]),
     MediaModule,
-    AuthModule,
+    forwardRef(() => AuthModule),
   ],
   controllers: [UserController],
   providers: [
     AssignUserRolesUseCase,
+    RegisterHostUseCase,
     ListUsersUseCase,
     ListUserOptionsUseCase,
     FindUserUseCase,
@@ -37,6 +39,6 @@ import { MediaModule } from '../media/media.module';
       useClass: UserRepository,
     },
   ],
-  exports: [USER_REPOSITORY, CreateUserUseCase, SaveUserAvatarUseCase],
+  exports: [USER_REPOSITORY, CreateUserUseCase, SaveUserAvatarUseCase, RegisterHostUseCase],
 })
 export class UserModule {}

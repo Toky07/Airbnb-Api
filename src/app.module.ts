@@ -11,6 +11,7 @@ import { PropertyEntity } from './modules/properties/infrastructure/entities/pro
 import { RoomsModule } from './modules/rooms/room.module';
 import { MediaOrmEntity } from './modules/media/infrastructure/entities/media-orm.entity';
 import { ImportModule } from './modules/import/import.module';
+import { HostModule } from './modules/host/host.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -32,6 +33,7 @@ import { ImportModule } from './modules/import/import.module';
     PropertiesModule,
     RoomsModule,
     ImportModule,
+    HostModule,
   ],
   controllers: [],
   providers: [],

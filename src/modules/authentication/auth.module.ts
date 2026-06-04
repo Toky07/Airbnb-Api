@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthEntity } from './infrastructure/entity/auth.entity';
@@ -26,10 +26,12 @@ import { PermissionsGuard } from './interfaces/guard/permissions.guard';
 import { ListPermissionsUseCase } from './useCase/list-permissions.usecase';
 import { SetRolePermissionsUseCase } from './useCase/set-role-permissions.usecase';
 import { GetMeUseCase } from './useCase/get-me.usecase';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([AuthEntity, Role, PermissionEntity]),
+    forwardRef(() => UserModule),
     JwtModule.register({
       global: true,
       secret: '1234',

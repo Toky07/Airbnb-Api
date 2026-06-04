@@ -1,4 +1,5 @@
 export const SUPERADMIN_ROLE_SLUG = 'superadmin';
+export const HOST_ROLE_SLUG = 'host';
 
 export type PermissionDefinition = {
   key: string;
@@ -23,6 +24,14 @@ export const PERMISSION_DEFINITIONS: PermissionDefinition[] = [
   { key: 'import.execute', label: 'Importer des données CSV', module: 'import' },
   { key: 'roles.read', label: 'Voir les rôles et permissions', module: 'roles' },
   { key: 'roles.manage', label: 'Gérer les rôles et permissions', module: 'roles' },
+  { key: 'host.dashboard.read', label: 'Accéder à l\'espace hôte', module: 'host' },
+  { key: 'host.property.read', label: 'Voir son établissement', module: 'host' },
+  { key: 'host.property.create', label: 'Créer son établissement', module: 'host' },
+  { key: 'host.property.update', label: 'Modifier son établissement', module: 'host' },
+  { key: 'host.rooms.read', label: 'Voir ses chambres', module: 'host' },
+  { key: 'host.rooms.create', label: 'Créer des chambres', module: 'host' },
+  { key: 'host.rooms.update', label: 'Modifier ses chambres', module: 'host' },
+  { key: 'host.rooms.delete', label: 'Supprimer ses chambres', module: 'host' },
 ];
 
 export const ALL_PERMISSION_KEYS = PERMISSION_DEFINITIONS.map((p) => p.key);

@@ -25,6 +25,7 @@ import { parseKeptImages } from './parse-kept-images';
 import { parseRoomBody } from './parse-room-body';
 import type { UploadFile } from '../../../media/types/upload-file';
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
+import { Public } from '../../../authentication/interfaces/decorators/public.decorator';
 
 @Controller('rooms')
 export class RoomController {
@@ -36,16 +37,16 @@ export class RoomController {
     private readonly deleteRoomUseCase: DeleteRoomUseCase,
   ) {}
 
+  @Public()
   @Get()
-  // @RequirePermissions('rooms.read')
   async findAll(
     @Query() query: Record<string, unknown>,
   ): Promise<PaginatedResult<RoomOutput>> {
     return this.listRoomUseCase.execute(parsePaginationQuery(query));
   }
 
+  @Public()
   @Get(':id')
-  // @RequirePermissions('rooms.read')
   async findById(@Param('id') id: number) {
     return this.findOneRoomUseCase.execute(id);
   }

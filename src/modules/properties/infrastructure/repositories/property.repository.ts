@@ -57,6 +57,14 @@ export class PropertyRepository implements IPropertyRepository {
         return property ? PropertyMapper.toDomain(property) : null;
     }
 
+    async findByOwnerId(ownerId: number): Promise<Property | null> {
+        const property = await this.repository.findOne({
+            where: { ownerId: Number(ownerId) },
+            relations: ['rooms', 'propertyType'],
+        });
+        return property ? PropertyMapper.toDomain(property) : null;
+    }
+
     async create(property: Property): Promise<Property> {
         const data = this.repository.create(PropertyMapper.toEntity(property));
         const newProperty = await this.repository.save(data);

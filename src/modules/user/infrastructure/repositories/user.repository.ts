@@ -105,6 +105,20 @@ export class UserRepository implements IUserRepository {
     }
   }
 
+  async findByAuthId(authId: number): Promise<User | null> {
+    const user = await this.repository.findOne({
+      where: { authId: Number(authId) },
+      relations: [...this.authRelations],
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    const enriched = await this.resolveAuthAccount(user);
+    return UserMapper.toDomain(enriched);
+  }
+
   private async loadById(id: number): Promise<User | null> {
     const user = await this.repository.findOne({
       where: { id },

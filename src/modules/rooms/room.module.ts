@@ -47,6 +47,16 @@ import { RoomMediaPresenter } from './applications/presenters/room-media.present
       useClass: RoomTypeRepository,
     },
   ],
-  exports: [ROOM_TYPE_REPOSITORY, ListRoomTypeOptionsUseCase],
+  exports: [
+    ROOM_REPOSITORY,
+    ROOM_TYPE_REPOSITORY,
+    ListRoomTypeOptionsUseCase,
+    ListRoomsUseCase,
+    FindOneRoomUseCase,
+    CreateRoomUseCase,
+    UpdateRoomUseCase,
+    DeleteRoomUseCase,
+    RoomMediaPresenter,
+  ],
 })
 export class RoomsModule {}

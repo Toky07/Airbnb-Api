@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import {
   ALL_PERMISSION_KEYS,
+  HOST_ROLE_SLUG,
   PERMISSION_DEFINITIONS,
   SUPERADMIN_ROLE_SLUG,
 } from '../../domain/constants/permissions.constant';
@@ -21,6 +22,7 @@ export class AuthRbacSeedService implements OnModuleInit {
   async onModuleInit(): Promise<void> {
     await this.seedPermissions();
     await this.seedSuperAdminRole();
+    await this.seedHostRole();
   }
 
   private async seedPermissions(): Promise<void> {
@@ -56,6 +58,33 @@ export class AuthRbacSeedService implements OnModuleInit {
     });
 
     role.permissions = allPermissions;
+    await this.roleRepository.save(role);
+  }
+
+  private async seedHostRole(): Promise<void> {
+    const hostPermissionKeys = PERMISSION_DEFINITIONS.filter(
+      (definition) => definition.module === 'host',
+    ).map((definition) => definition.key);
+
+    let role = await this.roleRepository.findOne({
+      where: { slug: HOST_ROLE_SLUG },
+      relations: ['permissions'],
+    });
+
+    if (!role) {
+      role = this.roleRepository.create({
+        slug: HOST_ROLE_SLUG,
+        name: 'Hôte',
+        description: 'Gestion de son établissement et de ses chambres',
+      });
+      role = await this.roleRepository.save(role);
+    }
+
+    const permissions = await this.permissionRepository.find({
+      where: { key: In(hostPermissionKeys) },
+    });
+
+    role.permissions = permissions;
     await this.roleRepository.save(role);
   }
 }

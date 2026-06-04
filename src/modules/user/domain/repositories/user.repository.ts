@@ -9,4 +9,5 @@ export interface IUserRepository {
   findPaginated(params: PaginationParams): Promise<PaginatedResult<User>>;
   delete(id: number): Promise<boolean>;
   linkAuthAccount(userId: number, authId: number): Promise<void>;
+  findByAuthId(authId: number): Promise<User | null>;
 }
