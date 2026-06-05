@@ -63,6 +63,7 @@ describe('ImportController', () => {
       rooms: 0,
       propertyTypes: 0,
       roomTypes: 0,
+      roles: 0,
     });
     expect(response.body.errors).toEqual([]);
   });

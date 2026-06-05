@@ -39,19 +39,7 @@ export class AuthRbacSeedService implements OnModuleInit {
   }
 
   private async seedSuperAdminRole(): Promise<void> {
-    let role = await this.roleRepository.findOne({
-      where: { slug: SUPERADMIN_ROLE_SLUG },
-      relations: ['permissions'],
-    });
-
-    if (!role) {
-      role = this.roleRepository.create({
-        slug: SUPERADMIN_ROLE_SLUG,
-        name: 'Super administrateur',
-        description: 'Accès complet à toutes les fonctionnalités',
-      });
-      role = await this.roleRepository.save(role);
-    }
+    const role = await this.saveRole(SUPERADMIN_ROLE_SLUG, 'Super administrateur', 'Accès complet à toutes les fonctionnalités');
 
     const allPermissions = await this.permissionRepository.find({
       where: { key: In(ALL_PERMISSION_KEYS) },
@@ -66,19 +54,7 @@ export class AuthRbacSeedService implements OnModuleInit {
       (definition) => definition.module === 'host',
     ).map((definition) => definition.key);
 
-    let role = await this.roleRepository.findOne({
-      where: { slug: HOST_ROLE_SLUG },
-      relations: ['permissions'],
-    });
-
-    if (!role) {
-      role = this.roleRepository.create({
-        slug: HOST_ROLE_SLUG,
-        name: 'Hôte',
-        description: 'Gestion de son établissement et de ses chambres',
-      });
-      role = await this.roleRepository.save(role);
-    }
+    const role = await this.saveRole(HOST_ROLE_SLUG, 'Hôte', 'Gestion de son établissement et de ses chambres');
 
     const permissions = await this.permissionRepository.find({
       where: { key: In(hostPermissionKeys) },
@@ -86,5 +62,19 @@ export class AuthRbacSeedService implements OnModuleInit {
 
     role.permissions = permissions;
     await this.roleRepository.save(role);
+  }
+
+  private async saveRole(slug: string, name: string, description: string): Promise<Role> {
+    let role = await this.roleRepository.findOne({
+      where: { slug },
+      relations: ['permissions'],
+    });
+    if (!role) {
+      console.log('Creating role', slug, name, description);
+      role = this.roleRepository.create({ slug, name, description });
+      role = await this.roleRepository.save(role);
+    }
+
+    return role;
   }
 }

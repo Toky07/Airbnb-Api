@@ -14,12 +14,10 @@ import type { JwtPayload } from '../../../authentication/domain/types/jwt-payloa
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
 import type { UploadFile } from '../../../media/types/upload-file';
-import {
-  GetEmailUseCase,
-  ListEmailsUseCase,
-  RetryEmailUseCase,
-  SendEmailUseCase,
-} from '../../applications/useCase/email.usecase';
+import { GetEmailUseCase } from '../../applications/useCase/get-email.usecase';
+import { ListEmailsUseCase } from '../../applications/useCase/list-emails.usecase';
+import { RetryEmailUseCase } from '../../applications/useCase/retry-email.usecase';
+import { SendEmailUseCase } from '../../applications/useCase/send-email.usecase';
 import type { SendEmailDto } from '../../applications/dto/send-email.dto';
 import { parseEmailBody } from './parse-email-body';
 

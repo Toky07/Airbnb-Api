@@ -24,7 +24,14 @@ import { RoomMediaPresenter } from '../rooms/applications/presenters/room-media.
 import { UserModule } from '../user/user.module';
 import { MediaModule } from '../media/media.module';
 import { ImportController } from './interfaces/http/import.controller';
-import { ImportDataUseCase } from './applications/useCase/importData.usecase';
+import { ImportBatchContextService } from './applications/services/import-batch-context.service';
+import { ImportDataUseCase } from './applications/useCase/import-data.usecase';
+import { ImportUsersUseCase } from './applications/useCase/import-users.usecase';
+import { ImportPropertiesUseCase } from './applications/useCase/import-properties.usecase';
+import { ImportRoomsUseCase } from './applications/useCase/import-rooms.usecase';
+import { ImportPropertyTypesUseCase } from './applications/useCase/import-property-types.usecase';
+import { ImportRoomTypesUseCase } from './applications/useCase/import-room-types.usecase';
+import { ImportRolesUseCase } from './applications/useCase/import-roles.usecase';
 
 @Module({
   imports: [
@@ -42,7 +49,14 @@ import { ImportDataUseCase } from './applications/useCase/importData.usecase';
   ],
   controllers: [ImportController],
   providers: [
+    ImportBatchContextService,
     ImportDataUseCase,
+    ImportUsersUseCase,
+    ImportPropertiesUseCase,
+    ImportRoomsUseCase,
+    ImportPropertyTypesUseCase,
+    ImportRoomTypesUseCase,
+    ImportRolesUseCase,
     CreatePropertyUseCase,
     CreatePropertyTypeUseCase,
     PropertyMediaPresenter,

@@ -4,12 +4,10 @@ import { EmailOrmEntity } from './infrastructure/entities/email.orm-entity';
 import { EmailRepository } from './infrastructure/repositories/email.repository';
 import { EMAIL_REPOSITORY } from './domain/repositories/email.repository';
 import { MailController } from './interfaces/http/mail.controller';
-import {
-  GetEmailUseCase,
-  ListEmailsUseCase,
-  RetryEmailUseCase,
-  SendEmailUseCase,
-} from './applications/useCase/email.usecase';
+import { GetEmailUseCase } from './applications/useCase/get-email.usecase';
+import { ListEmailsUseCase } from './applications/useCase/list-emails.usecase';
+import { RetryEmailUseCase } from './applications/useCase/retry-email.usecase';
+import { SendEmailUseCase } from './applications/useCase/send-email.usecase';
 import { MailService } from './applications/services/mail.service';
 import { EmailAttachmentStorageService } from './infrastructure/storage/email-attachment-storage.service';
 import { MailTransportFactory } from './infrastructure/transport/mail-transport.factory';

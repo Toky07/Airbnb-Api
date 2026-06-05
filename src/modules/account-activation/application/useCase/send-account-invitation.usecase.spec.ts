@@ -48,7 +48,7 @@ describe('SendAccountInvitationUseCase', () => {
     );
   });
 
-  it('envoie une invitation pour un utilisateur pending', async () => {
+  it('should send an invitation for a pending user', async () => {
     userRepository.findById.mockResolvedValue(
       new User(
         new UserNameVO('Jean'),
@@ -79,7 +79,7 @@ describe('SendAccountInvitationUseCase', () => {
     expect(mailService.sendSimple).toHaveBeenCalledWith(
       expect.objectContaining({
         to: 'jean@test.com',
-        subject: 'Activez votre compte',
+        subject: 'Activate your account',
       }),
     );
   });

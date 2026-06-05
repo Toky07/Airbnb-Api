@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import type { UploadFile } from '../../../media/types/upload-file';
-import { SendEmailUseCase, type SendEmailOptions } from '../useCase/email.usecase';
+import { SendEmailUseCase, type SendEmailOptions } from '../useCase/send-email.usecase';
 import { EmailOutput } from '../dto/email.output';
 
 /**

@@ -5,7 +5,7 @@ import { RoleEntity } from '../domain/entities/role.entity';
 import { CreateRoleDto } from '../application/dto/create-role.dto';
 import { UserNameVO } from '../../user/domain/valueObject/username.vo';
 import { RoleOutput } from '../application/dto/role.output';
-import { slugifyRole } from '../infrastructure/utils/slugify-role';
+import { slugify } from '../../../shared/utils/slug.util';
 
 @Injectable()
 export class CreateRoleUseCase {
@@ -14,7 +14,7 @@ export class CreateRoleUseCase {
   ) {}
 
   async execute(createRoleDto: CreateRoleDto): Promise<RoleOutput> {
-    const slug = createRoleDto.slug?.trim() || slugifyRole(createRoleDto.name);
+    const slug = createRoleDto.slug?.trim() || slugify(createRoleDto.name);
     const existing = await this.repository.findBySlug(slug);
 
     if (existing) {
