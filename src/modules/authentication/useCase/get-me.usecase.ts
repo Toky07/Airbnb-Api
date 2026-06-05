@@ -10,6 +10,7 @@ import { USER_REPOSITORY } from '../../user/infrastructure/repositories/user.rep
 import type { IUserRepository } from '../../user/domain/repositories/user.repository';
 import { PROPERTY_REPOSITORY } from '../../properties/infrastructure/repositories/property.repository';
 import type { IPropertyRepository } from '../../properties/domain/repositories/property.repository';
+import type { Property } from '../../properties/domain/entities/property.entity';
 import { EnsurePropertyOwnerHostRoleService } from '../application/services/ensure-property-owner-host-role.service';
 
 @Injectable()
@@ -41,7 +42,7 @@ export class GetMeUseCase {
           )
         : null;
 
-    let property = null;
+    let property: Property | null = null;
     if (user?.id != null) {
       property = await this.propertyRepository.findByOwnerId(user.id);
 

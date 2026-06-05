@@ -408,7 +408,7 @@ export class ImportDataUseCase {
         const created = await this.createRole.execute({
           name: row.name.trim(),
           slug,
-          description: row.description?.trim() || null,
+          description: row.description?.trim() || undefined,
         });
         await this.setRolePermissions.execute(created.id, permissionKeys);
         rolesCreated += 1;

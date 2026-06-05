@@ -26,6 +26,7 @@ import { PermissionsGuard } from './interfaces/guard/permissions.guard';
 import { ListPermissionsUseCase } from './useCase/list-permissions.usecase';
 import { SetRolePermissionsUseCase } from './useCase/set-role-permissions.usecase';
 import { GetMeUseCase } from './useCase/get-me.usecase';
+import { EnsurePropertyOwnerHostRoleService } from './application/services/ensure-property-owner-host-role.service';
 import { UserModule } from '../user/user.module';
 import { AccountActivationModule } from '../account-activation/account-activation.module';
 import { PropertiesModule } from '../properties/properties.module';
