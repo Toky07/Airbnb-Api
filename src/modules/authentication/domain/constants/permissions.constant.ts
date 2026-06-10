@@ -35,6 +35,9 @@ export const PERMISSION_DEFINITIONS: PermissionDefinition[] = [
   { key: 'emails.read', label: 'Voir les emails', module: 'emails' },
   { key: 'emails.send', label: 'Envoyer des emails', module: 'emails' },
   { key: 'payments.read', label: 'Voir les paiements', module: 'payments' },
+  { key: 'reservations.read', label: 'Voir les réservations', module: 'reservations' },
+  { key: 'reservations.cancel', label: 'Annuler les réservations', module: 'reservations' },
+  { key: 'host.reservations.read', label: 'Voir les réservations de son établissement', module: 'host' },
 ];
 
 export const ALL_PERMISSION_KEYS = PERMISSION_DEFINITIONS.map((p) => p.key);

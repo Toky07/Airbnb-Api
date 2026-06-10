@@ -15,6 +15,8 @@ export class Payment {
     public readonly guestCount: number,
     public readonly nights: number,
     public readonly reservationId: number | null = null,
+    public readonly cartId: number | null = null,
+    public readonly reservationIds: number[] = [],
     public readonly errorMessage: string | null = null,
     public readonly id?: number,
     public readonly createdAt?: Date,

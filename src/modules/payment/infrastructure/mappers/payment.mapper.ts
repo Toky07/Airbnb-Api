@@ -18,6 +18,8 @@ export class PaymentMapper {
       entity.guestCount,
       entity.nights,
       entity.reservationId,
+      entity.cartId ?? null,
+      entity.reservationIds ?? [],
       entity.errorMessage,
       entity.id,
       entity.createdAt,
@@ -36,6 +38,8 @@ export class PaymentMapper {
     entity.provider = payment.provider;
     entity.transactionId = payment.transactionId;
     entity.reservationId = payment.reservationId;
+    entity.cartId = payment.cartId;
+    entity.reservationIds = payment.reservationIds;
     entity.userId = payment.userId;
     entity.roomId = payment.roomId;
     entity.checkInDate = payment.checkInDate;

@@ -10,6 +10,7 @@ export function createSamplePayment(overrides: Partial<{
   transactionId: string;
   userId: number;
   status: (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS];
+  reservationId: number | null;
 }> = {}): Payment {
   return new Payment(
     20000,
@@ -23,7 +24,9 @@ export function createSamplePayment(overrides: Partial<{
     '2026-06-12',
     2,
     2,
+    overrides.reservationId ?? null,
     null,
+    [],
     null,
     overrides.id ?? 1,
     new Date('2026-06-01T10:00:00.000Z'),

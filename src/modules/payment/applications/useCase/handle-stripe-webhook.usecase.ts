@@ -4,6 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { PAYMENT_STATUS } from '../../domain/constants/payment-status.constant';
 import { Payment } from '../../domain/entities/payment.entity';
 import {
   PAYMENT_GATEWAY,
@@ -14,6 +15,7 @@ import {
   type IPaymentRepository,
 } from '../../domain/repositories/payment.repository';
 import { PaymentOutput } from '../dto/payment.output';
+import { FinalizeSuccessfulPaymentService } from '../services/finalize-successful-payment.service';
 import { MapStripeStatusService } from '../services/map-stripe-status.service';
 
 @Injectable()
@@ -24,6 +26,7 @@ export class HandleStripeWebhookUseCase {
     @Inject(PAYMENT_GATEWAY)
     private readonly paymentGateway: IPaymentGateway,
     private readonly mapStripeStatus: MapStripeStatusService,
+    private readonly finalizeSuccessfulPayment: FinalizeSuccessfulPaymentService,
   ) {}
 
   async execute(payload: Buffer, signature: string): Promise<PaymentOutput> {
@@ -63,12 +66,18 @@ export class HandleStripeWebhookUseCase {
         payment.guestCount,
         payment.nights,
         payment.reservationId,
+        payment.cartId,
+        payment.reservationIds,
         event.errorMessage ?? payment.errorMessage,
         payment.id,
         payment.createdAt,
         payment.updatedAt,
       ),
     );
+
+    if (status === PAYMENT_STATUS.SUCCEEDED) {
+      await this.finalizeSuccessfulPayment.execute(updated);
+    }
 
     return PaymentOutput.fromDomain(updated);
   }

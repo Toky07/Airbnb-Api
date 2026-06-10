@@ -27,35 +27,35 @@ export class AuthGuard implements CanActivate {
       context.getClass(),
     ]);
 
+    const request = context.switchToHttp().getRequest<Request>();
+    const token = this.extractTokenFromHeader(request);
+
+    if (token) {
+      try {
+        const payload = await this.jwtService.verifyAsync<{ sub?: number }>(token);
+        const authId = payload.sub;
+
+        if (typeof authId === 'number') {
+          const auth = await this.authRepository.findById(authId);
+          if (auth?.id) {
+            request['user'] = buildJwtPayload(auth);
+          }
+        }
+      } catch (error) {
+        if (!isPublic) {
+          if (error instanceof UnauthorizedException) {
+            throw error;
+          }
+          throw new UnauthorizedException();
+        }
+      }
+    }
+
     if (isPublic) {
       return true;
     }
 
-    const request = context.switchToHttp().getRequest<Request>();
-    const token = this.extractTokenFromHeader(request);
-
-    if (!token) {
-      throw new UnauthorizedException();
-    }
-
-    try {
-      const payload = await this.jwtService.verifyAsync<{ sub?: number }>(token);
-      const authId = payload.sub;
-
-      if (typeof authId !== 'number') {
-        throw new UnauthorizedException();
-      }
-
-      const auth = await this.authRepository.findById(authId);
-      if (!auth?.id) {
-        throw new UnauthorizedException();
-      }
-
-      request['user'] = buildJwtPayload(auth);
-    } catch (error) {
-      if (error instanceof UnauthorizedException) {
-        throw error;
-      }
+    if (!token || !request['user']) {
       throw new UnauthorizedException();
     }
 

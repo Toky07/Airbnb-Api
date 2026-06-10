@@ -1,9 +1,13 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CalculateStayAmountService } from '../../shared/pricing/calculate-stay-amount.service';
+import { CartModule } from '../cart/cart.module';
+import { ReservationModule } from '../reservation/reservation.module';
 import { RoomsModule } from '../rooms/room.module';
 import { UserModule } from '../user/user.module';
-import { CalculateStayAmountService } from './applications/services/calculate-stay-amount.service';
 import { MapStripeStatusService } from './applications/services/map-stripe-status.service';
+import { FinalizeSuccessfulPaymentService } from './applications/services/finalize-successful-payment.service';
+import { CreateCartPaymentIntentUseCase } from './applications/useCase/create-cart-payment-intent.usecase';
 import { CreatePaymentIntentUseCase } from './applications/useCase/create-payment-intent.usecase';
 import { GetPaymentUseCase } from './applications/useCase/get-payment.usecase';
 import { HandleStripeWebhookUseCase } from './applications/useCase/handle-stripe-webhook.usecase';
@@ -20,6 +24,8 @@ import { PaymentController } from './interfaces/http/payment.controller';
     TypeOrmModule.forFeature([PaymentOrmEntity]),
     RoomsModule,
     UserModule,
+    ReservationModule,
+    forwardRef(() => CartModule),
   ],
   controllers: [PaymentController],
   providers: [
@@ -33,13 +39,21 @@ import { PaymentController } from './interfaces/http/payment.controller';
       provide: PAYMENT_GATEWAY,
       useClass: StripePaymentGateway,
     },
-    CalculateStayAmountService,
     MapStripeStatusService,
+    FinalizeSuccessfulPaymentService,
     CreatePaymentIntentUseCase,
+    CreateCartPaymentIntentUseCase,
     ListPaymentsUseCase,
     GetPaymentUseCase,
     HandleStripeWebhookUseCase,
   ],
-  exports: [PAYMENT_REPOSITORY, CreatePaymentIntentUseCase],
+  exports: [
+    PAYMENT_REPOSITORY,
+    PAYMENT_GATEWAY,
+    MapStripeStatusService,
+    FinalizeSuccessfulPaymentService,
+    CreatePaymentIntentUseCase,
+    CreateCartPaymentIntentUseCase,
+  ],
 })
 export class PaymentModule {}

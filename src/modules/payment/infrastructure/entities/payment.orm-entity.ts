@@ -29,6 +29,12 @@ export class PaymentOrmEntity {
   @Column({ type: 'integer', nullable: true })
   reservationId: number | null;
 
+  @Column({ type: 'integer', nullable: true })
+  cartId: number | null;
+
+  @Column({ type: 'simple-json', default: '[]' })
+  reservationIds: number[];
+
   @Column({ type: 'integer' })
   userId: number;
 

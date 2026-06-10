@@ -18,6 +18,11 @@ import { AccountActivationModule } from './modules/account-activation/account-ac
 import { PasswordSetupTokenOrmEntity } from './modules/account-activation/infrastructure/entities/password-setup-token.orm-entity';
 import { PaymentModule } from './modules/payment/payment.module';
 import { PaymentOrmEntity } from './modules/payment/infrastructure/entities/payment.orm-entity';
+import { ReservationModule } from './modules/reservation/reservation.module';
+import { ReservationOrmEntity } from './modules/reservation/infrastructure/entities/reservation.orm-entity';
+import { CartModule } from './modules/cart/cart.module';
+import { CartOrmEntity } from './modules/cart/infrastructure/entities/cart.orm-entity';
+import { CartItemOrmEntity } from './modules/cart/infrastructure/entities/cart-item.orm-entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -35,6 +40,9 @@ import { PaymentOrmEntity } from './modules/payment/infrastructure/entities/paym
         EmailOrmEntity,
         PasswordSetupTokenOrmEntity,
         PaymentOrmEntity,
+        ReservationOrmEntity,
+        CartOrmEntity,
+        CartItemOrmEntity,
       ],
     }),
     UserModule,
@@ -46,6 +54,8 @@ import { PaymentOrmEntity } from './modules/payment/infrastructure/entities/paym
     MailModule,
     AccountActivationModule,
     PaymentModule,
+    ReservationModule,
+    CartModule,
   ],
   controllers: [],
   providers: [],

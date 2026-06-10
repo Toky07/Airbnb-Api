@@ -4,21 +4,25 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { CalculateStayAmountService } from '../../../../shared/pricing/calculate-stay-amount.service';
 import { Property } from '../../../properties/domain/entities/property.entity';
 import { Room } from '../../../rooms/domain/entities/room.entity';
 import type { IRoomRepository } from '../../../rooms/domain/repositories/room.repository';
+import {
+  createReservationRepositoryMock,
+  createSampleReservation,
+} from '../../../reservation/applications/useCase/reservation-test.helpers';
+import type { IReservationRepository } from '../../../reservation/domain/repositories/reservation.repository';
 import { User } from '../../../user/domain/entities/user.entity';
 import { UserNameVO } from '../../../user/domain/valueObject/username.vo';
 import { EmailVO } from '../../../../shared/valueObject/email.vo';
 import { PhoneNumberVO } from '../../../../shared/valueObject/phone.vo';
 import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
 import { PAYMENT_STATUS } from '../../domain/constants/payment-status.constant';
-import { CalculateStayAmountService } from '../services/calculate-stay-amount.service';
 import { CreatePaymentIntentUseCase } from './create-payment-intent.usecase';
 import {
   createPaymentGatewayMock,
   createPaymentRepositoryMock,
-  createSamplePayment,
 } from './payment-test.helpers';
 
 describe('CreatePaymentIntentUseCase', () => {
@@ -68,12 +72,14 @@ describe('CreatePaymentIntentUseCase', () => {
     const userRepository = {
       findByAuthId: vi.fn().mockResolvedValue(user),
     } as unknown as IUserRepository;
+    const reservationRepository = createReservationRepositoryMock();
 
     const useCase = new CreatePaymentIntentUseCase(
       paymentRepository,
       paymentGateway,
       roomRepository,
       userRepository,
+      reservationRepository,
       new CalculateStayAmountService(),
     );
 
@@ -105,12 +111,46 @@ describe('CreatePaymentIntentUseCase', () => {
     );
   });
 
+  it('crée un payment intent à partir d’une réservation', async () => {
+    process.env.STRIPE_PUBLISHABLE_KEY = 'pk_test_123';
+
+    const reservation = createSampleReservation({
+      id: 8,
+      userId: 5,
+      roomId: 10,
+      totalPrice: 240,
+    });
+
+    const paymentRepository = createPaymentRepositoryMock();
+    const paymentGateway = createPaymentGatewayMock();
+    const useCase = new CreatePaymentIntentUseCase(
+      paymentRepository,
+      paymentGateway,
+      { findById: vi.fn().mockResolvedValue(room) } as unknown as IRoomRepository,
+      { findByAuthId: vi.fn().mockResolvedValue(user) } as unknown as IUserRepository,
+      createReservationRepositoryMock({
+        findById: vi.fn().mockResolvedValue(reservation),
+      }),
+      new CalculateStayAmountService(),
+    );
+
+    const result = await useCase.execute(5, { reservationId: 8 });
+
+    expect(result.amount).toBe(24000);
+    expect(paymentRepository.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        reservationId: 8,
+      }),
+    );
+  });
+
   it('lève une erreur si l’utilisateur est introuvable', async () => {
     const useCase = new CreatePaymentIntentUseCase(
       createPaymentRepositoryMock(),
       createPaymentGatewayMock(),
       { findById: vi.fn() } as unknown as IRoomRepository,
       { findByAuthId: vi.fn().mockResolvedValue(null) } as unknown as IUserRepository,
+      createReservationRepositoryMock(),
       new CalculateStayAmountService(),
     );
 
@@ -130,6 +170,7 @@ describe('CreatePaymentIntentUseCase', () => {
       createPaymentGatewayMock(),
       { findById: vi.fn().mockResolvedValue(null) } as unknown as IRoomRepository,
       { findByAuthId: vi.fn().mockResolvedValue(user) } as unknown as IUserRepository,
+      createReservationRepositoryMock(),
       new CalculateStayAmountService(),
     );
 
@@ -149,6 +190,7 @@ describe('CreatePaymentIntentUseCase', () => {
       createPaymentGatewayMock(),
       { findById: vi.fn().mockResolvedValue(room) } as unknown as IRoomRepository,
       { findByAuthId: vi.fn().mockResolvedValue(user) } as unknown as IUserRepository,
+      createReservationRepositoryMock(),
       new CalculateStayAmountService(),
     );
 
