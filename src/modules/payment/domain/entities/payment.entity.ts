@@ -21,5 +21,6 @@ export class Payment {
     public readonly id?: number,
     public readonly createdAt?: Date,
     public readonly updatedAt?: Date,
+    public readonly invoiceNotificationsSentAt: Date | null = null,
   ) {}
 }

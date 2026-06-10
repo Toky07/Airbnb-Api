@@ -72,6 +72,7 @@ export class HandleStripeWebhookUseCase {
         payment.id,
         payment.createdAt,
         payment.updatedAt,
+        payment.invoiceNotificationsSentAt,
       ),
     );
 

@@ -15,6 +15,12 @@ import {
   createSampleReservation,
 } from './reservation-test.helpers';
 
+function createEnrichReservationOutputsMock() {
+  return {
+    enrich: vi.fn().mockImplementation(async (outputs: unknown[]) => outputs),
+  };
+}
+
 describe('GetReservationUseCase', () => {
   it('retourne une réservation pour un administrateur', async () => {
     const reservation = createSampleReservation({ id: 7 });
@@ -25,6 +31,7 @@ describe('GetReservationUseCase', () => {
       { findByAuthId: vi.fn() } as unknown as IUserRepository,
       { findById: vi.fn() } as unknown as IRoomRepository,
       { findByOwnerId: vi.fn() } as unknown as IPropertyRepository,
+      createEnrichReservationOutputsMock() as never,
     );
 
     const result = await useCase.execute(7, {
@@ -54,6 +61,7 @@ describe('GetReservationUseCase', () => {
       { findByAuthId: vi.fn().mockResolvedValue(user) } as unknown as IUserRepository,
       { findById: vi.fn() } as unknown as IRoomRepository,
       { findByOwnerId: vi.fn() } as unknown as IPropertyRepository,
+      createEnrichReservationOutputsMock() as never,
     );
 
     const result = await useCase.execute(7, {
@@ -83,6 +91,7 @@ describe('GetReservationUseCase', () => {
       { findByAuthId: vi.fn().mockResolvedValue(user) } as unknown as IUserRepository,
       { findById: vi.fn() } as unknown as IRoomRepository,
       { findByOwnerId: vi.fn() } as unknown as IPropertyRepository,
+      createEnrichReservationOutputsMock() as never,
     );
 
     await expect(
@@ -141,6 +150,7 @@ describe('GetReservationUseCase', () => {
       {
         findByOwnerId: vi.fn().mockResolvedValue(property),
       } as unknown as IPropertyRepository,
+      createEnrichReservationOutputsMock() as never,
     );
 
     const result = await useCase.execute(7, {
@@ -160,6 +170,7 @@ describe('GetReservationUseCase', () => {
       { findByAuthId: vi.fn() } as unknown as IUserRepository,
       { findById: vi.fn() } as unknown as IRoomRepository,
       { findByOwnerId: vi.fn() } as unknown as IPropertyRepository,
+      createEnrichReservationOutputsMock() as never,
     );
 
     await expect(

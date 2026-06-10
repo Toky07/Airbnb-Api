@@ -61,6 +61,7 @@ import { ReservationController } from './interfaces/http/reservation.controller'
     CreateReservationUseCase,
     CheckRoomAvailabilityService,
     CalculateStayAmountService,
+    ResolvePaymentReservationsService,
   ],
 })
 export class ReservationModule {}

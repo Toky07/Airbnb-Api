@@ -23,6 +23,7 @@ import { ReservationOrmEntity } from './modules/reservation/infrastructure/entit
 import { CartModule } from './modules/cart/cart.module';
 import { CartOrmEntity } from './modules/cart/infrastructure/entities/cart.orm-entity';
 import { CartItemOrmEntity } from './modules/cart/infrastructure/entities/cart-item.orm-entity';
+import { InvoiceModule } from './modules/invoice/invoice.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -56,6 +57,7 @@ import { CartItemOrmEntity } from './modules/cart/infrastructure/entities/cart-i
     PaymentModule,
     ReservationModule,
     CartModule,
+    InvoiceModule,
   ],
   controllers: [],
   providers: [],

@@ -79,7 +79,7 @@ describe('SendAccountInvitationUseCase', () => {
     expect(mailService.sendSimple).toHaveBeenCalledWith(
       expect.objectContaining({
         to: 'jean@test.com',
-        subject: 'Activate your account',
+        subject: 'Activez votre compte',
       }),
     );
   });

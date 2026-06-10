@@ -98,6 +98,7 @@ export class CompleteCartCheckoutUseCase {
           payment.id,
           payment.createdAt,
           payment.updatedAt,
+          payment.invoiceNotificationsSentAt,
         ),
       );
     }

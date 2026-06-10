@@ -24,6 +24,7 @@ export class PaymentMapper {
       entity.id,
       entity.createdAt,
       entity.updatedAt,
+      entity.invoiceNotificationsSentAt ?? null,
     );
   }
 
@@ -47,6 +48,7 @@ export class PaymentMapper {
     entity.guestCount = payment.guestCount;
     entity.nights = payment.nights;
     entity.errorMessage = payment.errorMessage;
+    entity.invoiceNotificationsSentAt = payment.invoiceNotificationsSentAt;
     return entity;
   }
 }

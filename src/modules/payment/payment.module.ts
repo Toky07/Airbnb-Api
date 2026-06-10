@@ -2,6 +2,7 @@ import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CalculateStayAmountService } from '../../shared/pricing/calculate-stay-amount.service';
 import { CartModule } from '../cart/cart.module';
+import { InvoiceModule } from '../invoice/invoice.module';
 import { ReservationModule } from '../reservation/reservation.module';
 import { RoomsModule } from '../rooms/room.module';
 import { UserModule } from '../user/user.module';
@@ -24,8 +25,9 @@ import { PaymentController } from './interfaces/http/payment.controller';
     TypeOrmModule.forFeature([PaymentOrmEntity]),
     RoomsModule,
     UserModule,
-    ReservationModule,
+    forwardRef(() => ReservationModule),
     forwardRef(() => CartModule),
+    forwardRef(() => InvoiceModule),
   ],
   controllers: [PaymentController],
   providers: [

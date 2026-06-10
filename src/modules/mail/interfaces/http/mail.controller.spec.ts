@@ -16,8 +16,9 @@ import { HOST_ROLE_SLUG } from '../../../authentication/domain/constants/permiss
 import { MediaOrmEntity } from '../../../media/infrastructure/entities/media-orm.entity';
 import { MediaModule } from '../../../media/media.module';
 import {
-  activateAuthAccountForTests,
   AUTH_TEST_ENTITIES,
+  DOMAIN_TEST_ENTITIES,
+  activateAuthAccountForTests,
 } from '../../../../test/controller-test.helpers';
 
 describe('MailController', () => {
@@ -35,7 +36,7 @@ describe('MailController', () => {
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [...AUTH_TEST_ENTITIES, EmailOrmEntity, MediaOrmEntity],
+          entities: [...AUTH_TEST_ENTITIES, ...DOMAIN_TEST_ENTITIES],
           synchronize: true,
         }),
         JwtModule.register({

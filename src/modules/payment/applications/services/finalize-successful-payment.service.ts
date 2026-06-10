@@ -3,6 +3,7 @@ import {
   CART_REPOSITORY,
   type ICartRepository,
 } from '../../../cart/domain/repositories/cart.repository';
+import { SendPaymentInvoiceNotificationsUseCase } from '../../../invoice/applications/useCase/send-payment-invoice-notifications.usecase';
 import { ConfirmReservationUseCase } from '../../../reservation/applications/useCase/confirm-reservation.usecase';
 import type { Payment } from '../../domain/entities/payment.entity';
 
@@ -12,6 +13,7 @@ export class FinalizeSuccessfulPaymentService {
     private readonly confirmReservationUseCase: ConfirmReservationUseCase,
     @Inject(CART_REPOSITORY)
     private readonly cartRepository: ICartRepository,
+    private readonly sendPaymentInvoiceNotifications: SendPaymentInvoiceNotificationsUseCase,
   ) {}
 
   async execute(payment: Payment): Promise<void> {
@@ -29,5 +31,7 @@ export class FinalizeSuccessfulPaymentService {
     if (payment.cartId != null) {
       await this.cartRepository.clearItems(payment.cartId);
     }
+
+    await this.sendPaymentInvoiceNotifications.execute(payment);
   }
 }

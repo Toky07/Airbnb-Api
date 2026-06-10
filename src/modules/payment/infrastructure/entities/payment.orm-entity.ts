@@ -56,6 +56,9 @@ export class PaymentOrmEntity {
   @Column({ type: 'text', nullable: true })
   errorMessage: string | null;
 
+  @Column({ type: 'datetime', nullable: true })
+  invoiceNotificationsSentAt: Date | null;
+
   @CreateDateColumn()
   createdAt: Date;
 

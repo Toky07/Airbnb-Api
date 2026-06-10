@@ -92,7 +92,7 @@ describe('ReservationController', () => {
   });
 
   afterAll(async () => {
-    await app.close();
+    await app?.close();
   });
 
   it('POST /reservations crée une réservation', async () => {

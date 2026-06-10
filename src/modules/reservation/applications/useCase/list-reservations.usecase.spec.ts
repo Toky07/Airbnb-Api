@@ -18,8 +18,14 @@ describe('ListReservationsUseCase', () => {
         },
       }),
     });
+    const enrichReservationOutputs = {
+      enrich: vi.fn().mockImplementation(async (outputs: unknown[]) => outputs),
+    };
 
-    const useCase = new ListReservationsUseCase(repository);
+    const useCase = new ListReservationsUseCase(
+      repository,
+      enrichReservationOutputs as never,
+    );
     const result = await useCase.execute({ page: 1, limit: 10 });
 
     expect(result.data).toHaveLength(2);

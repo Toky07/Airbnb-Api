@@ -27,7 +27,7 @@ import { CartController } from './interfaces/http/cart.controller';
     TypeOrmModule.forFeature([CartOrmEntity, CartItemOrmEntity]),
     RoomsModule,
     UserModule,
-    ReservationModule,
+    forwardRef(() => ReservationModule),
     forwardRef(() => PaymentModule),
   ],
   controllers: [CartController],

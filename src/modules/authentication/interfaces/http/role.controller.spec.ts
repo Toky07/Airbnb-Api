@@ -19,7 +19,7 @@ describe('Roles', () => {
 
   const createRole = async (name: string, slug = 'test-role') => {
     const repository = dataSource.getRepository(Role);
-    await repository.clear();
+    await repository.delete({ slug });
 
     return repository.save(
       repository.create(
@@ -66,9 +66,6 @@ describe('Roles', () => {
   });
 
   it(`/GET auth/roles`, async () => {
-    const repository = dataSource.getRepository(Role);
-    repository.clear();
-    
     await createRole('test');
 
     const response = await request(app.getHttpServer())
@@ -76,21 +73,20 @@ describe('Roles', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    expect(response.body.data).toStrictEqual([
-      {
-        id: expect.any(Number),
-        name: 'test',
-        slug: 'test-role',
-        description: null,
-        permissionKeys: [],
-      },
-    ]);
+    expect(response.body.data).toEqual(
+      expect.arrayContaining([
+        {
+          id: expect.any(Number),
+          name: 'test',
+          slug: 'test-role',
+          description: null,
+          permissionKeys: [],
+        },
+      ]),
+    );
   });
 
   it(`PUT auth/roles/:id`, async () => {
-    const repository = dataSource.getRepository(Role);
-    repository.clear();
-    
     const role = await createRole('test');
 
     const response = await request(app.getHttpServer())
@@ -109,9 +105,6 @@ describe('Roles', () => {
   });
 
   it(`DELETE auth/roles/:id`, async () => {
-    const repository = dataSource.getRepository(Role);
-    repository.clear();
-    
     const role = await createRole('test');
 
     await request(app.getHttpServer())
