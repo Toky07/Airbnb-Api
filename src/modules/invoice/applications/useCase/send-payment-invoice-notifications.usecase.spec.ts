@@ -12,6 +12,7 @@ import { SendPaymentInvoiceNotificationsUseCase } from './send-payment-invoice-n
 
 describe('SendPaymentInvoiceNotificationsUseCase', () => {
   const paymentRepository = {
+    findById: vi.fn(),
     update: vi.fn(),
   };
   const buildPaymentInvoiceData = {
@@ -49,6 +50,7 @@ describe('SendPaymentInvoiceNotificationsUseCase', () => {
     buildCustomerInvoiceEmailBody.execute.mockReturnValue('<p>Confirmation</p>');
     buildHostPaymentNotificationEmailBody.execute.mockReturnValue('Nouvelle réservation');
     mailService.sendSimple.mockResolvedValue({});
+    paymentRepository.findById.mockResolvedValue(createSamplePaymentForInvoice());
     paymentRepository.update.mockImplementation(async (payment) => payment);
 
     useCase = new SendPaymentInvoiceNotificationsUseCase(
@@ -93,23 +95,24 @@ describe('SendPaymentInvoiceNotificationsUseCase', () => {
   });
 
   it('ignore les paiements déjà notifiés', async () => {
-    await useCase.execute(
+    paymentRepository.findById.mockResolvedValue(
       createSamplePaymentForInvoice({
         invoiceNotificationsSentAt: new Date('2026-06-10T15:00:00.000Z'),
       }),
     );
+
+    await useCase.execute(createSamplePaymentForInvoice());
 
     expect(buildPaymentInvoiceData.execute).not.toHaveBeenCalled();
     expect(mailService.sendSimple).not.toHaveBeenCalled();
     expect(paymentRepository.update).not.toHaveBeenCalled();
   });
 
-  it('ne marque pas le paiement si les données de facture sont indisponibles', async () => {
+  it('ne envoie pas d\'email si les données de facture sont indisponibles', async () => {
     buildPaymentInvoiceData.execute.mockResolvedValue(null);
 
     await useCase.execute(createSamplePaymentForInvoice());
 
     expect(mailService.sendSimple).not.toHaveBeenCalled();
-    expect(paymentRepository.update).not.toHaveBeenCalled();
   });
 });

@@ -27,14 +27,43 @@ export class SendPaymentInvoiceNotificationsUseCase {
   ) {}
 
   async execute(payment: Payment): Promise<void> {
-    if (!payment.id || payment.invoiceNotificationsSentAt != null) {
+    if (!payment.id) {
       return;
     }
 
-    const invoiceData = await this.buildPaymentInvoiceData.execute(payment);
+    const fresh = await this.paymentRepository.findById(payment.id);
+    if (!fresh || fresh.invoiceNotificationsSentAt != null) {
+      return;
+    }
+
+    await this.paymentRepository.update(
+      new Payment(
+        fresh.amount,
+        fresh.currency,
+        fresh.status,
+        fresh.provider,
+        fresh.transactionId,
+        fresh.userId,
+        fresh.roomId,
+        fresh.checkInDate,
+        fresh.checkOutDate,
+        fresh.guestCount,
+        fresh.nights,
+        fresh.reservationId,
+        fresh.cartId,
+        fresh.reservationIds,
+        fresh.errorMessage,
+        fresh.id,
+        fresh.createdAt,
+        fresh.updatedAt,
+        new Date(),
+      ),
+    );
+
+    const invoiceData = await this.buildPaymentInvoiceData.execute(fresh);
     if (!invoiceData) {
       this.logger.warn(
-        `Impossible de générer la facture pour le paiement #${payment.id}.`,
+        `Impossible de générer la facture pour le paiement #${fresh.id}.`,
       );
       return;
     }
@@ -58,10 +87,6 @@ export class SendPaymentInvoiceNotificationsUseCase {
       await this.buildPaymentInvoiceData.buildHostNotificationGroups(invoiceData);
 
     for (const group of hostGroups) {
-      if (group.ownerEmail === invoiceData.customerEmail) {
-        continue;
-      }
-
       await this.mailService.sendSimple({
         to: group.ownerEmail,
         subject: `Nouvelle réservation confirmée · ${group.items[0]?.propertyName ?? 'Votre établissement'}`,
@@ -69,33 +94,10 @@ export class SendPaymentInvoiceNotificationsUseCase {
           invoiceData,
           group,
         ),
+        isHtml: true,
         sourceModule: INVOICE_SOURCE_MODULE.HOST,
       });
     }
-
-    await this.paymentRepository.update(
-      new Payment(
-        payment.amount,
-        payment.currency,
-        payment.status,
-        payment.provider,
-        payment.transactionId,
-        payment.userId,
-        payment.roomId,
-        payment.checkInDate,
-        payment.checkOutDate,
-        payment.guestCount,
-        payment.nights,
-        payment.reservationId,
-        payment.cartId,
-        payment.reservationIds,
-        payment.errorMessage,
-        payment.id,
-        payment.createdAt,
-        payment.updatedAt,
-        new Date(),
-      ),
-    );
   }
 
   private toUploadFile(filename: string, buffer: Buffer): UploadFile {
