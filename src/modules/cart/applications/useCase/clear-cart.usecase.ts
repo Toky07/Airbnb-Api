@@ -16,6 +16,7 @@ export class ClearCartUseCase {
     private readonly resolveCartService: ResolveCartService,
     @Inject(CART_REPOSITORY)
     private readonly cartRepository: ICartRepository,
+    private readonly cartPresenter: CartPresenter,
   ) {}
 
   async execute(context: CartRequestContext): Promise<CartOutput> {
@@ -27,6 +28,6 @@ export class ClearCartUseCase {
 
     await this.cartRepository.clearItems(cart.id);
     const reloaded = await this.cartRepository.findById(cart.id);
-    return CartPresenter.toOutput(reloaded!);
+    return this.cartPresenter.toOutput(reloaded!);
   }
 }

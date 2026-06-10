@@ -38,6 +38,7 @@ export class CompleteCartCheckoutUseCase {
     private readonly mapStripeStatus: MapStripeStatusService,
     private readonly finalizeSuccessfulPayment: FinalizeSuccessfulPaymentService,
     private readonly resolveCartService: ResolveCartService,
+    private readonly cartPresenter: CartPresenter,
   ) {}
 
   async execute(
@@ -108,6 +109,6 @@ export class CompleteCartCheckoutUseCase {
       authId,
     });
 
-    return CartPresenter.toOutput(cart);
+    return this.cartPresenter.toOutput(cart);
   }
 }

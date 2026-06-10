@@ -16,6 +16,10 @@ export class CartItemOutput {
     public readonly endDate: string | null,
     public readonly guestCount: number | null,
     public readonly nights: number | null,
+    public readonly roomName: string | null,
+    public readonly propertyName: string | null,
+    public readonly propertyCity: string | null,
+    public readonly imageUrl: string | null,
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
   ) {}
@@ -35,6 +39,10 @@ export class CartItemOutput {
       item.endDate,
       item.guestCount,
       item.nights,
+      null,
+      null,
+      null,
+      null,
       item.createdAt!,
       item.updatedAt!,
     );

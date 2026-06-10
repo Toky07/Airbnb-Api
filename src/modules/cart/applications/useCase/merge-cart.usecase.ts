@@ -21,6 +21,7 @@ export class MergeCartUseCase {
     private readonly cartRepository: ICartRepository,
     @Inject(USER_REPOSITORY)
     private readonly userRepository: IUserRepository,
+    private readonly cartPresenter: CartPresenter,
   ) {}
 
   async execute(authId: number, sessionId?: string | null): Promise<CartOutput> {
@@ -70,6 +71,6 @@ export class MergeCartUseCase {
       );
     }
 
-    return CartPresenter.toOutput(userCart);
+    return this.cartPresenter.toOutput(userCart);
   }
 }

@@ -8,10 +8,13 @@ import {
 
 @Injectable()
 export class GetCartUseCase {
-  constructor(private readonly resolveCartService: ResolveCartService) {}
+  constructor(
+    private readonly resolveCartService: ResolveCartService,
+    private readonly cartPresenter: CartPresenter,
+  ) {}
 
   async execute(context: CartRequestContext): Promise<CartOutput> {
     const cart = await this.resolveCartService.resolve(context);
-    return CartPresenter.toOutput(cart);
+    return this.cartPresenter.toOutput(cart);
   }
 }

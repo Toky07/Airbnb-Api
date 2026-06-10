@@ -32,6 +32,7 @@ export class UpdateCartItemUseCase {
     @Inject(ROOM_REPOSITORY)
     private readonly roomRepository: IRoomRepository,
     private readonly calculateStayAmount: CalculateStayAmountService,
+    private readonly cartPresenter: CartPresenter,
   ) {}
 
   async execute(
@@ -74,7 +75,7 @@ export class UpdateCartItemUseCase {
 
     await this.cartRepository.updateItem(updated);
     const reloaded = await this.cartRepository.findById(cart.id);
-    return CartPresenter.toOutput(reloaded!);
+    return this.cartPresenter.toOutput(reloaded!);
   }
 
   private async updateReservationItem(

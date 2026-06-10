@@ -16,6 +16,7 @@ export class RemoveCartItemUseCase {
     private readonly resolveCartService: ResolveCartService,
     @Inject(CART_REPOSITORY)
     private readonly cartRepository: ICartRepository,
+    private readonly cartPresenter: CartPresenter,
   ) {}
 
   async execute(
@@ -31,6 +32,6 @@ export class RemoveCartItemUseCase {
 
     await this.cartRepository.removeItem(item.id);
     const reloaded = await this.cartRepository.findById(cart.id);
-    return CartPresenter.toOutput(reloaded!);
+    return this.cartPresenter.toOutput(reloaded!);
   }
 }

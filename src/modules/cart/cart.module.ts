@@ -7,6 +7,7 @@ import { RoomsModule } from '../rooms/room.module';
 import { UserModule } from '../user/user.module';
 import { BuildCartItemService } from './applications/services/build-cart-item.service';
 import { ResolveCartService } from './applications/services/resolve-cart.service';
+import { CartPresenter } from './applications/presenters/cart.presenter';
 import { AddCartItemUseCase } from './applications/useCase/add-cart-item.usecase';
 import { CheckoutCartUseCase } from './applications/useCase/checkout-cart.usecase';
 import { CompleteCartCheckoutUseCase } from './applications/useCase/complete-cart-checkout.usecase';
@@ -39,6 +40,7 @@ import { CartController } from './interfaces/http/cart.controller';
     CalculateStayAmountService,
     ResolveCartService,
     BuildCartItemService,
+    CartPresenter,
     GetCartUseCase,
     AddCartItemUseCase,
     UpdateCartItemUseCase,

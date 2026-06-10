@@ -21,6 +21,7 @@ import { DeleteRoomTypeUseCase } from './applications/useCase/delete-room-type.u
 import { RoomTypesSeedService } from './infrastructure/seed/room-types.seed';
 import { MediaModule } from '../media/media.module';
 import { RoomMediaPresenter } from './applications/presenters/room-media.presenter';
+import { RoomProductSummaryService } from './applications/services/room-product-summary.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([RoomEntity, RoomTypeEntity]), MediaModule],
@@ -38,6 +39,7 @@ import { RoomMediaPresenter } from './applications/presenters/room-media.present
     DeleteRoomTypeUseCase,
     RoomTypesSeedService,
     RoomMediaPresenter,
+    RoomProductSummaryService,
     {
       provide: ROOM_REPOSITORY,
       useClass: RoomRepository,
@@ -57,6 +59,7 @@ import { RoomMediaPresenter } from './applications/presenters/room-media.present
     UpdateRoomUseCase,
     DeleteRoomUseCase,
     RoomMediaPresenter,
+    RoomProductSummaryService,
   ],
 })
 export class RoomsModule {}

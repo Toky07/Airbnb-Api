@@ -25,6 +25,7 @@ export class AddCartItemUseCase {
     @Inject(CART_REPOSITORY)
     private readonly cartRepository: ICartRepository,
     private readonly buildCartItemService: BuildCartItemService,
+    private readonly cartPresenter: CartPresenter,
   ) {}
 
   async execute(
@@ -58,6 +59,6 @@ export class AddCartItemUseCase {
       throw new NotFoundException('Panier introuvable.');
     }
 
-    return CartPresenter.toOutput(reloaded);
+    return this.cartPresenter.toOutput(reloaded);
   }
 }
