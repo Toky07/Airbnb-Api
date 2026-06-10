@@ -58,8 +58,22 @@ export class PropertyRepository implements IPropertyRepository {
     }
 
     async findByOwnerId(ownerId: number): Promise<Property | null> {
-        const property = await this.repository.findOne({
+        const properties = await this.findAllByOwnerId(ownerId);
+        return properties[0] ?? null;
+    }
+
+    async findAllByOwnerId(ownerId: number): Promise<Property[]> {
+        const properties = await this.repository.find({
             where: { ownerId: Number(ownerId) },
+            relations: ['rooms', 'propertyType'],
+            order: { name: 'ASC' },
+        });
+        return properties.map((property) => PropertyMapper.toDomain(property));
+    }
+
+    async findByIdForOwner(propertyId: number, ownerId: number): Promise<Property | null> {
+        const property = await this.repository.findOne({
+            where: { id: propertyId, ownerId: Number(ownerId) },
             relations: ['rooms', 'propertyType'],
         });
         return property ? PropertyMapper.toDomain(property) : null;

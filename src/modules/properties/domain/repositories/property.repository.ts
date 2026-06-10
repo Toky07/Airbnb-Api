@@ -9,4 +9,6 @@ export interface IPropertyRepository {
     findPaginated(params: PaginationParams): Promise<PaginatedResult<Property>>;
     delete(id: number): Promise<boolean>;
     findByOwnerId(ownerId: number): Promise<Property | null>;
+    findAllByOwnerId(ownerId: number): Promise<Property[]>;
+    findByIdForOwner(propertyId: number, ownerId: number): Promise<Property | null>;
 }

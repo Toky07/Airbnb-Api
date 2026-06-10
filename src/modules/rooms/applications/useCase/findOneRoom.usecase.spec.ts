@@ -19,6 +19,7 @@ const repository = {
             size: 1,
             status: 'available',
             property: new Property({
+                id: 10,
                 name: 'P',
                 description: 'D',
                 address: 'A',
@@ -46,11 +47,25 @@ const mockReservationRepo = {
     createQueryBuilder: vi.fn().mockReturnValue(mockQueryBuilder),
 } as any;
 
+const mockListRoomAmenitiesUseCase = {
+    execute: vi.fn().mockResolvedValue([
+        { id: 1, name: 'WiFi', icon: 'wifi', scope: 'room', isActive: true },
+    ]),
+};
+
+const mockListPropertyAmenitiesUseCase = {
+    execute: vi.fn().mockResolvedValue([
+        { id: 2, name: 'Piscine', icon: 'water-ladder', scope: 'property', isActive: true },
+    ]),
+};
+
 describe('UseCase: find one room use case', () => {
     it('should find one room with unavailable dates', async () => {
         const findOneRoomUseCase = new FindOneRoomUseCase(
             repository,
             mockRoomMediaPresenter,
+            mockListRoomAmenitiesUseCase as any,
+            mockListPropertyAmenitiesUseCase as any,
             mockReservationRepo,
         );
 
@@ -62,12 +77,16 @@ describe('UseCase: find one room use case', () => {
         expect(room.unavailableDates).toEqual([
             { startDate: '2026-09-10', endDate: '2026-09-13' },
         ]);
+        expect(room.amenities).toHaveLength(1);
+        expect(room.propertyAmenities).toHaveLength(1);
     });
 
     it('should throw an error if the room is not found', async () => {
         const findOneRoomUseCase = new FindOneRoomUseCase(
             repository,
             mockRoomMediaPresenter,
+            mockListRoomAmenitiesUseCase as any,
+            mockListPropertyAmenitiesUseCase as any,
             mockReservationRepo,
         );
 

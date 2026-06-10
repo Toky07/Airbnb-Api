@@ -61,7 +61,14 @@ export class ReservationRepository implements IReservationRepository {
       qb.andWhere('reservation.roomId = :roomId', { roomId: params.roomId });
     }
 
-    if (params.propertyId != null && params.propertyId > 0) {
+    if (params.propertyIds?.length) {
+      qb.innerJoin(
+        RoomEntity,
+        'room',
+        'room.id = reservation.roomId AND room.propertyId IN (:...propertyIds)',
+        { propertyIds: params.propertyIds },
+      );
+    } else if (params.propertyId != null && params.propertyId > 0) {
       qb.innerJoin(
         RoomEntity,
         'room',
@@ -200,7 +207,12 @@ export class ReservationRepository implements IReservationRepository {
   }
 
   async findIdsByPropertyId(propertyId: number): Promise<number[]> {
-    if (!Number.isFinite(propertyId) || propertyId <= 0) {
+    return this.findIdsByPropertyIds([propertyId]);
+  }
+
+  async findIdsByPropertyIds(propertyIds: number[]): Promise<number[]> {
+    const ids = propertyIds.filter((id) => Number.isFinite(id) && id > 0);
+    if (ids.length === 0) {
       return [];
     }
 
@@ -208,7 +220,7 @@ export class ReservationRepository implements IReservationRepository {
       .createQueryBuilder('reservation')
       .select('reservation.id', 'id')
       .innerJoin(RoomEntity, 'room', 'room.id = reservation.roomId')
-      .where('room.propertyId = :propertyId', { propertyId })
+      .where('room.propertyId IN (:...propertyIds)', { propertyIds: ids })
       .getRawMany<{ id: number }>();
 
     return rows.map((row) => Number(row.id)).filter((id) => id > 0);
@@ -218,6 +230,21 @@ export class ReservationRepository implements IReservationRepository {
     qb: ReturnType<Repository<ReservationOrmEntity>['createQueryBuilder']>,
     scope: ReservationStatsScope,
   ): void {
+    if (scope.propertyIds?.length) {
+      qb.innerJoin(
+        RoomEntity,
+        'room',
+        'room.id = reservation.roomId AND room.propertyId IN (:...propertyIds)',
+        { propertyIds: scope.propertyIds },
+      );
+      return;
+    }
+
+    if (scope.propertyId === -1) {
+      qb.andWhere('1 = 0');
+      return;
+    }
+
     if (scope.propertyId != null && scope.propertyId > 0) {
       qb.innerJoin(
         RoomEntity,

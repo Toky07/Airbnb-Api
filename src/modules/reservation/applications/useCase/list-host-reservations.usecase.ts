@@ -1,7 +1,6 @@
 import {
   Inject,
   Injectable,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
@@ -34,8 +33,12 @@ export class ListHostReservationsUseCase {
       throw new UnauthorizedException('Utilisateur introuvable.');
     }
 
-    const property = await this.propertyRepository.findByOwnerId(user.id);
-    if (!property?.id) {
+    const properties = await this.propertyRepository.findAllByOwnerId(user.id);
+    const propertyIds = properties
+      .map((property) => property.id)
+      .filter((id): id is number => typeof id === 'number' && id > 0);
+
+    if (propertyIds.length === 0) {
       return {
         data: [],
         meta: {
@@ -47,9 +50,30 @@ export class ListHostReservationsUseCase {
       };
     }
 
+    if (params.propertyId != null && params.propertyId > 0) {
+      if (!propertyIds.includes(params.propertyId)) {
+        return {
+          data: [],
+          meta: {
+            page: params.page,
+            limit: params.limit,
+            total: 0,
+            totalPages: 0,
+          },
+        };
+      }
+
+      return this.listReservationsUseCase.execute({
+        ...params,
+        propertyId: params.propertyId,
+        propertyIds: undefined,
+      });
+    }
+
     return this.listReservationsUseCase.execute({
       ...params,
-      propertyId: property.id,
+      propertyId: undefined,
+      propertyIds,
     });
   }
 }

@@ -43,7 +43,7 @@ describe('ReservationController', () => {
         JwtModule.register({
           global: true,
           secret: '1234',
-          secretOrPrivateKey: '1234',
+          secret: '1234',
           signOptions: { expiresIn: '5h' },
         }),
         AuthModule,

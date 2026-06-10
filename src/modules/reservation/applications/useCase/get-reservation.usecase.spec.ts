@@ -148,7 +148,7 @@ describe('GetReservationUseCase', () => {
       { findByAuthId: vi.fn().mockResolvedValue(host) } as unknown as IUserRepository,
       { findById: vi.fn().mockResolvedValue(room) } as unknown as IRoomRepository,
       {
-        findByOwnerId: vi.fn().mockResolvedValue(property),
+        findAllByOwnerId: vi.fn().mockResolvedValue([property]),
       } as unknown as IPropertyRepository,
       createEnrichReservationOutputsMock() as never,
     );

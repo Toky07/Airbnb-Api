@@ -92,12 +92,18 @@ export class CancelReservationUseCase {
     userId: number,
     roomId: number,
   ): Promise<boolean> {
-    const property = await this.propertyRepository.findByOwnerId(userId);
-    if (!property?.id) {
+    const properties = await this.propertyRepository.findAllByOwnerId(userId);
+    const propertyIds = new Set(
+      properties
+        .map((property) => property.id)
+        .filter((id): id is number => typeof id === 'number' && id > 0),
+    );
+
+    if (propertyIds.size === 0) {
       return false;
     }
 
     const room = await this.roomRepository.findById(roomId);
-    return room?.property?.id === property.id;
+    return Boolean(room?.property?.id && propertyIds.has(room.property.id));
   }
 }

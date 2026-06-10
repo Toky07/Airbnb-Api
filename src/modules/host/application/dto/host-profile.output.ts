@@ -9,6 +9,6 @@ export class HostProfileOutput {
       email: string;
       phoneNumber: string;
     },
-    public readonly property: PropertyOutput | null,
+    public readonly properties: PropertyOutput[],
   ) {}
 }

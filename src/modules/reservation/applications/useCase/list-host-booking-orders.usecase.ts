@@ -45,8 +45,12 @@ export class ListHostBookingOrdersUseCase {
       throw new UnauthorizedException('Utilisateur introuvable.');
     }
 
-    const property = await this.propertyRepository.findByOwnerId(user.id);
-    if (!property?.id) {
+    const properties = await this.propertyRepository.findAllByOwnerId(user.id);
+    const propertyIds = properties
+      .map((property) => property.id)
+      .filter((id): id is number => typeof id === 'number' && id > 0);
+
+    if (propertyIds.length === 0) {
       return {
         data: [],
         meta: {
@@ -58,8 +62,27 @@ export class ListHostBookingOrdersUseCase {
       };
     }
 
-    const reservationIds = await this.reservationRepository.findIdsByPropertyId(
-      property.id,
+    const scopedPropertyIds =
+      params.propertyId != null && params.propertyId > 0
+        ? propertyIds.includes(params.propertyId)
+          ? [params.propertyId]
+          : []
+        : propertyIds;
+
+    if (scopedPropertyIds.length === 0) {
+      return {
+        data: [],
+        meta: {
+          page: params.page,
+          limit: params.limit,
+          total: 0,
+          totalPages: 0,
+        },
+      };
+    }
+
+    const reservationIds = await this.reservationRepository.findIdsByPropertyIds(
+      scopedPropertyIds,
     );
 
     const result = await this.paymentRepository.findPaginatedForReservationIds(

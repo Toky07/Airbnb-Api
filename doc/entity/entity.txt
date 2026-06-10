@@ -120,7 +120,7 @@ amenityId
 
 RoomAmenity
 ---------------
-propertyId
+roomId
 amenityId
 
 

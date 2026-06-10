@@ -1,4 +1,5 @@
 import { Property } from "src/modules/properties/domain/entities/property.entity";
+import type { AmenityOutput } from "../../../amenity/applications/dto/amenity.output";
 import type { CategorySummary } from "../../../../shared/types/category-summary";
 import { Room } from "../../domain/entities/room.entity";
 
@@ -28,12 +29,16 @@ export class RoomOutput {
         public readonly updatedAt: Date,
         public readonly images: string[],
         public readonly unavailableDates?: UnavailableDateRange[],
+        public readonly amenities: AmenityOutput[] = [],
+        public readonly propertyAmenities: AmenityOutput[] = [],
     ) {}
 
     public static fromDomain(
         room: Room,
         images: string[] = [],
         unavailableDates?: UnavailableDateRange[],
+        amenities: AmenityOutput[] = [],
+        propertyAmenities: AmenityOutput[] = [],
     ): RoomOutput {
         return new RoomOutput(
             room.id!,
@@ -55,6 +60,8 @@ export class RoomOutput {
             room.updatedAt!,
             images,
             unavailableDates,
+            amenities,
+            propertyAmenities,
         );
     }
 }

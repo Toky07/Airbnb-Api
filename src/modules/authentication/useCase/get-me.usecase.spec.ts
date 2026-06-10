@@ -37,10 +37,12 @@ describe('GetMeUseCase', () => {
   };
 
   const propertyRepository = {
-    findByOwnerId: vi.fn(async () => ({
-      id: 10,
-      name: 'Hôtel Azur',
-    })),
+    findAllByOwnerId: vi.fn(async () => [
+      {
+        id: 10,
+        name: 'Hôtel Azur',
+      },
+    ]),
   };
 
   const ensurePropertyOwnerHostRole = {
@@ -69,6 +71,7 @@ describe('GetMeUseCase', () => {
       hasProperty: true,
       propertyId: 10,
       propertyName: 'Hôtel Azur',
+      propertyCount: 1,
     });
   });
 });

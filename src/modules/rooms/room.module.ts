@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RoomEntity } from './infrastructure/entities/room.entity';
 import { RoomTypeEntity } from './infrastructure/entities/room-type.entity';
@@ -25,11 +25,13 @@ import { RoomMediaPresenter } from './applications/presenters/room-media.present
 import { RoomProductSummaryService } from './applications/services/room-product-summary.service';
 import { GenerateRoomSlugService } from './applications/services/generate-room-slug.service';
 import { ReservationOrmEntity } from '../reservation/infrastructure/entities/reservation.orm-entity';
+import { AmenityModule } from '../amenity/amenity.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([RoomEntity, RoomTypeEntity, ReservationOrmEntity]),
     MediaModule,
+    forwardRef(() => AmenityModule),
   ],
   controllers: [RoomController, RoomTypeController],
   providers: [

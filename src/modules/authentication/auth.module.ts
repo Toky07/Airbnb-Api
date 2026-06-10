@@ -40,7 +40,6 @@ import { PropertiesModule } from '../properties/properties.module';
     JwtModule.register({
       global: true,
       secret: '1234',
-      secretOrPrivateKey: '1234',
       signOptions: { expiresIn: '8h' },
     }),
   ],

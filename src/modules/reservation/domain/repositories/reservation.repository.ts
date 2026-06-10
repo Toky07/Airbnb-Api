@@ -10,10 +10,12 @@ export type ReservationListParams = PaginationParams & {
   roomId?: number;
   userId?: number;
   propertyId?: number;
+  propertyIds?: number[];
 };
 
 export type ReservationStatsScope = {
   propertyId?: number;
+  propertyIds?: number[];
 };
 
 export interface IReservationRepository {
@@ -41,4 +43,5 @@ export interface IReservationRepository {
   findRecent(limit: number, scope?: ReservationStatsScope): Promise<Reservation[]>;
   findByIds(ids: number[]): Promise<Reservation[]>;
   findIdsByPropertyId(propertyId: number): Promise<number[]>;
+  findIdsByPropertyIds(propertyIds: number[]): Promise<number[]>;
 }

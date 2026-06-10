@@ -1,6 +1,8 @@
 import { Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { ListPropertyAmenitiesUseCase } from '../../../amenity/applications/useCase/list-property-amenities.usecase';
+import { ListRoomAmenitiesUseCase } from '../../../amenity/applications/useCase/list-room-amenities.usecase';
 import { ROOM_REPOSITORY, type IRoomRepository } from '../../domain/repositories/room.repository';
 import { BLOCKING_RESERVATION_STATUSES } from '../../../reservation/domain/constants/reservation-status.constant';
 import { ReservationOrmEntity } from '../../../reservation/infrastructure/entities/reservation.orm-entity';
@@ -11,6 +13,8 @@ export class FindOneRoomUseCase {
     constructor(
         @Inject(ROOM_REPOSITORY) private readonly repository: IRoomRepository,
         private readonly presenter: RoomMediaPresenter,
+        private readonly listRoomAmenitiesUseCase: ListRoomAmenitiesUseCase,
+        private readonly listPropertyAmenitiesUseCase: ListPropertyAmenitiesUseCase,
         @InjectRepository(ReservationOrmEntity)
         private readonly reservationRepo: Repository<ReservationOrmEntity>,
     ) {}
@@ -28,12 +32,22 @@ export class FindOneRoomUseCase {
             throw new Error('Room not found');
         }
 
-        const [output, unavailableDates] = await Promise.all([
+        const propertyId = room.property?.id;
+        const [output, unavailableDates, amenities, propertyAmenities] = await Promise.all([
             this.presenter.toOutput(room),
             this.findUnavailableDates(room.id!),
+            this.listRoomAmenitiesUseCase.execute(room.id!),
+            propertyId
+                ? this.listPropertyAmenitiesUseCase.execute(propertyId)
+                : Promise.resolve([]),
         ]);
 
-        return { ...output, unavailableDates };
+        return {
+            ...output,
+            unavailableDates,
+            amenities,
+            propertyAmenities,
+        };
     }
 
     private async findUnavailableDates(roomId: number): Promise<UnavailableDateRange[]> {

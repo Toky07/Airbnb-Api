@@ -61,10 +61,16 @@ export class GetReservationUseCase {
     }
 
     if (access.canReadHost && user?.id) {
-      const property = await this.propertyRepository.findByOwnerId(user.id);
-      if (property?.id) {
+      const properties = await this.propertyRepository.findAllByOwnerId(user.id);
+      const propertyIds = new Set(
+        properties
+          .map((property) => property.id)
+          .filter((id): id is number => typeof id === 'number' && id > 0),
+      );
+
+      if (propertyIds.size > 0) {
         const room = await this.roomRepository.findById(reservation.roomId);
-        if (room?.property?.id === property.id) {
+        if (room?.property?.id && propertyIds.has(room.property.id)) {
           return this.toEnrichedOutput(reservation);
         }
       }

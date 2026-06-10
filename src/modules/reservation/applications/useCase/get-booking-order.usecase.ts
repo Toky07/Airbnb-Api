@@ -78,13 +78,17 @@ export class GetBookingOrderUseCase {
       throw new ForbiddenException('Accès refusé.');
     }
 
-    const property = await this.propertyRepository.findByOwnerId(user.id);
-    if (!property?.id) {
+    const properties = await this.propertyRepository.findAllByOwnerId(user.id);
+    const propertyIds = properties
+      .map((property) => property.id)
+      .filter((id): id is number => typeof id === 'number' && id > 0);
+
+    if (propertyIds.length === 0) {
       throw new ForbiddenException('Accès refusé.');
     }
 
     const allowedReservationIds = new Set(
-      await this.reservationRepository.findIdsByPropertyId(property.id),
+      await this.reservationRepository.findIdsByPropertyIds(propertyIds),
     );
 
     const hasAllowedItem = items.some((item) => allowedReservationIds.has(item.id));

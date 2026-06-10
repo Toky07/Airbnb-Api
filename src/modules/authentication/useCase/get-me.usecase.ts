@@ -42,11 +42,11 @@ export class GetMeUseCase {
           )
         : null;
 
-    let property: Property | null = null;
+    let properties: Property[] = [];
     if (user?.id != null) {
-      property = await this.propertyRepository.findByOwnerId(user.id);
+      properties = await this.propertyRepository.findAllByOwnerId(user.id);
 
-      if (property?.id) {
+      if (properties.length > 0) {
         await this.ensurePropertyOwnerHostRole.executeForAuthId(auth.id);
         auth = (await this.authRepository.findById(authId)) ?? auth;
       }
@@ -55,15 +55,17 @@ export class GetMeUseCase {
     const payload = buildJwtPayload(auth);
     const isHostRole =
       payload.roles.includes(HOST_ROLE_SLUG) || payload.isSuperAdmin;
-    const ownsProperty = Boolean(property?.id);
+    const ownsProperty = properties.length > 0;
+    const primaryProperty = properties[0] ?? null;
 
     let hostAccess: HostAccessOutput | null = null;
     if (isHostRole || ownsProperty) {
       hostAccess = new HostAccessOutput(
         isHostRole || ownsProperty,
         ownsProperty,
-        property?.id ?? null,
-        property?.name ?? null,
+        primaryProperty?.id ?? null,
+        primaryProperty?.name ?? null,
+        properties.length,
       );
     }
 

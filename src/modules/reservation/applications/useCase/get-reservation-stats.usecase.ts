@@ -113,8 +113,12 @@ export class GetReservationStatsUseCase {
         throw new UnauthorizedException('Utilisateur introuvable.');
       }
 
-      const property = await this.propertyRepository.findByOwnerId(user.id);
-      return property?.id ? { propertyId: property.id } : { propertyId: -1 };
+      const properties = await this.propertyRepository.findAllByOwnerId(user.id);
+      const propertyIds = properties
+        .map((property) => property.id)
+        .filter((id): id is number => typeof id === 'number' && id > 0);
+
+      return propertyIds.length > 0 ? { propertyIds } : { propertyId: -1 };
     }
 
     throw new UnauthorizedException('Accès refusé.');
@@ -123,6 +127,20 @@ export class GetReservationStatsUseCase {
   private async countRooms(scope: ReservationStatsScope): Promise<number> {
     if (scope.propertyId === -1) {
       return 0;
+    }
+
+    if (scope.propertyIds?.length) {
+      const results = await Promise.all(
+        scope.propertyIds.map((propertyId) =>
+          this.roomRepository.findPaginated({
+            page: 1,
+            limit: 10,
+            propertyId,
+          }),
+        ),
+      );
+
+      return results.reduce((total, result) => total + result.meta.total, 0);
     }
 
     const result = await this.roomRepository.findPaginated({

@@ -21,6 +21,8 @@ export const PERMISSION_DEFINITIONS: PermissionDefinition[] = [
   { key: 'rooms.create', label: 'Créer des chambres', module: 'rooms' },
   { key: 'rooms.update', label: 'Modifier des chambres', module: 'rooms' },
   { key: 'rooms.delete', label: 'Supprimer des chambres', module: 'rooms' },
+  { key: 'amenities.read', label: 'Voir les équipements', module: 'amenities' },
+  { key: 'amenities.manage', label: 'Gérer les équipements', module: 'amenities' },
   { key: 'import.execute', label: 'Importer des données CSV', module: 'import' },
   { key: 'roles.read', label: 'Voir les rôles et permissions', module: 'roles' },
   { key: 'roles.manage', label: 'Gérer les rôles et permissions', module: 'roles' },
