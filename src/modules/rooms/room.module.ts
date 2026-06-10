@@ -19,12 +19,18 @@ import { CreateRoomTypeUseCase } from './applications/useCase/create-room-type.u
 import { UpdateRoomTypeUseCase } from './applications/useCase/update-room-type.usecase';
 import { DeleteRoomTypeUseCase } from './applications/useCase/delete-room-type.usecase';
 import { RoomTypesSeedService } from './infrastructure/seed/room-types.seed';
+import { RoomSlugsSeedService } from './infrastructure/seed/room-slugs.seed';
 import { MediaModule } from '../media/media.module';
 import { RoomMediaPresenter } from './applications/presenters/room-media.presenter';
 import { RoomProductSummaryService } from './applications/services/room-product-summary.service';
+import { GenerateRoomSlugService } from './applications/services/generate-room-slug.service';
+import { ReservationOrmEntity } from '../reservation/infrastructure/entities/reservation.orm-entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([RoomEntity, RoomTypeEntity]), MediaModule],
+  imports: [
+    TypeOrmModule.forFeature([RoomEntity, RoomTypeEntity, ReservationOrmEntity]),
+    MediaModule,
+  ],
   controllers: [RoomController, RoomTypeController],
   providers: [
     ListRoomsUseCase,
@@ -38,8 +44,10 @@ import { RoomProductSummaryService } from './applications/services/room-product-
     UpdateRoomTypeUseCase,
     DeleteRoomTypeUseCase,
     RoomTypesSeedService,
+    RoomSlugsSeedService,
     RoomMediaPresenter,
     RoomProductSummaryService,
+    GenerateRoomSlugService,
     {
       provide: ROOM_REPOSITORY,
       useClass: RoomRepository,

@@ -32,6 +32,7 @@ import { ImportRoomsUseCase } from './applications/useCase/import-rooms.usecase'
 import { ImportPropertyTypesUseCase } from './applications/useCase/import-property-types.usecase';
 import { ImportRoomTypesUseCase } from './applications/useCase/import-room-types.usecase';
 import { ImportRolesUseCase } from './applications/useCase/import-roles.usecase';
+import { GenerateRoomSlugService } from '../rooms/applications/services/generate-room-slug.service';
 
 @Module({
   imports: [
@@ -64,6 +65,7 @@ import { ImportRolesUseCase } from './applications/useCase/import-roles.usecase'
     CreateRoomTypeUseCase,
     RoomMediaPresenter,
     PropertyRepository,
+    GenerateRoomSlugService,
     { provide: PROPERTY_REPOSITORY, useClass: PropertyRepository },
     PropertyTypeRepository,
     { provide: PROPERTY_TYPE_REPOSITORY, useClass: PropertyTypeRepository },

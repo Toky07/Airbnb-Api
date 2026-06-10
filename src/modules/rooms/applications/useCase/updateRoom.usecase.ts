@@ -6,6 +6,7 @@ import { CreateRoomDto } from "../dto/createRoom.dto";
 import { ENTITY_TYPE } from "../../../media/constant";
 import { SyncEntityMediasUseCase } from "../../../media/applications/useCase/syncEntityMedias.usecase";
 import { RoomMediaPresenter } from "../presenters/room-media.presenter";
+import { GenerateRoomSlugService } from "../services/generate-room-slug.service";
 import type { UploadFile } from "../../../media/types/upload-file";
 
 export class UpdateRoomUseCase {
@@ -13,6 +14,7 @@ export class UpdateRoomUseCase {
         @Inject(ROOM_REPOSITORY) private readonly repository: IRoomRepository,
         private readonly syncEntityMedias: SyncEntityMediasUseCase,
         private readonly presenter: RoomMediaPresenter,
+        private readonly generateSlug: GenerateRoomSlugService,
     ) {}
 
     async execute(
@@ -27,7 +29,11 @@ export class UpdateRoomUseCase {
             throw new Error('Room not found');
         }
 
+        const nameChanged = room.name !== updateRoomDto.name;
         room.name = updateRoomDto.name;
+        if (nameChanged || !room.slug) {
+            room.slug = await this.generateSlug.execute(room.name, room.id);
+        }
         room.description = updateRoomDto.description;
         room.pricePerNight = updateRoomDto.pricePerNight;
         room.maxGuests = updateRoomDto.maxGuests;

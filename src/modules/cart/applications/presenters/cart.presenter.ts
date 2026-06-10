@@ -54,6 +54,7 @@ export class CartPresenter {
       item.guestCount,
       item.nights,
       summary?.roomName ?? null,
+      summary?.roomSlug ?? null,
       summary?.propertyName ?? null,
       summary?.propertyCity ?? null,
       summary?.imageUrl ?? null,

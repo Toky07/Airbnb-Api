@@ -15,6 +15,7 @@ import { RoomEntity } from '../modules/rooms/infrastructure/entities/room.entity
 import { UserEntity } from '../modules/user/infrastructure/entities/user.entity';
 import { ACCOUNT_STATUS } from '../modules/account-activation/domain/constants/account-status.constant';
 import { PasswordSetupTokenOrmEntity } from '../modules/account-activation/infrastructure/entities/password-setup-token.orm-entity';
+import { ReservationOrmEntity } from '../modules/reservation/infrastructure/entities/reservation.orm-entity';
 
 export type RegisterPayload = {
   email: string;
@@ -47,6 +48,7 @@ export const DOMAIN_TEST_ENTITIES = [
   RoomTypeEntity,
   MediaOrmEntity,
   EmailOrmEntity,
+  ReservationOrmEntity,
 ] as const;
 
 export async function assignSuperAdminRole(

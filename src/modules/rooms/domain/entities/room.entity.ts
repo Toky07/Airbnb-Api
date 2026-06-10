@@ -3,6 +3,7 @@ import type { CategorySummary } from "../../../../shared/types/category-summary"
 
 export class Room {
     public name: string;
+    public slug: string;
     public description: string;
     public pricePerNight: number;
     public maxGuests: number;
@@ -21,6 +22,7 @@ export class Room {
 
     constructor({
         name,
+        slug,
         description,
         pricePerNight,
         maxGuests,
@@ -38,6 +40,7 @@ export class Room {
         id,
     }: {
         name: string;
+        slug?: string;
         description: string;
         pricePerNight: number;
         maxGuests: number;
@@ -55,6 +58,7 @@ export class Room {
         id?: number;
     }) {
         this.name = name;
+        this.slug = slug ?? '';
         this.description = description;
         this.pricePerNight = pricePerNight;
         this.maxGuests = maxGuests;

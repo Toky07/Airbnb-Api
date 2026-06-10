@@ -1,6 +1,7 @@
 import { Room } from '../../../domain/entities/room.entity';
 import { RoomOutput } from '../../dto/room.output';
 import { RoomMediaPresenter } from '../../presenters/room-media.presenter';
+import { GenerateRoomSlugService } from '../../services/generate-room-slug.service';
 import { SaveEntityMediasUseCase } from '../../../../media/applications/useCase/saveEntityMedias.usecase';
 import { SyncEntityMediasUseCase } from '../../../../media/applications/useCase/syncEntityMedias.usecase';
 import { DeleteMediasByEntityUseCase } from '../../../../media/applications/useCase/deleteMediasByEntity.usecase';
@@ -20,3 +21,7 @@ export const mockDeleteMediasByEntity = {
 export const mockRoomMediaPresenter = {
   toOutput: async (room: Room) => RoomOutput.fromDomain(room),
 } as RoomMediaPresenter;
+
+export const mockGenerateRoomSlug = {
+  execute: async (name: string) => name.toLowerCase().replace(/\s+/g, '-'),
+} as unknown as GenerateRoomSlugService;

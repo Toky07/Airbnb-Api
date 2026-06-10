@@ -46,6 +46,12 @@ export class RoomController {
   }
 
   @Public()
+  @Get('by-slug/:slug')
+  async findBySlug(@Param('slug') slug: string) {
+    return this.findOneRoomUseCase.executeBySlug(slug);
+  }
+
+  @Public()
   @Get(':id')
   async findById(@Param('id') id: number) {
     return this.findOneRoomUseCase.execute(id);

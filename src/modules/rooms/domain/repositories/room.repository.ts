@@ -5,6 +5,7 @@ export interface IRoomRepository {
     create(room: Room): Promise<Room>;
     update(room: Room): Promise<Room>;
     findById(id: number): Promise<Room|null>;
+    findBySlug(slug: string): Promise<Room|null>;
     findAll(): Promise<Room[]>;
     findPaginated(params: PaginationParams): Promise<PaginatedResult<Room>>;
     delete(id: number): Promise<boolean>;

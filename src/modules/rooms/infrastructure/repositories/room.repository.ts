@@ -73,6 +73,15 @@ export class RoomRepository implements IRoomRepository {
         return room ? RoomMapper.toDomain(room) : null;
     }
 
+    async findBySlug(slug: string): Promise<Room|null> {
+        const room = await this.repository.findOne({
+            where: { slug },
+            relations: ['property', 'roomType'],
+        });
+
+        return room ? RoomMapper.toDomain(room) : null;
+    }
+
     async update(room: Room): Promise<Room> {
         const data = await this.repository.preload({
             ...RoomMapper.toEntity(room),

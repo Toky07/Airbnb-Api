@@ -18,6 +18,9 @@ export class RoomEntity {
     @Column()
     name: string;
 
+    @Column({ unique: true, nullable: true })
+    slug: string;
+
     @Column()
     description: string;
 

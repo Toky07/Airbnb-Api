@@ -6,6 +6,7 @@ import { RoomOutput } from "../dto/room.output";
 import { ENTITY_TYPE } from "../../../media/constant";
 import { SaveEntityMediasUseCase } from "../../../media/applications/useCase/saveEntityMedias.usecase";
 import { RoomMediaPresenter } from "../presenters/room-media.presenter";
+import { GenerateRoomSlugService } from "../services/generate-room-slug.service";
 import type { UploadFile } from "../../../media/types/upload-file";
 
 export class CreateRoomUseCase {
@@ -13,6 +14,7 @@ export class CreateRoomUseCase {
         @Inject(ROOM_REPOSITORY) private readonly repository: IRoomRepository,
         private readonly saveEntityMedias: SaveEntityMediasUseCase,
         private readonly presenter: RoomMediaPresenter,
+        private readonly generateSlug: GenerateRoomSlugService,
     ) {}
 
     async execute(
@@ -20,6 +22,7 @@ export class CreateRoomUseCase {
         images?: UploadFile[],
     ): Promise<RoomOutput> {
         const room = new Room(createRoomDto);
+        room.slug = await this.generateSlug.execute(room.name);
 
         const createdRoom = await this.repository.create(room);
 

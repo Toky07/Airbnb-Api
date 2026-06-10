@@ -4,6 +4,7 @@ import { RoomOutput } from "../dto/room.output";
 import { CreateRoomUseCase } from "./createRoom.usecase";
 import { Property } from "../../../properties/domain/entities/property.entity";
 import {
+    mockGenerateRoomSlug,
     mockRoomMediaPresenter,
     mockSaveEntityMedias,
 } from "./test-helpers/room-usecase.mocks";
@@ -36,6 +37,7 @@ describe('UseCase: create room use case', () => {
             repository,
             mockSaveEntityMedias,
             mockRoomMediaPresenter,
+            mockGenerateRoomSlug,
         );
 
         const room = await createRoomUseCase.execute({

@@ -3,6 +3,7 @@ import { Room } from "../../domain/entities/room.entity";
 import { UpdateRoomUseCase } from "./updateRoom.usecase";
 import { Property } from "../../../properties/domain/entities/property.entity";
 import {
+    mockGenerateRoomSlug,
     mockRoomMediaPresenter,
     mockSyncEntityMedias,
 } from "./test-helpers/room-usecase.mocks";
@@ -45,6 +46,7 @@ describe('UseCase: update room use case', () => {
             repository,
             mockSyncEntityMedias,
             mockRoomMediaPresenter,
+            mockGenerateRoomSlug,
         );
 
         const updatedRoom = await updateRoomUseCase.execute(1, {
@@ -70,6 +72,7 @@ describe('UseCase: update room use case', () => {
             repository,
             mockSyncEntityMedias,
             mockRoomMediaPresenter,
+            mockGenerateRoomSlug,
         );
 
         vi.spyOn(repository, 'findById').mockResolvedValue(null);

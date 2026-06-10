@@ -38,6 +38,7 @@ export class RoomMapper {
   static toDomain(room: RoomEntity): Room {
     return new Room({
       name: room.name,
+      slug: room.slug,
       description: room.description,
       pricePerNight: room.pricePerNight,
       maxGuests: room.maxGuests,
@@ -59,6 +60,7 @@ export class RoomMapper {
   static toEntity(room: Room): Partial<RoomEntity> {
     return {
       name: room.name,
+      slug: room.slug,
       description: room.description,
       pricePerNight: room.pricePerNight,
       maxGuests: room.maxGuests,

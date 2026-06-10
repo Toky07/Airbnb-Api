@@ -14,6 +14,7 @@ export class ReservationOutput {
     public readonly nights: number,
     public readonly status: ReservationStatus,
     public readonly roomName: string | null = null,
+    public readonly roomSlug: string | null = null,
     public readonly propertyName: string | null = null,
     public readonly propertyCity: string | null = null,
     public readonly imageUrl: string | null = null,
@@ -25,6 +26,7 @@ export class ReservationOutput {
     reservation: Reservation,
     product?: {
       roomName?: string | null;
+      roomSlug?: string | null;
       propertyName?: string | null;
       propertyCity?: string | null;
       imageUrl?: string | null;
@@ -41,6 +43,7 @@ export class ReservationOutput {
       reservation.nights,
       reservation.status,
       product?.roomName ?? null,
+      product?.roomSlug ?? null,
       product?.propertyName ?? null,
       product?.propertyCity ?? null,
       product?.imageUrl ?? null,
@@ -64,6 +67,7 @@ export class ReservationOutput {
       output.nights,
       output.status,
       summary?.roomName ?? null,
+      summary?.roomSlug ?? null,
       summary?.propertyName ?? null,
       summary?.propertyCity ?? null,
       summary?.imageUrl ?? null,

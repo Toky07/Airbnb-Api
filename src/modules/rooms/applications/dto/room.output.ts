@@ -2,10 +2,16 @@ import { Property } from "src/modules/properties/domain/entities/property.entity
 import type { CategorySummary } from "../../../../shared/types/category-summary";
 import { Room } from "../../domain/entities/room.entity";
 
+export type UnavailableDateRange = {
+    startDate: string;
+    endDate: string;
+};
+
 export class RoomOutput {
     constructor(
         public readonly id: number,
         public readonly name: string,
+        public readonly slug: string,
         public readonly description: string,
         public readonly pricePerNight: number,
         public readonly maxGuests: number,
@@ -21,12 +27,18 @@ export class RoomOutput {
         public readonly createdAt: Date,
         public readonly updatedAt: Date,
         public readonly images: string[],
+        public readonly unavailableDates?: UnavailableDateRange[],
     ) {}
 
-    public static fromDomain(room: Room, images: string[] = []): RoomOutput {
+    public static fromDomain(
+        room: Room,
+        images: string[] = [],
+        unavailableDates?: UnavailableDateRange[],
+    ): RoomOutput {
         return new RoomOutput(
             room.id!,
             room.name,
+            room.slug,
             room.description,
             room.pricePerNight,
             room.maxGuests,
@@ -42,6 +54,7 @@ export class RoomOutput {
             room.createdAt!,
             room.updatedAt!,
             images,
+            unavailableDates,
         );
     }
 }
