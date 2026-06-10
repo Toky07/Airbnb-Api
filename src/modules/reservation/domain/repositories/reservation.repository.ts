@@ -12,6 +12,10 @@ export type ReservationListParams = PaginationParams & {
   propertyId?: number;
 };
 
+export type ReservationStatsScope = {
+  propertyId?: number;
+};
+
 export interface IReservationRepository {
   create(reservation: Reservation): Promise<Reservation>;
   update(reservation: Reservation): Promise<Reservation>;
@@ -23,4 +27,18 @@ export interface IReservationRepository {
     endDate: string,
     excludeReservationId?: number,
   ): Promise<Reservation[]>;
+  countByScope(scope: ReservationStatsScope, status?: Reservation['status']): Promise<number>;
+  sumConfirmedRevenueForMonth(
+    year: number,
+    month: number,
+    scope?: ReservationStatsScope,
+  ): Promise<number>;
+  sumConfirmedNightsForMonth(
+    year: number,
+    month: number,
+    scope?: ReservationStatsScope,
+  ): Promise<number>;
+  findRecent(limit: number, scope?: ReservationStatsScope): Promise<Reservation[]>;
+  findByIds(ids: number[]): Promise<Reservation[]>;
+  findIdsByPropertyId(propertyId: number): Promise<number[]>;
 }

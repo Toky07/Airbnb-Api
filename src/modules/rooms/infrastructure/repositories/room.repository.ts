@@ -1,15 +1,17 @@
-import { Room } from "../../domain/entities/room.entity";
-import { RoomEntity } from "../entities/room.entity";
-import { IRoomRepository } from "../../domain/repositories/room.repository";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { RoomMapper } from "../mappers/room.mapper";
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import {
     buildPaginationMeta,
     type PaginatedResult,
     type PaginationParams,
 } from '../../../../shared/pagination/pagination.types';
+import { Room } from "../../domain/entities/room.entity";
+import { RoomEntity } from "../entities/room.entity";
+import { IRoomRepository } from "../../domain/repositories/room.repository";
+import { RoomMapper } from "../mappers/room.mapper";
 
+@Injectable()
 export class RoomRepository implements IRoomRepository {
     constructor(@InjectRepository(RoomEntity) private readonly repository: Repository<RoomEntity>) {}
 

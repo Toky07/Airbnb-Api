@@ -31,7 +31,11 @@ export class PaymentRepository implements IPaymentRepository {
   }
 
   async findById(id: number): Promise<Payment | null> {
-    const entity = await this.repository.findOne({ where: { id: Number(id) } });
+    if (!Number.isFinite(id) || id <= 0) {
+      return null;
+    }
+
+    const entity = await this.repository.findOne({ where: { id } });
     return entity ? PaymentMapper.toDomain(entity) : null;
   }
 
@@ -47,6 +51,54 @@ export class PaymentRepository implements IPaymentRepository {
   ): Promise<PaginatedResult<Payment>> {
     const qb = this.repository
       .createQueryBuilder('payment')
+      .orderBy('payment.createdAt', 'DESC');
+
+    if (params.search) {
+      const term = `%${params.search}%`;
+      qb.andWhere(
+        '(payment.transactionId LIKE :term OR payment.status LIKE :term OR payment.currency LIKE :term)',
+        { term },
+      );
+    }
+
+    const [entities, total] = await qb
+      .skip((params.page - 1) * params.limit)
+      .take(params.limit)
+      .getManyAndCount();
+
+    return {
+      data: entities.map((entity) => PaymentMapper.toDomain(entity)),
+      meta: buildPaginationMeta(total, params.page, params.limit),
+    };
+  }
+
+  async findPaginatedForReservationIds(
+    reservationIds: number[],
+    params: PaginationParams,
+  ): Promise<PaginatedResult<Payment>> {
+    const uniqueIds = [
+      ...new Set(reservationIds.filter((id) => Number.isFinite(id) && id > 0)),
+    ];
+
+    if (uniqueIds.length === 0) {
+      return {
+        data: [],
+        meta: buildPaginationMeta(0, params.page, params.limit),
+      };
+    }
+
+    const qb = this.repository
+      .createQueryBuilder('payment')
+      .where(
+        `(
+          payment.reservationId IN (:...reservationIds)
+          OR EXISTS (
+            SELECT 1 FROM json_each(payment.reservationIds) AS reservationRef
+            WHERE CAST(reservationRef.value AS INTEGER) IN (:...reservationIds)
+          )
+        )`,
+        { reservationIds: uniqueIds },
+      )
       .orderBy('payment.createdAt', 'DESC');
 
     if (params.search) {

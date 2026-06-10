@@ -19,6 +19,7 @@ import {
   type IReservationRepository,
 } from '../../domain/repositories/reservation.repository';
 import { ReservationOutput } from '../dto/reservation.output';
+import { EnrichReservationOutputsService } from '../services/enrich-reservation-outputs.service';
 
 export type GetReservationAccess = {
   authId: number;
@@ -37,6 +38,7 @@ export class GetReservationUseCase {
     private readonly roomRepository: IRoomRepository,
     @Inject(PROPERTY_REPOSITORY)
     private readonly propertyRepository: IPropertyRepository,
+    private readonly enrichReservationOutputs: EnrichReservationOutputsService,
   ) {}
 
   async execute(
@@ -50,12 +52,12 @@ export class GetReservationUseCase {
     }
 
     if (access.canReadAll) {
-      return ReservationOutput.fromDomain(reservation);
+      return this.toEnrichedOutput(reservation);
     }
 
     const user = await this.userRepository.findByAuthId(access.authId);
     if (user?.id === reservation.userId) {
-      return ReservationOutput.fromDomain(reservation);
+      return this.toEnrichedOutput(reservation);
     }
 
     if (access.canReadHost && user?.id) {
@@ -63,11 +65,20 @@ export class GetReservationUseCase {
       if (property?.id) {
         const room = await this.roomRepository.findById(reservation.roomId);
         if (room?.property?.id === property.id) {
-          return ReservationOutput.fromDomain(reservation);
+          return this.toEnrichedOutput(reservation);
         }
       }
     }
 
     throw new ForbiddenException('Accès refusé.');
+  }
+
+  private async toEnrichedOutput(
+    reservation: import('../../domain/entities/reservation.entity').Reservation,
+  ): Promise<ReservationOutput> {
+    const [output] = await this.enrichReservationOutputs.enrich([
+      ReservationOutput.fromDomain(reservation),
+    ]);
+    return output ?? ReservationOutput.fromDomain(reservation);
   }
 }

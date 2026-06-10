@@ -12,4 +12,8 @@ export interface IPaymentRepository {
   findById(id: number): Promise<Payment | null>;
   findByTransactionId(transactionId: string): Promise<Payment | null>;
   findPaginated(params: PaginationParams): Promise<PaginatedResult<Payment>>;
+  findPaginatedForReservationIds(
+    reservationIds: number[],
+    params: PaginationParams,
+  ): Promise<PaginatedResult<Payment>>;
 }

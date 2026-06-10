@@ -1,15 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import {
   buildPaginationMeta,
   type PaginatedResult,
 } from '../../../../shared/pagination/pagination.types';
-import { BLOCKING_RESERVATION_STATUSES } from '../../domain/constants/reservation-status.constant';
+import { BLOCKING_RESERVATION_STATUSES, RESERVATION_STATUS } from '../../domain/constants/reservation-status.constant';
 import { Reservation } from '../../domain/entities/reservation.entity';
 import type {
   IReservationRepository,
   ReservationListParams,
+  ReservationStatsScope,
 } from '../../domain/repositories/reservation.repository';
 import { ReservationOrmEntity } from '../entities/reservation.orm-entity';
 import { ReservationMapper } from '../mappers/reservation.mapper';
@@ -37,7 +38,11 @@ export class ReservationRepository implements IReservationRepository {
   }
 
   async findById(id: number): Promise<Reservation | null> {
-    const entity = await this.repository.findOne({ where: { id: Number(id) } });
+    if (!Number.isFinite(id) || id <= 0) {
+      return null;
+    }
+
+    const entity = await this.repository.findOne({ where: { id } });
     return entity ? ReservationMapper.toDomain(entity) : null;
   }
 
@@ -56,7 +61,7 @@ export class ReservationRepository implements IReservationRepository {
       qb.andWhere('reservation.roomId = :roomId', { roomId: params.roomId });
     }
 
-    if (params.propertyId) {
+    if (params.propertyId != null && params.propertyId > 0) {
       qb.innerJoin(
         RoomEntity,
         'room',
@@ -107,5 +112,127 @@ export class ReservationRepository implements IReservationRepository {
 
     const entities = await qb.getMany();
     return entities.map((entity) => ReservationMapper.toDomain(entity));
+  }
+
+  async countByScope(
+    scope: ReservationStatsScope,
+    status?: Reservation['status'],
+  ): Promise<number> {
+    const qb = this.repository.createQueryBuilder('reservation');
+    this.applyScope(qb, scope);
+
+    if (status) {
+      qb.andWhere('reservation.status = :status', { status });
+    }
+
+    return qb.getCount();
+  }
+
+  async sumConfirmedRevenueForMonth(
+    year: number,
+    month: number,
+    scope: ReservationStatsScope = {},
+  ): Promise<number> {
+    const { start, end } = this.getMonthRange(year, month);
+    const qb = this.repository
+      .createQueryBuilder('reservation')
+      .select('COALESCE(SUM(reservation.totalPrice), 0)', 'total')
+      .where('reservation.status = :status', {
+        status: RESERVATION_STATUS.CONFIRMED,
+      })
+      .andWhere('reservation.startDate >= :start', { start })
+      .andWhere('reservation.startDate < :end', { end });
+
+    this.applyScope(qb, scope);
+
+    const result = await qb.getRawOne<{ total: number | string | null }>();
+    return Number(result?.total ?? 0);
+  }
+
+  async sumConfirmedNightsForMonth(
+    year: number,
+    month: number,
+    scope: ReservationStatsScope = {},
+  ): Promise<number> {
+    const { start, end } = this.getMonthRange(year, month);
+    const qb = this.repository
+      .createQueryBuilder('reservation')
+      .select('COALESCE(SUM(reservation.nights), 0)', 'total')
+      .where('reservation.status = :status', {
+        status: RESERVATION_STATUS.CONFIRMED,
+      })
+      .andWhere('reservation.startDate >= :start', { start })
+      .andWhere('reservation.startDate < :end', { end });
+
+    this.applyScope(qb, scope);
+
+    const result = await qb.getRawOne<{ total: number | string | null }>();
+    return Number(result?.total ?? 0);
+  }
+
+  async findRecent(
+    limit: number,
+    scope: ReservationStatsScope = {},
+  ): Promise<Reservation[]> {
+    const qb = this.repository
+      .createQueryBuilder('reservation')
+      .orderBy('reservation.createdAt', 'DESC')
+      .take(Math.max(1, Math.min(limit, 20)));
+
+    this.applyScope(qb, scope);
+
+    const entities = await qb.getMany();
+    return entities.map((entity) => ReservationMapper.toDomain(entity));
+  }
+
+  async findByIds(ids: number[]): Promise<Reservation[]> {
+    const uniqueIds = [...new Set(ids.filter((id) => Number.isFinite(id) && id > 0))];
+    if (uniqueIds.length === 0) {
+      return [];
+    }
+
+    const entities = await this.repository.find({
+      where: { id: In(uniqueIds) },
+      order: { createdAt: 'ASC' },
+    });
+
+    return entities.map((entity) => ReservationMapper.toDomain(entity));
+  }
+
+  async findIdsByPropertyId(propertyId: number): Promise<number[]> {
+    if (!Number.isFinite(propertyId) || propertyId <= 0) {
+      return [];
+    }
+
+    const rows = await this.repository
+      .createQueryBuilder('reservation')
+      .select('reservation.id', 'id')
+      .innerJoin(RoomEntity, 'room', 'room.id = reservation.roomId')
+      .where('room.propertyId = :propertyId', { propertyId })
+      .getRawMany<{ id: number }>();
+
+    return rows.map((row) => Number(row.id)).filter((id) => id > 0);
+  }
+
+  private applyScope(
+    qb: ReturnType<Repository<ReservationOrmEntity>['createQueryBuilder']>,
+    scope: ReservationStatsScope,
+  ): void {
+    if (scope.propertyId != null && scope.propertyId > 0) {
+      qb.innerJoin(
+        RoomEntity,
+        'room',
+        'room.id = reservation.roomId AND room.propertyId = :propertyId',
+        { propertyId: scope.propertyId },
+      );
+    }
+  }
+
+  private getMonthRange(year: number, month: number): { start: string; end: string } {
+    const start = `${year}-${String(month).padStart(2, '0')}-01`;
+    const nextMonth = month === 12 ? 1 : month + 1;
+    const nextYear = month === 12 ? year + 1 : year;
+    const end = `${nextYear}-${String(nextMonth).padStart(2, '0')}-01`;
+    return { start, end };
   }
 }

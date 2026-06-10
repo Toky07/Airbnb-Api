@@ -17,6 +17,10 @@ import { GetReservationUseCase } from '../../applications/useCase/get-reservatio
 import { ListHostReservationsUseCase } from '../../applications/useCase/list-host-reservations.usecase';
 import { ListMyReservationsUseCase } from '../../applications/useCase/list-my-reservations.usecase';
 import { ListReservationsUseCase } from '../../applications/useCase/list-reservations.usecase';
+import { GetReservationStatsUseCase } from '../../applications/useCase/get-reservation-stats.usecase';
+import { GetBookingOrderUseCase } from '../../applications/useCase/get-booking-order.usecase';
+import { ListBookingOrdersUseCase } from '../../applications/useCase/list-booking-orders.usecase';
+import { ListHostBookingOrdersUseCase } from '../../applications/useCase/list-host-booking-orders.usecase';
 import { parseReservationQuery } from './parse-reservation-query';
 
 @Controller('reservations')
@@ -26,6 +30,10 @@ export class ReservationController {
     private readonly listReservationsUseCase: ListReservationsUseCase,
     private readonly listMyReservationsUseCase: ListMyReservationsUseCase,
     private readonly listHostReservationsUseCase: ListHostReservationsUseCase,
+    private readonly getReservationStatsUseCase: GetReservationStatsUseCase,
+    private readonly listBookingOrdersUseCase: ListBookingOrdersUseCase,
+    private readonly listHostBookingOrdersUseCase: ListHostBookingOrdersUseCase,
+    private readonly getBookingOrderUseCase: GetBookingOrderUseCase,
     private readonly getReservationUseCase: GetReservationUseCase,
     private readonly cancelReservationUseCase: CancelReservationUseCase,
   ) {}
@@ -49,6 +57,49 @@ export class ReservationController {
     );
   }
 
+  @Get('stats')
+  stats(@Req() request: { user?: JwtPayload }) {
+    const user = request.user!;
+
+    return this.getReservationStatsUseCase.execute(user.sub, {
+      canReadAll: hasPermission(user, ['reservations.read']),
+      canReadHost: hasPermission(user, ['host.reservations.read']),
+    });
+  }
+
+  @Get('bookings/host')
+  @RequirePermissions('host.reservations.read')
+  listBookingOrdersForHost(
+    @Req() request: { user?: JwtPayload },
+    @Query() query: Record<string, unknown>,
+  ) {
+    return this.listHostBookingOrdersUseCase.execute(
+      request.user!.sub,
+      parseReservationQuery(query),
+    );
+  }
+
+  @Get('bookings')
+  @RequirePermissions('reservations.read')
+  listBookingOrders(@Query() query: Record<string, unknown>) {
+    return this.listBookingOrdersUseCase.execute(parseReservationQuery(query));
+  }
+
+  @Get('bookings/:paymentId')
+  getBookingOrder(
+    @Req() request: { user?: JwtPayload },
+    @Param('paymentId') paymentId: string,
+  ) {
+    const user = request.user!;
+    const parsedPaymentId = Number.parseInt(paymentId, 10);
+
+    return this.getBookingOrderUseCase.execute(parsedPaymentId, {
+      authId: user.sub,
+      canReadAll: hasPermission(user, ['reservations.read']),
+      canReadHost: hasPermission(user, ['host.reservations.read']),
+    });
+  }
+
   @Get('host')
   @RequirePermissions('host.reservations.read')
   listForHost(
@@ -68,10 +119,11 @@ export class ReservationController {
   }
 
   @Get(':id')
-  getById(@Req() request: { user?: JwtPayload }, @Param('id') id: number) {
+  getById(@Req() request: { user?: JwtPayload }, @Param('id') id: string) {
     const user = request.user!;
+    const parsedId = Number.parseInt(id, 10);
 
-    return this.getReservationUseCase.execute(Number(id), {
+    return this.getReservationUseCase.execute(parsedId, {
       authId: user.sub,
       canReadAll: hasPermission(user, ['reservations.read']),
       canReadHost: hasPermission(user, ['host.reservations.read']),
@@ -79,10 +131,11 @@ export class ReservationController {
   }
 
   @Post(':id/cancel')
-  cancel(@Req() request: { user?: JwtPayload }, @Param('id') id: number) {
+  cancel(@Req() request: { user?: JwtPayload }, @Param('id') id: string) {
     const user = request.user!;
+    const parsedId = Number.parseInt(id, 10);
 
-    return this.cancelReservationUseCase.execute(Number(id), {
+    return this.cancelReservationUseCase.execute(parsedId, {
       authId: user.sub,
       canCancelAll: hasPermission(user, ['reservations.cancel']),
       canCancelHost: hasPermission(user, ['host.reservations.read']),
