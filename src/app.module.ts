@@ -16,6 +16,8 @@ import { MailModule } from './modules/mail/mail.module';
 import { EmailOrmEntity } from './modules/mail/infrastructure/entities/email.orm-entity';
 import { AccountActivationModule } from './modules/account-activation/account-activation.module';
 import { PasswordSetupTokenOrmEntity } from './modules/account-activation/infrastructure/entities/password-setup-token.orm-entity';
+import { PaymentModule } from './modules/payment/payment.module';
+import { PaymentOrmEntity } from './modules/payment/infrastructure/entities/payment.orm-entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -32,6 +34,7 @@ import { PasswordSetupTokenOrmEntity } from './modules/account-activation/infras
         MediaOrmEntity,
         EmailOrmEntity,
         PasswordSetupTokenOrmEntity,
+        PaymentOrmEntity,
       ],
     }),
     UserModule,
@@ -42,6 +45,7 @@ import { PasswordSetupTokenOrmEntity } from './modules/account-activation/infras
     HostModule,
     MailModule,
     AccountActivationModule,
+    PaymentModule,
   ],
   controllers: [],
   providers: [],

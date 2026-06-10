@@ -34,6 +34,7 @@ export const PERMISSION_DEFINITIONS: PermissionDefinition[] = [
   { key: 'host.rooms.delete', label: 'Supprimer ses chambres', module: 'host' },
   { key: 'emails.read', label: 'Voir les emails', module: 'emails' },
   { key: 'emails.send', label: 'Envoyer des emails', module: 'emails' },
+  { key: 'payments.read', label: 'Voir les paiements', module: 'payments' },
 ];
 
 export const ALL_PERMISSION_KEYS = PERMISSION_DEFINITIONS.map((p) => p.key);
