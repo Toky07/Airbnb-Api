@@ -5,7 +5,6 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { FinalizeSuccessfulPaymentService } from '../../../payment/applications/services/finalize-successful-payment.service';
 import { MapStripeStatusService } from '../../../payment/applications/services/map-stripe-status.service';
 import { PAYMENT_STATUS } from '../../../payment/domain/constants/payment-status.constant';
 import { Payment } from '../../../payment/domain/entities/payment.entity';
@@ -36,7 +35,6 @@ export class CompleteCartCheckoutUseCase {
     @Inject(USER_REPOSITORY)
     private readonly userRepository: IUserRepository,
     private readonly mapStripeStatus: MapStripeStatusService,
-    private readonly finalizeSuccessfulPayment: FinalizeSuccessfulPaymentService,
     private readonly resolveCartService: ResolveCartService,
     private readonly cartPresenter: CartPresenter,
   ) {}
@@ -102,8 +100,6 @@ export class CompleteCartCheckoutUseCase {
         ),
       );
     }
-
-    await this.finalizeSuccessfulPayment.execute(currentPayment);
 
     const cart = await this.resolveCartService.resolve({
       ...context,

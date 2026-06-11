@@ -23,10 +23,13 @@ import { RESERVATION_REPOSITORY } from './domain/repositories/reservation.reposi
 import { ReservationOrmEntity } from './infrastructure/entities/reservation.orm-entity';
 import { ReservationRepository } from './infrastructure/repositories/reservation.repository';
 import { ReservationController } from './interfaces/http/reservation.controller';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ClearExpiredReservationService } from './applications/services/clear-expired-reservation.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([ReservationOrmEntity]),
+    ScheduleModule.forRoot(),
     forwardRef(() => PaymentModule),
     RoomsModule,
     UserModule,
@@ -54,6 +57,7 @@ import { ReservationController } from './interfaces/http/reservation.controller'
     GetReservationUseCase,
     CancelReservationUseCase,
     ConfirmReservationUseCase,
+    ClearExpiredReservationService,
   ],
   exports: [
     RESERVATION_REPOSITORY,

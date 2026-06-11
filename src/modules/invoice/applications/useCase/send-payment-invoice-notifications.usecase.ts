@@ -83,8 +83,7 @@ export class SendPaymentInvoiceNotificationsUseCase {
       files: [pdfFile],
     });
 
-    const hostGroups =
-      await this.buildPaymentInvoiceData.buildHostNotificationGroups(invoiceData);
+    const hostGroups = await this.buildPaymentInvoiceData.buildHostNotificationGroups(invoiceData);
 
     for (const group of hostGroups) {
       await this.mailService.sendSimple({

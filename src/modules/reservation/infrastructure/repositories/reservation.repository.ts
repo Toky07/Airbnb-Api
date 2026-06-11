@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { In, LessThan, Repository } from 'typeorm';
 import {
   buildPaginationMeta,
   type PaginatedResult,
@@ -206,6 +206,49 @@ export class ReservationRepository implements IReservationRepository {
     return entities.map((entity) => ReservationMapper.toDomain(entity));
   }
 
+  async findIdsByFilters(
+    params: Omit<ReservationListParams, 'page' | 'limit'>,
+  ): Promise<number[]> {
+    const qb = this.repository
+      .createQueryBuilder('reservation')
+      .select('reservation.id', 'id');
+
+    if (params.userId) {
+      qb.andWhere('reservation.userId = :userId', { userId: params.userId });
+    }
+
+    if (params.roomId) {
+      qb.andWhere('reservation.roomId = :roomId', { roomId: params.roomId });
+    }
+
+    if (params.propertyIds?.length) {
+      qb.innerJoin(
+        RoomEntity,
+        'room',
+        'room.id = reservation.roomId AND room.propertyId IN (:...propertyIds)',
+        { propertyIds: params.propertyIds },
+      );
+    } else if (params.propertyId != null && params.propertyId > 0) {
+      qb.innerJoin(
+        RoomEntity,
+        'room',
+        'room.id = reservation.roomId AND room.propertyId = :propertyId',
+        { propertyId: params.propertyId },
+      );
+    }
+
+    if (params.search) {
+      const term = `%${params.search}%`;
+      qb.andWhere(
+        '(reservation.status LIKE :term OR reservation.startDate LIKE :term OR reservation.endDate LIKE :term)',
+        { term },
+      );
+    }
+
+    const rows = await qb.getRawMany<{ id: number }>();
+    return rows.map((row) => Number(row.id)).filter((id) => id > 0);
+  }
+
   async findIdsByPropertyId(propertyId: number): Promise<number[]> {
     return this.findIdsByPropertyIds([propertyId]);
   }
@@ -224,6 +267,13 @@ export class ReservationRepository implements IReservationRepository {
       .getRawMany<{ id: number }>();
 
     return rows.map((row) => Number(row.id)).filter((id) => id > 0);
+  }
+
+  async clearExpiredReservations(): Promise<void> {
+    await this.repository.delete({
+      createdAt: LessThan(new Date(Date.now() - 1000 * 60 * 20)),
+      status: RESERVATION_STATUS.PENDING,
+    });
   }
 
   private applyScope(
