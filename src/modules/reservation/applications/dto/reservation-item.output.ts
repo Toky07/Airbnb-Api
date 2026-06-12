@@ -1,5 +1,4 @@
 import type { RoomProductSummary } from '../../../rooms/applications/services/room-product-summary.service';
-import type { ReservationStatus } from '../../domain/constants/reservation-status.constant';
 import type { ReservationItem } from '../../domain/entities/reservation-item.entity';
 
 export class ReservationItemOutput {
@@ -14,7 +13,6 @@ export class ReservationItemOutput {
     public readonly guestCount: number,
     public readonly price: number,
     public readonly nights: number,
-    public readonly status: ReservationStatus,
     public readonly roomName: string | null = null,
     public readonly roomSlug: string | null = null,
     public readonly propertyName: string | null = null,
@@ -45,7 +43,6 @@ export class ReservationItemOutput {
       item.guestCount,
       item.price,
       item.nights,
-      item.status,
       product?.roomName ?? null,
       product?.roomSlug ?? null,
       product?.propertyName ?? null,
@@ -71,7 +68,6 @@ export class ReservationItemOutput {
       output.guestCount,
       output.price,
       output.nights,
-      output.status,
       summary?.roomName ?? output.roomName,
       summary?.roomSlug ?? output.roomSlug,
       summary?.propertyName ?? output.propertyName,

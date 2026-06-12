@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   Query,
@@ -130,8 +132,10 @@ export class ReservationController {
     });
   }
 
-  @Post('items/:id/cancel')
-  cancelItem(@Req() request: { user?: JwtPayload }, @Param('id') id: string) {
+  @Post('cancel/:id')
+  @RequirePermissions('reservations.cancel')
+  @HttpCode(HttpStatus.OK)
+  cancel(@Req() request: { user?: JwtPayload }, @Param('id') id: string) {
     const user = request.user!;
     const parsedId = Number.parseInt(id, 10);
 
@@ -140,10 +144,5 @@ export class ReservationController {
       canCancelAll: hasPermission(user, ['reservations.cancel']),
       canCancelHost: hasPermission(user, ['host.reservations.read']),
     });
-  }
-
-  @Post(':id/cancel')
-  cancel(@Req() request: { user?: JwtPayload }, @Param('id') id: string) {
-    return this.cancelItem(request, id);
   }
 }

@@ -141,9 +141,7 @@ export class CreatePaymentIntentUseCase {
       throw new UnauthorizedException('Accès refusé.');
     }
 
-    const pendingItems = reservation.items.filter(
-      (item) => item.status === RESERVATION_STATUS.PENDING,
-    );
+    const pendingItems = reservation.items;
 
     if (pendingItems.length === 0) {
       throw new BadRequestException(

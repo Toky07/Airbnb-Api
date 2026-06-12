@@ -9,7 +9,6 @@ import { UserModule } from '../../../user/user.module';
 import { RoomsModule } from '../../../rooms/room.module';
 import { PropertiesModule } from '../../../properties/properties.module';
 import { ReservationModule } from '../../reservation.module';
-import { ReservationItemOrmEntity } from '../../infrastructure/entities/reservation-item.orm-entity';
 import { PropertyEntity } from '../../../properties/infrastructure/entities/property-entity.entity';
 import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
 import { RESERVATION_STATUS } from '../../domain/constants/reservation-status.constant';
@@ -18,6 +17,7 @@ import {
   DOMAIN_TEST_ENTITIES,
   registerAndLoginAsSuperAdmin,
 } from '../../../../test/controller-test.helpers';
+import { ReservationOrmEntity } from '../../infrastructure/entities/reservation.orm-entity';
 
 describe('ReservationController', () => {
   let app: INestApplication;
@@ -106,6 +106,7 @@ describe('ReservationController', () => {
       expect.objectContaining({
         id: expect.any(Number),
         userId: expect.any(Number),
+        status: RESERVATION_STATUS.PENDING,
         items: [
           expect.objectContaining({
             roomId,
@@ -113,7 +114,6 @@ describe('ReservationController', () => {
             checkOut: '2026-09-03',
             startDate: '2026-09-01',
             endDate: '2026-09-03',
-            status: RESERVATION_STATUS.PENDING,
             price: 200,
             nights: 2,
           }),
@@ -152,20 +152,6 @@ describe('ReservationController', () => {
     );
   });
 
-  it('POST /reservations/items/:id/cancel annule un séjour', async () => {
-    const item = await dataSource.getRepository(ReservationItemOrmEntity).findOne({
-      where: {},
-      order: { id: 'DESC' },
-    });
-
-    const response = await request(app.getHttpServer())
-      .post(`/reservations/items/${item!.id}/cancel`)
-      .set('Authorization', `Bearer ${token}`)
-      .expect(201);
-
-    expect(response.body.status).toBe(RESERVATION_STATUS.CANCELLED);
-  });
-
   it('rejette une double réservation sur les mêmes dates', async () => {
     await request(app.getHttpServer())
       .post('/reservations')
@@ -188,5 +174,25 @@ describe('ReservationController', () => {
         guestCount: 2,
       })
       .expect(400);
+  });
+
+  it('POST /reservations/cancel/:id annule une réservation', async () => {
+    const reservation = await dataSource.getRepository(ReservationOrmEntity).save({
+      roomId,
+      startDate: '2026-10-01',
+      endDate: '2026-10-03',
+      guestCount: 2,
+      userId: 1,
+      status: RESERVATION_STATUS.CONFIRMED,
+    });
+
+    const response = await request(app.getHttpServer())
+      .post(`/reservations/cancel/${reservation.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    expect(response.body).toEqual(expect.objectContaining({
+      status: RESERVATION_STATUS.CANCELLED,
+    }));
   });
 });

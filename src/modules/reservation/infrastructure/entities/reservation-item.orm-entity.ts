@@ -41,9 +41,6 @@ export class ReservationItemOrmEntity {
   @Column({ type: 'integer' })
   nights: number;
 
-  @Column({ default: 'pending' })
-  status: string;
-
   @CreateDateColumn()
   createdAt: Date;
 

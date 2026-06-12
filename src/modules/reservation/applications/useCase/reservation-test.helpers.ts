@@ -23,7 +23,6 @@ export function createSampleReservationItem(
     2,
     overrides.price ?? 240,
     2,
-    overrides.status ?? RESERVATION_STATUS.PENDING,
     overrides.id ?? 1,
     new Date('2026-06-01T10:00:00.000Z'),
     new Date('2026-06-01T10:00:00.000Z'),
@@ -34,6 +33,7 @@ export function createSampleReservation(
   overrides: Partial<{
     id: number;
     userId: number;
+    status: (typeof RESERVATION_STATUS)[keyof typeof RESERVATION_STATUS];
     items: ReservationItem[];
   }> = {},
 ): Reservation {
@@ -44,6 +44,7 @@ export function createSampleReservation(
   return new Reservation(
     overrides.userId ?? 5,
     overrides.items ?? [item],
+    overrides.status ?? RESERVATION_STATUS.PENDING,
     overrides.id ?? 1,
     new Date('2026-06-01T10:00:00.000Z'),
     new Date('2026-06-01T10:00:00.000Z'),

@@ -81,7 +81,7 @@ describe('CreateReservationUseCase', () => {
       guestCount: 2,
     });
 
-    expect(result.items[0]?.status).toBe(RESERVATION_STATUS.PENDING);
+    expect(result.status).toBe(RESERVATION_STATUS.PENDING);
     expect(result.items[0]?.price).toBe(240);
     expect(result.items[0]?.nights).toBe(2);
   });

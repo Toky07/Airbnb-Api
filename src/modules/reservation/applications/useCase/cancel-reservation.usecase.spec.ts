@@ -24,9 +24,9 @@ describe('CancelReservationUseCase', () => {
     const item = createSampleReservationItem({ id: 3, reservationId: 1, roomId: 10 });
     const reservation = createSampleReservation({ id: 1, userId: 5, items: [item] });
     const repository = createReservationRepositoryMock({
+      update: vi.fn().mockImplementation(async (updated) => updated),
       findItemById: vi.fn().mockResolvedValue(item),
       findById: vi.fn().mockResolvedValue(reservation),
-      updateItem: vi.fn().mockImplementation(async (updated) => updated),
     });
     const user = new User(
       new UserNameVO('Jean'),
@@ -40,9 +40,6 @@ describe('CancelReservationUseCase', () => {
     const useCase = new CancelReservationUseCase(
       repository,
       { findByAuthId: vi.fn().mockResolvedValue(user) } as unknown as IUserRepository,
-      { findById: vi.fn() } as never,
-      { findAllByOwnerId: vi.fn() } as never,
-      createEnrichMock() as never,
     );
 
     const result = await useCase.execute(3, {
@@ -55,22 +52,13 @@ describe('CancelReservationUseCase', () => {
   });
 
   it('rejette si la réservation est déjà annulée', async () => {
-    const item = createSampleReservationItem({
-      id: 3,
-      reservationId: 1,
-      status: RESERVATION_STATUS.CANCELLED,
-    });
-    const reservation = createSampleReservation({ id: 1, userId: 5, items: [item] });
+    const reservation = createSampleReservation({ id: 1, userId: 5, status: RESERVATION_STATUS.CANCELLED });
 
     const useCase = new CancelReservationUseCase(
       createReservationRepositoryMock({
-        findItemById: vi.fn().mockResolvedValue(item),
         findById: vi.fn().mockResolvedValue(reservation),
       }),
-      { findByAuthId: vi.fn() } as unknown as IUserRepository,
-      { findById: vi.fn() } as never,
-      { findAllByOwnerId: vi.fn() } as never,
-      createEnrichMock() as never,
+      { findByAuthId: vi.fn().mockResolvedValue(null) } as unknown as IUserRepository,
     );
 
     await expect(

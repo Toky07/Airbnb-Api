@@ -11,7 +11,6 @@ export class ReservationItemMapper {
       entity.guestCount,
       entity.price,
       entity.nights,
-      entity.status as ReservationItem['status'],
       entity.id,
       entity.createdAt,
       entity.updatedAt,
@@ -30,7 +29,6 @@ export class ReservationItemMapper {
     entity.guestCount = item.guestCount;
     entity.price = item.price;
     entity.nights = item.nights;
-    entity.status = item.status;
     return entity;
   }
 }

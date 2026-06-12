@@ -83,25 +83,25 @@ export class CreateReservationUseCase {
       if (room.status !== 'available') {
         throw new BadRequestException('Cette chambre n’est pas disponible.');
       }
-
+      
       if (input.guestCount > room.maxGuests) {
         throw new BadRequestException(
           `Cette chambre accepte au maximum ${room.maxGuests} voyageurs.`,
         );
       }
-
+      
       const stayAmount = this.calculateStayAmount.execute({
         checkIn: input.checkIn,
         checkOut: input.checkOut,
         pricePerNight: room.pricePerNight,
       });
-
+      
       await this.checkRoomAvailability.ensureAvailable(
         room.id,
         input.checkIn,
         input.checkOut,
       );
-
+      
       items.push(
         new ReservationItem(
           0,
@@ -111,13 +111,12 @@ export class CreateReservationUseCase {
           input.guestCount,
           stayAmount.amountInMajorUnit,
           stayAmount.nights,
-          RESERVATION_STATUS.PENDING,
         ),
       );
     }
 
     const reservation = await this.reservationRepository.create(
-      new Reservation(user.id, items),
+      new Reservation(user.id, items, RESERVATION_STATUS.PENDING),
     );
 
     const [enriched] = await this.enrichReservationOutputs.enrich([

@@ -91,7 +91,6 @@ export class GetReservationStatsUseCase {
           new ReservationActivityOutput(
             item.id,
             this.buildActivityLabel(item),
-            item.status,
             item.price,
             item.createdAt,
           ),

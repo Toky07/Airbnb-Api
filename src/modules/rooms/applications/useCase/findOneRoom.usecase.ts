@@ -59,9 +59,6 @@ export class FindOneRoomUseCase {
             .createQueryBuilder('item')
             .select(['item.checkIn', 'item.checkOut'])
             .where('item.roomId = :roomId', { roomId })
-            .andWhere('item.status IN (:...statuses)', {
-                statuses: BLOCKING_RESERVATION_STATUSES,
-            })
             .andWhere('item.checkOut > :today', { today: todayStr })
             .getMany();
 

@@ -32,6 +32,7 @@ export class EnrichReservationOutputsService {
           reservation.items.map(
             (item) => enrichedById.get(item.id) ?? item,
           ),
+          reservation.status,
           reservation.createdAt,
           reservation.updatedAt,
         ),

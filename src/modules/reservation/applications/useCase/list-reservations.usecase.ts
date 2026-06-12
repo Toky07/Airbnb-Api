@@ -20,6 +20,7 @@ export class ListReservationsUseCase {
     params: ReservationListParams,
   ): Promise<PaginatedResult<ReservationOutput>> {
     const result = await this.reservationRepository.findPaginated(params);
+  
     const outputs = result.data.map((reservation) =>
       ReservationOutput.fromDomain(reservation),
     );

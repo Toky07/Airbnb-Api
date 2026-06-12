@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { In, LessThan, Repository } from 'typeorm';
 import {
   buildPaginationMeta,
   type PaginatedResult,
@@ -18,6 +18,7 @@ import { ReservationOrmEntity } from '../entities/reservation.orm-entity';
 import { ReservationItemMapper } from '../mappers/reservation-item.mapper';
 import { ReservationMapper } from '../mappers/reservation.mapper';
 import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
+import { ReservationStatus } from '../../domain/constants/reservation-status.constant';
 
 @Injectable()
 export class ReservationRepository implements IReservationRepository {
@@ -32,11 +33,20 @@ export class ReservationRepository implements IReservationRepository {
     const saved = await this.repository.save(
       this.repository.create(ReservationMapper.toEntity(reservation)),
     );
+    
     const loaded = await this.repository.findOne({
       where: { id: saved.id },
       relations: ['items'],
     });
     return ReservationMapper.toDomain(loaded!);
+  }
+
+  async update(reservation: Reservation): Promise<Reservation> {
+    const saved = await this.repository.preload(
+      ReservationMapper.toEntity(reservation)
+    );
+
+    return ReservationMapper.toDomain(saved!);
   }
 
   async updateItem(item: ReservationItem): Promise<ReservationItem> {
@@ -102,7 +112,7 @@ export class ReservationRepository implements IReservationRepository {
     if (params.search) {
       const term = `%${params.search}%`;
       qb.andWhere(
-        '(item.status LIKE :term OR item.checkIn LIKE :term OR item.checkOut LIKE :term)',
+        '(item.checkIn LIKE :term OR item.checkOut LIKE :term)',
         { term },
       );
     }
@@ -127,9 +137,6 @@ export class ReservationRepository implements IReservationRepository {
     const qb = this.itemRepository
       .createQueryBuilder('item')
       .where('item.roomId = :roomId', { roomId })
-      .andWhere('item.status IN (:...statuses)', {
-        statuses: BLOCKING_RESERVATION_STATUSES,
-      })
       .andWhere('item.checkIn < :checkOut', { checkOut })
       .andWhere('item.checkOut > :checkIn', { checkIn });
 
@@ -143,7 +150,7 @@ export class ReservationRepository implements IReservationRepository {
 
   async countByScope(
     scope: ReservationStatsScope,
-    status?: ReservationItem['status'],
+    status?: ReservationStatus,
   ): Promise<number> {
     const qb = this.itemRepository.createQueryBuilder('item');
     this.applyItemScope(qb, scope);
@@ -281,23 +288,11 @@ export class ReservationRepository implements IReservationRepository {
 
   async clearExpiredReservations(): Promise<void> {
     const threshold = new Date(Date.now() - 1000 * 60 * 20);
-    const expired = await this.repository.find({
-      relations: ['items'],
+
+    await this.repository.delete({
+      status: RESERVATION_STATUS.PENDING,
+      createdAt: LessThan(threshold),
     });
-
-    for (const reservation of expired) {
-      if (reservation.createdAt >= threshold) {
-        continue;
-      }
-
-      const allPending = (reservation.items ?? []).every(
-        (item) => item.status === RESERVATION_STATUS.PENDING,
-      );
-
-      if (allPending && reservation.id) {
-        await this.repository.delete(reservation.id);
-      }
-    }
   }
 
   private applyPropertyScope(

@@ -70,7 +70,6 @@ export class AuthRbacSeedService implements OnModuleInit {
       relations: ['permissions'],
     });
     if (!role) {
-      console.log('Creating role', slug, name, description);
       role = this.roleRepository.create({ slug, name, description });
       role = await this.roleRepository.save(role);
     }

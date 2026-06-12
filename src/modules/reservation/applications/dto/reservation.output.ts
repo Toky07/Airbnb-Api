@@ -1,3 +1,4 @@
+import { ReservationStatus } from '../../domain/constants/reservation-status.constant';
 import type { Reservation } from '../../domain/entities/reservation.entity';
 import { ReservationItemOutput } from './reservation-item.output';
 
@@ -6,6 +7,7 @@ export class ReservationOutput {
     public readonly id: number,
     public readonly userId: number,
     public readonly items: ReservationItemOutput[],
+    public readonly status: ReservationStatus,
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
   ) {}
@@ -19,6 +21,7 @@ export class ReservationOutput {
       reservation.id!,
       reservation.userId,
       reservation.items.map((item) => ReservationItemOutput.fromDomain(item)),
+      reservation.status,
       reservation.createdAt!,
       reservation.updatedAt!,
     );

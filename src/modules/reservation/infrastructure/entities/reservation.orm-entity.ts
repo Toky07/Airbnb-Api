@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ReservationItemOrmEntity } from './reservation-item.orm-entity';
+import { RESERVATION_STATUS } from '../../domain/constants/reservation-status.constant';
 
 @Entity({ name: 'reservations' })
 export class ReservationOrmEntity {
@@ -20,6 +21,9 @@ export class ReservationOrmEntity {
     cascade: true,
   })
   items: ReservationItemOrmEntity[];
+
+  @Column({ enum: RESERVATION_STATUS, default: RESERVATION_STATUS.PENDING })
+  status: string;
 
   @CreateDateColumn()
   createdAt: Date;

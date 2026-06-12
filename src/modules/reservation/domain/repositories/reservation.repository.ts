@@ -4,6 +4,7 @@ import type {
 } from '../../../../shared/pagination/pagination.types';
 import type { Reservation } from '../entities/reservation.entity';
 import type { ReservationItem } from '../entities/reservation-item.entity';
+import { ReservationStatus } from '../constants/reservation-status.constant';
 
 export const RESERVATION_REPOSITORY = 'RESERVATION_REPOSITORY';
 
@@ -21,7 +22,7 @@ export type ReservationStatsScope = {
 
 export interface IReservationRepository {
   create(reservation: Reservation): Promise<Reservation>;
-  updateItem(item: ReservationItem): Promise<ReservationItem>;
+  update(reservation: Reservation): Promise<Reservation>;
   findById(id: number): Promise<Reservation | null>;
   findItemById(id: number): Promise<ReservationItem | null>;
   findItemsByIds(ids: number[]): Promise<ReservationItem[]>;
@@ -32,7 +33,7 @@ export interface IReservationRepository {
     checkOut: string,
     excludeItemId?: number,
   ): Promise<ReservationItem[]>;
-  countByScope(scope: ReservationStatsScope, status?: ReservationItem['status']): Promise<number>;
+  countByScope(scope: ReservationStatsScope, status?: ReservationStatus): Promise<number>;
   sumConfirmedRevenueForMonth(
     year: number,
     month: number,
