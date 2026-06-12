@@ -11,6 +11,7 @@ import {
   ResolveCartService,
   type CartRequestContext,
 } from '../services/resolve-cart.service';
+import { PAYMENT_TYPE } from 'src/modules/payment/domain/types/payment.type';
 
 @Injectable()
 export class CheckoutCartUseCase {
@@ -74,12 +75,8 @@ export class CheckoutCartUseCase {
       cartId: cart.id,
       reservationIds,
       amountInCents,
-      nights: totalNights,
-      roomId: summaryRoomId,
-      checkInDate: summaryCheckIn,
-      checkOutDate: summaryCheckOut,
-      guestCount: summaryGuestCount,
-      pricePerNight: summaryPricePerNight,
+      propertyType: PAYMENT_TYPE.RESERVATION,
+      propertyId: reservationIds[0]!,
     });
   }
 }

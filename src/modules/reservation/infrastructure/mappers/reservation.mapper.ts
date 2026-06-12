@@ -2,6 +2,7 @@ import { Reservation } from '../../domain/entities/reservation.entity';
 import { ReservationOrmEntity } from '../entities/reservation.orm-entity';
 import { ReservationItemMapper } from './reservation-item.mapper';
 import type { ReservationStatus } from '../../domain/constants/reservation-status.constant';
+import { PaymentMapper } from 'src/modules/payment/infrastructure/mappers/payment.mapper';
 
 export class ReservationMapper {
   static toDomain(entity: ReservationOrmEntity): Reservation {
@@ -9,6 +10,7 @@ export class ReservationMapper {
       entity.userId,
       (entity.items ?? []).map((item) => ReservationItemMapper.toDomain(item)),
       entity.status as ReservationStatus,
+      PaymentMapper.toDomain(entity.payment),
       entity.id,
       entity.createdAt,
       entity.updatedAt,

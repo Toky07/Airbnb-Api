@@ -1,5 +1,6 @@
 import type { PaymentProvider } from '../constants/payment-provider.constant';
 import type { PaymentStatus } from '../constants/payment-status.constant';
+import { PaymentType } from '../types/payment.type';
 
 export class Payment {
   constructor(
@@ -9,14 +10,9 @@ export class Payment {
     public readonly provider: PaymentProvider,
     public readonly transactionId: string,
     public readonly userId: number,
-    public readonly roomId: number,
-    public readonly checkInDate: string,
-    public readonly checkOutDate: string,
-    public readonly guestCount: number,
-    public readonly nights: number,
-    public readonly reservationId: number | null = null,
+    public readonly propertyType: PaymentType,
+    public readonly propertyId: number,
     public readonly cartId: number | null = null,
-    public readonly reservationIds: number[] = [],
     public readonly errorMessage: string | null = null,
     public readonly id?: number,
     public readonly createdAt?: Date,

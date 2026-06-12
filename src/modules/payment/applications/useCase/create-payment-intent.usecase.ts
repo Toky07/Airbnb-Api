@@ -34,17 +34,15 @@ import {
   getStripeCurrency,
   getStripePublishableKey,
 } from '../../infrastructure/stripe/stripe.config';
+import { PAYMENT_TYPE } from '../../domain/types/payment.type';
 
 type PaymentIntentContext = {
-  roomId: number;
   userId: number;
-  checkIn: string;
-  checkOut: string;
-  guestCount: number;
+  propertyType: (typeof PAYMENT_TYPE)[keyof typeof PAYMENT_TYPE];
+  propertyId: number;
   amountInCents: number;
-  nights: number;
-  pricePerNight: number;
-  reservationId: number | null;
+  metadata: Record<string, string>;
+  cartId: number | null;
 };
 
 @Injectable()
@@ -81,16 +79,7 @@ export class CreatePaymentIntentUseCase {
     const paymentIntent = await this.paymentGateway.createPaymentIntent({
       amount: context.amountInCents,
       currency,
-      metadata: {
-        roomId: String(context.roomId),
-        userId: String(context.userId),
-        checkIn: context.checkIn,
-        checkOut: context.checkOut,
-        guestCount: String(context.guestCount),
-        ...(context.reservationId
-          ? { reservationId: String(context.reservationId) }
-          : {}),
-      },
+      metadata: { ...context.metadata },
     });
 
     if (!paymentIntent.clientSecret) {
@@ -107,12 +96,8 @@ export class CreatePaymentIntentUseCase {
         PAYMENT_PROVIDER.STRIPE,
         paymentIntent.id,
         context.userId,
-        context.roomId,
-        context.checkIn,
-        context.checkOut,
-        context.guestCount,
-        context.nights,
-        context.reservationId,
+        context.propertyType,
+        context.propertyId,
       ),
     );
 
@@ -122,8 +107,6 @@ export class CreatePaymentIntentUseCase {
       context.amountInCents,
       currency,
       getStripePublishableKey(),
-      context.nights,
-      context.pricePerNight,
     );
   }
 
@@ -149,33 +132,13 @@ export class CreatePaymentIntentUseCase {
       );
     }
 
-    const firstItem = pendingItems[0]!;
-
-    const room = await this.roomRepository.findById(firstItem.roomId);
-    if (!room?.id) {
-      throw new NotFoundException('Chambre introuvable.');
-    }
-
-    const stayAmount = this.calculateStayAmount.execute({
-      checkIn: firstItem.checkIn,
-      checkOut: firstItem.checkOut,
-      pricePerNight: room.pricePerNight,
-    });
-
-    if (stayAmount.amountInMajorUnit !== firstItem.price) {
-      throw new BadRequestException('Le montant de la réservation est invalide.');
-    }
-
     return {
-      roomId: firstItem.roomId,
       userId: reservation.userId,
-      checkIn: firstItem.checkIn,
-      checkOut: firstItem.checkOut,
-      guestCount: firstItem.guestCount,
-      amountInCents: stayAmount.amountInCents,
-      nights: firstItem.nights,
-      pricePerNight: room.pricePerNight,
-      reservationId: reservation.id,
+      amountInCents: 0,
+      propertyType: PAYMENT_TYPE.RESERVATION,
+      propertyId: reservation.id,
+      metadata: {},
+      cartId: null,
     };
   }
 
@@ -211,15 +174,12 @@ export class CreatePaymentIntentUseCase {
     });
 
     return {
-      roomId: room.id,
       userId,
-      checkIn: dto.checkIn,
-      checkOut: dto.checkOut,
-      guestCount: dto.guestCount,
       amountInCents: stayAmount.amountInCents,
-      nights: stayAmount.nights,
-      pricePerNight: room.pricePerNight,
-      reservationId: null,
+      propertyType: PAYMENT_TYPE.RESERVATION,
+      propertyId: room.id,
+      metadata: {},
+      cartId: null,
     };
   }
 }

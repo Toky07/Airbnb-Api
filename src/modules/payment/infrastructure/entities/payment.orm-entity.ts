@@ -2,9 +2,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { PAYMENT_TYPE, type PaymentType } from '../../domain/types/payment.type';
+import { ReservationOrmEntity } from 'src/modules/reservation/infrastructure/entities/reservation.orm-entity';
 
 @Entity({ name: 'payments' })
 export class PaymentOrmEntity {
@@ -27,9 +31,6 @@ export class PaymentOrmEntity {
   transactionId: string;
 
   @Column({ type: 'integer', nullable: true })
-  reservationId: number | null;
-
-  @Column({ type: 'integer', nullable: true })
   cartId: number | null;
 
   @Column({ type: 'simple-json', default: '[]' })
@@ -38,26 +39,20 @@ export class PaymentOrmEntity {
   @Column({ type: 'integer' })
   userId: number;
 
-  @Column({ type: 'integer' })
-  roomId: number;
-
   @Column()
-  checkInDate: string;
-
-  @Column()
-  checkOutDate: string;
+  propertyType: string;
 
   @Column({ type: 'integer' })
-  guestCount: number;
-
-  @Column({ type: 'integer' })
-  nights: number;
+  propertyId: number;
 
   @Column({ type: 'text', nullable: true })
   errorMessage: string | null;
 
   @Column({ type: 'datetime', nullable: true })
   invoiceNotificationsSentAt: Date | null;
+
+  @OneToOne(() => ReservationOrmEntity, (reservation) => reservation.payment)
+  reservation: ReservationOrmEntity;
 
   @CreateDateColumn()
   createdAt: Date;

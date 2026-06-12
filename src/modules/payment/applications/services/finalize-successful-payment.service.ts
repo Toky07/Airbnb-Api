@@ -6,6 +6,7 @@ import {
 import { SendPaymentInvoiceNotificationsUseCase } from '../../../invoice/applications/useCase/send-payment-invoice-notifications.usecase';
 import { ConfirmReservationUseCase } from '../../../reservation/applications/useCase/confirm-reservation.usecase';
 import type { Payment } from '../../domain/entities/payment.entity';
+import { PAYMENT_TYPE } from '../../domain/types/payment.type';
 
 @Injectable()
 export class FinalizeSuccessfulPaymentService {
@@ -17,14 +18,10 @@ export class FinalizeSuccessfulPaymentService {
   ) {}
 
   async execute(payment: Payment): Promise<void> {
-    const idsToConfirm = payment.reservationIds.length > 0
-      ? payment.reservationIds
-      : payment.reservationId
-        ? [payment.reservationId]
-        : [];
+    const reservationId = payment.propertyType === PAYMENT_TYPE.RESERVATION ? payment.propertyId : null;
 
-    for (const id of idsToConfirm) {
-      await this.confirmReservationUseCase.execute(id);
+    if (reservationId) {
+      await this.confirmReservationUseCase.execute(reservationId);
     }
 
     if (payment.cartId != null) {

@@ -1,3 +1,4 @@
+import { PAYMENT_TYPE } from 'src/modules/payment/domain/types/payment.type';
 import type { PaymentStatus } from '../../../payment/domain/constants/payment-status.constant';
 import type { Payment } from '../../../payment/domain/entities/payment.entity';
 import type { User } from '../../../user/domain/entities/user.entity';
@@ -79,16 +80,14 @@ export class BookingOrderDetailOutput {
   }
 }
 
-export function resolvePaymentReservationIds(payment: Payment): number[] {
-  if (payment.reservationIds.length > 0) {
-    return [...new Set(payment.reservationIds.filter((id) => id > 0))];
-  }
+export function resolvePaymentReservationIds(payment: Payment): number[] {  
+  const reservationId = payment.propertyType === PAYMENT_TYPE.RESERVATION ? payment.propertyId : null;
 
-  if (payment.reservationId) {
-    return [payment.reservationId];
-  }
+  if (reservationId) {
+    return [reservationId];
+  } 
 
-  return [];
+  return []; 
 }
 
 function buildPreviewLabel(items: ReservationItemOutput[]): string {

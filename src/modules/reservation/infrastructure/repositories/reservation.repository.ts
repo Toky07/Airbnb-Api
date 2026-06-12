@@ -152,14 +152,13 @@ export class ReservationRepository implements IReservationRepository {
     scope: ReservationStatsScope,
     status?: ReservationStatus,
   ): Promise<number> {
-    const qb = this.itemRepository.createQueryBuilder('item');
-    this.applyItemScope(qb, scope);
-
-    if (status) {
-      qb.andWhere('item.status = :status', { status });
-    }
-
-    return qb.getCount();
+    const tests = await this.repository.count({
+        where: {
+          status
+        }
+      });
+    
+    return tests;
   }
 
   async sumConfirmedRevenueForMonth(
@@ -171,9 +170,6 @@ export class ReservationRepository implements IReservationRepository {
     const qb = this.itemRepository
       .createQueryBuilder('item')
       .select('COALESCE(SUM(item.price), 0)', 'total')
-      .where('item.status = :status', {
-        status: RESERVATION_STATUS.CONFIRMED,
-      })
       .andWhere('item.checkIn >= :start', { start })
       .andWhere('item.checkIn < :end', { end });
 
@@ -192,9 +188,6 @@ export class ReservationRepository implements IReservationRepository {
     const qb = this.itemRepository
       .createQueryBuilder('item')
       .select('COALESCE(SUM(item.nights), 0)', 'total')
-      .where('item.status = :status', {
-        status: RESERVATION_STATUS.CONFIRMED,
-      })
       .andWhere('item.checkIn >= :start', { start })
       .andWhere('item.checkIn < :end', { end });
 
@@ -257,7 +250,7 @@ export class ReservationRepository implements IReservationRepository {
       qb.innerJoin('reservation.items', 'searchItem');
       const term = `%${params.search}%`;
       qb.andWhere(
-        '(searchItem.status LIKE :term OR searchItem.checkIn LIKE :term OR searchItem.checkOut LIKE :term)',
+        '(searchItem.checkIn LIKE :term OR searchItem.checkOut LIKE :term)',
         { term },
       );
     }

@@ -1,3 +1,4 @@
+import { PAYMENT_TYPE } from 'src/modules/payment/domain/types/payment.type';
 import { PAYMENT_PROVIDER } from '../../../payment/domain/constants/payment-provider.constant';
 import { PAYMENT_STATUS } from '../../../payment/domain/constants/payment-status.constant';
 import { Payment } from '../../../payment/domain/entities/payment.entity';
@@ -50,14 +51,9 @@ export function createSamplePaymentForInvoice(
     PAYMENT_PROVIDER.STRIPE,
     'pi_test_123',
     1,
-    10,
-    '2026-07-01',
-    '2026-07-04',
-    2,
+    PAYMENT_TYPE.RESERVATION,
     3,
-    7,
     null,
-    [7],
     null,
     overrides.id ?? 42,
     new Date('2026-06-10T10:00:00.000Z'),

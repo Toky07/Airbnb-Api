@@ -38,6 +38,7 @@ export class ConfirmReservationUseCase {
         reservation.userId,
         reservation.items,
         RESERVATION_STATUS.CONFIRMED,
+        undefined,
         reservation.id,
         reservation.createdAt,
         reservation.updatedAt,

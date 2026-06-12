@@ -4,6 +4,7 @@ import { PAYMENT_STATUS } from '../../domain/constants/payment-status.constant';
 import { Payment } from '../../domain/entities/payment.entity';
 import type { IPaymentGateway } from '../../domain/ports/payment-gateway.port';
 import type { IPaymentRepository } from '../../domain/repositories/payment.repository';
+import { PAYMENT_TYPE } from '../../domain/types/payment.type';
 
 export function createSamplePayment(overrides: Partial<{
   id: number;
@@ -19,14 +20,9 @@ export function createSamplePayment(overrides: Partial<{
     PAYMENT_PROVIDER.STRIPE,
     overrides.transactionId ?? 'pi_test_123',
     overrides.userId ?? 1,
-    10,
-    '2026-06-10',
-    '2026-06-12',
-    2,
-    2,
-    overrides.reservationId ?? null,
+    PAYMENT_TYPE.RESERVATION,
+    1,
     null,
-    [],
     null,
     overrides.id ?? 1,
     new Date('2026-06-01T10:00:00.000Z'),

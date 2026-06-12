@@ -24,6 +24,7 @@ import { ReservationItemOutput } from '../dto/reservation-item.output';
 import { EnrichReservationOutputsService } from '../services/enrich-reservation-outputs.service';
 import { Reservation } from '../../domain/entities/reservation.entity';
 import { ReservationOutput } from '../dto/reservation.output';
+import { PAYMENT_REPOSITORY, type IPaymentRepository } from 'src/modules/payment/domain/repositories/payment.repository';
 
 export type CancelReservationAccess = {
   authId: number;
@@ -38,6 +39,8 @@ export class CancelReservationUseCase {
     private readonly reservationRepository: IReservationRepository,
     @Inject(USER_REPOSITORY)
     private readonly userRepository: IUserRepository,
+    @Inject(PAYMENT_REPOSITORY)
+    private readonly paymentRepository: IPaymentRepository,
   ) {}
 
   async execute(
@@ -52,6 +55,12 @@ export class CancelReservationUseCase {
 
     if (!reservation?.id) {
       throw new NotFoundException('Séjour introuvable.');
+    }
+
+    const payment = await this.paymentRepository.findById(reservation.payment?.id ?? 0);
+
+    if (!payment) {
+      throw new NotFoundException('Paiement introuvable.');
     }
 
     if (reservation.status === RESERVATION_STATUS.CANCELLED) {
@@ -72,6 +81,7 @@ export class CancelReservationUseCase {
         reservation.userId,
         reservation.items,
         RESERVATION_STATUS.CANCELLED,
+        payment,
         reservation.id,
       ),
     );

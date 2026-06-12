@@ -122,6 +122,23 @@ describe('ReservationController', () => {
     );
   });
 
+  it.only('GET /reservations/stats retourne les stats de réservation', async () => {
+    const response = await request(app.getHttpServer())
+      .get('/reservations/stats')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    expect(response.body).toEqual(expect.objectContaining({
+      canReadAll: true,
+      canReadHost: true,
+      stats: expect.objectContaining({
+        totalReservations: expect.any(Number),
+        totalRevenue: expect.any(Number),
+        totalNights: expect.any(Number),
+      }),
+    }));
+  });
+
   it('GET /reservations retourne la liste admin', async () => {
     const response = await request(app.getHttpServer())
       .get('/reservations')

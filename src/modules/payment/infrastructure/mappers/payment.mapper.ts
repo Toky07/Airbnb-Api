@@ -2,6 +2,7 @@ import { PAYMENT_PROVIDER } from '../../domain/constants/payment-provider.consta
 import type { PaymentStatus } from '../../domain/constants/payment-status.constant';
 import { Payment } from '../../domain/entities/payment.entity';
 import { PaymentOrmEntity } from '../entities/payment.orm-entity';
+import { PaymentType } from '../../domain/types/payment.type';
 
 export class PaymentMapper {
   static toDomain(entity: PaymentOrmEntity): Payment {
@@ -12,14 +13,9 @@ export class PaymentMapper {
       entity.provider as (typeof PAYMENT_PROVIDER)[keyof typeof PAYMENT_PROVIDER],
       entity.transactionId,
       entity.userId,
-      entity.roomId,
-      entity.checkInDate,
-      entity.checkOutDate,
-      entity.guestCount,
-      entity.nights,
-      entity.reservationId,
+      entity.propertyType as PaymentType,
+      entity.propertyId,
       entity.cartId ?? null,
-      entity.reservationIds ?? [],
       entity.errorMessage,
       entity.id,
       entity.createdAt,
@@ -38,15 +34,10 @@ export class PaymentMapper {
     entity.status = payment.status;
     entity.provider = payment.provider;
     entity.transactionId = payment.transactionId;
-    entity.reservationId = payment.reservationId;
     entity.cartId = payment.cartId;
-    entity.reservationIds = payment.reservationIds;
     entity.userId = payment.userId;
-    entity.roomId = payment.roomId;
-    entity.checkInDate = payment.checkInDate;
-    entity.checkOutDate = payment.checkOutDate;
-    entity.guestCount = payment.guestCount;
-    entity.nights = payment.nights;
+    entity.propertyType = payment.propertyType;
+    entity.propertyId = payment.propertyId;
     entity.errorMessage = payment.errorMessage;
     entity.invoiceNotificationsSentAt = payment.invoiceNotificationsSentAt;
     return entity;

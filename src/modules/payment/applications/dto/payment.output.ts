@@ -1,6 +1,7 @@
 import type { PaymentProvider } from '../../domain/constants/payment-provider.constant';
 import type { PaymentStatus } from '../../domain/constants/payment-status.constant';
 import type { Payment } from '../../domain/entities/payment.entity';
+import type { PaymentType } from '../../domain/types/payment.type';
 
 export class PaymentOutput {
   constructor(
@@ -11,12 +12,8 @@ export class PaymentOutput {
     public readonly provider: PaymentProvider,
     public readonly transactionId: string,
     public readonly userId: number,
-    public readonly roomId: number,
-    public readonly checkInDate: string,
-    public readonly checkOutDate: string,
-    public readonly guestCount: number,
-    public readonly nights: number,
-    public readonly reservationId: number | null,
+    public readonly propertyType: PaymentType,
+    public readonly propertyId: number,
     public readonly cartId: number | null,
     public readonly errorMessage: string | null,
     public readonly createdAt: Date,
@@ -32,12 +29,8 @@ export class PaymentOutput {
       payment.provider,
       payment.transactionId,
       payment.userId,
-      payment.roomId,
-      payment.checkInDate,
-      payment.checkOutDate,
-      payment.guestCount,
-      payment.nights,
-      payment.reservationId,
+      payment.propertyType,
+      payment.propertyId,
       payment.cartId,
       payment.errorMessage,
       payment.createdAt!,

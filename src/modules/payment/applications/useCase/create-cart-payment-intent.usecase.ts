@@ -22,18 +22,15 @@ import {
   getStripeCurrency,
   getStripePublishableKey,
 } from '../../infrastructure/stripe/stripe.config';
+import { PAYMENT_TYPE } from '../../domain/types/payment.type';
 
 export type CreateCartPaymentIntentParams = {
   authId: number;
   cartId: number;
   reservationIds: number[];
   amountInCents: number;
-  nights: number;
-  roomId: number;
-  checkInDate: string;
-  checkOutDate: string;
-  guestCount: number;
-  pricePerNight: number;
+  propertyType: (typeof PAYMENT_TYPE)[keyof typeof PAYMENT_TYPE];
+  propertyId: number;
 };
 
 @Injectable()
@@ -83,14 +80,9 @@ export class CreateCartPaymentIntentUseCase {
         PAYMENT_PROVIDER.STRIPE,
         paymentIntent.id,
         user.id,
-        params.roomId,
-        params.checkInDate,
-        params.checkOutDate,
-        params.guestCount,
-        params.nights,
-        params.reservationIds[0] ?? null,
+        params.propertyType,
+        params.propertyId,
         params.cartId,
-        params.reservationIds,
       ),
     );
 
@@ -100,8 +92,6 @@ export class CreateCartPaymentIntentUseCase {
       params.amountInCents,
       currency,
       getStripePublishableKey(),
-      params.nights,
-      params.pricePerNight,
     );
   }
 }

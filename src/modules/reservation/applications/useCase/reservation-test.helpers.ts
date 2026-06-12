@@ -3,6 +3,8 @@ import { RESERVATION_STATUS } from '../../domain/constants/reservation-status.co
 import { ReservationItem } from '../../domain/entities/reservation-item.entity';
 import { Reservation } from '../../domain/entities/reservation.entity';
 import type { IReservationRepository } from '../../domain/repositories/reservation.repository';
+import { Payment } from 'src/modules/payment/domain/entities/payment.entity';
+import { createSamplePaymentForInvoice } from 'src/modules/invoice/applications/useCase/invoice-test.helpers';
 
 export function createSampleReservationItem(
   overrides: Partial<{
@@ -33,6 +35,7 @@ export function createSampleReservation(
   overrides: Partial<{
     id: number;
     userId: number;
+    payment: Payment;
     status: (typeof RESERVATION_STATUS)[keyof typeof RESERVATION_STATUS];
     items: ReservationItem[];
   }> = {},
@@ -45,6 +48,7 @@ export function createSampleReservation(
     overrides.userId ?? 5,
     overrides.items ?? [item],
     overrides.status ?? RESERVATION_STATUS.PENDING,
+    createSamplePaymentForInvoice(),
     overrides.id ?? 1,
     new Date('2026-06-01T10:00:00.000Z'),
     new Date('2026-06-01T10:00:00.000Z'),
