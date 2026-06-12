@@ -39,7 +39,7 @@ const mockQueryBuilder = {
     where: vi.fn().mockReturnThis(),
     andWhere: vi.fn().mockReturnThis(),
     getMany: vi.fn().mockResolvedValue([
-        { startDate: '2026-09-10', endDate: '2026-09-13' },
+        { checkIn: '2026-09-10', checkOut: '2026-09-13' },
     ]),
 };
 

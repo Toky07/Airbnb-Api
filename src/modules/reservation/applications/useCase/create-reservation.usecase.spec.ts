@@ -21,6 +21,12 @@ import {
   createSampleReservation,
 } from './reservation-test.helpers';
 
+function createEnrichMock() {
+  return {
+    enrich: vi.fn().mockImplementation(async (outputs: unknown[]) => outputs),
+  };
+}
+
 describe('CreateReservationUseCase', () => {
   const room = new Room({
     id: 10,
@@ -65,6 +71,7 @@ describe('CreateReservationUseCase', () => {
       { findByAuthId: vi.fn().mockResolvedValue(user) } as unknown as IUserRepository,
       new CheckRoomAvailabilityService(reservationRepository),
       new CalculateStayAmountService(),
+      createEnrichMock() as never,
     );
 
     const result = await useCase.execute(1, {
@@ -74,16 +81,16 @@ describe('CreateReservationUseCase', () => {
       guestCount: 2,
     });
 
-    expect(result.status).toBe(RESERVATION_STATUS.PENDING);
-    expect(result.totalPrice).toBe(240);
-    expect(result.nights).toBe(2);
+    expect(result.items[0]?.status).toBe(RESERVATION_STATUS.PENDING);
+    expect(result.items[0]?.price).toBe(240);
+    expect(result.items[0]?.nights).toBe(2);
   });
 
   it('rejette si la chambre est indisponible sur les dates', async () => {
     const reservationRepository = createReservationRepositoryMock({
       findOverlapping: vi
         .fn()
-        .mockResolvedValue([createSampleReservation({ id: 99 })]),
+        .mockResolvedValue([createSampleReservation({ id: 99 }).items[0]]),
     });
 
     const useCase = new CreateReservationUseCase(
@@ -92,6 +99,7 @@ describe('CreateReservationUseCase', () => {
       { findByAuthId: vi.fn().mockResolvedValue(user) } as unknown as IUserRepository,
       new CheckRoomAvailabilityService(reservationRepository),
       new CalculateStayAmountService(),
+      createEnrichMock() as never,
     );
 
     await expect(
@@ -111,6 +119,7 @@ describe('CreateReservationUseCase', () => {
       { findByAuthId: vi.fn().mockResolvedValue(null) } as unknown as IUserRepository,
       new CheckRoomAvailabilityService(createReservationRepositoryMock()),
       new CalculateStayAmountService(),
+      createEnrichMock() as never,
     );
 
     await expect(
@@ -130,6 +139,7 @@ describe('CreateReservationUseCase', () => {
       { findByAuthId: vi.fn().mockResolvedValue(user) } as unknown as IUserRepository,
       new CheckRoomAvailabilityService(createReservationRepositoryMock()),
       new CalculateStayAmountService(),
+      createEnrichMock() as never,
     );
 
     await expect(

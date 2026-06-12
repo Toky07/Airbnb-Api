@@ -24,12 +24,12 @@ import { MediaModule } from '../media/media.module';
 import { RoomMediaPresenter } from './applications/presenters/room-media.presenter';
 import { RoomProductSummaryService } from './applications/services/room-product-summary.service';
 import { GenerateRoomSlugService } from './applications/services/generate-room-slug.service';
-import { ReservationOrmEntity } from '../reservation/infrastructure/entities/reservation.orm-entity';
+import { ReservationItemOrmEntity } from '../reservation/infrastructure/entities/reservation-item.orm-entity';
 import { AmenityModule } from '../amenity/amenity.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([RoomEntity, RoomTypeEntity, ReservationOrmEntity]),
+    TypeOrmModule.forFeature([RoomEntity, RoomTypeEntity, ReservationItemOrmEntity]),
     MediaModule,
     forwardRef(() => AmenityModule),
   ],

@@ -4,9 +4,10 @@ import {
   RESERVATION_REPOSITORY,
   type IReservationRepository,
 } from '../../domain/repositories/reservation.repository';
-import { ReservationOutput } from '../dto/reservation.output';
+import { ReservationItemOutput } from '../dto/reservation-item.output';
 import { resolvePaymentReservationIds } from '../dto/booking-order.output';
 import { EnrichReservationOutputsService } from './enrich-reservation-outputs.service';
+import { ReservationOutput } from '../dto/reservation.output';
 
 @Injectable()
 export class ResolvePaymentReservationsService {
@@ -16,23 +17,23 @@ export class ResolvePaymentReservationsService {
     private readonly enrichReservationOutputs: EnrichReservationOutputsService,
   ) {}
 
-  async resolveForPayment(payment: Payment): Promise<ReservationOutput[]> {
+  async resolveForPayment(payment: Payment): Promise<ReservationItemOutput[]> {
     const reservationIds = resolvePaymentReservationIds(payment);
     if (reservationIds.length === 0) {
       return [];
     }
 
     const reservations = await this.reservationRepository.findByIds(reservationIds);
-    const outputs = reservations.map((reservation) =>
-      ReservationOutput.fromDomain(reservation),
+    const items = reservations.flatMap((reservation) =>
+      reservation.items.map((item) => ReservationItemOutput.fromDomain(item)),
     );
 
-    return this.enrichReservationOutputs.enrich(outputs);
+    return this.enrichReservationOutputs.enrichItems(items);
   }
 
   async resolveForPayments(
     payments: Payment[],
-  ): Promise<Map<number, ReservationOutput[]>> {
+  ): Promise<Map<number, ReservationItemOutput[]>> {
     const reservationIds = [
       ...new Set(payments.flatMap((payment) => resolvePaymentReservationIds(payment))),
     ];
@@ -42,18 +43,21 @@ export class ResolvePaymentReservationsService {
     }
 
     const reservations = await this.reservationRepository.findByIds(reservationIds);
-    const outputs = reservations.map((reservation) =>
-      ReservationOutput.fromDomain(reservation),
+    const enrichedReservations = await this.enrichReservationOutputs.enrich(
+      reservations.map((reservation) => ReservationOutput.fromDomain(reservation)),
     );
-    const enriched = await this.enrichReservationOutputs.enrich(outputs);
-    const enrichedById = new Map(enriched.map((item) => [item.id, item]));
 
-    const grouped = new Map<number, ReservationOutput[]>();
+    const itemsByReservationId = new Map<number, ReservationItemOutput[]>();
+    for (const reservation of enrichedReservations) {
+      itemsByReservationId.set(reservation.id, reservation.items);
+    }
+
+    const grouped = new Map<number, ReservationItemOutput[]>();
 
     for (const payment of payments) {
-      const items = resolvePaymentReservationIds(payment)
-        .map((id) => enrichedById.get(id))
-        .filter((item): item is ReservationOutput => item !== undefined);
+      const items = resolvePaymentReservationIds(payment).flatMap(
+        (reservationId) => itemsByReservationId.get(reservationId) ?? [],
+      );
 
       if (payment.id) {
         grouped.set(payment.id, items);

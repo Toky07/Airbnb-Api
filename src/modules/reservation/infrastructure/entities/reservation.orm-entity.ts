@@ -2,9 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { ReservationItemOrmEntity } from './reservation-item.orm-entity';
 
 @Entity({ name: 'reservations' })
 export class ReservationOrmEntity {
@@ -12,28 +14,12 @@ export class ReservationOrmEntity {
   id: number;
 
   @Column({ type: 'integer' })
-  roomId: number;
-
-  @Column({ type: 'integer' })
   userId: number;
 
-  @Column()
-  startDate: string;
-
-  @Column()
-  endDate: string;
-
-  @Column({ type: 'integer' })
-  guestCount: number;
-
-  @Column({ type: 'real' })
-  totalPrice: number;
-
-  @Column({ type: 'integer' })
-  nights: number;
-
-  @Column({ default: 'pending' })
-  status: string;
+  @OneToMany(() => ReservationItemOrmEntity, (item) => item.reservation, {
+    cascade: true,
+  })
+  items: ReservationItemOrmEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

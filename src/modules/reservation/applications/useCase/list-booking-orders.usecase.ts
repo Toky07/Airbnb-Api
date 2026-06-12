@@ -31,17 +31,18 @@ export class ListBookingOrdersUseCase {
   async buildPage(
     result: PaginatedResult<Payment>,
   ): Promise<PaginatedResult<BookingOrderListItemOutput>> {
-    const itemsByPayment = await this.resolvePaymentReservations.resolveForPayments(
-      result.data,
-    );
+    const itemsByPayment =
+      await this.resolvePaymentReservations.resolveForPayments(result.data);
 
-    const users = await this.loadUsers(result.data.map((payment) => payment.userId));
+    const users = await this.loadUsers(
+      result.data.map((payment) => payment.userId),
+    );
 
     return {
       data: result.data.map((payment) =>
         BookingOrderListItemOutput.fromParts(
           payment,
-          payment.id ? itemsByPayment.get(payment.id) ?? [] : [],
+          payment.id ? (itemsByPayment.get(payment.id) ?? []) : [],
           users.get(payment.userId) ?? null,
         ),
       ),
@@ -51,7 +52,10 @@ export class ListBookingOrdersUseCase {
 
   private async loadUsers(userIds: number[]) {
     const uniqueIds = [...new Set(userIds.filter((id) => id > 0))];
-    const users = new Map<number, Awaited<ReturnType<IUserRepository['findById']>>>();
+    const users = new Map<
+      number,
+      Awaited<ReturnType<IUserRepository['findById']>>
+    >();
 
     await Promise.all(
       uniqueIds.map(async (userId) => {

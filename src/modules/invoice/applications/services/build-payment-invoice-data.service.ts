@@ -50,8 +50,8 @@ export class BuildPaymentInvoiceDataService {
 
       const unitPrice =
         item.nights > 0
-          ? Math.round((item.totalPrice / item.nights) * 100) / 100
-          : item.totalPrice;
+          ? Math.round((item.price / item.nights) * 100) / 100
+          : item.price;
 
       lineItems.push({
         reservationId: item.id,
@@ -65,7 +65,7 @@ export class BuildPaymentInvoiceDataService {
         guestCount: item.guestCount,
         nights: item.nights,
         unitPrice,
-        totalPrice: item.totalPrice,
+        totalPrice: item.price,
         propertyOwnerId: room.property.ownerId,
       });
     }

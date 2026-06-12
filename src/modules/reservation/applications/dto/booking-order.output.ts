@@ -1,7 +1,7 @@
 import type { PaymentStatus } from '../../../payment/domain/constants/payment-status.constant';
 import type { Payment } from '../../../payment/domain/entities/payment.entity';
 import type { User } from '../../../user/domain/entities/user.entity';
-import { ReservationOutput } from './reservation.output';
+import { ReservationItemOutput } from './reservation-item.output';
 
 export class BookingOrderListItemOutput {
   constructor(
@@ -15,15 +15,18 @@ export class BookingOrderListItemOutput {
     public readonly customerEmail: string,
     public readonly previewLabel: string,
     public readonly transactionId: string,
+    public readonly startDate: string | null,
+    public readonly endDate: string | null,
   ) {}
 
   static fromParts(
     payment: Payment,
-    items: ReservationOutput[],
+    items: ReservationItemOutput[],
     user: User | null,
   ): BookingOrderListItemOutput {
     const itemCount = items.length;
     const previewLabel = buildPreviewLabel(items);
+    const firstItem = items[0];
 
     return new BookingOrderListItemOutput(
       payment.id!,
@@ -36,6 +39,8 @@ export class BookingOrderListItemOutput {
       user?.email ?? '—',
       previewLabel,
       payment.transactionId,
+      firstItem?.startDate ?? null,
+      firstItem?.endDate ?? null,
     );
   }
 }
@@ -51,12 +56,12 @@ export class BookingOrderDetailOutput {
     public readonly customerName: string,
     public readonly customerEmail: string,
     public readonly itemCount: number,
-    public readonly items: ReservationOutput[],
+    public readonly items: ReservationItemOutput[],
   ) {}
 
   static fromParts(
     payment: Payment,
-    items: ReservationOutput[],
+    items: ReservationItemOutput[],
     user: User | null,
   ): BookingOrderDetailOutput {
     return new BookingOrderDetailOutput(
@@ -86,7 +91,7 @@ export function resolvePaymentReservationIds(payment: Payment): number[] {
   return [];
 }
 
-function buildPreviewLabel(items: ReservationOutput[]): string {
+function buildPreviewLabel(items: ReservationItemOutput[]): string {
   if (items.length === 0) {
     return 'Aucun séjour';
   }

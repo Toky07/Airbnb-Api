@@ -9,7 +9,7 @@ import { UserModule } from '../../../user/user.module';
 import { RoomsModule } from '../../../rooms/room.module';
 import { PropertiesModule } from '../../../properties/properties.module';
 import { ReservationModule } from '../../reservation.module';
-import { ReservationOrmEntity } from '../../infrastructure/entities/reservation.orm-entity';
+import { ReservationItemOrmEntity } from '../../infrastructure/entities/reservation-item.orm-entity';
 import { PropertyEntity } from '../../../properties/infrastructure/entities/property-entity.entity';
 import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
 import { RESERVATION_STATUS } from '../../domain/constants/reservation-status.constant';
@@ -33,16 +33,11 @@ describe('ReservationController', () => {
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [
-            ...AUTH_TEST_ENTITIES,
-            ...DOMAIN_TEST_ENTITIES,
-            ReservationOrmEntity,
-          ],
+          entities: [...AUTH_TEST_ENTITIES, ...DOMAIN_TEST_ENTITIES],
           synchronize: true,
         }),
         JwtModule.register({
           global: true,
-          secret: '1234',
           secret: '1234',
           signOptions: { expiresIn: '5h' },
         }),
@@ -95,7 +90,7 @@ describe('ReservationController', () => {
     await app?.close();
   });
 
-  it('POST /reservations crée une réservation', async () => {
+  it('POST /reservations crée une réservation avec ses items', async () => {
     const response = await request(app.getHttpServer())
       .post('/reservations')
       .set('Authorization', `Bearer ${token}`)
@@ -110,10 +105,19 @@ describe('ReservationController', () => {
     expect(response.body).toEqual(
       expect.objectContaining({
         id: expect.any(Number),
-        roomId,
-        status: RESERVATION_STATUS.PENDING,
-        totalPrice: 200,
-        nights: 2,
+        userId: expect.any(Number),
+        items: [
+          expect.objectContaining({
+            roomId,
+            checkIn: '2026-09-01',
+            checkOut: '2026-09-03',
+            startDate: '2026-09-01',
+            endDate: '2026-09-03',
+            status: RESERVATION_STATUS.PENDING,
+            price: 200,
+            nights: 2,
+          }),
+        ],
       }),
     );
   });
@@ -125,6 +129,12 @@ describe('ReservationController', () => {
       .expect(200);
 
     expect(response.body.data.length).toBeGreaterThan(0);
+    expect(response.body.data[0].items?.[0]).toEqual(
+      expect.objectContaining({
+        startDate: expect.any(String),
+        endDate: expect.any(String),
+      }),
+    );
   });
 
   it('GET /reservations/me retourne les réservations de l’utilisateur', async () => {
@@ -134,16 +144,22 @@ describe('ReservationController', () => {
       .expect(200);
 
     expect(response.body.data.length).toBeGreaterThan(0);
+    expect(response.body.data[0].items?.[0]).toEqual(
+      expect.objectContaining({
+        startDate: expect.any(String),
+        endDate: expect.any(String),
+      }),
+    );
   });
 
-  it('POST /reservations/:id/cancel annule une réservation', async () => {
-    const reservation = await dataSource.getRepository(ReservationOrmEntity).findOne({
+  it('POST /reservations/items/:id/cancel annule un séjour', async () => {
+    const item = await dataSource.getRepository(ReservationItemOrmEntity).findOne({
       where: {},
       order: { id: 'DESC' },
     });
 
     const response = await request(app.getHttpServer())
-      .post(`/reservations/${reservation!.id}/cancel`)
+      .post(`/reservations/items/${item!.id}/cancel`)
       .set('Authorization', `Bearer ${token}`)
       .expect(201);
 

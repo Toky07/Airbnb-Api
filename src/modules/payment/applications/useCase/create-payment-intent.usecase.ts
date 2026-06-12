@@ -141,35 +141,41 @@ export class CreatePaymentIntentUseCase {
       throw new UnauthorizedException('Accès refusé.');
     }
 
-    if (reservation.status !== RESERVATION_STATUS.PENDING) {
+    const pendingItems = reservation.items.filter(
+      (item) => item.status === RESERVATION_STATUS.PENDING,
+    );
+
+    if (pendingItems.length === 0) {
       throw new BadRequestException(
         'Seules les réservations en attente peuvent être payées.',
       );
     }
 
-    const room = await this.roomRepository.findById(reservation.roomId);
+    const firstItem = pendingItems[0]!;
+
+    const room = await this.roomRepository.findById(firstItem.roomId);
     if (!room?.id) {
       throw new NotFoundException('Chambre introuvable.');
     }
 
     const stayAmount = this.calculateStayAmount.execute({
-      checkIn: reservation.startDate,
-      checkOut: reservation.endDate,
+      checkIn: firstItem.checkIn,
+      checkOut: firstItem.checkOut,
       pricePerNight: room.pricePerNight,
     });
 
-    if (stayAmount.amountInMajorUnit !== reservation.totalPrice) {
+    if (stayAmount.amountInMajorUnit !== firstItem.price) {
       throw new BadRequestException('Le montant de la réservation est invalide.');
     }
 
     return {
-      roomId: reservation.roomId,
+      roomId: firstItem.roomId,
       userId: reservation.userId,
-      checkIn: reservation.startDate,
-      checkOut: reservation.endDate,
-      guestCount: reservation.guestCount,
+      checkIn: firstItem.checkIn,
+      checkOut: firstItem.checkOut,
+      guestCount: firstItem.guestCount,
       amountInCents: stayAmount.amountInCents,
-      nights: reservation.nights,
+      nights: firstItem.nights,
       pricePerNight: room.pricePerNight,
       reservationId: reservation.id,
     };

@@ -51,6 +51,7 @@ export class PaymentRepository implements IPaymentRepository {
   ): Promise<PaginatedResult<Payment>> {
     const qb = this.repository
       .createQueryBuilder('payment')
+      .where('payment.status = :status', { status: 'succeeded' })
       .orderBy('payment.createdAt', 'DESC');
 
     if (params.search) {

@@ -19,6 +19,7 @@ import { PasswordSetupTokenOrmEntity } from './modules/account-activation/infras
 import { PaymentModule } from './modules/payment/payment.module';
 import { PaymentOrmEntity } from './modules/payment/infrastructure/entities/payment.orm-entity';
 import { ReservationModule } from './modules/reservation/reservation.module';
+import { ReservationItemOrmEntity } from './modules/reservation/infrastructure/entities/reservation-item.orm-entity';
 import { ReservationOrmEntity } from './modules/reservation/infrastructure/entities/reservation.orm-entity';
 import { CartModule } from './modules/cart/cart.module';
 import { CartOrmEntity } from './modules/cart/infrastructure/entities/cart.orm-entity';
@@ -46,6 +47,7 @@ import { RoomAmenityOrmEntity } from './modules/amenity/infrastructure/entities/
         PasswordSetupTokenOrmEntity,
         PaymentOrmEntity,
         ReservationOrmEntity,
+        ReservationItemOrmEntity,
         CartOrmEntity,
         CartItemOrmEntity,
         AmenityOrmEntity,

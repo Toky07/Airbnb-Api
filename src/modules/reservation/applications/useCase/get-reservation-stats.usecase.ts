@@ -23,8 +23,8 @@ import {
   ReservationActivityOutput,
   ReservationStatsOutput,
 } from '../dto/reservation-stats.output';
+import { ReservationItemOutput } from '../dto/reservation-item.output';
 import { EnrichReservationOutputsService } from '../services/enrich-reservation-outputs.service';
-import { ReservationOutput } from '../dto/reservation.output';
 
 export type ReservationStatsAccess = {
   canReadAll: boolean;
@@ -61,14 +61,14 @@ export class GetReservationStatsUseCase {
       totalCount,
       monthlyRevenue,
       confirmedNights,
-      recent,
+      recentItems,
     ] = await Promise.all([
       this.reservationRepository.countByScope(scope, RESERVATION_STATUS.CONFIRMED),
       this.reservationRepository.countByScope(scope, RESERVATION_STATUS.PENDING),
       this.reservationRepository.countByScope(scope),
       this.reservationRepository.sumConfirmedRevenueForMonth(year, month, scope),
       this.reservationRepository.sumConfirmedNightsForMonth(year, month, scope),
-      this.reservationRepository.findRecent(5, scope),
+      this.reservationRepository.findRecentItems(5, scope),
     ]);
 
     const roomCount = await this.countRooms(scope);
@@ -76,8 +76,8 @@ export class GetReservationStatsUseCase {
     const occupancyRate =
       maxNights > 0 ? Math.min(100, Math.round((confirmedNights / maxNights) * 100)) : 0;
 
-    const enrichedRecent = await this.enrichReservationOutputs.enrich(
-      recent.map((reservation) => ReservationOutput.fromDomain(reservation)),
+    const enrichedRecent = await this.enrichReservationOutputs.enrichItems(
+      recentItems.map((item) => ReservationItemOutput.fromDomain(item)),
     );
 
     return new ReservationStatsOutput(
@@ -87,13 +87,13 @@ export class GetReservationStatsUseCase {
       occupancyRate,
       totalCount,
       enrichedRecent.map(
-        (reservation) =>
+        (item) =>
           new ReservationActivityOutput(
-            reservation.id,
-            this.buildActivityLabel(reservation),
-            reservation.status,
-            reservation.totalPrice,
-            reservation.createdAt,
+            item.id,
+            this.buildActivityLabel(item),
+            item.status,
+            item.price,
+            item.createdAt,
           ),
       ),
     );
@@ -152,11 +152,11 @@ export class GetReservationStatsUseCase {
     return result.meta.total;
   }
 
-  private buildActivityLabel(reservation: ReservationOutput): string {
-    if (reservation.roomName && reservation.propertyName) {
-      return `${reservation.roomName} — ${reservation.propertyName}`;
+  private buildActivityLabel(item: ReservationItemOutput): string {
+    if (item.roomName && item.propertyName) {
+      return `${item.roomName} — ${item.propertyName}`;
     }
 
-    return `Réservation #${reservation.id}`;
+    return `Séjour #${item.id}`;
   }
 }

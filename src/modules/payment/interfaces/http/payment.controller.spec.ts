@@ -128,6 +128,14 @@ describe('PaymentController', () => {
   });
 
   it('GET /payments retourne la liste paginée pour un admin', async () => {
+    const existing = await dataSource.getRepository(PaymentOrmEntity).findOne({
+      where: {},
+      order: { id: 'DESC' },
+    });
+    await dataSource.getRepository(PaymentOrmEntity).update(existing!.id, {
+      status: 'succeeded',
+    });
+
     const response = await request(app.getHttpServer())
       .get('/payments')
       .set('Authorization', `Bearer ${token}`)
@@ -156,7 +164,7 @@ describe('PaymentController', () => {
     expect(response.body).toEqual(
       expect.objectContaining({
         id: payment!.id,
-        status: PAYMENT_STATUS.PENDING,
+        status: PAYMENT_STATUS.SUCCEEDED,
         transactionId: 'pi_test_123',
       }),
     );

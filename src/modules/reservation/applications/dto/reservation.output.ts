@@ -1,78 +1,26 @@
-import type { RoomProductSummary } from '../../../rooms/applications/services/room-product-summary.service';
-import type { ReservationStatus } from '../../domain/constants/reservation-status.constant';
 import type { Reservation } from '../../domain/entities/reservation.entity';
+import { ReservationItemOutput } from './reservation-item.output';
 
 export class ReservationOutput {
   constructor(
     public readonly id: number,
-    public readonly roomId: number,
     public readonly userId: number,
-    public readonly startDate: string,
-    public readonly endDate: string,
-    public readonly guestCount: number,
-    public readonly totalPrice: number,
-    public readonly nights: number,
-    public readonly status: ReservationStatus,
-    public readonly roomName: string | null = null,
-    public readonly roomSlug: string | null = null,
-    public readonly propertyName: string | null = null,
-    public readonly propertyCity: string | null = null,
-    public readonly imageUrl: string | null = null,
+    public readonly items: ReservationItemOutput[],
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
   ) {}
 
-  static fromDomain(
-    reservation: Reservation,
-    product?: {
-      roomName?: string | null;
-      roomSlug?: string | null;
-      propertyName?: string | null;
-      propertyCity?: string | null;
-      imageUrl?: string | null;
-    },
-  ): ReservationOutput {
-    return new ReservationOutput(
-      reservation.id!,
-      reservation.roomId,
-      reservation.userId,
-      reservation.startDate,
-      reservation.endDate,
-      reservation.guestCount,
-      reservation.totalPrice,
-      reservation.nights,
-      reservation.status,
-      product?.roomName ?? null,
-      product?.roomSlug ?? null,
-      product?.propertyName ?? null,
-      product?.propertyCity ?? null,
-      product?.imageUrl ?? null,
-      reservation.createdAt!,
-      reservation.updatedAt!,
-    );
+  get nights(): number {
+    return this.items.reduce((sum, item) => sum + item.nights, 0);
   }
 
-  static enrich(
-    output: ReservationOutput,
-    summary?: RoomProductSummary | null,
-  ): ReservationOutput {
+  static fromDomain(reservation: Reservation): ReservationOutput {
     return new ReservationOutput(
-      output.id,
-      output.roomId,
-      output.userId,
-      output.startDate,
-      output.endDate,
-      output.guestCount,
-      output.totalPrice,
-      output.nights,
-      output.status,
-      summary?.roomName ?? null,
-      summary?.roomSlug ?? null,
-      summary?.propertyName ?? null,
-      summary?.propertyCity ?? null,
-      summary?.imageUrl ?? null,
-      output.createdAt,
-      output.updatedAt,
+      reservation.id!,
+      reservation.userId,
+      reservation.items.map((item) => ReservationItemOutput.fromDomain(item)),
+      reservation.createdAt!,
+      reservation.updatedAt!,
     );
   }
 }

@@ -3,6 +3,7 @@ import type {
   PaginationParams,
 } from '../../../../shared/pagination/pagination.types';
 import type { Reservation } from '../entities/reservation.entity';
+import type { ReservationItem } from '../entities/reservation-item.entity';
 
 export const RESERVATION_REPOSITORY = 'RESERVATION_REPOSITORY';
 
@@ -20,16 +21,18 @@ export type ReservationStatsScope = {
 
 export interface IReservationRepository {
   create(reservation: Reservation): Promise<Reservation>;
-  update(reservation: Reservation): Promise<Reservation>;
+  updateItem(item: ReservationItem): Promise<ReservationItem>;
   findById(id: number): Promise<Reservation | null>;
+  findItemById(id: number): Promise<ReservationItem | null>;
+  findItemsByIds(ids: number[]): Promise<ReservationItem[]>;
   findPaginated(params: ReservationListParams): Promise<PaginatedResult<Reservation>>;
   findOverlapping(
     roomId: number,
-    startDate: string,
-    endDate: string,
-    excludeReservationId?: number,
-  ): Promise<Reservation[]>;
-  countByScope(scope: ReservationStatsScope, status?: Reservation['status']): Promise<number>;
+    checkIn: string,
+    checkOut: string,
+    excludeItemId?: number,
+  ): Promise<ReservationItem[]>;
+  countByScope(scope: ReservationStatsScope, status?: ReservationItem['status']): Promise<number>;
   sumConfirmedRevenueForMonth(
     year: number,
     month: number,
@@ -40,7 +43,7 @@ export interface IReservationRepository {
     month: number,
     scope?: ReservationStatsScope,
   ): Promise<number>;
-  findRecent(limit: number, scope?: ReservationStatsScope): Promise<Reservation[]>;
+  findRecentItems(limit: number, scope?: ReservationStatsScope): Promise<ReservationItem[]>;
   findByIds(ids: number[]): Promise<Reservation[]>;
   findIdsByPropertyId(propertyId: number): Promise<number[]>;
   findIdsByPropertyIds(propertyIds: number[]): Promise<number[]>;

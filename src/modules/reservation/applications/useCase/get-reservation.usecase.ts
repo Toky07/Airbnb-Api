@@ -69,9 +69,11 @@ export class GetReservationUseCase {
       );
 
       if (propertyIds.size > 0) {
-        const room = await this.roomRepository.findById(reservation.roomId);
-        if (room?.property?.id && propertyIds.has(room.property.id)) {
-          return this.toEnrichedOutput(reservation);
+        for (const item of reservation.items) {
+          const room = await this.roomRepository.findById(item.roomId);
+          if (room?.property?.id && propertyIds.has(room.property.id)) {
+            return this.toEnrichedOutput(reservation);
+          }
         }
       }
     }

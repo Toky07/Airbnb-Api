@@ -16,12 +16,13 @@ import {
 import { USER_REPOSITORY } from '../../../user/infrastructure/repositories/user.repository';
 import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
 import { RESERVATION_STATUS } from '../../domain/constants/reservation-status.constant';
-import { Reservation } from '../../domain/entities/reservation.entity';
+import { ReservationItem } from '../../domain/entities/reservation-item.entity';
 import {
   RESERVATION_REPOSITORY,
   type IReservationRepository,
 } from '../../domain/repositories/reservation.repository';
-import { ReservationOutput } from '../dto/reservation.output';
+import { ReservationItemOutput } from '../dto/reservation-item.output';
+import { EnrichReservationOutputsService } from '../services/enrich-reservation-outputs.service';
 
 export type CancelReservationAccess = {
   authId: number;
@@ -40,20 +41,26 @@ export class CancelReservationUseCase {
     private readonly roomRepository: IRoomRepository,
     @Inject(PROPERTY_REPOSITORY)
     private readonly propertyRepository: IPropertyRepository,
+    private readonly enrichReservationOutputs: EnrichReservationOutputsService,
   ) {}
 
   async execute(
-    id: number,
+    itemId: number,
     access: CancelReservationAccess,
-  ): Promise<ReservationOutput> {
-    const reservation = await this.reservationRepository.findById(id);
+  ): Promise<ReservationItemOutput> {
+    const item = await this.reservationRepository.findItemById(itemId);
 
-    if (!reservation?.id) {
-      throw new NotFoundException('Réservation introuvable.');
+    if (!item?.id) {
+      throw new NotFoundException('Séjour introuvable.');
     }
 
-    if (reservation.status === RESERVATION_STATUS.CANCELLED) {
-      throw new BadRequestException('Cette réservation est déjà annulée.');
+    if (item.status === RESERVATION_STATUS.CANCELLED) {
+      throw new BadRequestException('Ce séjour est déjà annulé.');
+    }
+
+    const reservation = await this.reservationRepository.findById(item.reservationId);
+    if (!reservation) {
+      throw new NotFoundException('Réservation introuvable.');
     }
 
     if (!access.canCancelAll) {
@@ -62,30 +69,34 @@ export class CancelReservationUseCase {
       const isHost =
         access.canCancelHost &&
         user?.id != null &&
-        (await this.isHostOfReservation(user.id, reservation.roomId));
+        (await this.isHostOfReservation(user.id, item.roomId));
 
       if (!isOwner && !isHost) {
         throw new ForbiddenException('Accès refusé.');
       }
     }
 
-    const updated = await this.reservationRepository.update(
-      new Reservation(
-        reservation.roomId,
-        reservation.userId,
-        reservation.startDate,
-        reservation.endDate,
-        reservation.guestCount,
-        reservation.totalPrice,
-        reservation.nights,
+    const updated = await this.reservationRepository.updateItem(
+      new ReservationItem(
+        item.reservationId,
+        item.roomId,
+        item.checkIn,
+        item.checkOut,
+        item.guestCount,
+        item.price,
+        item.nights,
         RESERVATION_STATUS.CANCELLED,
-        reservation.id,
-        reservation.createdAt,
-        reservation.updatedAt,
+        item.id,
+        item.createdAt,
+        item.updatedAt,
       ),
     );
 
-    return ReservationOutput.fromDomain(updated);
+    const [enriched] = await this.enrichReservationOutputs.enrichItems([
+      ReservationItemOutput.fromDomain(updated),
+    ]);
+
+    return enriched ?? ReservationItemOutput.fromDomain(updated);
   }
 
   private async isHostOfReservation(

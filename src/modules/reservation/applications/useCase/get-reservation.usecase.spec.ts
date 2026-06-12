@@ -13,6 +13,7 @@ import { GetReservationUseCase } from './get-reservation.usecase';
 import {
   createReservationRepositoryMock,
   createSampleReservation,
+  createSampleReservationItem,
 } from './reservation-test.helpers';
 
 function createEnrichReservationOutputsMock() {
@@ -104,7 +105,11 @@ describe('GetReservationUseCase', () => {
   });
 
   it('autorise un hôte sur sa propriété', async () => {
-    const reservation = createSampleReservation({ id: 7, userId: 5, roomId: 10 });
+    const reservation = createSampleReservation({
+      id: 7,
+      userId: 5,
+      items: [createSampleReservationItem({ id: 1, reservationId: 7, roomId: 10 })],
+    });
     const host = new User(
       new UserNameVO('Host'),
       new UserNameVO('Owner'),
@@ -159,7 +164,7 @@ describe('GetReservationUseCase', () => {
       canReadHost: true,
     });
 
-    expect(result.roomId).toBe(10);
+    expect(result.items[0]?.roomId).toBe(10);
   });
 
   it('lève une erreur si la réservation est introuvable', async () => {

@@ -17,15 +17,14 @@ export class FinalizeSuccessfulPaymentService {
   ) {}
 
   async execute(payment: Payment): Promise<void> {
-    const reservationIds =
-      payment.reservationIds.length > 0
-        ? payment.reservationIds
-        : payment.reservationId != null
-          ? [payment.reservationId]
-          : [];
+    const idsToConfirm = payment.reservationIds.length > 0
+      ? payment.reservationIds
+      : payment.reservationId
+        ? [payment.reservationId]
+        : [];
 
-    for (const reservationId of reservationIds) {
-      await this.confirmReservationUseCase.execute(reservationId);
+    for (const id of idsToConfirm) {
+      await this.confirmReservationUseCase.execute(id);
     }
 
     if (payment.cartId != null) {

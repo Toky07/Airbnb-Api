@@ -4,9 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import {
-  PROPERTY_REPOSITORY,
-} from '../../../properties/infrastructure/repositories/property.repository';
+import { PROPERTY_REPOSITORY } from '../../../properties/infrastructure/repositories/property.repository';
 import type { IPropertyRepository } from '../../../properties/domain/repositories/property.repository';
 import {
   PAYMENT_REPOSITORY,
@@ -54,7 +52,8 @@ export class GetBookingOrderUseCase {
       throw new NotFoundException('Réservation introuvable.');
     }
 
-    const items = await this.resolvePaymentReservations.resolveForPayment(payment);
+    const items =
+      await this.resolvePaymentReservations.resolveForPayment(payment);
 
     if (!access.canReadAll) {
       await this.assertHostAccess(access, items);
@@ -67,7 +66,7 @@ export class GetBookingOrderUseCase {
 
   private async assertHostAccess(
     access: GetBookingOrderAccess,
-    items: import('../dto/reservation.output').ReservationOutput[],
+    items: import('../dto/reservation-item.output').ReservationItemOutput[],
   ): Promise<void> {
     if (!access.canReadHost) {
       throw new ForbiddenException('Accès refusé.');
@@ -91,7 +90,9 @@ export class GetBookingOrderUseCase {
       await this.reservationRepository.findIdsByPropertyIds(propertyIds),
     );
 
-    const hasAllowedItem = items.some((item) => allowedReservationIds.has(item.id));
+    const hasAllowedItem = items.some((item) =>
+      allowedReservationIds.has(item.reservationId),
+    );
     if (!hasAllowedItem) {
       throw new ForbiddenException('Accès refusé.');
     }

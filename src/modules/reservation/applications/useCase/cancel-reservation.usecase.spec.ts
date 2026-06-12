@@ -10,14 +10,23 @@ import { CancelReservationUseCase } from './cancel-reservation.usecase';
 import {
   createReservationRepositoryMock,
   createSampleReservation,
+  createSampleReservationItem,
 } from './reservation-test.helpers';
+
+function createEnrichMock() {
+  return {
+    enrichItems: vi.fn().mockImplementation(async (items: unknown[]) => items),
+  };
+}
 
 describe('CancelReservationUseCase', () => {
   it('annule une réservation pour son propriétaire', async () => {
-    const reservation = createSampleReservation({ id: 3, userId: 5 });
+    const item = createSampleReservationItem({ id: 3, reservationId: 1, roomId: 10 });
+    const reservation = createSampleReservation({ id: 1, userId: 5, items: [item] });
     const repository = createReservationRepositoryMock({
+      findItemById: vi.fn().mockResolvedValue(item),
       findById: vi.fn().mockResolvedValue(reservation),
-      update: vi.fn().mockImplementation(async (updated) => updated),
+      updateItem: vi.fn().mockImplementation(async (updated) => updated),
     });
     const user = new User(
       new UserNameVO('Jean'),
@@ -32,7 +41,8 @@ describe('CancelReservationUseCase', () => {
       repository,
       { findByAuthId: vi.fn().mockResolvedValue(user) } as unknown as IUserRepository,
       { findById: vi.fn() } as never,
-      { findByOwnerId: vi.fn() } as never,
+      { findAllByOwnerId: vi.fn() } as never,
+      createEnrichMock() as never,
     );
 
     const result = await useCase.execute(3, {
@@ -45,18 +55,22 @@ describe('CancelReservationUseCase', () => {
   });
 
   it('rejette si la réservation est déjà annulée', async () => {
-    const reservation = createSampleReservation({
+    const item = createSampleReservationItem({
       id: 3,
+      reservationId: 1,
       status: RESERVATION_STATUS.CANCELLED,
     });
+    const reservation = createSampleReservation({ id: 1, userId: 5, items: [item] });
 
     const useCase = new CancelReservationUseCase(
       createReservationRepositoryMock({
+        findItemById: vi.fn().mockResolvedValue(item),
         findById: vi.fn().mockResolvedValue(reservation),
       }),
       { findByAuthId: vi.fn() } as unknown as IUserRepository,
       { findById: vi.fn() } as never,
-      { findByOwnerId: vi.fn() } as never,
+      { findAllByOwnerId: vi.fn() } as never,
+      createEnrichMock() as never,
     );
 
     await expect(
@@ -69,7 +83,8 @@ describe('CancelReservationUseCase', () => {
   });
 
   it('refuse l’annulation par un autre utilisateur', async () => {
-    const reservation = createSampleReservation({ id: 3, userId: 5 });
+    const item = createSampleReservationItem({ id: 3, reservationId: 1 });
+    const reservation = createSampleReservation({ id: 1, userId: 5, items: [item] });
     const user = new User(
       new UserNameVO('Alice'),
       new UserNameVO('Martin'),
@@ -81,11 +96,13 @@ describe('CancelReservationUseCase', () => {
 
     const useCase = new CancelReservationUseCase(
       createReservationRepositoryMock({
+        findItemById: vi.fn().mockResolvedValue(item),
         findById: vi.fn().mockResolvedValue(reservation),
       }),
       { findByAuthId: vi.fn().mockResolvedValue(user) } as unknown as IUserRepository,
       { findById: vi.fn() } as never,
-      { findByOwnerId: vi.fn() } as never,
+      { findAllByOwnerId: vi.fn() } as never,
+      createEnrichMock() as never,
     );
 
     await expect(

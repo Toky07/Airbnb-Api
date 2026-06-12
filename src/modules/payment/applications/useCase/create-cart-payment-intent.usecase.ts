@@ -72,9 +72,7 @@ export class CreateCartPaymentIntentUseCase {
     });
 
     if (!paymentIntent.clientSecret) {
-      throw new BadRequestException(
-        'Impossible de créer le paiement Stripe.',
-      );
+      throw new BadRequestException('Impossible de créer le paiement Stripe.');
     }
 
     const payment = await this.paymentRepository.create(
@@ -90,7 +88,7 @@ export class CreateCartPaymentIntentUseCase {
         params.checkOutDate,
         params.guestCount,
         params.nights,
-        params.reservationIds.length === 1 ? params.reservationIds[0]! : null,
+        params.reservationIds[0] ?? null,
         params.cartId,
         params.reservationIds,
       ),

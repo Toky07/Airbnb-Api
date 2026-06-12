@@ -16,6 +16,7 @@ import { UserEntity } from '../modules/user/infrastructure/entities/user.entity'
 import { ACCOUNT_STATUS } from '../modules/account-activation/domain/constants/account-status.constant';
 import { PasswordSetupTokenOrmEntity } from '../modules/account-activation/infrastructure/entities/password-setup-token.orm-entity';
 import { ReservationOrmEntity } from '../modules/reservation/infrastructure/entities/reservation.orm-entity';
+import { ReservationItemOrmEntity } from '../modules/reservation/infrastructure/entities/reservation-item.orm-entity';
 import { AmenityOrmEntity } from '../modules/amenity/infrastructure/entities/amenity.orm-entity';
 import { PropertyAmenityOrmEntity } from '../modules/amenity/infrastructure/entities/property-amenity.orm-entity';
 import { RoomAmenityOrmEntity } from '../modules/amenity/infrastructure/entities/room-amenity.orm-entity';
@@ -52,6 +53,7 @@ export const DOMAIN_TEST_ENTITIES = [
   MediaOrmEntity,
   EmailOrmEntity,
   ReservationOrmEntity,
+  ReservationItemOrmEntity,
   AmenityOrmEntity,
   PropertyAmenityOrmEntity,
   RoomAmenityOrmEntity,

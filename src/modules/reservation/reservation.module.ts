@@ -20,6 +20,7 @@ import { ListHostReservationsUseCase } from './applications/useCase/list-host-re
 import { ListMyReservationsUseCase } from './applications/useCase/list-my-reservations.usecase';
 import { ListReservationsUseCase } from './applications/useCase/list-reservations.usecase';
 import { RESERVATION_REPOSITORY } from './domain/repositories/reservation.repository';
+import { ReservationItemOrmEntity } from './infrastructure/entities/reservation-item.orm-entity';
 import { ReservationOrmEntity } from './infrastructure/entities/reservation.orm-entity';
 import { ReservationRepository } from './infrastructure/repositories/reservation.repository';
 import { ReservationController } from './interfaces/http/reservation.controller';
@@ -28,7 +29,7 @@ import { ClearExpiredReservationService } from './applications/services/clear-ex
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ReservationOrmEntity]),
+    TypeOrmModule.forFeature([ReservationOrmEntity, ReservationItemOrmEntity]),
     ScheduleModule.forRoot(),
     forwardRef(() => PaymentModule),
     RoomsModule,

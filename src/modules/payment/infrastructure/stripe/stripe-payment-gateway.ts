@@ -10,10 +10,7 @@ import type {
   PaymentIntentSnapshot,
   WebhookEventPayload,
 } from '../../domain/ports/payment-gateway.port';
-import {
-  getStripeSecretKey,
-  getStripeWebhookSecret,
-} from './stripe.config';
+import { getStripeSecretKey, getStripeWebhookSecret } from './stripe.config';
 
 type StripeClient = InstanceType<typeof Stripe>;
 
@@ -41,7 +38,10 @@ export class StripePaymentGateway implements IPaymentGateway {
     return this.toSnapshot(paymentIntent);
   }
 
-  constructWebhookEvent(payload: Buffer, signature: string): WebhookEventPayload {
+  constructWebhookEvent(
+    payload: Buffer,
+    signature: string,
+  ): WebhookEventPayload {
     const stripe = this.requireStripe();
     const webhookSecret = getStripeWebhookSecret();
 
@@ -54,11 +54,7 @@ export class StripePaymentGateway implements IPaymentGateway {
     let event: unknown;
 
     try {
-      event = stripe.webhooks.constructEvent(
-        payload,
-        signature,
-        webhookSecret,
-      );
+      event = stripe.webhooks.constructEvent(payload, signature, webhookSecret);
     } catch {
       throw new BadRequestException('Signature Stripe invalide.');
     }
@@ -68,15 +64,17 @@ export class StripePaymentGateway implements IPaymentGateway {
       throw new BadRequestException('Événement Stripe non pris en charge.');
     }
 
-    const paymentIntent = (event as {
-      data: {
-        object: {
-          id: string;
-          status: string;
-          last_payment_error?: { message?: string | null } | null;
+    const paymentIntent = (
+      event as {
+        data: {
+          object: {
+            id: string;
+            status: string;
+            last_payment_error?: { message?: string | null } | null;
+          };
         };
-      };
-    }).data.object;
+      }
+    ).data.object;
 
     return {
       type: eventType,

@@ -5,7 +5,7 @@ import { ListPropertyAmenitiesUseCase } from '../../../amenity/applications/useC
 import { ListRoomAmenitiesUseCase } from '../../../amenity/applications/useCase/list-room-amenities.usecase';
 import { ROOM_REPOSITORY, type IRoomRepository } from '../../domain/repositories/room.repository';
 import { BLOCKING_RESERVATION_STATUSES } from '../../../reservation/domain/constants/reservation-status.constant';
-import { ReservationOrmEntity } from '../../../reservation/infrastructure/entities/reservation.orm-entity';
+import { ReservationItemOrmEntity } from '../../../reservation/infrastructure/entities/reservation-item.orm-entity';
 import type { UnavailableDateRange } from '../dto/room.output';
 import { RoomMediaPresenter } from '../presenters/room-media.presenter';
 
@@ -15,8 +15,8 @@ export class FindOneRoomUseCase {
         private readonly presenter: RoomMediaPresenter,
         private readonly listRoomAmenitiesUseCase: ListRoomAmenitiesUseCase,
         private readonly listPropertyAmenitiesUseCase: ListPropertyAmenitiesUseCase,
-        @InjectRepository(ReservationOrmEntity)
-        private readonly reservationRepo: Repository<ReservationOrmEntity>,
+        @InjectRepository(ReservationItemOrmEntity)
+        private readonly reservationItemRepo: Repository<ReservationItemOrmEntity>,
     ) {}
 
     async execute(id: number) {
@@ -55,19 +55,19 @@ export class FindOneRoomUseCase {
         today.setHours(0, 0, 0, 0);
         const todayStr = this.formatDate(today);
 
-        const reservations = await this.reservationRepo
-            .createQueryBuilder('r')
-            .select(['r.startDate', 'r.endDate'])
-            .where('r.roomId = :roomId', { roomId })
-            .andWhere('r.status IN (:...statuses)', {
+        const reservations = await this.reservationItemRepo
+            .createQueryBuilder('item')
+            .select(['item.checkIn', 'item.checkOut'])
+            .where('item.roomId = :roomId', { roomId })
+            .andWhere('item.status IN (:...statuses)', {
                 statuses: BLOCKING_RESERVATION_STATUSES,
             })
-            .andWhere('r.endDate > :today', { today: todayStr })
+            .andWhere('item.checkOut > :today', { today: todayStr })
             .getMany();
 
-        return reservations.map((r) => ({
-            startDate: r.startDate,
-            endDate: r.endDate,
+        return reservations.map((item) => ({
+            startDate: item.checkIn,
+            endDate: item.checkOut,
         }));
     }
 
