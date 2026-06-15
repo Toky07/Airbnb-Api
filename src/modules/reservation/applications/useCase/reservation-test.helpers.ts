@@ -48,7 +48,7 @@ export function createSampleReservation(
     overrides.userId ?? 5,
     overrides.items ?? [item],
     overrides.status ?? RESERVATION_STATUS.PENDING,
-    createSamplePaymentForInvoice(),
+    1,
     overrides.id ?? 1,
     new Date('2026-06-01T10:00:00.000Z'),
     new Date('2026-06-01T10:00:00.000Z'),

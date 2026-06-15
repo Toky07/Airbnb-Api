@@ -26,6 +26,7 @@ import { ReservationRepository } from './infrastructure/repositories/reservation
 import { ReservationController } from './interfaces/http/reservation.controller';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ClearExpiredReservationService } from './applications/services/clear-expired-reservation.service';
+import { ReservationEvent } from './applications/events/register-reservation.event';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { ClearExpiredReservationService } from './applications/services/clear-ex
     CancelReservationUseCase,
     ConfirmReservationUseCase,
     ClearExpiredReservationService,
+    ReservationEvent,
   ],
   exports: [
     RESERVATION_REPOSITORY,

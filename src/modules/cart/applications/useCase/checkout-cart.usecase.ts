@@ -12,6 +12,9 @@ import {
   type CartRequestContext,
 } from '../services/resolve-cart.service';
 import { PAYMENT_TYPE } from 'src/modules/payment/domain/types/payment.type';
+import { CreateReservationDto } from 'src/modules/reservation/applications/dto/create-reservation.dto';
+import { Reservation } from 'src/modules/reservation/domain/entities/reservation.entity';
+import { ReservationItem } from 'src/modules/reservation/domain/entities/reservation-item.entity';
 
 @Injectable()
 export class CheckoutCartUseCase {
@@ -38,45 +41,27 @@ export class CheckoutCartUseCase {
       throw new UnauthorizedException('Connexion requise pour payer.');
     }
 
-    const reservationIds: number[] = [];
-    let totalNights = 0;
-    let summaryRoomId = 0;
-    let summaryCheckIn = 'cart-checkout';
-    let summaryCheckOut = 'cart-checkout';
-    let summaryGuestCount = 0;
-    let summaryPricePerNight = 0;
-
+    const items: CreateReservationDto[] = [];
     for (const item of cart.items) {
       if (item.itemType === CART_ITEM_TYPE.RESERVATION) {
-        const reservation = await this.createReservationUseCase.execute(authId, {
+        items.push({
           roomId: item.roomId!,
           startDate: item.startDate!,
           endDate: item.endDate!,
           guestCount: item.guestCount!,
         });
-
-        reservationIds.push(reservation.id);
-        totalNights += reservation.nights;
-
-        if (reservationIds.length === 1) {
-          summaryRoomId = item.roomId!;
-          summaryCheckIn = item.startDate!;
-          summaryCheckOut = item.endDate!;
-          summaryGuestCount = item.guestCount!;
-          summaryPricePerNight = item.unitPrice;
-        }
       }
     }
 
+    const reservation = await this.createReservationUseCase.execute(authId, items);
     const amountInCents = Math.round(cart.totalPrice * 100);
 
-    return this.createCartPaymentIntentUseCase.execute({
+    return await this.createCartPaymentIntentUseCase.execute({
       authId,
       cartId: cart.id,
-      reservationIds,
       amountInCents,
       propertyType: PAYMENT_TYPE.RESERVATION,
-      propertyId: reservationIds[0]!,
+      propertyId: reservation.id,
     });
   }
 }

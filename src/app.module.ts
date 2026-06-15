@@ -29,6 +29,7 @@ import { AmenityModule } from './modules/amenity/amenity.module';
 import { AmenityOrmEntity } from './modules/amenity/infrastructure/entities/amenity.orm-entity';
 import { PropertyAmenityOrmEntity } from './modules/amenity/infrastructure/entities/property-amenity.orm-entity';
 import { RoomAmenityOrmEntity } from './modules/amenity/infrastructure/entities/room-amenity.orm-entity';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({

@@ -23,6 +23,7 @@ import type { CreateReservationDto } from '../dto/create-reservation.dto';
 import { ReservationOutput } from '../dto/reservation.output';
 import { CheckRoomAvailabilityService } from '../services/check-room-availability.service';
 import { EnrichReservationOutputsService } from '../services/enrich-reservation-outputs.service';
+import { Room } from 'src/modules/rooms/domain/entities/room.entity';
 
 export type CreateReservationItemInput = {
   roomId: number;
@@ -47,23 +48,9 @@ export class CreateReservationUseCase {
 
   async execute(
     authId: number,
-    dto: CreateReservationDto,
+    dtos: CreateReservationDto[],
   ): Promise<ReservationOutput> {
-    return this.executeWithItems(authId, [
-      {
-        roomId: dto.roomId,
-        checkIn: dto.startDate,
-        checkOut: dto.endDate,
-        guestCount: dto.guestCount,
-      },
-    ]);
-  }
-
-  async executeWithItems(
-    authId: number,
-    itemInputs: CreateReservationItemInput[],
-  ): Promise<ReservationOutput> {
-    if (itemInputs.length === 0) {
+    if (dtos.length === 0) {
       throw new BadRequestException('Au moins un séjour est requis.');
     }
 
@@ -74,40 +61,26 @@ export class CreateReservationUseCase {
 
     const items: ReservationItem[] = [];
 
-    for (const input of itemInputs) {
+    for (const input of dtos) {
       const room = await this.roomRepository.findById(input.roomId);
       if (!room?.id) {
         throw new NotFoundException('Chambre introuvable.');
       }
 
-      if (room.status !== 'available') {
-        throw new BadRequestException('Cette chambre n’est pas disponible.');
-      }
-      
-      if (input.guestCount > room.maxGuests) {
-        throw new BadRequestException(
-          `Cette chambre accepte au maximum ${room.maxGuests} voyageurs.`,
-        );
-      }
-      
+      await this.isRoomAvailable(room, input.guestCount, input.startDate, input.endDate);
+
       const stayAmount = this.calculateStayAmount.execute({
-        checkIn: input.checkIn,
-        checkOut: input.checkOut,
+        checkIn: input.startDate,
+        checkOut: input.endDate,
         pricePerNight: room.pricePerNight,
       });
-      
-      await this.checkRoomAvailability.ensureAvailable(
-        room.id,
-        input.checkIn,
-        input.checkOut,
-      );
       
       items.push(
         new ReservationItem(
           0,
           room.id,
-          input.checkIn,
-          input.checkOut,
+          input.startDate,
+          input.endDate,
           input.guestCount,
           stayAmount.amountInMajorUnit,
           stayAmount.nights,
@@ -124,5 +97,19 @@ export class CreateReservationUseCase {
     ]);
 
     return enriched ?? ReservationOutput.fromDomain(reservation);
+  }
+
+  private async isRoomAvailable(room: Room, guestCount: number, startDate: string, endDate: string): Promise<void> {
+    if (room.status !== 'available') {
+      throw new BadRequestException('Cette chambre n’est pas disponible.');
+    }
+    
+    if (guestCount > room.maxGuests) {
+      throw new BadRequestException(
+        `Cette chambre accepte au maximum ${room.maxGuests} voyageurs.`,
+      );
+    }
+
+    await this.checkRoomAvailability.ensureAvailable(room.id!, startDate, endDate);
   }
 }

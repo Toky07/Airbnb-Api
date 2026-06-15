@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, LessThan, Repository } from 'typeorm';
 import {
@@ -19,6 +19,7 @@ import { ReservationItemMapper } from '../mappers/reservation-item.mapper';
 import { ReservationMapper } from '../mappers/reservation.mapper';
 import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
 import { ReservationStatus } from '../../domain/constants/reservation-status.constant';
+import { type IPaymentRepository, PAYMENT_REPOSITORY } from 'src/modules/payment/domain/repositories/payment.repository';
 
 @Injectable()
 export class ReservationRepository implements IReservationRepository {
@@ -27,6 +28,8 @@ export class ReservationRepository implements IReservationRepository {
     private readonly repository: Repository<ReservationOrmEntity>,
     @InjectRepository(ReservationItemOrmEntity)
     private readonly itemRepository: Repository<ReservationItemOrmEntity>,
+    @Inject(PAYMENT_REPOSITORY)
+    private readonly paymentRepository: IPaymentRepository,
   ) {}
 
   async create(reservation: Reservation): Promise<Reservation> {
@@ -47,6 +50,10 @@ export class ReservationRepository implements IReservationRepository {
     );
 
     return ReservationMapper.toDomain(saved!);
+  }
+
+  async setPayment(reservation: Reservation, paymentId: number): Promise<void> {
+    await this.repository.update(reservation.id!, { payment: { id: paymentId } });
   }
 
   async updateItem(item: ReservationItem): Promise<ReservationItem> {

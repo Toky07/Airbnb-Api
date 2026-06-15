@@ -23,6 +23,7 @@ export type ReservationStatsScope = {
 export interface IReservationRepository {
   create(reservation: Reservation): Promise<Reservation>;
   update(reservation: Reservation): Promise<Reservation>;
+  setPayment(reservation: Reservation, paymentId: number): Promise<void>;
   findById(id: number): Promise<Reservation | null>;
   findItemById(id: number): Promise<ReservationItem | null>;
   findItemsByIds(ids: number[]): Promise<ReservationItem[]>;

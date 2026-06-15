@@ -45,7 +45,7 @@ export class ReservationController {
     @Req() request: { user?: JwtPayload },
     @Body() dto: CreateReservationDto,
   ) {
-    return this.createReservationUseCase.execute(request.user!.sub, dto);
+    return this.createReservationUseCase.execute(request.user!.sub, [dto]);
   }
 
   @Get('me')

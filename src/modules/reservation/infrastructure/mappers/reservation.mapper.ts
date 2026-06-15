@@ -10,7 +10,7 @@ export class ReservationMapper {
       entity.userId,
       (entity.items ?? []).map((item) => ReservationItemMapper.toDomain(item)),
       entity.status as ReservationStatus,
-      PaymentMapper.toDomain(entity.payment),
+      entity?.payment?.id ?? null,
       entity.id,
       entity.createdAt,
       entity.updatedAt,

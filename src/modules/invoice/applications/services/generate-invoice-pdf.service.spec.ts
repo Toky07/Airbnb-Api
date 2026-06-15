@@ -1,8 +1,7 @@
-import { describe, expect, it } from 'vitest';
 import { GenerateInvoicePdfService } from './generate-invoice-pdf.service';
 import { createSampleInvoiceData } from '../useCase/invoice-test.helpers';
 
-describe('GenerateInvoicePdfService', () => {
+describe.only('GenerateInvoicePdfService', () => {
   it('génère un PDF valide avec les informations de facture', async () => {
     const service = new GenerateInvoicePdfService();
     const buffer = await service.execute(createSampleInvoiceData());

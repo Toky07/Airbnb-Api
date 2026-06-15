@@ -57,7 +57,7 @@ export class CancelReservationUseCase {
       throw new NotFoundException('Séjour introuvable.');
     }
 
-    const payment = await this.paymentRepository.findById(reservation.payment?.id ?? 0);
+    const payment = await this.paymentRepository.findById(reservation.paymentId ?? 0);
 
     if (!payment) {
       throw new NotFoundException('Paiement introuvable.');
@@ -81,7 +81,7 @@ export class CancelReservationUseCase {
         reservation.userId,
         reservation.items,
         RESERVATION_STATUS.CANCELLED,
-        payment,
+        payment.id,
         reservation.id,
       ),
     );

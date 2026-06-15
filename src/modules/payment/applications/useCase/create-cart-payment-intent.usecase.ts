@@ -23,11 +23,12 @@ import {
   getStripePublishableKey,
 } from '../../infrastructure/stripe/stripe.config';
 import { PAYMENT_TYPE } from '../../domain/types/payment.type';
+import { EventBus } from 'src/shared/domain/event.bus';
+import { PaymentCreatedEvent } from '../../domain/events/payment-created.event';
 
 export type CreateCartPaymentIntentParams = {
   authId: number;
   cartId: number;
-  reservationIds: number[];
   amountInCents: number;
   propertyType: (typeof PAYMENT_TYPE)[keyof typeof PAYMENT_TYPE];
   propertyId: number;
@@ -64,7 +65,8 @@ export class CreateCartPaymentIntentUseCase {
       metadata: {
         cartId: String(params.cartId),
         userId: String(user.id),
-        reservationIds: JSON.stringify(params.reservationIds),
+        propertyType: params.propertyType,
+        propertyId: String(params.propertyId),
       },
     });
 
@@ -85,6 +87,12 @@ export class CreateCartPaymentIntentUseCase {
         params.cartId,
       ),
     );
+
+    await EventBus.getInstance().publish(new PaymentCreatedEvent(
+      payment.id!,
+      params.propertyType,
+      params.propertyId,
+    ))
 
     return new CreatePaymentIntentOutput(
       payment.id!,
