@@ -3,7 +3,7 @@ import { FinalizeSuccessfulPaymentService } from './finalize-successful-payment.
 import { createSamplePayment } from '../useCase/payment-test.helpers';
 
 describe('FinalizeSuccessfulPaymentService', () => {
-  it('confirme les réservations, vide le panier et envoie les notifications de facture', async () => {
+  it('confirme la réservation, vide le panier et envoie les notifications de facture', async () => {
     const confirmReservationUseCase = {
       execute: vi.fn().mockResolvedValue(undefined),
     };
@@ -20,19 +20,12 @@ describe('FinalizeSuccessfulPaymentService', () => {
       sendPaymentInvoiceNotifications as never,
     );
 
-    const payment = createSamplePayment({
-      reservationId: 12,
-      reservationIds: [12],
-    });
+    const payment = createSamplePayment({ id: 42, propertyId: 12, cartId: 3 });
 
-    await service.execute({
-      ...payment,
-      cartId: 3,
-      reservationIds: [12, 13],
-    } as never);
+    await service.execute(payment);
 
-    expect(confirmReservationUseCase.execute).toHaveBeenCalledTimes(2);
+    expect(confirmReservationUseCase.execute).toHaveBeenCalledWith(12);
     expect(cartRepository.clearItems).toHaveBeenCalledWith(3);
-    expect(sendPaymentInvoiceNotifications.execute).toHaveBeenCalled();
+    expect(sendPaymentInvoiceNotifications.execute).toHaveBeenCalledWith(payment);
   });
 });

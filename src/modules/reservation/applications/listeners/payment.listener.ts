@@ -1,6 +1,6 @@
 import { type IReservationRepository, RESERVATION_REPOSITORY } from "../../domain/repositories/reservation.repository";
 import { Inject } from "@nestjs/common";
-import { EventBus } from "src/shared/domain/event.bus";
+import { EventBus } from '../../../../shared/domain/event.bus';
 
 export class PaymentListener {
     constructor(@Inject(RESERVATION_REPOSITORY) private readonly reservationRepository: IReservationRepository) {}

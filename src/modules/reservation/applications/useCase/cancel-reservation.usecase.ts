@@ -5,14 +5,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import {
-  PROPERTY_REPOSITORY,
-} from '../../../properties/infrastructure/repositories/property.repository';
-import type { IPropertyRepository } from '../../../properties/domain/repositories/property.repository';
-import {
-  ROOM_REPOSITORY,
-  type IRoomRepository,
-} from '../../../rooms/domain/repositories/room.repository';
 import { USER_REPOSITORY } from '../../../user/infrastructure/repositories/user.repository';
 import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
 import { RESERVATION_STATUS } from '../../domain/constants/reservation-status.constant';
@@ -20,11 +12,9 @@ import {
   RESERVATION_REPOSITORY,
   type IReservationRepository,
 } from '../../domain/repositories/reservation.repository';
-import { ReservationItemOutput } from '../dto/reservation-item.output';
-import { EnrichReservationOutputsService } from '../services/enrich-reservation-outputs.service';
 import { Reservation } from '../../domain/entities/reservation.entity';
 import { ReservationOutput } from '../dto/reservation.output';
-import { PAYMENT_REPOSITORY, type IPaymentRepository } from 'src/modules/payment/domain/repositories/payment.repository';
+import { PAYMENT_REPOSITORY, type IPaymentRepository } from '../../../payment/domain/repositories/payment.repository';
 
 export type CancelReservationAccess = {
   authId: number;

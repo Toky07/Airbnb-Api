@@ -16,7 +16,6 @@ import { RequirePermissions } from '../../../authentication/interfaces/decorator
 import { hasPermission } from '../../../authentication/domain/utils/build-jwt-payload';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
 import { CreatePaymentIntentDto } from '../../applications/dto/create-payment-intent.dto';
-import { CreatePaymentIntentUseCase } from '../../applications/useCase/create-payment-intent.usecase';
 import { GetPaymentUseCase } from '../../applications/useCase/get-payment.usecase';
 import { HandleStripeWebhookUseCase } from '../../applications/useCase/handle-stripe-webhook.usecase';
 import { ListPaymentsUseCase } from '../../applications/useCase/list-payments.usecase';
@@ -24,19 +23,10 @@ import { ListPaymentsUseCase } from '../../applications/useCase/list-payments.us
 @Controller('payments')
 export class PaymentController {
   constructor(
-    private readonly createPaymentIntentUseCase: CreatePaymentIntentUseCase,
     private readonly listPaymentsUseCase: ListPaymentsUseCase,
     private readonly getPaymentUseCase: GetPaymentUseCase,
     private readonly handleStripeWebhookUseCase: HandleStripeWebhookUseCase,
   ) {}
-
-  @Post('intents')
-  createIntent(
-    @Req() request: { user?: JwtPayload },
-    @Body() dto: CreatePaymentIntentDto,
-  ) {
-    return this.createPaymentIntentUseCase.execute(request.user!.sub, dto);
-  }
 
   @Get()
   @RequirePermissions('payments.read')

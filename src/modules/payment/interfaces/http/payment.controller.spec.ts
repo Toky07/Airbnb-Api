@@ -19,12 +19,12 @@ import {
   registerAndLoginAsSuperAdmin,
 } from '../../../../test/controller-test.helpers';
 import { createPaymentGatewayMock } from '../../applications/useCase/payment-test.helpers';
+import { ReservationOrmEntity } from '../../../reservation/infrastructure/entities/reservation.orm-entity';
 
 describe('PaymentController', () => {
   let app: INestApplication;
   let dataSource: DataSource;
   let token: string;
-  let roomId: number;
   let paymentGateway = createPaymentGatewayMock();
 
   beforeAll(async () => {
@@ -41,13 +41,13 @@ describe('PaymentController', () => {
           entities: [
             ...AUTH_TEST_ENTITIES,
             ...DOMAIN_TEST_ENTITIES,
+            ReservationOrmEntity,
             PaymentOrmEntity,
           ],
           synchronize: true,
         }),
         JwtModule.register({
           global: true,
-          secret: '1234',
           secret: '1234',
           signOptions: { expiresIn: '5h' },
         }),
@@ -95,36 +95,20 @@ describe('PaymentController', () => {
       propertyId: property.id,
     });
 
-    roomId = room.id;
+    await dataSource.getRepository(PaymentOrmEntity).save({
+      amount: 20000,
+      currency: 'eur',
+      status: 'pending',
+      provider: 'stripe',
+      transactionId: 'pi_test_123',
+      userId: 1,
+      propertyType: 'order',
+      propertyId: 1,
+    });
   });
 
   afterAll(async () => {
     await app.close();
-  });
-
-  it('POST /payments/intents crée un payment intent', async () => {
-    const response = await request(app.getHttpServer())
-      .post('/payments/intents')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        roomId,
-        checkIn: '2026-08-01',
-        checkOut: '2026-08-03',
-        guestCount: 2,
-      })
-      .expect(201);
-
-    expect(response.body).toEqual(
-      expect.objectContaining({
-        paymentId: expect.any(Number),
-        clientSecret: 'pi_test_123_secret',
-        amount: 20000,
-        currency: 'eur',
-        publishableKey: 'pk_test_controller',
-        nights: 2,
-        pricePerNight: 100,
-      }),
-    );
   });
 
   it('GET /payments retourne la liste paginée pour un admin', async () => {

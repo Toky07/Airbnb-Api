@@ -23,7 +23,7 @@ import type { CreateReservationDto } from '../dto/create-reservation.dto';
 import { ReservationOutput } from '../dto/reservation.output';
 import { CheckRoomAvailabilityService } from '../services/check-room-availability.service';
 import { EnrichReservationOutputsService } from '../services/enrich-reservation-outputs.service';
-import { Room } from 'src/modules/rooms/domain/entities/room.entity';
+import { Room } from '../../../rooms/domain/entities/room.entity';
 
 export type CreateReservationItemInput = {
   roomId: number;

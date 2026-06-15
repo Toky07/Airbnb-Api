@@ -23,7 +23,7 @@ import {
   getStripePublishableKey,
 } from '../../infrastructure/stripe/stripe.config';
 import { PAYMENT_TYPE } from '../../domain/types/payment.type';
-import { EventBus } from 'src/shared/domain/event.bus';
+import { EventBus } from '../../../../shared/domain/event.bus';
 import { PaymentCreatedEvent } from '../../domain/events/payment-created.event';
 
 export type CreateCartPaymentIntentParams = {

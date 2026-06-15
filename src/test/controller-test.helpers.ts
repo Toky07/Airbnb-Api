@@ -20,6 +20,7 @@ import { ReservationItemOrmEntity } from '../modules/reservation/infrastructure/
 import { AmenityOrmEntity } from '../modules/amenity/infrastructure/entities/amenity.orm-entity';
 import { PropertyAmenityOrmEntity } from '../modules/amenity/infrastructure/entities/property-amenity.orm-entity';
 import { RoomAmenityOrmEntity } from '../modules/amenity/infrastructure/entities/room-amenity.orm-entity';
+import { PaymentOrmEntity } from '../modules/payment/infrastructure/entities/payment.orm-entity';
 
 export type RegisterPayload = {
   email: string;
@@ -54,6 +55,7 @@ export const DOMAIN_TEST_ENTITIES = [
   EmailOrmEntity,
   ReservationOrmEntity,
   ReservationItemOrmEntity,
+  PaymentOrmEntity,
   AmenityOrmEntity,
   PropertyAmenityOrmEntity,
   RoomAmenityOrmEntity,

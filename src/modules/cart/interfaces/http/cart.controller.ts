@@ -18,7 +18,6 @@ import {
 import { AddCartItemUseCase } from '../../applications/useCase/add-cart-item.usecase';
 import { CheckoutCartUseCase } from '../../applications/useCase/checkout-cart.usecase';
 import { CompleteCartCheckoutUseCase } from '../../applications/useCase/complete-cart-checkout.usecase';
-import { ClearCartUseCase } from '../../applications/useCase/clear-cart.usecase';
 import { GetCartUseCase } from '../../applications/useCase/get-cart.usecase';
 import { MergeCartUseCase } from '../../applications/useCase/merge-cart.usecase';
 import { RemoveCartItemUseCase } from '../../applications/useCase/remove-cart-item.usecase';
@@ -32,7 +31,6 @@ export class CartController {
     private readonly addCartItemUseCase: AddCartItemUseCase,
     private readonly updateCartItemUseCase: UpdateCartItemUseCase,
     private readonly removeCartItemUseCase: RemoveCartItemUseCase,
-    private readonly clearCartUseCase: ClearCartUseCase,
     private readonly mergeCartUseCase: MergeCartUseCase,
     private readonly checkoutCartUseCase: CheckoutCartUseCase,
     private readonly completeCartCheckoutUseCase: CompleteCartCheckoutUseCase,
@@ -95,18 +93,6 @@ export class CartController {
       parseCartContext(request),
       Number(id),
     );
-  }
-
-  @Delete()
-  @Public()
-  clear(
-    @Req()
-    request: {
-      user?: JwtPayload;
-      headers: Record<string, string | string[] | undefined>;
-    },
-  ) {
-    return this.clearCartUseCase.execute(parseCartContext(request));
   }
 
   @Post('merge')

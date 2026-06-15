@@ -7,14 +7,7 @@ import { UserEntity } from '../../infrastructure/entities/user.entity';
 import { DataSource } from 'typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthEntity } from '../../../authentication/infrastructure/entity/auth.entity';
-import { Auth } from '../../../authentication/domain/entities/user.entity';
-import { EmailVO } from '../../../../shared/valueObject/email.vo';
-import * as bcrypt from 'bcrypt';
 import { AuthModule } from '../../../authentication/auth.module';
-import { AuthMapper } from '../../../authentication/infrastructure/mappers/auth.mappers';
-import { Role } from '../../../authentication/infrastructure/entity/role.entity';
-import { PermissionEntity } from '../../../authentication/infrastructure/entity/permission.entity';
-import { MediaOrmEntity } from '../../../media/infrastructure/entities/media-orm.entity';
 import { rm } from 'fs/promises';
 import {
   AUTH_TEST_ENTITIES,
@@ -40,7 +33,6 @@ describe('UserController', () => {
         }),
         JwtModule.register({
           global: true,
-          secret: '1234',
           secret: '1234',
           signOptions: { expiresIn: '5h' },
         }),

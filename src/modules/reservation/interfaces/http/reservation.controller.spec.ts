@@ -18,6 +18,7 @@ import {
   registerAndLoginAsSuperAdmin,
 } from '../../../../test/controller-test.helpers';
 import { ReservationOrmEntity } from '../../infrastructure/entities/reservation.orm-entity';
+import { PaymentOrmEntity } from '../../../payment/infrastructure/entities/payment.orm-entity';
 
 describe('ReservationController', () => {
   let app: INestApplication;
@@ -33,7 +34,7 @@ describe('ReservationController', () => {
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [...AUTH_TEST_ENTITIES, ...DOMAIN_TEST_ENTITIES],
+          entities: [...AUTH_TEST_ENTITIES, ...DOMAIN_TEST_ENTITIES, ReservationOrmEntity, PaymentOrmEntity],
           synchronize: true,
         }),
         JwtModule.register({
@@ -122,21 +123,22 @@ describe('ReservationController', () => {
     );
   });
 
-  it.only('GET /reservations/stats retourne les stats de réservation', async () => {
+  it('GET /reservations/stats retourne les stats de réservation', async () => {
     const response = await request(app.getHttpServer())
       .get('/reservations/stats')
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    expect(response.body).toEqual(expect.objectContaining({
-      canReadAll: true,
-      canReadHost: true,
-      stats: expect.objectContaining({
-        totalReservations: expect.any(Number),
-        totalRevenue: expect.any(Number),
-        totalNights: expect.any(Number),
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        activeCount: expect.any(Number),
+        pendingCount: expect.any(Number),
+        monthlyRevenue: expect.any(Number),
+        occupancyRate: expect.any(Number),
+        totalCount: expect.any(Number),
+        recentActivity: expect.any(Array),
       }),
-    }));
+    );
   });
 
   it('GET /reservations retourne la liste admin', async () => {
@@ -194,13 +196,31 @@ describe('ReservationController', () => {
   });
 
   it('POST /reservations/cancel/:id annule une réservation', async () => {
+    const payment = await dataSource.getRepository(PaymentOrmEntity).save({
+      amount: 20000,
+      currency: 'eur',
+      status: 'succeeded',
+      provider: 'stripe',
+      transactionId: 'pi_cancel_test',
+      userId: 1,
+      propertyType: 'reservation',
+      propertyId: 1,
+    });
+
     const reservation = await dataSource.getRepository(ReservationOrmEntity).save({
-      roomId,
-      startDate: '2026-10-01',
-      endDate: '2026-10-03',
-      guestCount: 2,
       userId: 1,
       status: RESERVATION_STATUS.CONFIRMED,
+      payment,
+      items: [
+        {
+          roomId,
+          checkIn: '2026-10-01',
+          checkOut: '2026-10-03',
+          guestCount: 2,
+          price: 200,
+          nights: 2,
+        },
+      ],
     });
 
     const response = await request(app.getHttpServer())
@@ -208,8 +228,10 @@ describe('ReservationController', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    expect(response.body).toEqual(expect.objectContaining({
-      status: RESERVATION_STATUS.CANCELLED,
-    }));
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        status: RESERVATION_STATUS.CANCELLED,
+      }),
+    );
   });
 });

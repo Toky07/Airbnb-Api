@@ -2,7 +2,6 @@ import { Reservation } from '../../domain/entities/reservation.entity';
 import { ReservationOrmEntity } from '../entities/reservation.orm-entity';
 import { ReservationItemMapper } from './reservation-item.mapper';
 import type { ReservationStatus } from '../../domain/constants/reservation-status.constant';
-import { PaymentMapper } from 'src/modules/payment/infrastructure/mappers/payment.mapper';
 
 export class ReservationMapper {
   static toDomain(entity: ReservationOrmEntity): Reservation {

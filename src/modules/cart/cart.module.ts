@@ -11,7 +11,6 @@ import { CartPresenter } from './applications/presenters/cart.presenter';
 import { AddCartItemUseCase } from './applications/useCase/add-cart-item.usecase';
 import { CheckoutCartUseCase } from './applications/useCase/checkout-cart.usecase';
 import { CompleteCartCheckoutUseCase } from './applications/useCase/complete-cart-checkout.usecase';
-import { ClearCartUseCase } from './applications/useCase/clear-cart.usecase';
 import { GetCartUseCase } from './applications/useCase/get-cart.usecase';
 import { MergeCartUseCase } from './applications/useCase/merge-cart.usecase';
 import { RemoveCartItemUseCase } from './applications/useCase/remove-cart-item.usecase';
@@ -45,7 +44,6 @@ import { CartController } from './interfaces/http/cart.controller';
     AddCartItemUseCase,
     UpdateCartItemUseCase,
     RemoveCartItemUseCase,
-    ClearCartUseCase,
     MergeCartUseCase,
     CheckoutCartUseCase,
     CompleteCartCheckoutUseCase,

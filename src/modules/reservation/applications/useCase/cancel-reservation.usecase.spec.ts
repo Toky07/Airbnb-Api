@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
+import { createPaymentRepositoryMock, createSamplePayment } from '../../../payment/applications/useCase/payment-test.helpers';
 import { UserNameVO } from '../../../user/domain/valueObject/username.vo';
 import { EmailVO } from '../../../../shared/valueObject/email.vo';
 import { PhoneNumberVO } from '../../../../shared/valueObject/phone.vo';
@@ -13,11 +14,9 @@ import {
   createSampleReservationItem,
 } from './reservation-test.helpers';
 
-function createEnrichMock() {
-  return {
-    enrichItems: vi.fn().mockImplementation(async (items: unknown[]) => items),
-  };
-}
+const paymentRepository = createPaymentRepositoryMock({
+  findById: vi.fn().mockResolvedValue(createSamplePayment({ id: 1 })),
+});
 
 describe('CancelReservationUseCase', () => {
   it('annule une réservation pour son propriétaire', async () => {
@@ -25,7 +24,6 @@ describe('CancelReservationUseCase', () => {
     const reservation = createSampleReservation({ id: 1, userId: 5, items: [item] });
     const repository = createReservationRepositoryMock({
       update: vi.fn().mockImplementation(async (updated) => updated),
-      findItemById: vi.fn().mockResolvedValue(item),
       findById: vi.fn().mockResolvedValue(reservation),
     });
     const user = new User(
@@ -40,9 +38,10 @@ describe('CancelReservationUseCase', () => {
     const useCase = new CancelReservationUseCase(
       repository,
       { findByAuthId: vi.fn().mockResolvedValue(user) } as unknown as IUserRepository,
+      paymentRepository,
     );
 
-    const result = await useCase.execute(3, {
+    const result = await useCase.execute(1, {
       authId: 1,
       canCancelAll: false,
       canCancelHost: false,
@@ -52,17 +51,22 @@ describe('CancelReservationUseCase', () => {
   });
 
   it('rejette si la réservation est déjà annulée', async () => {
-    const reservation = createSampleReservation({ id: 1, userId: 5, status: RESERVATION_STATUS.CANCELLED });
+    const reservation = createSampleReservation({
+      id: 1,
+      userId: 5,
+      status: RESERVATION_STATUS.CANCELLED,
+    });
 
     const useCase = new CancelReservationUseCase(
       createReservationRepositoryMock({
         findById: vi.fn().mockResolvedValue(reservation),
       }),
       { findByAuthId: vi.fn().mockResolvedValue(null) } as unknown as IUserRepository,
+      paymentRepository,
     );
 
     await expect(
-      useCase.execute(3, {
+      useCase.execute(1, {
         authId: 1,
         canCancelAll: false,
         canCancelHost: false,
@@ -84,17 +88,14 @@ describe('CancelReservationUseCase', () => {
 
     const useCase = new CancelReservationUseCase(
       createReservationRepositoryMock({
-        findItemById: vi.fn().mockResolvedValue(item),
         findById: vi.fn().mockResolvedValue(reservation),
       }),
       { findByAuthId: vi.fn().mockResolvedValue(user) } as unknown as IUserRepository,
-      { findById: vi.fn() } as never,
-      { findAllByOwnerId: vi.fn() } as never,
-      createEnrichMock() as never,
+      paymentRepository,
     );
 
     await expect(
-      useCase.execute(3, {
+      useCase.execute(1, {
         authId: 2,
         canCancelAll: false,
         canCancelHost: false,

@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { ReservationItemOrmEntity } from './reservation-item.orm-entity';
 import { RESERVATION_STATUS } from '../../domain/constants/reservation-status.constant';
-import { PaymentOrmEntity } from 'src/modules/payment/infrastructure/entities/payment.orm-entity';
+import { PaymentOrmEntity } from '../../../payment/infrastructure/entities/payment.orm-entity';
 
 @Entity({ name: 'reservations' })
 export class ReservationOrmEntity {

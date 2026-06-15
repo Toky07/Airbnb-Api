@@ -3,8 +3,7 @@ import { RESERVATION_STATUS } from '../../domain/constants/reservation-status.co
 import { ReservationItem } from '../../domain/entities/reservation-item.entity';
 import { Reservation } from '../../domain/entities/reservation.entity';
 import type { IReservationRepository } from '../../domain/repositories/reservation.repository';
-import { Payment } from 'src/modules/payment/domain/entities/payment.entity';
-import { createSamplePaymentForInvoice } from 'src/modules/invoice/applications/useCase/invoice-test.helpers';
+import { Payment } from '../../../payment/domain/entities/payment.entity';
 
 export function createSampleReservationItem(
   overrides: Partial<{

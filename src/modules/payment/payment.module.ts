@@ -9,7 +9,6 @@ import { UserModule } from '../user/user.module';
 import { MapStripeStatusService } from './applications/services/map-stripe-status.service';
 import { FinalizeSuccessfulPaymentService } from './applications/services/finalize-successful-payment.service';
 import { CreateCartPaymentIntentUseCase } from './applications/useCase/create-cart-payment-intent.usecase';
-import { CreatePaymentIntentUseCase } from './applications/useCase/create-payment-intent.usecase';
 import { GetPaymentUseCase } from './applications/useCase/get-payment.usecase';
 import { HandleStripeWebhookUseCase } from './applications/useCase/handle-stripe-webhook.usecase';
 import { ListPaymentsUseCase } from './applications/useCase/list-payments.usecase';
@@ -43,7 +42,6 @@ import { PaymentController } from './interfaces/http/payment.controller';
     },
     MapStripeStatusService,
     FinalizeSuccessfulPaymentService,
-    CreatePaymentIntentUseCase,
     CreateCartPaymentIntentUseCase,
     ListPaymentsUseCase,
     GetPaymentUseCase,
@@ -54,7 +52,6 @@ import { PaymentController } from './interfaces/http/payment.controller';
     PAYMENT_GATEWAY,
     MapStripeStatusService,
     FinalizeSuccessfulPaymentService,
-    CreatePaymentIntentUseCase,
     CreateCartPaymentIntentUseCase,
   ],
 })

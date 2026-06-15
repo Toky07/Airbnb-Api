@@ -19,7 +19,7 @@ import { ReservationItemMapper } from '../mappers/reservation-item.mapper';
 import { ReservationMapper } from '../mappers/reservation.mapper';
 import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
 import { ReservationStatus } from '../../domain/constants/reservation-status.constant';
-import { type IPaymentRepository, PAYMENT_REPOSITORY } from 'src/modules/payment/domain/repositories/payment.repository';
+import { type IPaymentRepository, PAYMENT_REPOSITORY } from '../../../payment/domain/repositories/payment.repository';
 
 @Injectable()
 export class ReservationRepository implements IReservationRepository {
@@ -70,7 +70,7 @@ export class ReservationRepository implements IReservationRepository {
 
     const entity = await this.repository.findOne({
       where: { id },
-      relations: ['items'],
+      relations: ['items', 'payment'],
     });
     return entity ? ReservationMapper.toDomain(entity) : null;
   }

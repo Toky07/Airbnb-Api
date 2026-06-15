@@ -24,10 +24,13 @@ import {
   ResolveCartService,
   type CartRequestContext,
 } from '../services/resolve-cart.service';
+import { CART_REPOSITORY, type ICartRepository } from '../../domain/repositories/cart.repository';
 
 @Injectable()
 export class CompleteCartCheckoutUseCase {
   constructor(
+    @Inject(CART_REPOSITORY)
+    private readonly cartRepository: ICartRepository,
     @Inject(PAYMENT_REPOSITORY)
     private readonly paymentRepository: IPaymentRepository,
     @Inject(PAYMENT_GATEWAY)
@@ -62,7 +65,7 @@ export class CompleteCartCheckoutUseCase {
       throw new BadRequestException('Ce paiement ne correspond pas à un panier.');
     }
 
-    let currentPayment = payment;
+    const currentPayment = payment;
 
     if (currentPayment.status !== PAYMENT_STATUS.SUCCEEDED) {
       const stripeIntent = await this.paymentGateway.retrievePaymentIntent(
@@ -76,7 +79,7 @@ export class CompleteCartCheckoutUseCase {
         throw new BadRequestException('Le paiement n’est pas encore confirmé.');
       }
 
-      currentPayment = await this.paymentRepository.update(
+      await this.paymentRepository.update(
         new Payment(
           payment.amount,
           payment.currency,
@@ -95,6 +98,8 @@ export class CompleteCartCheckoutUseCase {
         ),
       );
     }
+
+    await this.cartRepository.clearItems(payment.cartId);
 
     const cart = await this.resolveCartService.resolve({
       ...context,

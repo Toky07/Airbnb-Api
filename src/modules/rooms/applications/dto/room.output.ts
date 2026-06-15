@@ -1,4 +1,4 @@
-import { Property } from "src/modules/properties/domain/entities/property.entity";
+import { Property } from "../../../properties/domain/entities/property.entity";
 import type { AmenityOutput } from "../../../amenity/applications/dto/amenity.output";
 import type { CategorySummary } from "../../../../shared/types/category-summary";
 import { Room } from "../../domain/entities/room.entity";

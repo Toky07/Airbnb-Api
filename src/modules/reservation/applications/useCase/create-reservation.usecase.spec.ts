@@ -74,12 +74,14 @@ describe('CreateReservationUseCase', () => {
       createEnrichMock() as never,
     );
 
-    const result = await useCase.execute(1, {
-      roomId: 10,
-      startDate: '2026-07-01',
-      endDate: '2026-07-03',
-      guestCount: 2,
-    });
+    const result = await useCase.execute(1, [
+      {
+        roomId: 10,
+        startDate: '2026-07-01',
+        endDate: '2026-07-03',
+        guestCount: 2,
+      },
+    ]);
 
     expect(result.status).toBe(RESERVATION_STATUS.PENDING);
     expect(result.items[0]?.price).toBe(240);
@@ -103,12 +105,14 @@ describe('CreateReservationUseCase', () => {
     );
 
     await expect(
-      useCase.execute(1, {
-        roomId: 10,
-        startDate: '2026-07-01',
-        endDate: '2026-07-03',
-        guestCount: 2,
-      }),
+      useCase.execute(1, [
+        {
+          roomId: 10,
+          startDate: '2026-07-01',
+          endDate: '2026-07-03',
+          guestCount: 2,
+        },
+      ]),
     ).rejects.toBeInstanceOf(BadRequestException);
   });
 
@@ -123,12 +127,14 @@ describe('CreateReservationUseCase', () => {
     );
 
     await expect(
-      useCase.execute(1, {
-        roomId: 10,
-        startDate: '2026-07-01',
-        endDate: '2026-07-03',
-        guestCount: 2,
-      }),
+      useCase.execute(1, [
+        {
+          roomId: 10,
+          startDate: '2026-07-01',
+          endDate: '2026-07-03',
+          guestCount: 2,
+        },
+      ]),
     ).rejects.toBeInstanceOf(UnauthorizedException);
   });
 
@@ -143,12 +149,14 @@ describe('CreateReservationUseCase', () => {
     );
 
     await expect(
-      useCase.execute(1, {
-        roomId: 99,
-        startDate: '2026-07-01',
-        endDate: '2026-07-03',
-        guestCount: 2,
-      }),
+      useCase.execute(1, [
+        {
+          roomId: 99,
+          startDate: '2026-07-01',
+          endDate: '2026-07-03',
+          guestCount: 2,
+        },
+      ]),
     ).rejects.toBeInstanceOf(NotFoundException);
   });
 });

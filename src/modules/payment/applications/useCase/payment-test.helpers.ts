@@ -11,7 +11,8 @@ export function createSamplePayment(overrides: Partial<{
   transactionId: string;
   userId: number;
   status: (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS];
-  reservationId: number | null;
+  propertyId: number;
+  cartId: number | null;
 }> = {}): Payment {
   return new Payment(
     20000,
@@ -21,8 +22,8 @@ export function createSamplePayment(overrides: Partial<{
     overrides.transactionId ?? 'pi_test_123',
     overrides.userId ?? 1,
     PAYMENT_TYPE.RESERVATION,
-    1,
-    null,
+    overrides.propertyId ?? 1,
+    overrides.cartId ?? null,
     null,
     overrides.id ?? 1,
     new Date('2026-06-01T10:00:00.000Z'),

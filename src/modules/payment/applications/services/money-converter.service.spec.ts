@@ -1,8 +1,8 @@
-import { AmountConverterService } from "./amount-converter.service";
+import { MoneyConverterService } from "./money-converter.service";
 
 describe('AmountConverterService', () => {
     it('should convert an amount to a formatted string', () => {
-        const formattedAmount = AmountConverterService.convert(1000);
+        const formattedAmount = MoneyConverterService.convert(1000);
         expect(formattedAmount).toBe('10.00');
     });
 });

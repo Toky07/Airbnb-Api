@@ -1,4 +1,4 @@
-import { Room } from 'src/modules/rooms/domain/entities/room.entity';
+import { Room } from '../../../rooms/domain/entities/room.entity';
 import { CreatePropertyDto } from '../../applications/dto/createProperty.dto';
 import type { CategorySummary } from '../../../../shared/types/category-summary';
 import { Property } from '../../domain/entities/property.entity';

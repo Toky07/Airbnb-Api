@@ -1,4 +1,4 @@
-import { PAYMENT_TYPE } from 'src/modules/payment/domain/types/payment.type';
+import { PAYMENT_TYPE } from '../../../payment/domain/types/payment.type';
 import type { PaymentStatus } from '../../../payment/domain/constants/payment-status.constant';
 import type { Payment } from '../../../payment/domain/entities/payment.entity';
 import type { User } from '../../../user/domain/entities/user.entity';

@@ -2,13 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PAYMENT_TYPE, type PaymentType } from '../../domain/types/payment.type';
-import { ReservationOrmEntity } from 'src/modules/reservation/infrastructure/entities/reservation.orm-entity';
+import { ReservationOrmEntity } from '../../../reservation/infrastructure/entities/reservation.orm-entity';
 
 @Entity({ name: 'payments' })
 export class PaymentOrmEntity {

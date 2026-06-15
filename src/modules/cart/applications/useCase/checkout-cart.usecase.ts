@@ -11,10 +11,8 @@ import {
   ResolveCartService,
   type CartRequestContext,
 } from '../services/resolve-cart.service';
-import { PAYMENT_TYPE } from 'src/modules/payment/domain/types/payment.type';
-import { CreateReservationDto } from 'src/modules/reservation/applications/dto/create-reservation.dto';
-import { Reservation } from 'src/modules/reservation/domain/entities/reservation.entity';
-import { ReservationItem } from 'src/modules/reservation/domain/entities/reservation-item.entity';
+import { PAYMENT_TYPE } from '../../../payment/domain/types/payment.type';
+import { CreateReservationDto } from '../../../reservation/applications/dto/create-reservation.dto';
 
 @Injectable()
 export class CheckoutCartUseCase {
