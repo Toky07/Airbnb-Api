@@ -13,6 +13,7 @@ import {
 } from '../services/resolve-cart.service';
 import { PAYMENT_TYPE } from '../../../payment/domain/types/payment.type';
 import { CreateReservationDto } from '../../../reservation/applications/dto/create-reservation.dto';
+import { CartItem } from '../../domain/entities/cart-item.entity';
 
 @Injectable()
 export class CheckoutCartUseCase {
@@ -42,12 +43,7 @@ export class CheckoutCartUseCase {
     const items: CreateReservationDto[] = [];
     for (const item of cart.items) {
       if (item.itemType === CART_ITEM_TYPE.RESERVATION) {
-        items.push({
-          roomId: item.roomId!,
-          startDate: item.startDate!,
-          endDate: item.endDate!,
-          guestCount: item.guestCount!,
-        });
+        items.push(this.buildReservationItem(item));
       }
     }
 
@@ -61,5 +57,14 @@ export class CheckoutCartUseCase {
       propertyType: PAYMENT_TYPE.RESERVATION,
       propertyId: reservation.id,
     });
+  }
+
+  private buildReservationItem(item: CartItem) {
+    return {
+      roomId: item.roomId!,
+      startDate: item.startDate!,
+      endDate: item.endDate!,
+      guestCount: item.guestCount!,
+    };
   }
 }

@@ -1,7 +1,4 @@
-import { Inject } from '@nestjs/common';
-import { RESERVATION_REPOSITORY } from '../../domain/repositories/reservation.repository';
 import type { IReservationRepository } from '../../domain/repositories/reservation.repository';
-import type { IPaymentRepository } from '../../../payment/domain/repositories/payment.repository';
 import { EventBus } from '../../../../shared/domain/event.bus';
 import { ConfirmReservationUseCase } from '../useCase/confirm-reservation.usecase';
 import type { BuildReservationInvoicePayloadService } from '../services/build-reservation-invoice-payload.service';
@@ -11,7 +8,6 @@ export class PaymentConfirmedListener {
 
   constructor(
     private readonly reservationRepository: IReservationRepository,
-    private readonly paymentRepository: IPaymentRepository,
     private readonly buildReservationInvoicePayload: BuildReservationInvoicePayloadService,
   ) {
     this.confirmReservationUseCase = new ConfirmReservationUseCase(

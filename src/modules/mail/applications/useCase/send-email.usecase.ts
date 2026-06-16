@@ -55,25 +55,8 @@ export class SendEmailUseCase {
     );
 
     if (attachments.length) {
-      email = await this.repository.update(
-        new Email(
-          email.to,
-          email.subject,
-          email.body,
-          email.status,
-          email.cc,
-          email.bcc,
-          email.isHtml,
-          email.sourceModule,
-          email.sentByAuthId,
-          email.errorMessage,
-          email.sentAt,
-          attachments,
-          email.id,
-          email.createdAt,
-          email.updatedAt,
-        ),
-      );
+      email.attachments = attachments;
+      email = await this.repository.update(email);
     }
 
     email = await deliverEmail(this.repository, this.transport, email);

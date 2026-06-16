@@ -33,7 +33,6 @@ export class ReservationEvent implements OnModuleInit {
     const paymentListener = new PaymentListener(this.repository);
     const paymentConfirmedListener = new PaymentConfirmedListener(
       this.repository,
-      this.paymentRepository,
       this.buildReservationInvoicePayload,
     );
     const invoiceCreatedListener = new InvoiceCreatedListener(

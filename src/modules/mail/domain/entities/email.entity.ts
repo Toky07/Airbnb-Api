@@ -14,7 +14,7 @@ export class Email {
     public readonly sentByAuthId: number | null = null,
     public readonly errorMessage: string | null = null,
     public readonly sentAt: Date | null = null,
-    public readonly attachments: EmailAttachment[] = [],
+    public attachments: EmailAttachment[] = [],
     public readonly id?: number,
     public readonly createdAt?: Date,
     public readonly updatedAt?: Date,

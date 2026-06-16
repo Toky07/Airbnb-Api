@@ -19,6 +19,7 @@ import {
   buildInvoiceNumber,
   formatInvoiceDate,
 } from '../utils/format-invoice.util';
+import { ReservationItemOutput } from '../dto/reservation-item.output';
 
 @Injectable()
 export class BuildReservationInvoicePayloadService {
@@ -39,42 +40,12 @@ export class BuildReservationInvoicePayloadService {
       this.resolvePaymentReservations.resolveForPayment(payment),
       this.userRepository.findById(payment.userId),
     ]);
+    
+    if (!customer) return null;
 
-    if (items.length === 0 || !customer) {
-      return null;
-    }
+    const lineItems = await this.buildLineItems(items);
 
-    const lineItems: ReservationInvoiceLineItem[] = [];
-
-    for (const item of items) {
-      const room = await this.roomRepository.findById(item.roomId);
-      if (!room) {
-        continue;
-      }
-
-      const unitPrice =
-        item.nights > 0
-          ? Math.round((item.price / item.nights) * 100) / 100
-          : item.price;
-
-      lineItems.push({
-        reservationId: item.id,
-        roomName: item.roomName ?? room.name,
-        propertyName: item.propertyName ?? room.property.name,
-        propertyCity: item.propertyCity ?? room.property.city,
-        propertyAddress: room.property.address,
-        propertyCountry: room.property.country,
-        startDate: item.startDate,
-        endDate: item.endDate,
-        guestCount: item.guestCount,
-        nights: item.nights,
-        unitPrice,
-        totalPrice: item.price,
-        propertyOwnerId: room.property.ownerId,
-      });
-    }
-
-    if (lineItems.length === 0) {
+    if (!lineItems) {
       return null;
     }
 
@@ -166,5 +137,43 @@ export class BuildReservationInvoicePayloadService {
     }
 
     return groups;
+  }
+
+  private async buildLineItems(items: ReservationItemOutput[]): Promise<ReservationInvoiceLineItem[] | null> {
+    if (items.length === 0) {
+      return null;
+    }
+
+    const lineItems: ReservationInvoiceLineItem[] = [];
+
+    for (const item of items) {
+      const room = await this.roomRepository.findById(item.roomId);
+      if (!room) {
+        continue;
+      }
+
+      const unitPrice =
+        item.nights > 0
+          ? Math.round((item.price / item.nights) * 100) / 100
+          : item.price;
+
+      lineItems.push({
+        reservationId: item.id,
+        roomName: item.roomName ?? room.name,
+        propertyName: item.propertyName ?? room.property.name,
+        propertyCity: item.propertyCity ?? room.property.city,
+        propertyAddress: room.property.address,
+        propertyCountry: room.property.country,
+        startDate: item.startDate,
+        endDate: item.endDate,
+        guestCount: item.guestCount,
+        nights: item.nights,
+        unitPrice,
+        totalPrice: item.price,
+        propertyOwnerId: room.property.ownerId,
+      });
+    }
+
+    return lineItems;
   }
 }
