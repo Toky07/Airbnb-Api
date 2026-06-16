@@ -17,6 +17,8 @@ import {
 import { PaymentOutput } from '../dto/payment.output';
 import { FinalizeSuccessfulPaymentService } from '../services/finalize-successful-payment.service';
 import { MapStripeStatusService } from '../services/map-stripe-status.service';
+import { EventBus } from '../../../../shared/domain/event.bus';
+import { PaymentConfirmedEvent } from '../../domain/events/payment-confirmed.event';
 
 @Injectable()
 export class HandleStripeWebhookUseCase {
@@ -26,7 +28,6 @@ export class HandleStripeWebhookUseCase {
     @Inject(PAYMENT_GATEWAY)
     private readonly paymentGateway: IPaymentGateway,
     private readonly mapStripeStatus: MapStripeStatusService,
-    private readonly finalizeSuccessfulPayment: FinalizeSuccessfulPaymentService,
   ) {}
 
   async execute(payload: Buffer, signature: string): Promise<PaymentOutput> {
@@ -71,8 +72,10 @@ export class HandleStripeWebhookUseCase {
       ),
     );
 
-    if (status === PAYMENT_STATUS.SUCCEEDED) {
-      await this.finalizeSuccessfulPayment.execute(updated);
+    if (status === PAYMENT_STATUS.SUCCEEDED && updated.id) {
+      await EventBus.getInstance().publish(
+        new PaymentConfirmedEvent(updated.id),
+      );
     }
 
     return PaymentOutput.fromDomain(updated);

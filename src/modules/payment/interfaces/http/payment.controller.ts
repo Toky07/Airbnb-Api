@@ -15,7 +15,6 @@ import { Public } from '../../../authentication/interfaces/decorators/public.dec
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
 import { hasPermission } from '../../../authentication/domain/utils/build-jwt-payload';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
-import { CreatePaymentIntentDto } from '../../applications/dto/create-payment-intent.dto';
 import { GetPaymentUseCase } from '../../applications/useCase/get-payment.usecase';
 import { HandleStripeWebhookUseCase } from '../../applications/useCase/handle-stripe-webhook.usecase';
 import { ListPaymentsUseCase } from '../../applications/useCase/list-payments.usecase';

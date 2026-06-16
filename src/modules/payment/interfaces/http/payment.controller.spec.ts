@@ -19,12 +19,14 @@ import {
   registerAndLoginAsSuperAdmin,
 } from '../../../../test/controller-test.helpers';
 import { createPaymentGatewayMock } from '../../applications/useCase/payment-test.helpers';
+import { RESERVATION_STATUS } from '../../../reservation/domain/constants/reservation-status.constant';
 import { ReservationOrmEntity } from '../../../reservation/infrastructure/entities/reservation.orm-entity';
 
 describe('PaymentController', () => {
   let app: INestApplication;
   let dataSource: DataSource;
   let token: string;
+  let roomId: number;
   let paymentGateway = createPaymentGatewayMock();
 
   beforeAll(async () => {
@@ -94,6 +96,7 @@ describe('PaymentController', () => {
       status: 'available',
       propertyId: property.id,
     });
+    roomId = room.id;
 
     await dataSource.getRepository(PaymentOrmEntity).save({
       amount: 20000,
@@ -158,6 +161,26 @@ describe('PaymentController', () => {
     const payment = await dataSource.getRepository(PaymentOrmEntity).findOne({
       where: {},
       order: { id: 'DESC' },
+    });
+
+    await dataSource.getRepository(PaymentOrmEntity).update(payment!.id, {
+      status: 'pending',
+    });
+
+    await dataSource.getRepository(ReservationOrmEntity).save({
+      userId: 1,
+      status: RESERVATION_STATUS.PENDING,
+      payment: { id: payment!.id },
+      items: [
+        {
+          roomId,
+          checkIn: '2026-10-01',
+          checkOut: '2026-10-03',
+          guestCount: 2,
+          price: 200,
+          nights: 2,
+        },
+      ],
     });
 
     paymentGateway.constructWebhookEvent = vi.fn().mockReturnValue({

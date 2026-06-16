@@ -1,7 +1,8 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { EventBus } from '../../../../shared/domain/event.bus';
 import { PAYMENT_STATUS } from '../../domain/constants/payment-status.constant';
-import { FinalizeSuccessfulPaymentService } from '../services/finalize-successful-payment.service';
+import { PaymentConfirmedEvent } from '../../domain/events/payment-confirmed.event';
 import { MapStripeStatusService } from '../services/map-stripe-status.service';
 import { HandleStripeWebhookUseCase } from './handle-stripe-webhook.usecase';
 import {
@@ -11,6 +12,10 @@ import {
 } from './payment-test.helpers';
 
 describe('HandleStripeWebhookUseCase', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('met à jour le statut du paiement depuis un webhook Stripe', async () => {
     const payment = createSamplePayment({
       id: 3,
@@ -30,15 +35,14 @@ describe('HandleStripeWebhookUseCase', () => {
         errorMessage: null,
       }),
     });
-    const finalizeSuccessfulPayment = {
-      execute: vi.fn(),
-    } as unknown as FinalizeSuccessfulPaymentService;
+    const publishSpy = vi
+      .spyOn(EventBus.getInstance(), 'publish')
+      .mockResolvedValue(undefined);
 
     const useCase = new HandleStripeWebhookUseCase(
       paymentRepository,
       paymentGateway,
       new MapStripeStatusService(),
-      finalizeSuccessfulPayment,
     );
 
     const result = await useCase.execute(
@@ -48,38 +52,38 @@ describe('HandleStripeWebhookUseCase', () => {
 
     expect(result.status).toBe(PAYMENT_STATUS.SUCCEEDED);
     expect(paymentRepository.update).toHaveBeenCalled();
-    expect(finalizeSuccessfulPayment.execute).toHaveBeenCalled();
+    expect(publishSpy).toHaveBeenCalledWith(expect.any(PaymentConfirmedEvent));
+    expect(publishSpy.mock.calls[0]?.[0]).toEqual(
+      expect.objectContaining({ paymentId: 3 }),
+    );
   });
 
-  it('finalise le paiement quand le webhook confirme le succès', async () => {
+  it('publie payment.confirmed quand le webhook confirme le succès', async () => {
     const payment = createSamplePayment({
       id: 3,
       transactionId: 'pi_webhook_123',
       status: PAYMENT_STATUS.PENDING,
-      reservationId: 12,
     });
 
     const paymentRepository = createPaymentRepositoryMock({
       findByTransactionId: vi.fn().mockResolvedValue(payment),
-      update: vi.fn().mockImplementation(async (updated) => ({
-        ...updated,
-        reservationId: 12,
-      })),
+      update: vi.fn().mockImplementation(async (updated) => updated),
     });
-    const finalizeSuccessfulPayment = {
-      execute: vi.fn().mockResolvedValue(undefined),
-    } as unknown as FinalizeSuccessfulPaymentService;
+    const publishSpy = vi
+      .spyOn(EventBus.getInstance(), 'publish')
+      .mockResolvedValue(undefined);
 
     const useCase = new HandleStripeWebhookUseCase(
       paymentRepository,
       createPaymentGatewayMock(),
       new MapStripeStatusService(),
-      finalizeSuccessfulPayment,
     );
 
     await useCase.execute(Buffer.from('{}'), 'sig_test');
 
-    expect(finalizeSuccessfulPayment.execute).toHaveBeenCalled();
+    expect(publishSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ paymentId: 3 }),
+    );
   });
 
   it('rejette un webhook sans signature', async () => {
@@ -87,7 +91,6 @@ describe('HandleStripeWebhookUseCase', () => {
       createPaymentRepositoryMock(),
       createPaymentGatewayMock(),
       new MapStripeStatusService(),
-      { execute: vi.fn() } as unknown as FinalizeSuccessfulPaymentService,
     );
 
     await expect(
@@ -102,7 +105,6 @@ describe('HandleStripeWebhookUseCase', () => {
       }),
       createPaymentGatewayMock(),
       new MapStripeStatusService(),
-      { execute: vi.fn() } as unknown as FinalizeSuccessfulPaymentService,
     );
 
     await expect(

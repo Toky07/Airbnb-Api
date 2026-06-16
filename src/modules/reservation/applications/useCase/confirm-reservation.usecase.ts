@@ -33,18 +33,18 @@ export class ConfirmReservationUseCase {
       );
     }
 
-    const updated = await this.reservationRepository.update(
+    const reservationUpdated = await this.reservationRepository.update(
       new Reservation(
         reservation.userId,
         reservation.items,
         RESERVATION_STATUS.CONFIRMED,
-        undefined,
+        reservation.paymentId,
         reservation.id,
         reservation.createdAt,
         reservation.updatedAt,
       ),
     );
 
-    return ReservationOutput.fromDomain(updated);
+    return ReservationOutput.fromDomain(reservationUpdated);
   }
 }

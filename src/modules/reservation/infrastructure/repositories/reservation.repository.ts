@@ -45,9 +45,11 @@ export class ReservationRepository implements IReservationRepository {
   }
 
   async update(reservation: Reservation): Promise<Reservation> {
-    const saved = await this.repository.preload(
+    const updatedReservation = await this.repository.preload(
       ReservationMapper.toEntity(reservation)
     );
+
+    const saved = await this.repository.save(updatedReservation!);
 
     return ReservationMapper.toDomain(saved!);
   }
@@ -293,6 +295,15 @@ export class ReservationRepository implements IReservationRepository {
       status: RESERVATION_STATUS.PENDING,
       createdAt: LessThan(threshold),
     });
+  }
+
+  async findByPaymentId(paymentId: number): Promise<Reservation | null> {
+    const entity = await this.repository.findOne({
+      where: { payment: { id: paymentId } },
+      relations: ['items', 'payment'],
+    });
+    
+    return entity ? ReservationMapper.toDomain(entity) : null;
   }
 
   private applyPropertyScope(

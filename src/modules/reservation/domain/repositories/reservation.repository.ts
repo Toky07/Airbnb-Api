@@ -50,5 +50,6 @@ export interface IReservationRepository {
   findIdsByPropertyId(propertyId: number): Promise<number[]>;
   findIdsByPropertyIds(propertyIds: number[]): Promise<number[]>;
   findIdsByFilters(params: Omit<ReservationListParams, 'page' | 'limit'>): Promise<number[]>;
+  findByPaymentId(paymentId: number): Promise<Reservation | null>;
   clearExpiredReservations(): Promise<void>;
 }
