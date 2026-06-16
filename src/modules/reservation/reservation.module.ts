@@ -8,6 +8,9 @@ import { UserModule } from '../user/user.module';
 import { CheckRoomAvailabilityService } from './applications/services/check-room-availability.service';
 import { EnrichReservationOutputsService } from './applications/services/enrich-reservation-outputs.service';
 import { ResolvePaymentReservationsService } from './applications/services/resolve-payment-reservations.service';
+import { BuildReservationInvoicePayloadService } from './applications/services/build-reservation-invoice-payload.service';
+import { BuildCustomerInvoiceEmailBodyService } from './applications/services/build-customer-invoice-email-body.service';
+import { BuildHostPaymentNotificationEmailBodyService } from './applications/services/build-host-payment-notification-email-body.service';
 import { CancelReservationUseCase } from './applications/useCase/cancel-reservation.usecase';
 import { ConfirmReservationUseCase } from './applications/useCase/confirm-reservation.usecase';
 import { CreateReservationUseCase } from './applications/useCase/create-reservation.usecase';
@@ -61,6 +64,9 @@ import { ReservationEvent } from './applications/events/register-reservation.eve
     ConfirmReservationUseCase,
     ClearExpiredReservationService,
     ReservationEvent,
+    BuildReservationInvoicePayloadService,
+    BuildCustomerInvoiceEmailBodyService,
+    BuildHostPaymentNotificationEmailBodyService,
   ],
   exports: [
     RESERVATION_REPOSITORY,

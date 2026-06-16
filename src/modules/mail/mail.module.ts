@@ -9,6 +9,8 @@ import { ListEmailsUseCase } from './applications/useCase/list-emails.usecase';
 import { RetryEmailUseCase } from './applications/useCase/retry-email.usecase';
 import { SendEmailUseCase } from './applications/useCase/send-email.usecase';
 import { MailService } from './applications/services/mail.service';
+import { LoadEmailAttachmentsFromPathsService } from './applications/services/load-email-attachments-from-paths.service';
+import { MailEvent } from './applications/events/register-mail.event';
 import { EmailAttachmentStorageService } from './infrastructure/storage/email-attachment-storage.service';
 import { MailTransportFactory } from './infrastructure/transport/mail-transport.factory';
 import { MAIL_TRANSPORT } from './domain/ports/mail-transport.port';
@@ -34,6 +36,8 @@ import { MAIL_TRANSPORT } from './domain/ports/mail-transport.port';
     RetryEmailUseCase,
     MailService,
     EmailAttachmentStorageService,
+    LoadEmailAttachmentsFromPathsService,
+    MailEvent,
   ],
   exports: [MailService, SendEmailUseCase],
 })

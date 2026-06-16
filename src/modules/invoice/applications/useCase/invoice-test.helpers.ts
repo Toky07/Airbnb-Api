@@ -1,63 +1,52 @@
-import { PAYMENT_TYPE } from '../../../payment/domain/types/payment.type';
-import { PAYMENT_PROVIDER } from '../../../payment/domain/constants/payment-provider.constant';
-import { PAYMENT_STATUS } from '../../../payment/domain/constants/payment-status.constant';
-import { Payment } from '../../../payment/domain/entities/payment.entity';
-import type { PaymentInvoiceData } from '../../domain/types/payment-invoice-data.type';
+import type { InvoiceData } from '../../domain/types/invoice-data.type';
+import { INVOICE_PAYMENT_TYPE } from '../../domain/constants/invoice-payment-type.constant';
+import { InvoiceGenerateRequestedEvent } from '../../domain/events/invoice-generate-requested.event';
 
 export function createSampleInvoiceData(
-  overrides: Partial<PaymentInvoiceData> = {},
-): PaymentInvoiceData {
+  overrides: Partial<InvoiceData> = {},
+): InvoiceData {
   return {
-    paymentId: 42,
     invoiceNumber: 'FACT-2026-000042',
-    transactionId: 'pi_test_123',
     paidAt: new Date('2026-06-10T14:30:00.000Z'),
-    amountCents: 32000,
     currency: 'eur',
-    customerName: 'Jean Dupont',
-    customerEmail: 'jean@test.com',
-    customerPhone: '+33601020304',
-    lineItems: [
+    totalCents: 32000,
+    recipient: {
+      name: 'Jean Dupont',
+      email: 'jean@test.com',
+      phone: '+33601020304',
+    },
+    references: [
+      { label: 'Stripe', value: 'pi_test_123' },
+      { label: 'Paiement', value: '#42' },
+    ],
+    items: [
       {
-        reservationId: 7,
-        roomName: 'Suite Deluxe',
-        propertyName: 'Hôtel Riviera',
-        propertyCity: 'Nice',
-        propertyAddress: '12 Promenade des Anglais',
-        propertyCountry: 'France',
-        startDate: '2026-07-01',
-        endDate: '2026-07-04',
-        guestCount: 2,
-        nights: 3,
-        unitPrice: 106.67,
-        totalPrice: 320,
-        propertyOwnerId: 5,
+        label: 'Suite Deluxe',
+        subtitle: 'Hôtel Riviera · Nice',
+        quantity: 3,
+        unitPriceCents: 10667,
+        totalPriceCents: 32000,
+        columns: {
+          dates: '01 juil. → 04 juil. 2026',
+          guests: 2,
+          nights: 3,
+        },
       },
     ],
     ...overrides,
   };
 }
 
-export function createSamplePaymentForInvoice(
+export function createSampleInvoiceGenerateEvent(
   overrides: Partial<{
-    id: number;
-    invoiceNotificationsSentAt: Date | null;
+    userId: number;
+    paymentId: number;
   }> = {},
-): Payment {
-  return new Payment(
-    32000,
-    'eur',
-    PAYMENT_STATUS.SUCCEEDED,
-    PAYMENT_PROVIDER.STRIPE,
-    'pi_test_123',
-    1,
-    PAYMENT_TYPE.RESERVATION,
-    3,
-    null,
-    null,
-    overrides.id ?? 42,
-    new Date('2026-06-10T10:00:00.000Z'),
-    new Date('2026-06-10T14:30:00.000Z'),
-    overrides.invoiceNotificationsSentAt ?? null,
+): InvoiceGenerateRequestedEvent {
+  return new InvoiceGenerateRequestedEvent(
+    overrides.userId ?? 1,
+    INVOICE_PAYMENT_TYPE.RESERVATION,
+    overrides.paymentId ?? 42,
+    createSampleInvoiceData(),
   );
 }

@@ -1,19 +1,50 @@
-import { PaymentListener } from "../listeners/payment.listener";
-import { Inject, OnModuleInit } from "@nestjs/common";
-import { type IReservationRepository, RESERVATION_REPOSITORY } from "../../domain/repositories/reservation.repository";
-import { PaymentConfirmedListener } from "../listeners/payment-confirmed.listener";
+import { Inject, OnModuleInit } from '@nestjs/common';
+import {
+  PAYMENT_REPOSITORY,
+  type IPaymentRepository,
+} from '../../../payment/domain/repositories/payment.repository';
+import {
+  RESERVATION_REPOSITORY,
+  type IReservationRepository,
+} from '../../domain/repositories/reservation.repository';
+import { PaymentListener } from '../listeners/payment.listener';
+import { PaymentConfirmedListener } from '../listeners/payment-confirmed.listener';
+import { InvoiceCreatedListener } from '../listeners/invoice-created.listener';
+import { BuildCustomerInvoiceEmailBodyService } from '../services/build-customer-invoice-email-body.service';
+import { BuildHostPaymentNotificationEmailBodyService } from '../services/build-host-payment-notification-email-body.service';
+import { BuildReservationInvoicePayloadService } from '../services/build-reservation-invoice-payload.service';
 
 export class ReservationEvent implements OnModuleInit {
-    public constructor(@Inject(RESERVATION_REPOSITORY) private readonly repository: IReservationRepository) {}
+  public constructor(
+    @Inject(RESERVATION_REPOSITORY)
+    private readonly repository: IReservationRepository,
+    @Inject(PAYMENT_REPOSITORY)
+    private readonly paymentRepository: IPaymentRepository,
+    private readonly buildReservationInvoicePayload: BuildReservationInvoicePayloadService,
+    private readonly buildCustomerInvoiceEmailBody: BuildCustomerInvoiceEmailBodyService,
+    private readonly buildHostPaymentNotificationEmailBody: BuildHostPaymentNotificationEmailBodyService,
+  ) {}
 
-    public async onModuleInit(): Promise<void> {
-        await this.listen();
-    }
+  public async onModuleInit(): Promise<void> {
+    await this.listen();
+  }
 
-    public async listen(): Promise<void> {
-        const paymentListener = new PaymentListener(this.repository);
-        const paymentConfirmedListener = new PaymentConfirmedListener(this.repository);
-        await paymentListener.listen();
-        await paymentConfirmedListener.listen();
-    }
+  public async listen(): Promise<void> {
+    const paymentListener = new PaymentListener(this.repository);
+    const paymentConfirmedListener = new PaymentConfirmedListener(
+      this.repository,
+      this.paymentRepository,
+      this.buildReservationInvoicePayload,
+    );
+    const invoiceCreatedListener = new InvoiceCreatedListener(
+      this.paymentRepository,
+      this.buildReservationInvoicePayload,
+      this.buildCustomerInvoiceEmailBody,
+      this.buildHostPaymentNotificationEmailBody,
+    );
+
+    await paymentListener.listen();
+    await paymentConfirmedListener.listen();
+    await invoiceCreatedListener.listen();
+  }
 }

@@ -1,26 +1,53 @@
-import { Inject } from "@nestjs/common";
-import { RESERVATION_REPOSITORY } from "../../domain/repositories/reservation.repository";
-import type { IReservationRepository } from "../../domain/repositories/reservation.repository";
-import { EventBus } from "../../../../shared/domain/event.bus";
-import { ConfirmReservationUseCase } from "../useCase/confirm-reservation.usecase";
+import { Inject } from '@nestjs/common';
+import { RESERVATION_REPOSITORY } from '../../domain/repositories/reservation.repository';
+import type { IReservationRepository } from '../../domain/repositories/reservation.repository';
+import type { IPaymentRepository } from '../../../payment/domain/repositories/payment.repository';
+import { EventBus } from '../../../../shared/domain/event.bus';
+import { ConfirmReservationUseCase } from '../useCase/confirm-reservation.usecase';
+import type { BuildReservationInvoicePayloadService } from '../services/build-reservation-invoice-payload.service';
 
 export class PaymentConfirmedListener {
-    private readonly confirmReservationUseCase: ConfirmReservationUseCase;
+  private readonly confirmReservationUseCase: ConfirmReservationUseCase;
 
-    constructor(
-        @Inject(RESERVATION_REPOSITORY) private readonly reservationRepository: IReservationRepository) {
-            this.confirmReservationUseCase = new ConfirmReservationUseCase(this.reservationRepository);
-        }
+  constructor(
+    private readonly reservationRepository: IReservationRepository,
+    private readonly paymentRepository: IPaymentRepository,
+    private readonly buildReservationInvoicePayload: BuildReservationInvoicePayloadService,
+  ) {
+    this.confirmReservationUseCase = new ConfirmReservationUseCase(
+      this.reservationRepository,
+    );
+  }
 
-    async listen(): Promise<void> {
-        EventBus.getInstance().subscribe('payment.confirmed', async (payload) => {
-            const reservation = await this.reservationRepository.findByPaymentId(payload.paymentId);
+  async listen(): Promise<void> {
+    EventBus.getInstance().subscribe('payment.confirmed', async (payload) => {
+      const payment = payload.payment;
+      
+      if (!payment) {
+        return;
+      }
 
-            if (!reservation?.id) {
-                throw new Error('Reservation not found');
-            }
+      const reservation = await this.reservationRepository.findByPaymentId(
+        payment.id,
+      );
 
-            await this.confirmReservationUseCase.execute(reservation.id);
-        });
-    }
+      if (!reservation?.id) {
+        throw new Error('Reservation not found');
+      }
+
+      await this.confirmReservationUseCase.execute(reservation.id);
+
+      const context = await this.buildReservationInvoicePayload.execute(payment);
+      if (!context) {
+        return;
+      }
+
+      await EventBus.getInstance().publish(
+        this.buildReservationInvoicePayload.toInvoiceGenerateEvent(
+          payment,
+          context,
+        ),
+      );
+    });
+  }
 }

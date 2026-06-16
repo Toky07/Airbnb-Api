@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { INVOICE_BRAND } from '../../domain/constants/invoice-source.constant';
-import type { PaymentInvoiceData } from '../../domain/types/payment-invoice-data.type';
+import { RESERVATION_NOTIFICATION_BRAND } from '../../domain/constants/reservation-notification.constant';
+import type { ReservationInvoiceContext } from '../../domain/types/reservation-invoice-context.type';
 import {
   formatInvoiceAmount,
   formatInvoiceDate,
@@ -8,7 +8,7 @@ import {
 
 @Injectable()
 export class BuildCustomerInvoiceEmailBodyService {
-  execute(data: PaymentInvoiceData): string {
+  execute(data: ReservationInvoiceContext): string {
     const itemsHtml = data.lineItems
       .map(
         (item) => `
@@ -38,8 +38,8 @@ export class BuildCustomerInvoiceEmailBodyService {
               <td align="center">
                 <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="background:#FFFFFF;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(15,23,42,0.08);">
                   <tr>
-                    <td style="background:${INVOICE_BRAND.color};padding:28px 32px;color:#FFFFFF;">
-                      <div style="font-size:24px;font-weight:700;">${INVOICE_BRAND.name}</div>
+                    <td style="background:${RESERVATION_NOTIFICATION_BRAND.color};padding:28px 32px;color:#FFFFFF;">
+                      <div style="font-size:24px;font-weight:700;">${RESERVATION_NOTIFICATION_BRAND.name}</div>
                       <div style="margin-top:8px;font-size:15px;">Paiement confirmé</div>
                     </td>
                   </tr>
@@ -53,7 +53,7 @@ export class BuildCustomerInvoiceEmailBodyService {
                         <tr>
                           <td style="padding:16px 20px;">
                             <div style="font-size:13px;color:#9F1239;">Montant payé</div>
-                            <div style="font-size:28px;font-weight:700;color:${INVOICE_BRAND.color};">${formatInvoiceAmount(data.amountCents, data.currency)}</div>
+                            <div style="font-size:28px;font-weight:700;color:${RESERVATION_NOTIFICATION_BRAND.color};">${formatInvoiceAmount(data.amountCents, data.currency)}</div>
                             <div style="margin-top:8px;font-size:13px;color:#6B7280;">Référence : ${escapeHtml(data.transactionId)}</div>
                           </td>
                         </tr>

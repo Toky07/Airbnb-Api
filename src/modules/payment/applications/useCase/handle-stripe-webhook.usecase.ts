@@ -5,7 +5,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PAYMENT_STATUS } from '../../domain/constants/payment-status.constant';
-import { Payment } from '../../domain/entities/payment.entity';
 import {
   PAYMENT_GATEWAY,
   type IPaymentGateway,
@@ -52,31 +51,18 @@ export class HandleStripeWebhookUseCase {
       event.status,
     );
 
-    const updated = await this.paymentRepository.update(
-      new Payment(
-        payment.amount,
-        payment.currency,
-        status,
-        payment.provider,
-        payment.transactionId,
-        payment.userId,
-        payment.propertyType,
-        payment.propertyId,
-        payment.cartId,
-        event.errorMessage ?? payment.errorMessage,
-        payment.id,
-        payment.createdAt,
-        payment.updatedAt,
-        payment.invoiceNotificationsSentAt,
-      ),
+    payment.status = status;
+
+    await this.paymentRepository.update(
+      payment,
     );
 
-    if (status === PAYMENT_STATUS.SUCCEEDED && updated.id) {
+    if (status === PAYMENT_STATUS.SUCCEEDED) {
       await EventBus.getInstance().publish(
-        new PaymentConfirmedEvent(updated.id),
+        new PaymentConfirmedEvent(payment),
       );
     }
 
-    return PaymentOutput.fromDomain(updated);
+    return PaymentOutput.fromDomain(payment);
   }
 }

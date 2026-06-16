@@ -1,7 +1,7 @@
 import { GenerateInvoicePdfService } from './generate-invoice-pdf.service';
 import { createSampleInvoiceData } from '../useCase/invoice-test.helpers';
 
-describe.only('GenerateInvoicePdfService', () => {
+describe('GenerateInvoicePdfService', () => {
   it('génère un PDF valide avec les informations de facture', async () => {
     const service = new GenerateInvoicePdfService();
     const buffer = await service.execute(createSampleInvoiceData());
@@ -15,16 +15,20 @@ describe.only('GenerateInvoicePdfService', () => {
     const service = new GenerateInvoicePdfService();
     const buffer = await service.execute(
       createSampleInvoiceData({
-        amountCents: 52000,
-        lineItems: [
-          createSampleInvoiceData().lineItems[0]!,
+        totalCents: 52000,
+        items: [
+          createSampleInvoiceData().items[0]!,
           {
-            ...createSampleInvoiceData().lineItems[0]!,
-            reservationId: 8,
-            roomName: 'Chambre Standard',
-            totalPrice: 200,
-            unitPrice: 100,
-            nights: 2,
+            label: 'Chambre Standard',
+            subtitle: 'Hôtel Riviera · Nice',
+            quantity: 2,
+            unitPriceCents: 10000,
+            totalPriceCents: 20000,
+            columns: {
+              dates: '01 juil. → 03 juil. 2026',
+              guests: 2,
+              nights: 2,
+            },
           },
         ],
       }),

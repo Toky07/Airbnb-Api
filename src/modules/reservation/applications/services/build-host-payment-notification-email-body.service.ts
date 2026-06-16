@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { INVOICE_BRAND } from '../../domain/constants/invoice-source.constant';
+import { RESERVATION_NOTIFICATION_BRAND } from '../../domain/constants/reservation-notification.constant';
 import type {
   HostPaymentNotificationGroup,
-  PaymentInvoiceData,
-} from '../../domain/types/payment-invoice-data.type';
+  ReservationInvoiceContext,
+} from '../../domain/types/reservation-invoice-context.type';
 import {
   formatInvoiceAmount,
   formatInvoiceDate,
@@ -12,7 +12,7 @@ import {
 @Injectable()
 export class BuildHostPaymentNotificationEmailBodyService {
   execute(
-    data: PaymentInvoiceData,
+    data: ReservationInvoiceContext,
     group: HostPaymentNotificationGroup,
   ): string {
     const totalGroupAmount = group.items.reduce(
@@ -61,7 +61,7 @@ export class BuildHostPaymentNotificationEmailBodyService {
                 <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="background:#FFFFFF;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(15,23,42,0.08);">
                   <tr>
                     <td style="background:#059669;padding:28px 32px;color:#FFFFFF;">
-                      <div style="font-size:24px;font-weight:700;">${INVOICE_BRAND.name}</div>
+                      <div style="font-size:24px;font-weight:700;">${RESERVATION_NOTIFICATION_BRAND.name}</div>
                       <div style="margin-top:8px;font-size:15px;opacity:0.9;">Nouvelle r\u00e9servation</div>
                     </td>
                   </tr>
@@ -118,7 +118,7 @@ export class BuildHostPaymentNotificationEmailBodyService {
                   </tr>
                   <tr>
                     <td style="padding:20px 32px;background:#F9FAFB;border-top:1px solid #E5E7EB;text-align:center;">
-                      <span style="font-size:12px;color:#9CA3AF;">${INVOICE_BRAND.name} &middot; Notification automatique</span>
+                      <span style="font-size:12px;color:#9CA3AF;">${RESERVATION_NOTIFICATION_BRAND.name} &middot; Notification automatique</span>
                     </td>
                   </tr>
                 </table>

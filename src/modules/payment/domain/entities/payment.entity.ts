@@ -6,7 +6,7 @@ export class Payment {
   constructor(
     public readonly amount: number,
     public readonly currency: string,
-    public readonly status: PaymentStatus,
+    public status: PaymentStatus,
     public readonly provider: PaymentProvider,
     public readonly transactionId: string,
     public readonly userId: number,

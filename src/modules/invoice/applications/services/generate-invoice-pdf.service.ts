@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import PDFDocument from 'pdfkit';
 import { INVOICE_BRAND } from '../../domain/constants/invoice-source.constant';
-import type { PaymentInvoiceData } from '../../domain/types/payment-invoice-data.type';
+import type { InvoiceData } from '../../domain/types/invoice-data.type';
 import {
   formatInvoiceAmount,
   formatInvoiceDate,
@@ -9,7 +9,7 @@ import {
 
 @Injectable()
 export class GenerateInvoicePdfService {
-  async execute(data: PaymentInvoiceData): Promise<Buffer> {
+  async execute(data: InvoiceData): Promise<Buffer> {
     return new Promise((resolve, reject) => {
       const doc = new PDFDocument({
         size: 'A4',
@@ -35,7 +35,7 @@ export class GenerateInvoicePdfService {
     });
   }
 
-  private drawHeader(doc: InstanceType<typeof PDFDocument>, data: PaymentInvoiceData): void {
+  private drawHeader(doc: InstanceType<typeof PDFDocument>, data: InvoiceData): void {
     doc.rect(0, 0, doc.page.width, 120).fill(INVOICE_BRAND.color);
 
     doc
@@ -47,7 +47,7 @@ export class GenerateInvoicePdfService {
     doc
       .font('Helvetica')
       .fontSize(12)
-      .text('Facture de réservation', 50, 72);
+      .text('Facture', 50, 72);
 
     doc
       .font('Helvetica-Bold')
@@ -74,7 +74,7 @@ export class GenerateInvoicePdfService {
 
   private drawCustomerSection(
     doc: InstanceType<typeof PDFDocument>,
-    data: PaymentInvoiceData,
+    data: InvoiceData,
   ): void {
     const top = 150;
 
@@ -88,41 +88,41 @@ export class GenerateInvoicePdfService {
       .font('Helvetica-Bold')
       .fontSize(14)
       .fillColor('#111827')
-      .text(data.customerName, 50, top + 18);
+      .text(data.recipient.name, 50, top + 18);
 
     doc
       .font('Helvetica')
       .fontSize(11)
       .fillColor('#374151')
-      .text(data.customerEmail, 50, top + 38);
+      .text(data.recipient.email, 50, top + 38);
 
-    if (data.customerPhone) {
-      doc.text(data.customerPhone, 50, top + 54);
+    if (data.recipient.phone) {
+      doc.text(data.recipient.phone, 50, top + 54);
     }
 
+    let referenceY = top + 18;
     doc
       .font('Helvetica-Bold')
       .fontSize(11)
       .fillColor('#6B7280')
-      .text('RÉFÉRENCE PAIEMENT', doc.page.width - 250, top);
+      .text('RÉFÉRENCES', doc.page.width - 250, top);
 
-    doc
-      .font('Helvetica')
-      .fontSize(11)
-      .fillColor('#374151')
-      .text(`Stripe : ${data.transactionId}`, doc.page.width - 250, top + 18, {
-        width: 200,
-        align: 'right',
-      })
-      .text(`Paiement #${data.paymentId}`, doc.page.width - 250, top + 34, {
-        width: 200,
-        align: 'right',
-      });
+    for (const reference of data.references) {
+      doc
+        .font('Helvetica')
+        .fontSize(11)
+        .fillColor('#374151')
+        .text(`${reference.label} : ${reference.value}`, doc.page.width - 250, referenceY, {
+          width: 200,
+          align: 'right',
+        });
+      referenceY += 16;
+    }
   }
 
   private drawLineItemsTable(
     doc: InstanceType<typeof PDFDocument>,
-    data: PaymentInvoiceData,
+    data: InvoiceData,
   ): void {
     const tableTop = 250;
     const columns = {
@@ -151,7 +151,7 @@ export class GenerateInvoicePdfService {
 
     let rowY = tableTop + 34;
 
-    for (const [index, item] of data.lineItems.entries()) {
+    for (const [index, item] of data.items.entries()) {
       if (rowY > doc.page.height - 160) {
         doc.addPage();
         rowY = 60;
@@ -167,37 +167,32 @@ export class GenerateInvoicePdfService {
         .font('Helvetica-Bold')
         .fontSize(10)
         .fillColor('#111827')
-        .text(item.roomName, columns.description, rowY, { width: 160 })
-        .font('Helvetica')
-        .fontSize(9)
-        .fillColor('#6B7280')
-        .text(item.propertyName, columns.description, rowY + 14, { width: 160 });
+        .text(item.label, columns.description, rowY, { width: 160 });
 
-      if (item.propertyCity) {
-        doc.text(item.propertyCity, columns.description, rowY + 26, { width: 160 });
+      if (item.subtitle) {
+        doc
+          .font('Helvetica')
+          .fontSize(9)
+          .fillColor('#6B7280')
+          .text(item.subtitle, columns.description, rowY + 14, { width: 160 });
       }
 
       doc
         .font('Helvetica')
         .fontSize(9)
         .fillColor('#374151')
+        .text(item.columns?.dates ?? '—', columns.dates, rowY + 6, { width: 95 })
+        .text(String(item.columns?.guests ?? '—'), columns.guests, rowY + 6)
+        .text(String(item.columns?.nights ?? '—'), columns.nights, rowY + 6)
         .text(
-          `${formatInvoiceDate(item.startDate, { day: '2-digit', month: 'short' })} → ${formatInvoiceDate(item.endDate, { day: '2-digit', month: 'short', year: 'numeric' })}`,
-          columns.dates,
-          rowY + 6,
-          { width: 95 },
-        )
-        .text(String(item.guestCount), columns.guests, rowY + 6)
-        .text(String(item.nights), columns.nights, rowY + 6)
-        .text(
-          formatInvoiceAmount(Math.round(item.unitPrice * 100), data.currency),
+          formatInvoiceAmount(item.unitPriceCents, data.currency),
           columns.unit,
           rowY + 6,
         )
         .font('Helvetica-Bold')
         .fillColor('#111827')
         .text(
-          formatInvoiceAmount(Math.round(item.totalPrice * 100), data.currency),
+          formatInvoiceAmount(item.totalPriceCents, data.currency),
           columns.total,
           rowY + 6,
         );
@@ -206,7 +201,7 @@ export class GenerateInvoicePdfService {
     }
   }
 
-  private drawTotals(doc: InstanceType<typeof PDFDocument>, data: PaymentInvoiceData): void {
+  private drawTotals(doc: InstanceType<typeof PDFDocument>, data: InvoiceData): void {
     const boxTop = doc.page.height - 170;
     const boxLeft = doc.page.width - 260;
 
@@ -226,7 +221,7 @@ export class GenerateInvoicePdfService {
       .fontSize(11)
       .fillColor('#111827')
       .text(
-        formatInvoiceAmount(data.amountCents, data.currency),
+        formatInvoiceAmount(data.totalCents, data.currency),
         boxLeft + 80,
         boxTop + 16,
         { width: 100, align: 'right' },
@@ -234,20 +229,20 @@ export class GenerateInvoicePdfService {
       .fontSize(16)
       .fillColor(INVOICE_BRAND.color)
       .text(
-        formatInvoiceAmount(data.amountCents, data.currency),
+        formatInvoiceAmount(data.totalCents, data.currency),
         boxLeft + 60,
         boxTop + 38,
         { width: 120, align: 'right' },
       );
   }
 
-  private drawFooter(doc: InstanceType<typeof PDFDocument>, data: PaymentInvoiceData): void {
+  private drawFooter(doc: InstanceType<typeof PDFDocument>, data: InvoiceData): void {
     doc
       .font('Helvetica')
       .fontSize(9)
       .fillColor('#6B7280')
       .text(
-        `Merci pour votre confiance. Cette facture confirme le règlement de ${formatInvoiceAmount(data.amountCents, data.currency)} pour ${data.lineItems.length} séjour${data.lineItems.length > 1 ? 's' : ''}.`,
+        `Merci pour votre confiance. Cette facture confirme le règlement de ${formatInvoiceAmount(data.totalCents, data.currency)} pour ${data.items.length} article${data.items.length > 1 ? 's' : ''}.`,
         50,
         doc.page.height - 90,
         { width: doc.page.width - 100, align: 'center' },

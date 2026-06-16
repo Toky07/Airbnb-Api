@@ -4,20 +4,24 @@ import {
   ROOM_REPOSITORY,
   type IRoomRepository,
 } from '../../../rooms/domain/repositories/room.repository';
-import { ResolvePaymentReservationsService } from '../../../reservation/applications/services/resolve-payment-reservations.service';
 import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
 import { USER_REPOSITORY } from '../../../user/infrastructure/repositories/user.repository';
+import { InvoiceGenerateRequestedEvent } from '../../../invoice/domain/events/invoice-generate-requested.event';
+import { INVOICE_PAYMENT_TYPE } from '../../../invoice/domain/constants/invoice-payment-type.constant';
+import type { InvoiceData } from '../../../invoice/domain/types/invoice-data.type';
 import type {
   HostPaymentNotificationGroup,
-  PaymentInvoiceData,
-  PaymentInvoiceLineItem,
-} from '../../domain/types/payment-invoice-data.type';
+  ReservationInvoiceContext,
+  ReservationInvoiceLineItem,
+} from '../../domain/types/reservation-invoice-context.type';
+import { ResolvePaymentReservationsService } from './resolve-payment-reservations.service';
 import {
   buildInvoiceNumber,
+  formatInvoiceDate,
 } from '../utils/format-invoice.util';
 
 @Injectable()
-export class BuildPaymentInvoiceDataService {
+export class BuildReservationInvoicePayloadService {
   constructor(
     private readonly resolvePaymentReservations: ResolvePaymentReservationsService,
     @Inject(USER_REPOSITORY)
@@ -26,7 +30,7 @@ export class BuildPaymentInvoiceDataService {
     private readonly roomRepository: IRoomRepository,
   ) {}
 
-  async execute(payment: Payment): Promise<PaymentInvoiceData | null> {
+  async execute(payment: Payment): Promise<ReservationInvoiceContext | null> {
     if (!payment.id) {
       return null;
     }
@@ -40,7 +44,7 @@ export class BuildPaymentInvoiceDataService {
       return null;
     }
 
-    const lineItems: PaymentInvoiceLineItem[] = [];
+    const lineItems: ReservationInvoiceLineItem[] = [];
 
     for (const item of items) {
       const room = await this.roomRepository.findById(item.roomId);
@@ -90,12 +94,56 @@ export class BuildPaymentInvoiceDataService {
     };
   }
 
-  async buildHostNotificationGroups(
-    data: PaymentInvoiceData,
-  ): Promise<HostPaymentNotificationGroup[]> {
-    const grouped = new Map<number, PaymentInvoiceLineItem[]>();
+  toInvoiceGenerateEvent(
+    payment: Payment,
+    context: ReservationInvoiceContext,
+  ): InvoiceGenerateRequestedEvent {
+    return new InvoiceGenerateRequestedEvent(
+      payment.userId,
+      INVOICE_PAYMENT_TYPE.RESERVATION,
+      context.paymentId,
+      this.toInvoiceData(context),
+    );
+  }
 
-    for (const item of data.lineItems) {
+  toInvoiceData(context: ReservationInvoiceContext): InvoiceData {
+    return {
+      invoiceNumber: context.invoiceNumber,
+      paidAt: context.paidAt,
+      currency: context.currency,
+      totalCents: context.amountCents,
+      recipient: {
+        name: context.customerName,
+        email: context.customerEmail,
+        phone: context.customerPhone || undefined,
+      },
+      references: [
+        { label: 'Stripe', value: context.transactionId },
+        { label: 'Paiement', value: `#${context.paymentId}` },
+      ],
+      items: context.lineItems.map((item) => ({
+        label: item.roomName,
+        subtitle: [item.propertyName, item.propertyCity]
+          .filter(Boolean)
+          .join(' · ') || undefined,
+        quantity: item.nights,
+        unitPriceCents: Math.round(item.unitPrice * 100),
+        totalPriceCents: Math.round(item.totalPrice * 100),
+        columns: {
+          dates: `${formatInvoiceDate(item.startDate, { day: '2-digit', month: 'short' })} → ${formatInvoiceDate(item.endDate, { day: '2-digit', month: 'short', year: 'numeric' })}`,
+          guests: item.guestCount,
+          nights: item.nights,
+        },
+      })),
+    };
+  }
+
+  async buildHostNotificationGroups(
+    context: ReservationInvoiceContext,
+  ): Promise<HostPaymentNotificationGroup[]> {
+    const grouped = new Map<number, ReservationInvoiceLineItem[]>();
+
+    for (const item of context.lineItems) {
       const current = grouped.get(item.propertyOwnerId) ?? [];
       current.push(item);
       grouped.set(item.propertyOwnerId, current);

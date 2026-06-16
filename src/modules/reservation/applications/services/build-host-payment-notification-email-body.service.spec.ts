@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { BuildHostPaymentNotificationEmailBodyService } from './build-host-payment-notification-email-body.service';
-import { createSampleInvoiceData } from '../useCase/invoice-test.helpers';
+import { createSampleReservationInvoiceContext } from '../reservation-invoice-test.helpers';
 
 describe('BuildHostPaymentNotificationEmailBodyService', () => {
-  it('génère un email texte pour le propriétaire', () => {
+  it('génère un email HTML pour le propriétaire', () => {
     const service = new BuildHostPaymentNotificationEmailBodyService();
-    const data = createSampleInvoiceData();
+    const data = createSampleReservationInvoiceContext();
     const body = service.execute(data, {
       ownerId: 5,
       ownerEmail: 'host@test.com',

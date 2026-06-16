@@ -1,32 +1,26 @@
-import { Module, forwardRef } from '@nestjs/common';
-import { MailModule } from '../mail/mail.module';
-import { PaymentModule } from '../payment/payment.module';
-import { PropertiesModule } from '../properties/properties.module';
-import { ReservationModule } from '../reservation/reservation.module';
-import { RoomsModule } from '../rooms/room.module';
-import { UserModule } from '../user/user.module';
-import { BuildCustomerInvoiceEmailBodyService } from './applications/services/build-customer-invoice-email-body.service';
-import { BuildHostPaymentNotificationEmailBodyService } from './applications/services/build-host-payment-notification-email-body.service';
-import { BuildPaymentInvoiceDataService } from './applications/services/build-payment-invoice-data.service';
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { InvoiceEvent } from './applications/events/register-invoice.event';
 import { GenerateInvoicePdfService } from './applications/services/generate-invoice-pdf.service';
-import { SendPaymentInvoiceNotificationsUseCase } from './applications/useCase/send-payment-invoice-notifications.usecase';
+import { CreateInvoiceUseCase } from './applications/useCase/create-invoice.usecase';
+import { INVOICE_REPOSITORY } from './domain/repositories/invoice.repository';
+import { InvoiceOrmEntity } from './infrastructure/entities/invoice.orm-entity';
+import { InvoiceRepository } from './infrastructure/repositories/invoice.repository';
+import { InvoiceStorageService } from './infrastructure/storage/invoice-storage.service';
 
 @Module({
-  imports: [
-    MailModule,
-    UserModule,
-    RoomsModule,
-    PropertiesModule,
-    forwardRef(() => PaymentModule),
-    forwardRef(() => ReservationModule),
-  ],
+  imports: [TypeOrmModule.forFeature([InvoiceOrmEntity])],
   providers: [
-    BuildPaymentInvoiceDataService,
+    InvoiceRepository,
+    {
+      provide: INVOICE_REPOSITORY,
+      useClass: InvoiceRepository,
+    },
+    InvoiceStorageService,
     GenerateInvoicePdfService,
-    BuildCustomerInvoiceEmailBodyService,
-    BuildHostPaymentNotificationEmailBodyService,
-    SendPaymentInvoiceNotificationsUseCase,
+    CreateInvoiceUseCase,
+    InvoiceEvent,
   ],
-  exports: [SendPaymentInvoiceNotificationsUseCase],
+  exports: [CreateInvoiceUseCase],
 })
 export class InvoiceModule {}

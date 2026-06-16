@@ -1,4 +1,4 @@
-export type PaymentInvoiceLineItem = {
+export type ReservationInvoiceLineItem = {
   reservationId: number;
   roomName: string;
   propertyName: string;
@@ -18,10 +18,10 @@ export type HostPaymentNotificationGroup = {
   ownerId: number;
   ownerEmail: string;
   ownerName: string;
-  items: PaymentInvoiceLineItem[];
+  items: ReservationInvoiceLineItem[];
 };
 
-export type PaymentInvoiceData = {
+export type ReservationInvoiceContext = {
   paymentId: number;
   invoiceNumber: string;
   transactionId: string;
@@ -31,5 +31,5 @@ export type PaymentInvoiceData = {
   customerName: string;
   customerEmail: string;
   customerPhone: string;
-  lineItems: PaymentInvoiceLineItem[];
+  lineItems: ReservationInvoiceLineItem[];
 };
