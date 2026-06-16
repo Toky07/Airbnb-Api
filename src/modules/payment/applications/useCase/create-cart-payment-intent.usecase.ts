@@ -4,8 +4,6 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { USER_REPOSITORY } from '../../../user/infrastructure/repositories/user.repository';
-import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
 import { PAYMENT_PROVIDER } from '../../domain/constants/payment-provider.constant';
 import { PAYMENT_STATUS } from '../../domain/constants/payment-status.constant';
 import { Payment } from '../../domain/entities/payment.entity';
@@ -41,15 +39,12 @@ export class CreateCartPaymentIntentUseCase {
     private readonly paymentRepository: IPaymentRepository,
     @Inject(PAYMENT_GATEWAY)
     private readonly paymentGateway: IPaymentGateway,
-    @Inject(USER_REPOSITORY)
-    private readonly userRepository: IUserRepository,
   ) {}
 
   async execute(
     params: CreateCartPaymentIntentParams,
   ): Promise<CreatePaymentIntentOutput> {
-    const user = await this.userRepository.findByAuthId(params.authId);
-    if (!user?.id) {
+    if (!params.authId) {
       throw new UnauthorizedException('Utilisateur introuvable.');
     }
 
@@ -64,7 +59,7 @@ export class CreateCartPaymentIntentUseCase {
       currency,
       metadata: {
         cartId: String(params.cartId),
-        userId: String(user.id),
+        userId: String(params.authId),
         propertyType: params.propertyType,
         propertyId: String(params.propertyId),
       },
@@ -81,7 +76,7 @@ export class CreateCartPaymentIntentUseCase {
         PAYMENT_STATUS.PENDING,
         PAYMENT_PROVIDER.STRIPE,
         paymentIntent.id,
-        user.id,
+        params.authId,
         params.propertyType,
         params.propertyId,
         params.cartId,

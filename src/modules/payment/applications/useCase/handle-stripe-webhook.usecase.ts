@@ -15,7 +15,6 @@ import {
   type IPaymentRepository,
 } from '../../domain/repositories/payment.repository';
 import { PaymentOutput } from '../dto/payment.output';
-import { FinalizeSuccessfulPaymentService } from '../services/finalize-successful-payment.service';
 import { MapStripeStatusService } from '../services/map-stripe-status.service';
 import { EventBus } from '../../../../shared/domain/event.bus';
 import { PaymentConfirmedEvent } from '../../domain/events/payment-confirmed.event';

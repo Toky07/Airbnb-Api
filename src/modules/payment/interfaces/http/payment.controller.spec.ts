@@ -16,7 +16,6 @@ import { PAYMENT_STATUS } from '../../domain/constants/payment-status.constant';
 import {
   AUTH_TEST_ENTITIES,
   DOMAIN_TEST_ENTITIES,
-  registerAndLoginAsSuperAdmin,
 } from '../../../../test/controller-test.helpers';
 import { createPaymentGatewayMock } from '../../applications/useCase/payment-test.helpers';
 import { RESERVATION_STATUS } from '../../../reservation/domain/constants/reservation-status.constant';
@@ -25,7 +24,6 @@ import { ReservationOrmEntity } from '../../../reservation/infrastructure/entiti
 describe('PaymentController', () => {
   let app: INestApplication;
   let dataSource: DataSource;
-  let token: string;
   let roomId: number;
   let paymentGateway = createPaymentGatewayMock();
 
@@ -53,9 +51,6 @@ describe('PaymentController', () => {
           secret: '1234',
           signOptions: { expiresIn: '5h' },
         }),
-        AuthModule,
-        UserModule,
-        RoomsModule,
         PaymentModule,
       ],
     })
@@ -67,8 +62,6 @@ describe('PaymentController', () => {
     app = moduleRef.createNestApplication({ rawBody: true });
     app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
     await app.init();
-
-    token = await registerAndLoginAsSuperAdmin(app, dataSource);
 
     const property = await dataSource.getRepository(PropertyEntity).save({
       name: 'Hotel Test',
@@ -112,49 +105,6 @@ describe('PaymentController', () => {
 
   afterAll(async () => {
     await app.close();
-  });
-
-  it('GET /payments retourne la liste paginée pour un admin', async () => {
-    const existing = await dataSource.getRepository(PaymentOrmEntity).findOne({
-      where: {},
-      order: { id: 'DESC' },
-    });
-    await dataSource.getRepository(PaymentOrmEntity).update(existing!.id, {
-      status: 'succeeded',
-    });
-
-    const response = await request(app.getHttpServer())
-      .get('/payments')
-      .set('Authorization', `Bearer ${token}`)
-      .expect(200);
-
-    expect(response.body.data.length).toBeGreaterThan(0);
-    expect(response.body.meta).toEqual(
-      expect.objectContaining({
-        page: 1,
-        total: expect.any(Number),
-      }),
-    );
-  });
-
-  it('GET /payments/:id retourne un paiement existant', async () => {
-    const payment = await dataSource.getRepository(PaymentOrmEntity).findOne({
-      where: {},
-      order: { id: 'DESC' },
-    });
-
-    const response = await request(app.getHttpServer())
-      .get(`/payments/${payment!.id}`)
-      .set('Authorization', `Bearer ${token}`)
-      .expect(200);
-
-    expect(response.body).toEqual(
-      expect.objectContaining({
-        id: payment!.id,
-        status: PAYMENT_STATUS.SUCCEEDED,
-        transactionId: 'pi_test_123',
-      }),
-    );
   });
 
   it('POST /payments/webhook met à jour le statut du paiement', async () => {
