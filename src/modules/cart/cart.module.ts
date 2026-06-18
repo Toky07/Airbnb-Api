@@ -1,8 +1,5 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CalculateStayAmountService } from '../../shared/pricing/calculate-stay-amount.service';
-import { PaymentModule } from '../payment/payment.module';
-import { ReservationModule } from '../reservation/reservation.module';
 import { RoomsModule } from '../rooms/room.module';
 import { UserModule } from '../user/user.module';
 import { BuildCartItemService } from './applications/services/build-cart-item.service';
@@ -24,10 +21,8 @@ import { CartController } from './interfaces/http/cart.controller';
 @Module({
   imports: [
     TypeOrmModule.forFeature([CartOrmEntity, CartItemOrmEntity]),
-    RoomsModule,
     UserModule,
-    forwardRef(() => ReservationModule),
-    forwardRef(() => PaymentModule),
+    RoomsModule,
   ],
   controllers: [CartController],
   providers: [
@@ -36,7 +31,6 @@ import { CartController } from './interfaces/http/cart.controller';
       provide: CART_REPOSITORY,
       useClass: CartRepository,
     },
-    CalculateStayAmountService,
     ResolveCartService,
     BuildCartItemService,
     CartPresenter,

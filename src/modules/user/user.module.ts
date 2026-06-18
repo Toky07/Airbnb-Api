@@ -13,6 +13,7 @@ import { UpdateMyProfileUseCase } from './application/useCase/update-my-profile.
 import { SaveUserAvatarUseCase } from './application/useCase/saveUserAvatar.usecase';
 import { UserController } from './interfaces/http/user.controller';
 import { USER_REPOSITORY, UserRepository } from './infrastructure/repositories/user.repository';
+import { cartUserProvider } from './infrastructure/adapters/cart-user.adapter';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './infrastructure/entities/user.entity';
 import { AuthEntity } from '../authentication/infrastructure/entity/auth.entity';
@@ -42,9 +43,11 @@ import { MediaModule } from '../media/media.module';
       provide: USER_REPOSITORY,
       useClass: UserRepository,
     },
+    cartUserProvider,
   ],
   exports: [
     USER_REPOSITORY,
+    cartUserProvider,
     CreateUserUseCase,
     SaveUserAvatarUseCase,
     RegisterHostUseCase,

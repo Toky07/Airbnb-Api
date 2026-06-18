@@ -9,8 +9,10 @@ import {
   CART_REPOSITORY,
   type ICartRepository,
 } from '../../domain/repositories/cart.repository';
-import { USER_REPOSITORY } from '../../../user/infrastructure/repositories/user.repository';
-import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
+import {
+  CART_USER_PORT,
+  type ICartUserPort,
+} from '../../domain/ports/cart-user.port';
 import { CartOutput } from '../dto/cart.output';
 import { CartPresenter } from '../presenters/cart.presenter';
 
@@ -19,13 +21,13 @@ export class MergeCartUseCase {
   constructor(
     @Inject(CART_REPOSITORY)
     private readonly cartRepository: ICartRepository,
-    @Inject(USER_REPOSITORY)
-    private readonly userRepository: IUserRepository,
+    @Inject(CART_USER_PORT)
+    private readonly cartUserPort: ICartUserPort,
     private readonly cartPresenter: CartPresenter,
   ) {}
 
   async execute(authId: number, sessionId?: string | null): Promise<CartOutput> {
-    const user = await this.userRepository.findByAuthId(authId);
+    const user = await this.cartUserPort.findByAuthId(authId);
     if (!user?.id) {
       throw new UnauthorizedException('Utilisateur introuvable.');
     }

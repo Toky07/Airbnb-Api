@@ -5,8 +5,10 @@ import {
   CART_REPOSITORY,
   type ICartRepository,
 } from '../../domain/repositories/cart.repository';
-import { USER_REPOSITORY } from '../../../user/infrastructure/repositories/user.repository';
-import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
+import {
+  CART_USER_PORT,
+  type ICartUserPort,
+} from '../../domain/ports/cart-user.port';
 
 export type CartRequestContext = {
   sessionId?: string | null;
@@ -18,13 +20,13 @@ export class ResolveCartService {
   constructor(
     @Inject(CART_REPOSITORY)
     private readonly cartRepository: ICartRepository,
-    @Inject(USER_REPOSITORY)
-    private readonly userRepository: IUserRepository,
+    @Inject(CART_USER_PORT)
+    private readonly cartUserPort: ICartUserPort,
   ) {}
 
   async resolve(context: CartRequestContext): Promise<Cart> {
     const user = context.authId
-      ? await this.userRepository.findByAuthId(context.authId)
+      ? await this.cartUserPort.findByAuthId(context.authId)
       : null;
 
     if (user?.id) {
@@ -50,13 +52,13 @@ export class ResolveCartService {
         );
       }
 
-      return this.cartRepository.create(
-        new Cart(randomUUID(), [], user.id),
-      );
+      return this.cartRepository.create(new Cart(randomUUID(), [], user.id));
     }
 
     if (context.sessionId?.trim()) {
-      const existing = await this.cartRepository.findBySessionId(context.sessionId.trim());
+      const existing = await this.cartRepository.findBySessionId(
+        context.sessionId.trim(),
+      );
       if (existing?.id) {
         return existing;
       }

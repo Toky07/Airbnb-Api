@@ -5,7 +5,7 @@ import {
   buildPaginationMeta,
   type PaginatedResult,
 } from '../../../../shared/pagination/pagination.types';
-import { BLOCKING_RESERVATION_STATUSES, RESERVATION_STATUS } from '../../domain/constants/reservation-status.constant';
+import { RESERVATION_STATUS } from '../../domain/constants/reservation-status.constant';
 import { Reservation } from '../../domain/entities/reservation.entity';
 import type { ReservationItem } from '../../domain/entities/reservation-item.entity';
 import type {
@@ -176,11 +176,14 @@ export class ReservationRepository implements IReservationRepository {
     scope: ReservationStatsScope = {},
   ): Promise<number> {
     const { start, end } = this.getMonthRange(year, month);
+    
     const qb = this.itemRepository
       .createQueryBuilder('item')
       .select('COALESCE(SUM(item.price), 0)', 'total')
       .andWhere('item.checkIn >= :start', { start })
-      .andWhere('item.checkIn < :end', { end });
+      .andWhere('item.checkIn < :end', { end })
+      .innerJoin('item.reservation', 'reservation')
+      .andWhere('reservation.status = :status', { status: RESERVATION_STATUS.CONFIRMED });
 
     this.applyItemScope(qb, scope);
 

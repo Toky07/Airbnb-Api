@@ -4,13 +4,12 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CalculateStayAmountService } from '../../../../shared/pricing/calculate-stay-amount.service';
-import {
-  ROOM_REPOSITORY,
-  type IRoomRepository,
-} from '../../../rooms/domain/repositories/room.repository';
 import { CART_ITEM_TYPE } from '../../domain/constants/cart-item-type.constant';
 import { CartItem } from '../../domain/entities/cart-item.entity';
+import {
+  CART_ITEM_CATALOG_PORT,
+  type ICartItemCatalogPort,
+} from '../../domain/ports/cart-item-catalog.port';
 import {
   CART_REPOSITORY,
   type ICartRepository,
@@ -29,9 +28,8 @@ export class UpdateCartItemUseCase {
     private readonly resolveCartService: ResolveCartService,
     @Inject(CART_REPOSITORY)
     private readonly cartRepository: ICartRepository,
-    @Inject(ROOM_REPOSITORY)
-    private readonly roomRepository: IRoomRepository,
-    private readonly calculateStayAmount: CalculateStayAmountService,
+    @Inject(CART_ITEM_CATALOG_PORT)
+    private readonly cartItemCatalog: ICartItemCatalogPort,
     private readonly cartPresenter: CartPresenter,
   ) {}
 
@@ -86,40 +84,31 @@ export class UpdateCartItemUseCase {
       throw new BadRequestException('Article de réservation invalide.');
     }
 
-    const room = await this.roomRepository.findById(item.roomId);
-    if (!room?.id) {
-      throw new NotFoundException('Chambre introuvable.');
-    }
-
     const startDate = dto.startDate ?? item.startDate!;
     const endDate = dto.endDate ?? item.endDate!;
     const guestCount = dto.guestCount ?? item.guestCount!;
 
-    if (guestCount > room.maxGuests) {
-      throw new BadRequestException(
-        `Cette chambre accepte au maximum ${room.maxGuests} voyageurs.`,
-      );
-    }
-
-    const stayAmount = this.calculateStayAmount.execute({
-      checkIn: startDate,
-      checkOut: endDate,
-      pricePerNight: room.pricePerNight,
+    const details = await this.cartItemCatalog.updateReservationItem({
+      roomId: item.roomId,
+      startDate,
+      endDate,
+      guestCount,
+      currentLabel: item.label,
     });
 
     return new CartItem(
       item.itemType,
-      item.label,
-      room.pricePerNight,
-      stayAmount.amountInMajorUnit,
+      details.label,
+      details.unitPrice,
+      details.totalPrice,
       1,
-      item.propertyId,
-      item.roomId,
+      details.propertyId,
+      details.roomId,
       item.serviceId,
       startDate,
       endDate,
       guestCount,
-      stayAmount.nights,
+      details.nights,
       item.id,
       item.cartId,
       item.createdAt,

@@ -20,10 +20,13 @@ import { UpdateRoomTypeUseCase } from './applications/useCase/update-room-type.u
 import { DeleteRoomTypeUseCase } from './applications/useCase/delete-room-type.usecase';
 import { RoomTypesSeedService } from './infrastructure/seed/room-types.seed';
 import { RoomSlugsSeedService } from './infrastructure/seed/room-slugs.seed';
+import { CalculateStayAmountService } from '../../shared/pricing/calculate-stay-amount.service';
 import { MediaModule } from '../media/media.module';
 import { RoomMediaPresenter } from './applications/presenters/room-media.presenter';
 import { RoomProductSummaryService } from './applications/services/room-product-summary.service';
 import { GenerateRoomSlugService } from './applications/services/generate-room-slug.service';
+import { cartItemCatalogProvider } from './infrastructure/adapters/cart-item-catalog.adapter';
+import { cartProductSummaryProvider } from './infrastructure/adapters/cart-product-summary.adapter';
 import { ReservationItemOrmEntity } from '../reservation/infrastructure/entities/reservation-item.orm-entity';
 import { AmenityModule } from '../amenity/amenity.module';
 
@@ -50,6 +53,9 @@ import { AmenityModule } from '../amenity/amenity.module';
     RoomMediaPresenter,
     RoomProductSummaryService,
     GenerateRoomSlugService,
+    CalculateStayAmountService,
+    cartItemCatalogProvider,
+    cartProductSummaryProvider,
     {
       provide: ROOM_REPOSITORY,
       useClass: RoomRepository,
@@ -70,6 +76,8 @@ import { AmenityModule } from '../amenity/amenity.module';
     DeleteRoomUseCase,
     RoomMediaPresenter,
     RoomProductSummaryService,
+    cartItemCatalogProvider,
+    cartProductSummaryProvider,
   ],
 })
 export class RoomsModule {}

@@ -75,7 +75,7 @@ export class ReservationController {
     @Req() request: { user?: JwtPayload },
     @Query() query: Record<string, unknown>,
   ) {
-    return this.listHostBookingOrdersUseCase.execute(
+    return this.listHostReservationsUseCase.execute(
       request.user!.sub,
       parseReservationQuery(query),
     );
