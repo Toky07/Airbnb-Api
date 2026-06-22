@@ -23,9 +23,6 @@ export interface IPaymentGateway {
   createPaymentIntent(
     params: CreatePaymentIntentParams,
   ): Promise<PaymentIntentSnapshot>;
-  constructWebhookEvent(
-    payload: Buffer,
-    signature: string,
-  ): WebhookEventPayload;
+  
   retrievePaymentIntent(id: string): Promise<PaymentIntentSnapshot>;
 }

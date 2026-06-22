@@ -10,7 +10,7 @@ export class PaymentOutput {
     public readonly currency: string,
     public readonly status: PaymentStatus,
     public readonly provider: PaymentProvider,
-    public readonly transactionId: string,
+    public readonly transactionId: string | null,
     public readonly userId: number,
     public readonly propertyType: PaymentType,
     public readonly propertyId: number,

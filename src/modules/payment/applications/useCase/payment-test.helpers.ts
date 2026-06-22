@@ -14,21 +14,23 @@ export function createSamplePayment(overrides: Partial<{
   propertyId: number;
   cartId: number | null;
 }> = {}): Payment {
-  return new Payment(
-    20000,
-    'eur',
-    overrides.status ?? PAYMENT_STATUS.PENDING,
-    PAYMENT_PROVIDER.STRIPE,
-    overrides.transactionId ?? 'pi_test_123',
-    overrides.userId ?? 1,
-    PAYMENT_TYPE.RESERVATION,
-    overrides.propertyId ?? 1,
-    overrides.cartId ?? null,
-    null,
-    overrides.id ?? 1,
-    new Date('2026-06-01T10:00:00.000Z'),
-    new Date('2026-06-01T10:00:00.000Z'),
-  );
+
+  return Payment.create({
+    amount: 20000,
+    currency: 'eur',
+    status: overrides.status ?? PAYMENT_STATUS.PENDING,
+    provider: PAYMENT_PROVIDER.STRIPE,
+    transactionId: overrides.transactionId ?? 'pi_test_123',
+    userId: overrides.userId ?? 1,
+    propertyType: PAYMENT_TYPE.RESERVATION,
+    propertyId: overrides.propertyId ?? 1,
+    cartId: overrides.cartId ?? null,
+    id: overrides.id ?? 1,
+    createdAt: new Date('2026-06-01T10:00:00.000Z'),
+    updatedAt: new Date('2026-06-01T10:00:00.000Z'),
+    invoiceNotificationsSentAt: null,
+    errorMessage: null,
+  });
 }
 
 export function createPaymentRepositoryMock(
@@ -38,7 +40,7 @@ export function createPaymentRepositoryMock(
     create: vi.fn().mockImplementation(async (payment: Payment) =>
       createSamplePayment({
         id: 1,
-        transactionId: payment.transactionId,
+        transactionId: payment.transactionId ?? undefined,
         userId: payment.userId,
         status: payment.status,
       }),

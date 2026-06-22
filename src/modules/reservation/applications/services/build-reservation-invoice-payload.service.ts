@@ -54,7 +54,7 @@ export class BuildReservationInvoicePayloadService {
     return {
       paymentId: payment.id,
       invoiceNumber: buildInvoiceNumber(payment.id, paidAt),
-      transactionId: payment.transactionId,
+      transactionId: payment.transactionId ?? '',
       paidAt,
       amountCents: payment.amount,
       currency: payment.currency,

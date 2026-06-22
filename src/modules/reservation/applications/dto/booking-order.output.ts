@@ -39,7 +39,7 @@ export class BookingOrderListItemOutput {
       user ? `${user.firstName} ${user.lastName}`.trim() : 'Client inconnu',
       user?.email ?? '—',
       previewLabel,
-      payment.transactionId,
+      payment.transactionId ?? '',
       firstItem?.startDate ?? null,
       firstItem?.endDate ?? null,
     );
@@ -71,7 +71,7 @@ export class BookingOrderDetailOutput {
       payment.amount / 100,
       payment.currency,
       payment.status,
-      payment.transactionId,
+      payment.transactionId ?? '',
       user ? `${user.firstName} ${user.lastName}`.trim() : 'Client inconnu',
       user?.email ?? '—',
       items.length,

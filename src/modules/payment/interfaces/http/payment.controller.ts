@@ -7,12 +7,13 @@ import {
 import type { RawBodyRequest } from '@nestjs/common';
 import type { Request } from 'express';
 import { Public } from '../../../authentication/interfaces/decorators/public.decorator';
-import { HandleStripeWebhookUseCase } from '../../applications/useCase/handle-stripe-webhook.usecase';
+import { ConfirmStripePaymentCommandHandler } from '../../applications/useCase/handlers/ConfirmStripePaymentCommandHandler';
+import { ConfirmStripePaymentCommand } from '../../applications/useCase/commands/ConfirmStripePaymentCommand';
 
 @Controller('payments')
 export class PaymentController {
   constructor(
-    private readonly handleStripeWebhookUseCase: HandleStripeWebhookUseCase,
+    private readonly confirmStripePaymentCommandHandler: ConfirmStripePaymentCommandHandler,
   ) {}
 
   @Post('webhook')
@@ -21,9 +22,11 @@ export class PaymentController {
     @Req() request: RawBodyRequest<Request>,
     @Headers('stripe-signature') signature: string,
   ) {
-    return this.handleStripeWebhookUseCase.execute(
-      request.rawBody ?? Buffer.from(''),
-      signature,
+    this.confirmStripePaymentCommandHandler.execute(
+      new ConfirmStripePaymentCommand(
+        request.rawBody ?? Buffer.from(''),
+        signature,
+      ),
     );
   }
 }

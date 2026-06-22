@@ -70,17 +70,17 @@ export class CreateCartPaymentIntentUseCase {
     }
 
     const payment = await this.paymentRepository.create(
-      new Payment(
-        params.amountInCents,
+      Payment.create({
+        amount: params.amountInCents,
         currency,
-        PAYMENT_STATUS.PENDING,
-        PAYMENT_PROVIDER.STRIPE,
-        paymentIntent.id,
-        params.authId,
-        params.propertyType,
-        params.propertyId,
-        params.cartId,
-      ),
+        status: PAYMENT_STATUS.PENDING,
+        provider: PAYMENT_PROVIDER.STRIPE,
+        transactionId: paymentIntent.id,
+        userId: params.authId,
+        propertyType: params.propertyType,
+        propertyId: params.propertyId,
+        cartId: params.cartId,
+      }),
     );
 
     await EventBus.getInstance().publish(new PaymentCreatedEvent(

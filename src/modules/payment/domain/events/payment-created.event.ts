@@ -1,4 +1,4 @@
-import { DomainEvent } from "src/shared/domain/domain.event";
+import { DomainEvent } from "../../../../shared/domain/domain.event";
 import { PAYMENT_TYPE } from "../types/payment.type";
 
 export class PaymentCreatedEvent implements DomainEvent {
