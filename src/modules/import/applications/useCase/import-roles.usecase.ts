@@ -1,7 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateRoleUseCase } from '../../../authentication/useCase/create-role.usecase';
-import { UpdateRoleUseCase } from '../../../authentication/useCase/update-role.usecase';
-import { SetRolePermissionsUseCase } from '../../../authentication/useCase/set-role-permissions.usecase';
+import { CommandBus } from '../../../../shared/useCase/bus/bus';
+import { CreateRoleCommand } from '../../../authentication/useCase/commands/CreateRoleCommand';
+import { RoleOutput } from '../../../authentication/application/dto/role.output';
+import { UpdateRoleCommand } from '../../../authentication/useCase/commands/UpdateRoleCommand';
+import { SetRolePermissionsCommand } from '../../../authentication/useCase/commands/SetRolePermissionsCommand';
 import { ROLE_REPOSITORY } from '../../../authentication/domain/repositories/role.repository';
 import type { IRoleRepository } from '../../../authentication/domain/repositories/role.repository';
 import { SUPERADMIN_ROLE_SLUG } from '../../../authentication/domain/constants/permissions.constant';
@@ -14,9 +16,6 @@ import { validateImportRoleRow } from '../validation/validate-import-role-row';
 @Injectable()
 export class ImportRolesUseCase {
   constructor(
-    private readonly createRole: CreateRoleUseCase,
-    private readonly updateRole: UpdateRoleUseCase,
-    private readonly setRolePermissions: SetRolePermissionsUseCase,
     @Inject(ROLE_REPOSITORY) private readonly roleRepository: IRoleRepository,
   ) {}
 
@@ -48,10 +47,12 @@ export class ImportRolesUseCase {
         if (slug === SUPERADMIN_ROLE_SLUG) {
           if (existing?.id) {
             if (row.description?.trim()) {
-              await this.updateRole.execute({
-                id: existing.id,
-                description: row.description.trim(),
-              });
+              await CommandBus.execute(
+                new UpdateRoleCommand({
+                  id: existing.id,
+                  description: row.description.trim(),
+                }),
+              );
             }
             result.created += 1;
           } else {
@@ -66,22 +67,30 @@ export class ImportRolesUseCase {
         }
 
         if (existing?.id) {
-          await this.updateRole.execute({
-            id: existing.id,
-            name: row.name.trim(),
-            description: row.description?.trim() || null,
-          });
-          await this.setRolePermissions.execute(existing.id, permissionKeys);
+          await CommandBus.execute(
+            new UpdateRoleCommand({
+              id: existing.id,
+              name: row.name.trim(),
+              description: row.description?.trim() || null,
+            }),
+          );
+          await CommandBus.execute(
+            new SetRolePermissionsCommand(existing.id, permissionKeys),
+          );
           result.created += 1;
           continue;
         }
 
-        const created = await this.createRole.execute({
-          name: row.name.trim(),
-          slug,
-          description: row.description?.trim() || undefined,
-        });
-        await this.setRolePermissions.execute(created.id, permissionKeys);
+        const created = await CommandBus.execute<RoleOutput>(
+          new CreateRoleCommand({
+            name: row.name.trim(),
+            slug,
+            description: row.description?.trim() || undefined,
+          }),
+        );
+        await CommandBus.execute(
+          new SetRolePermissionsCommand(created.id, permissionKeys),
+        );
         result.created += 1;
       } catch (cause) {
         result.errors.push({

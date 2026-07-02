@@ -1,18 +1,11 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import type { AmenityScope } from '../../domain/constants/amenity-scope.constant';
 import { Amenity } from '../../domain/entities/amenity.entity';
-import {
-  AMENITY_REPOSITORY,
-  type IAmenityRepository,
-} from '../../domain/repositories/amenity.repository';
+import type { IAmenityRepository } from '../../domain/repositories/amenity.repository';
 import { AmenityOutput } from '../dto/amenity.output';
 
-@Injectable()
 export class ResolveAmenitiesService {
-  constructor(
-    @Inject(AMENITY_REPOSITORY)
-    private readonly amenityRepository: IAmenityRepository,
-  ) {}
+  constructor(private readonly amenityRepository: IAmenityRepository) {}
 
   async resolveActiveAmenities(
     amenityIds: number[],

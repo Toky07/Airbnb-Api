@@ -4,7 +4,7 @@ import { EmailVO } from '../../../../shared/valueObject/email.vo';
 import { UserEntity } from '../entities/user.entity';
 import { PhoneNumberVO } from '../../../../shared/valueObject/phone.vo';
 import type { UserRoleSummary } from '../../domain/dtos/user.output';
-import { AccountStatusResolver } from '../../../account-activation/domain/services/account-status.resolver';
+import { AccountStatusResolver } from '../../../authentication/domain/services/account-status.resolver';
 
 export class UserMapper {
   static toDomain(user: UserEntity): User {

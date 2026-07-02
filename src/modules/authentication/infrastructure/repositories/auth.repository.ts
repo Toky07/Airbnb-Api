@@ -6,7 +6,7 @@ import { AuthMapper } from '../mappers/auth.mappers';
 import { Auth } from '../../domain/entities/user.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Role } from '../entity/role.entity';
-import { ACCOUNT_STATUS } from '../../../account-activation/domain/constants/account-status.constant';
+import { ACCOUNT_STATUS } from '../../domain/constants/account-status.constant';
 
 @Injectable()
 export class AuthRepository implements IAuthRepository {

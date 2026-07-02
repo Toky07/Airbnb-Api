@@ -15,27 +15,19 @@ import {
   AddCartItemDto,
   UpdateCartItemDto,
 } from '../../applications/dto/add-cart-item.dto';
-import { AddCartItemUseCase } from '../../applications/useCase/add-cart-item.usecase';
-import { CheckoutCartUseCase } from '../../applications/useCase/checkout-cart.usecase';
-import { CompleteCartCheckoutUseCase } from '../../applications/useCase/complete-cart-checkout.usecase';
-import { GetCartUseCase } from '../../applications/useCase/get-cart.usecase';
-import { MergeCartUseCase } from '../../applications/useCase/merge-cart.usecase';
-import { RemoveCartItemUseCase } from '../../applications/useCase/remove-cart-item.usecase';
-import { UpdateCartItemUseCase } from '../../applications/useCase/update-cart-item.usecase';
 import { parseCartContext } from './parse-cart-context';
+import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
+import { CommandBus } from '../../../../shared/useCase/bus/bus';
+import { GetCartQuery } from '../../applications/useCase/queries/GetCartQuery';
+import { AddCartItemCommand } from '../../applications/useCase/commands/AddCartItemCommand';
+import { UpdateCartItemCommand } from '../../applications/useCase/commands/UpdateCartItemCommand';
+import { RemoveCartItemCommand } from '../../applications/useCase/commands/RemoveCartItemCommand';
+import { MergeCartCommand } from '../../applications/useCase/commands/MergeCartCommand';
+import { CheckoutCartCommand } from '../../applications/useCase/commands/CheckoutCartCommand';
+import { CompleteCartCheckoutCommand } from '../../applications/useCase/commands/CompleteCartCheckoutCommand';
 
 @Controller('cart')
 export class CartController {
-  constructor(
-    private readonly getCartUseCase: GetCartUseCase,
-    private readonly addCartItemUseCase: AddCartItemUseCase,
-    private readonly updateCartItemUseCase: UpdateCartItemUseCase,
-    private readonly removeCartItemUseCase: RemoveCartItemUseCase,
-    private readonly mergeCartUseCase: MergeCartUseCase,
-    private readonly checkoutCartUseCase: CheckoutCartUseCase,
-    private readonly completeCartCheckoutUseCase: CompleteCartCheckoutUseCase,
-  ) {}
-
   @Get()
   @Public()
   get(
@@ -45,7 +37,7 @@ export class CartController {
       headers: Record<string, string | string[] | undefined>;
     },
   ) {
-    return this.getCartUseCase.execute(parseCartContext(request));
+    return QueryBus.execute(new GetCartQuery(parseCartContext(request)));
   }
 
   @Post('items')
@@ -58,7 +50,9 @@ export class CartController {
     },
     @Body() dto: AddCartItemDto,
   ) {
-    return this.addCartItemUseCase.execute(parseCartContext(request), dto);
+    return CommandBus.execute(
+      new AddCartItemCommand(parseCartContext(request), dto),
+    );
   }
 
   @Patch('items/:id')
@@ -72,10 +66,8 @@ export class CartController {
     @Param('id') id: number,
     @Body() dto: UpdateCartItemDto,
   ) {
-    return this.updateCartItemUseCase.execute(
-      parseCartContext(request),
-      Number(id),
-      dto,
+    return CommandBus.execute(
+      new UpdateCartItemCommand(parseCartContext(request), Number(id), dto),
     );
   }
 
@@ -89,9 +81,8 @@ export class CartController {
     },
     @Param('id') id: number,
   ) {
-    return this.removeCartItemUseCase.execute(
-      parseCartContext(request),
-      Number(id),
+    return CommandBus.execute(
+      new RemoveCartItemCommand(parseCartContext(request), Number(id)),
     );
   }
 
@@ -104,7 +95,9 @@ export class CartController {
     },
   ) {
     const context = parseCartContext(request);
-    return this.mergeCartUseCase.execute(request.user!.sub, context.sessionId);
+    return CommandBus.execute(
+      new MergeCartCommand(request.user!.sub, context.sessionId),
+    );
   }
 
   @Post('checkout')
@@ -115,9 +108,8 @@ export class CartController {
       headers: Record<string, string | string[] | undefined>;
     },
   ) {
-    return this.checkoutCartUseCase.execute(
-      request.user!.sub,
-      parseCartContext(request),
+    return CommandBus.execute(
+      new CheckoutCartCommand(request.user!.sub, parseCartContext(request)),
     );
   }
 
@@ -130,10 +122,12 @@ export class CartController {
     },
     @Body() dto: CompleteCartCheckoutDto,
   ) {
-    return this.completeCartCheckoutUseCase.execute(
-      request.user!.sub,
-      dto.paymentId,
-      parseCartContext(request),
+    return CommandBus.execute(
+      new CompleteCartCheckoutCommand(
+        request.user!.sub,
+        dto.paymentId,
+        parseCartContext(request),
+      ),
     );
   }
 }

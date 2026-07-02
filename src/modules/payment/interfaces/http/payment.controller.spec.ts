@@ -4,34 +4,34 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { DataSource } from 'typeorm';
-import { AuthModule } from '../../../authentication/auth.module';
-import { UserModule } from '../../../user/user.module';
-import { RoomsModule } from '../../../rooms/room.module';
 import { PaymentModule } from '../../payment.module';
 import { PaymentOrmEntity } from '../../infrastructure/entities/payment.orm-entity';
-import { PropertyEntity } from '../../../properties/infrastructure/entities/property-entity.entity';
-import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
 import { PAYMENT_GATEWAY } from '../../domain/ports/payment-gateway.port';
 import { PAYMENT_STATUS } from '../../domain/constants/payment-status.constant';
 import {
   AUTH_TEST_ENTITIES,
   DOMAIN_TEST_ENTITIES,
 } from '../../../../test/controller-test.helpers';
-import { createPaymentGatewayMock } from '../../applications/useCase/payment-test.helpers';
-import { RESERVATION_STATUS } from '../../../reservation/domain/constants/reservation-status.constant';
+import {
+  createPaymentGatewayMock,
+  createWebhookVerifierMock,
+} from '../../applications/useCase/payment-test.helpers';
+import { StripeWebhookVerifier } from '../../infrastructure/stripe/StripeWebhookVerifier';
 import { ReservationOrmEntity } from '../../../reservation/infrastructure/entities/reservation.orm-entity';
+import { RESERVATION_STATUS } from '../../../reservation/domain/constants/reservation-status.constant';
+import { PropertyEntity } from '../../../properties/infrastructure/entities/property-entity.entity';
+import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
 
 describe('PaymentController', () => {
   let app: INestApplication;
   let dataSource: DataSource;
   let roomId: number;
-  let paymentGateway = createPaymentGatewayMock();
+  const paymentGateway = createPaymentGatewayMock();
+  const webhookVerifier = createWebhookVerifierMock();
 
   beforeAll(async () => {
     process.env.MAIL_TRANSPORT = 'console';
     process.env.STRIPE_PUBLISHABLE_KEY = 'pk_test_controller';
-
-    paymentGateway = createPaymentGatewayMock();
 
     const moduleRef = await Test.createTestingModule({
       imports: [
@@ -56,6 +56,8 @@ describe('PaymentController', () => {
     })
       .overrideProvider(PAYMENT_GATEWAY)
       .useValue(paymentGateway)
+      .overrideProvider(StripeWebhookVerifier)
+      .useValue(webhookVerifier)
       .compile();
 
     dataSource = moduleRef.get(DataSource);
@@ -104,7 +106,7 @@ describe('PaymentController', () => {
   });
 
   afterAll(async () => {
-    await app.close();
+    await app?.close();
   });
 
   it('POST /payments/webhook met à jour le statut du paiement', async () => {
@@ -133,7 +135,7 @@ describe('PaymentController', () => {
       ],
     });
 
-    paymentGateway.constructWebhookEvent = vi.fn().mockReturnValue({
+    webhookVerifier.verify = vi.fn().mockReturnValue({
       type: 'payment_intent.succeeded',
       paymentIntentId: payment!.transactionId,
       status: 'succeeded',

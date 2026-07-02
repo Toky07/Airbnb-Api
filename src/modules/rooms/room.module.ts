@@ -1,23 +1,17 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Inject, Module, OnModuleInit, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { RoomEntity } from './infrastructure/entities/room.entity';
 import { RoomTypeEntity } from './infrastructure/entities/room-type.entity';
 import { ROOM_REPOSITORY } from './domain/repositories/room.repository';
+import type { IRoomRepository } from './domain/repositories/room.repository';
 import { ROOM_TYPE_REPOSITORY } from './domain/repositories/room-type.repository';
+import type { IRoomTypeRepository } from './domain/repositories/room-type.repository';
 import { RoomRepository } from './infrastructure/repositories/room.repository';
 import { RoomTypeRepository } from './infrastructure/repositories/room-type.repository';
-import { ListRoomsUseCase } from './applications/useCase/listRoom.usecase';
 import { RoomController } from './interfaces/http/room.controller';
 import { RoomTypeController } from './interfaces/http/room-type.controller';
-import { FindOneRoomUseCase } from './applications/useCase/findOneRoom.usecase';
-import { CreateRoomUseCase } from './applications/useCase/createRoom.usecase';
-import { UpdateRoomUseCase } from './applications/useCase/updateRoom.usecase';
-import { DeleteRoomUseCase } from './applications/useCase/deleteRoom.usecase';
-import { ListRoomTypesUseCase } from './applications/useCase/list-room-types.usecase';
-import { ListRoomTypeOptionsUseCase } from './applications/useCase/list-room-type-options.usecase';
-import { CreateRoomTypeUseCase } from './applications/useCase/create-room-type.usecase';
-import { UpdateRoomTypeUseCase } from './applications/useCase/update-room-type.usecase';
-import { DeleteRoomTypeUseCase } from './applications/useCase/delete-room-type.usecase';
 import { RoomTypesSeedService } from './infrastructure/seed/room-types.seed';
 import { RoomSlugsSeedService } from './infrastructure/seed/room-slugs.seed';
 import { CalculateStayAmountService } from '../../shared/pricing/calculate-stay-amount.service';
@@ -29,6 +23,19 @@ import { cartItemCatalogProvider } from './infrastructure/adapters/cart-item-cat
 import { cartProductSummaryProvider } from './infrastructure/adapters/cart-product-summary.adapter';
 import { ReservationItemOrmEntity } from '../reservation/infrastructure/entities/reservation-item.orm-entity';
 import { AmenityModule } from '../amenity/amenity.module';
+import { RoomsBootstrap } from './rooms.bootstrap';
+import { CommandBus } from '../../shared/useCase/bus/bus';
+import { QueryBus } from '../../shared/useCase/bus/query-bus';
+import { CreateRoomCommand } from './applications/useCase/commands/CreateRoomCommand';
+import { UpdateRoomCommand } from './applications/useCase/commands/UpdateRoomCommand';
+import { DeleteRoomCommand } from './applications/useCase/commands/DeleteRoomCommand';
+import { CreateRoomTypeCommand } from './applications/useCase/commands/CreateRoomTypeCommand';
+import { UpdateRoomTypeCommand } from './applications/useCase/commands/UpdateRoomTypeCommand';
+import { DeleteRoomTypeCommand } from './applications/useCase/commands/DeleteRoomTypeCommand';
+import { FindRoomQuery } from './applications/useCase/queries/FindRoomQuery';
+import { ListRoomsQuery } from './applications/useCase/queries/ListRoomsQuery';
+import { ListRoomTypesQuery } from './applications/useCase/queries/ListRoomTypesQuery';
+import { ListRoomTypeOptionsQuery } from './applications/useCase/queries/ListRoomTypeOptionsQuery';
 
 @Module({
   imports: [
@@ -38,16 +45,6 @@ import { AmenityModule } from '../amenity/amenity.module';
   ],
   controllers: [RoomController, RoomTypeController],
   providers: [
-    ListRoomsUseCase,
-    FindOneRoomUseCase,
-    CreateRoomUseCase,
-    UpdateRoomUseCase,
-    DeleteRoomUseCase,
-    ListRoomTypesUseCase,
-    ListRoomTypeOptionsUseCase,
-    CreateRoomTypeUseCase,
-    UpdateRoomTypeUseCase,
-    DeleteRoomTypeUseCase,
     RoomTypesSeedService,
     RoomSlugsSeedService,
     RoomMediaPresenter,
@@ -68,16 +65,43 @@ import { AmenityModule } from '../amenity/amenity.module';
   exports: [
     ROOM_REPOSITORY,
     ROOM_TYPE_REPOSITORY,
-    ListRoomTypeOptionsUseCase,
-    ListRoomsUseCase,
-    FindOneRoomUseCase,
-    CreateRoomUseCase,
-    UpdateRoomUseCase,
-    DeleteRoomUseCase,
     RoomMediaPresenter,
     RoomProductSummaryService,
     cartItemCatalogProvider,
     cartProductSummaryProvider,
   ],
 })
-export class RoomsModule {}
+export class RoomsModule implements OnModuleInit {
+  constructor(
+    @Inject(ROOM_REPOSITORY)
+    private readonly roomRepository: IRoomRepository,
+    @Inject(ROOM_TYPE_REPOSITORY)
+    private readonly roomTypeRepository: IRoomTypeRepository,
+    private readonly roomMediaPresenter: RoomMediaPresenter,
+    private readonly generateRoomSlug: GenerateRoomSlugService,
+    @InjectRepository(ReservationItemOrmEntity)
+    private readonly reservationItemRepo: Repository<ReservationItemOrmEntity>,
+  ) {}
+
+  onModuleInit() {
+    const bootstrap = RoomsBootstrap.create({
+      roomRepository: this.roomRepository,
+      roomTypeRepository: this.roomTypeRepository,
+      roomMediaPresenter: this.roomMediaPresenter,
+      generateRoomSlug: this.generateRoomSlug,
+      reservationItemRepo: this.reservationItemRepo,
+    });
+
+    CommandBus.register(CreateRoomCommand, bootstrap.createRoomCommandHandler);
+    CommandBus.register(UpdateRoomCommand, bootstrap.updateRoomCommandHandler);
+    CommandBus.register(DeleteRoomCommand, bootstrap.deleteRoomCommandHandler);
+    CommandBus.register(CreateRoomTypeCommand, bootstrap.createRoomTypeCommandHandler);
+    CommandBus.register(UpdateRoomTypeCommand, bootstrap.updateRoomTypeCommandHandler);
+    CommandBus.register(DeleteRoomTypeCommand, bootstrap.deleteRoomTypeCommandHandler);
+
+    QueryBus.register(FindRoomQuery, bootstrap.findRoomQueryHandler);
+    QueryBus.register(ListRoomsQuery, bootstrap.listRoomsQueryHandler);
+    QueryBus.register(ListRoomTypesQuery, bootstrap.listRoomTypesQueryHandler);
+    QueryBus.register(ListRoomTypeOptionsQuery, bootstrap.listRoomTypeOptionsQueryHandler);
+  }
+}

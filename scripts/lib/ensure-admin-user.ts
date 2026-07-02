@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import type { DataSource } from 'typeorm';
-import { ACCOUNT_STATUS } from '../../src/modules/account-activation/domain/constants/account-status.constant';
+import { ACCOUNT_STATUS } from '../../src/modules/authentication/domain/constants/account-status.constant';
 import { SUPERADMIN_ROLE_SLUG } from '../../src/modules/authentication/domain/constants/permissions.constant';
 import { AuthEntity } from '../../src/modules/authentication/infrastructure/entity/auth.entity';
 import { Role } from '../../src/modules/authentication/infrastructure/entity/role.entity';

@@ -1,21 +1,27 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ImportRolesUseCase } from './import-roles.usecase';
+import { CreateRoleCommand } from '../../../authentication/useCase/commands/CreateRoleCommand';
+import { UpdateRoleCommand } from '../../../authentication/useCase/commands/UpdateRoleCommand';
+import { SetRolePermissionsCommand } from '../../../authentication/useCase/commands/SetRolePermissionsCommand';
+
+const mockExecute = vi.fn();
+
+vi.mock('../../../../shared/useCase/bus/bus', () => ({
+  CommandBus: { execute: (...args: unknown[]) => mockExecute(...args) },
+}));
 
 describe('ImportRolesUseCase', () => {
-  it('crée un rôle et assigne ses permissions', async () => {
-    const createRole = {
-      execute: vi.fn().mockResolvedValue({ id: 3, name: 'Support', slug: 'support' }),
-    };
-    const updateRole = { execute: vi.fn() };
-    const setRolePermissions = { execute: vi.fn().mockResolvedValue({}) };
-    const roleRepository = { findBySlug: vi.fn().mockResolvedValue(null) };
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
-    const useCase = new ImportRolesUseCase(
-      createRole as never,
-      updateRole as never,
-      setRolePermissions as never,
-      roleRepository as never,
-    );
+  it('crée un rôle et assigne ses permissions', async () => {
+    mockExecute
+      .mockResolvedValueOnce({ id: 3, name: 'Support', slug: 'support' })
+      .mockResolvedValueOnce({});
+
+    const roleRepository = { findBySlug: vi.fn().mockResolvedValue(null) };
+    const useCase = new ImportRolesUseCase(roleRepository as never);
 
     const result = await useCase.execute([
       {
@@ -27,27 +33,21 @@ describe('ImportRolesUseCase', () => {
     ]);
 
     expect(result.created).toBe(1);
-    expect(createRole.execute).toHaveBeenCalledTimes(1);
-    expect(setRolePermissions.execute).toHaveBeenCalledWith(3, [
-      'users.read',
-      'users.update',
-    ]);
+    expect(mockExecute).toHaveBeenCalledTimes(2);
+    expect(mockExecute.mock.calls[0]?.[0]).toBeInstanceOf(CreateRoleCommand);
+    expect(mockExecute.mock.calls[1]?.[0]).toEqual(
+      new SetRolePermissionsCommand(3, ['users.read', 'users.update']),
+    );
   });
 
   it('met à jour un rôle existant', async () => {
-    const createRole = { execute: vi.fn() };
-    const updateRole = { execute: vi.fn().mockResolvedValue({}) };
-    const setRolePermissions = { execute: vi.fn().mockResolvedValue({}) };
+    mockExecute.mockResolvedValue({});
+
     const roleRepository = {
       findBySlug: vi.fn().mockResolvedValue({ id: 2, slug: 'support', name: 'Support' }),
     };
 
-    const useCase = new ImportRolesUseCase(
-      createRole as never,
-      updateRole as never,
-      setRolePermissions as never,
-      roleRepository as never,
-    );
+    const useCase = new ImportRolesUseCase(roleRepository as never);
 
     const result = await useCase.execute([
       {
@@ -58,8 +58,10 @@ describe('ImportRolesUseCase', () => {
     ]);
 
     expect(result.created).toBe(1);
-    expect(createRole.execute).not.toHaveBeenCalled();
-    expect(updateRole.execute).toHaveBeenCalledTimes(1);
-    expect(setRolePermissions.execute).toHaveBeenCalledWith(2, ['users.read']);
+    expect(mockExecute).toHaveBeenCalledTimes(2);
+    expect(mockExecute.mock.calls[0]?.[0]).toBeInstanceOf(UpdateRoleCommand);
+    expect(mockExecute.mock.calls[1]?.[0]).toEqual(
+      new SetRolePermissionsCommand(2, ['users.read']),
+    );
   });
 });

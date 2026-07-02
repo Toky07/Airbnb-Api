@@ -1,10 +1,15 @@
-import Stripe from "stripe";
+import { Injectable } from '@nestjs/common';
+import Stripe from 'stripe';
 
+@Injectable()
 export class StripeClientProvider {
-    public readonly stripe: Stripe.Stripe;
+  private _stripe: Stripe.Stripe | null = null;
 
-    constructor() {
-        const stripeSecretKey = process.env.STRIPE_SECRET_KEY?.trim() ?? ''
-        this.stripe = new Stripe(stripeSecretKey);
+  get stripe(): Stripe.Stripe {
+    if (!this._stripe) {
+      const stripeSecretKey = process.env.STRIPE_SECRET_KEY?.trim() ?? '';
+      this._stripe = new Stripe(stripeSecretKey);
     }
+    return this._stripe;
+  }
 }

@@ -11,49 +11,42 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ListPropertyUseCase } from '../../applications/useCase/listProperty.usecase';
-import { ListPropertyOptionsUseCase } from '../../applications/useCase/listPropertyOptions.usecase';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
 import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
 import { PropertyOutput } from '../../applications/dto/property.outup';
-import { FindOnePropertyUseCase } from '../../applications/useCase/findOneProperty.usecase';
 import type { CreatePropertyDto } from '../../applications/dto/createProperty.dto';
-import { CreatePropertyUseCase } from '../../applications/useCase/createProperty.usecase';
-import { UpdatePropertyUseCase } from '../../applications/useCase/updateProperty.usecase';
-import { DeletePropertyUseCase } from '../../applications/useCase/deleteProperty.usecase';
 import { parsePropertyBody } from './parse-property-body';
 import type { UploadFile } from '../../../media/types/upload-file';
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
+import { CommandBus } from '../../../../shared/useCase/bus/bus';
+import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
+import { CreatePropertyCommand } from '../../applications/useCase/commands/CreatePropertyCommand';
+import { UpdatePropertyCommand } from '../../applications/useCase/commands/UpdatePropertyCommand';
+import { DeletePropertyCommand } from '../../applications/useCase/commands/DeletePropertyCommand';
+import { FindPropertyQuery } from '../../applications/useCase/queries/FindPropertyQuery';
+import { ListPropertiesQuery } from '../../applications/useCase/queries/ListPropertiesQuery';
+import { ListPropertyOptionsQuery } from '../../applications/useCase/queries/ListPropertyOptionsQuery';
 
 @Controller('properties')
 export class PropertyController {
-  constructor(
-        private readonly listePropertyUseCase: ListPropertyUseCase,
-        private readonly listPropertyOptionsUseCase: ListPropertyOptionsUseCase,
-    private readonly findPropertyUseCase: FindOnePropertyUseCase,
-    private readonly createPropertyUseCase: CreatePropertyUseCase,
-    private readonly updatePropertyUseCase: UpdatePropertyUseCase,
-    private readonly deletePropertyUseCase: DeletePropertyUseCase,
-  ) {}
+  @Get('options')
+  @RequirePermissions('properties.read')
+  listOptions(): Promise<PropertyOutput[]> {
+    return QueryBus.execute(new ListPropertyOptionsQuery());
+  }
 
-    @Get('options')
-    @RequirePermissions('properties.read')
-    listOptions(): Promise<PropertyOutput[]> {
-        return this.listPropertyOptionsUseCase.execute();
-    }
+  @Get()
+  @RequirePermissions('properties.read')
+  findAll(
+    @Query() query: Record<string, unknown>,
+  ): Promise<PaginatedResult<PropertyOutput>> {
+    return QueryBus.execute(new ListPropertiesQuery(parsePaginationQuery(query)));
+  }
 
-    @Get()
-    @RequirePermissions('properties.read')
-    findAll(
-        @Query() query: Record<string, unknown>,
-    ): Promise<PaginatedResult<PropertyOutput>> {
-        return this.listePropertyUseCase.execute(parsePaginationQuery(query));
-    }
-
-    @Get(':id')
+  @Get(':id')
   @RequirePermissions('properties.read')
   findById(@Param('id') id: number): Promise<PropertyOutput> {
-    return this.findPropertyUseCase.execute(id);
+    return QueryBus.execute(new FindPropertyQuery(id));
   }
 
   @Post()
@@ -67,7 +60,7 @@ export class PropertyController {
       typeof (body as CreatePropertyDto).latitude === 'number'
         ? (body as CreatePropertyDto)
         : parsePropertyBody(body as Record<string, unknown>);
-    return this.createPropertyUseCase.execute(createPropertyDto, image);
+    return CommandBus.execute(new CreatePropertyCommand(createPropertyDto, image));
   }
 
   @Put(':id')
@@ -82,12 +75,14 @@ export class PropertyController {
       typeof (body as CreatePropertyDto).latitude === 'number'
         ? (body as CreatePropertyDto)
         : parsePropertyBody(body as Record<string, unknown>);
-    return this.updatePropertyUseCase.execute(id, updatePropertyDto, image);
+    return CommandBus.execute(
+      new UpdatePropertyCommand(id, updatePropertyDto, image),
+    );
   }
 
   @Delete(':id')
   @RequirePermissions('properties.delete')
   delete(@Param('id') id: number): Promise<boolean> {
-    return this.deletePropertyUseCase.execute(id);
+    return CommandBus.execute(new DeletePropertyCommand(id));
   }
 }

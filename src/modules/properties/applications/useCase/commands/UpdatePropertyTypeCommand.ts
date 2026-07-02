@@ -1,0 +1,8 @@
+import type { UpdatePropertyTypeDto } from '../../dto/create-property-type.dto';
+
+export class UpdatePropertyTypeCommand {
+  constructor(
+    public readonly id: number,
+    public readonly dto: UpdatePropertyTypeDto,
+  ) {}
+}

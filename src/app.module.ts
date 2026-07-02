@@ -14,8 +14,7 @@ import { ImportModule } from './modules/import/import.module';
 import { HostModule } from './modules/host/host.module';
 import { MailModule } from './modules/mail/mail.module';
 import { EmailOrmEntity } from './modules/mail/infrastructure/entities/email.orm-entity';
-import { AccountActivationModule } from './modules/account-activation/account-activation.module';
-import { PasswordSetupTokenOrmEntity } from './modules/account-activation/infrastructure/entities/password-setup-token.orm-entity';
+import { PasswordSetupTokenOrmEntity } from './modules/authentication/infrastructure/entities/password-setup-token.orm-entity';
 import { PaymentModule } from './modules/payment/payment.module';
 import { PaymentOrmEntity } from './modules/payment/infrastructure/entities/payment.orm-entity';
 import { ReservationModule } from './modules/reservation/reservation.module';
@@ -65,7 +64,6 @@ import { RoomAmenityOrmEntity } from './modules/amenity/infrastructure/entities/
     ImportModule,
     HostModule,
     MailModule,
-    AccountActivationModule,
     PaymentModule,
     ReservationModule,
     CartModule,

@@ -1,3 +1,6 @@
+/** @deprecated Use ICommandHandler from command-handler.interface */
 export type CommandHandler = {
-    execute(command: any): Promise<any>;
+  execute(command: unknown): Promise<unknown>;
 };
+
+export type { ICommandHandler } from './command-handler.interface';

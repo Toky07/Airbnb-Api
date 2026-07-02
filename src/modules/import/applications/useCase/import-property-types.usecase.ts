@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePropertyTypeUseCase } from '../../../properties/applications/useCase/create-property-type.usecase';
+import { CommandBus } from '../../../../shared/useCase/bus/bus';
+import { CreatePropertyTypeCommand } from '../../../properties/applications/useCase/commands/CreatePropertyTypeCommand';
 import { slugify } from '../../../../shared/utils/slug.util';
 import type { ImportCategoryTypeRowDto } from '../dto/import-batch.dto';
 import type { ImportEntityResult } from '../dto/import-entity-result.dto';
@@ -9,10 +10,6 @@ import { validateImportCategoryTypeRow } from '../validation/validate-import-cat
 
 @Injectable()
 export class ImportPropertyTypesUseCase {
-  constructor(
-    private readonly createPropertyType: CreatePropertyTypeUseCase,
-  ) {}
-
   async execute(
     rows: ImportCategoryTypeRowDto[] | undefined,
     context: ImportBatchContext,
@@ -48,11 +45,13 @@ export class ImportPropertyTypesUseCase {
       }
 
       try {
-        const created = await this.createPropertyType.execute({
-          name: row.name.trim(),
-          sortOrder: Number(row.sortOrder),
-          isActive: row.isActive,
-        });
+        const created = await CommandBus.execute<{ slug: string }>(
+          new CreatePropertyTypeCommand({
+            name: row.name.trim(),
+            sortOrder: Number(row.sortOrder),
+            isActive: row.isActive,
+          }),
+        );
         context.propertyTypeSlugs.add(created.slug);
         result.created += 1;
       } catch (cause) {

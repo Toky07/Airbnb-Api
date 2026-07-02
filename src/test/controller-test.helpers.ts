@@ -13,8 +13,8 @@ import { PropertyEntity } from '../modules/properties/infrastructure/entities/pr
 import { RoomTypeEntity } from '../modules/rooms/infrastructure/entities/room-type.entity';
 import { RoomEntity } from '../modules/rooms/infrastructure/entities/room.entity';
 import { UserEntity } from '../modules/user/infrastructure/entities/user.entity';
-import { ACCOUNT_STATUS } from '../modules/account-activation/domain/constants/account-status.constant';
-import { PasswordSetupTokenOrmEntity } from '../modules/account-activation/infrastructure/entities/password-setup-token.orm-entity';
+import { ACCOUNT_STATUS } from '../modules/authentication/domain/constants/account-status.constant';
+import { PasswordSetupTokenOrmEntity } from '../modules/authentication/infrastructure/entities/password-setup-token.orm-entity';
 import { ReservationOrmEntity } from '../modules/reservation/infrastructure/entities/reservation.orm-entity';
 import { ReservationItemOrmEntity } from '../modules/reservation/infrastructure/entities/reservation-item.orm-entity';
 import { AmenityOrmEntity } from '../modules/amenity/infrastructure/entities/amenity.orm-entity';

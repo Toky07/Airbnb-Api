@@ -1,39 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { mkdir, unlink, writeFile } from 'fs/promises';
-import { dirname, join } from 'path';
+import { dirname } from 'path';
 import { randomUUID } from 'crypto';
-import type { EntityType } from '../constant';
-import { UPLOAD_DIRS, UPLOAD_ROOT } from '../constant';
 import type { UploadFile } from '../types/upload-file';
+import {
+  buildUploadRelativePath,
+  toDiskPath,
+  type SaveMediaContext,
+} from '../utils/build-upload-path';
+import { resolveUploadRoot } from '../utils/resolve-upload-root';
 
 export const LOCAL_STORAGE_SERVICE = 'LOCAL_STORAGE_SERVICE';
 
 export interface ILocalStorageService {
-  save(
-    file: UploadFile,
-    entityType: EntityType,
-    entityId: number,
-  ): Promise<string>;
+  save(file: UploadFile, context: SaveMediaContext): Promise<string>;
   delete(relativePath: string): Promise<void>;
   deleteMany(relativePaths: string[]): Promise<void>;
 }
 
 @Injectable()
 export class LocalStorageService implements ILocalStorageService {
-  async save(
-    file: UploadFile,
-    entityType: EntityType,
-    entityId: number,
-  ): Promise<string> {
+  async save(file: UploadFile, context: SaveMediaContext): Promise<string> {
     const extension = this.resolveExtension(file);
     const filename = `${randomUUID()}${extension}`;
-    const relativePath = join(
-      UPLOAD_ROOT,
-      UPLOAD_DIRS[entityType],
-      String(entityId),
-      filename,
-    );
-    const absolutePath = join(process.cwd(), relativePath);
+    const relativePath = buildUploadRelativePath(context, filename);
+    const absolutePath = toDiskPath(relativePath, resolveUploadRoot());
 
     await mkdir(dirname(absolutePath), { recursive: true });
     await writeFile(absolutePath, file.buffer);
@@ -42,7 +33,7 @@ export class LocalStorageService implements ILocalStorageService {
   }
 
   async delete(relativePath: string): Promise<void> {
-    const absolutePath = join(process.cwd(), relativePath);
+    const absolutePath = toDiskPath(relativePath, resolveUploadRoot());
     try {
       await unlink(absolutePath);
     } catch {

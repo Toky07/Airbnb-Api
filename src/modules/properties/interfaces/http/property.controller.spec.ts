@@ -12,7 +12,6 @@ import { RoomTypeEntity } from '../../../rooms/infrastructure/entities/room-type
 import { MediaOrmEntity } from '../../../media/infrastructure/entities/media-orm.entity';
 import { AuthModule } from '../../../authentication/auth.module';
 import { UserModule } from '../../../user/user.module';
-import { rm } from 'fs/promises';
 import {
   AUTH_TEST_ENTITIES,
   DOMAIN_TEST_ENTITIES,
@@ -165,7 +164,7 @@ describe('PropertyController', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(201);
 
-    expect(response.body.image).toMatch(/uploads\/properties\/\d+\/.+\.jpg$/);
+    expect(response.body.image).toMatch(/uploads\/\d+\/property\/.+\.jpg$/);
     expect(response.body.name).toBe(defaultProperty.name);
   });
 
@@ -222,7 +221,7 @@ describe('PropertyController', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    expect(response.body.image).toMatch(/uploads\/properties\/\d+\/.+\.jpg$/);
+    expect(response.body.image).toMatch(/uploads\/\d+\/property\/.+\.jpg$/);
     expect(response.body.name).toBe('Updated With Image');
   });
 
@@ -242,6 +241,5 @@ describe('PropertyController', () => {
 
   afterAll(async () => {
     await app.close();
-    await rm('uploads', { recursive: true, force: true });
   });
 });

@@ -1,24 +1,19 @@
 import type { IReservationRepository } from '../../domain/repositories/reservation.repository';
 import { EventBus } from '../../../../shared/domain/event.bus';
-import { ConfirmReservationUseCase } from '../useCase/confirm-reservation.usecase';
+import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import type { BuildReservationInvoicePayloadService } from '../services/build-reservation-invoice-payload.service';
+import { ConfirmReservationCommand } from '../useCase/commands/ConfirmReservationCommand';
 
 export class PaymentConfirmedListener {
-  private readonly confirmReservationUseCase: ConfirmReservationUseCase;
-
   constructor(
     private readonly reservationRepository: IReservationRepository,
     private readonly buildReservationInvoicePayload: BuildReservationInvoicePayloadService,
-  ) {
-    this.confirmReservationUseCase = new ConfirmReservationUseCase(
-      this.reservationRepository,
-    );
-  }
+  ) {}
 
   async listen(): Promise<void> {
     EventBus.getInstance().subscribe('payment.confirmed', async (payload) => {
       const payment = payload.payment;
-      
+
       if (!payment) {
         return;
       }
@@ -31,7 +26,7 @@ export class PaymentConfirmedListener {
         throw new Error('Reservation not found');
       }
 
-      await this.confirmReservationUseCase.execute(reservation.id);
+      await CommandBus.execute(new ConfirmReservationCommand(reservation.id));
 
       const context = await this.buildReservationInvoicePayload.execute(payment);
       if (!context) {

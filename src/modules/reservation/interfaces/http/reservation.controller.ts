@@ -13,39 +13,30 @@ import type { JwtPayload } from '../../../authentication/domain/types/jwt-payloa
 import { hasPermission } from '../../../authentication/domain/utils/build-jwt-payload';
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
 import { CreateReservationDto } from '../../applications/dto/create-reservation.dto';
-import { CancelReservationUseCase } from '../../applications/useCase/cancel-reservation.usecase';
-import { CreateReservationUseCase } from '../../applications/useCase/create-reservation.usecase';
-import { GetReservationUseCase } from '../../applications/useCase/get-reservation.usecase';
-import { ListHostReservationsUseCase } from '../../applications/useCase/list-host-reservations.usecase';
-import { ListMyReservationsUseCase } from '../../applications/useCase/list-my-reservations.usecase';
-import { ListReservationsUseCase } from '../../applications/useCase/list-reservations.usecase';
-import { GetReservationStatsUseCase } from '../../applications/useCase/get-reservation-stats.usecase';
-import { GetBookingOrderUseCase } from '../../applications/useCase/get-booking-order.usecase';
-import { ListBookingOrdersUseCase } from '../../applications/useCase/list-booking-orders.usecase';
-import { ListHostBookingOrdersUseCase } from '../../applications/useCase/list-host-booking-orders.usecase';
 import { parseReservationQuery } from './parse-reservation-query';
+import { CommandBus } from '../../../../shared/useCase/bus/bus';
+import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
+import { CreateReservationCommand } from '../../applications/useCase/commands/CreateReservationCommand';
+import { CancelReservationCommand } from '../../applications/useCase/commands/CancelReservationCommand';
+import { GetReservationQuery } from '../../applications/useCase/queries/GetReservationQuery';
+import { ListMyReservationsQuery } from '../../applications/useCase/queries/ListMyReservationsQuery';
+import { ListHostBookingOrdersQuery } from '../../applications/useCase/queries/ListHostBookingOrdersQuery';
+import { ListHostReservationsQuery } from '../../applications/useCase/queries/ListHostReservationsQuery';
+import { GetReservationStatsQuery } from '../../applications/useCase/queries/GetReservationStatsQuery';
+import { ListBookingOrdersQuery } from '../../applications/useCase/queries/ListBookingOrdersQuery';
+import { GetBookingOrderQuery } from '../../applications/useCase/queries/GetBookingOrderQuery';
+import { ListReservationsQuery } from '../../applications/useCase/queries/ListReservationsQuery';
 
 @Controller('reservations')
 export class ReservationController {
-  constructor(
-    private readonly createReservationUseCase: CreateReservationUseCase,
-    private readonly listReservationsUseCase: ListReservationsUseCase,
-    private readonly listMyReservationsUseCase: ListMyReservationsUseCase,
-    private readonly listHostReservationsUseCase: ListHostReservationsUseCase,
-    private readonly getReservationStatsUseCase: GetReservationStatsUseCase,
-    private readonly listBookingOrdersUseCase: ListBookingOrdersUseCase,
-    private readonly listHostBookingOrdersUseCase: ListHostBookingOrdersUseCase,
-    private readonly getBookingOrderUseCase: GetBookingOrderUseCase,
-    private readonly getReservationUseCase: GetReservationUseCase,
-    private readonly cancelReservationUseCase: CancelReservationUseCase,
-  ) {}
-
   @Post()
   create(
     @Req() request: { user?: JwtPayload },
     @Body() dto: CreateReservationDto,
   ) {
-    return this.createReservationUseCase.execute(request.user!.sub, [dto]);
+    return CommandBus.execute(
+      new CreateReservationCommand(request.user!.sub, [dto]),
+    );
   }
 
   @Get('me')
@@ -53,9 +44,11 @@ export class ReservationController {
     @Req() request: { user?: JwtPayload },
     @Query() query: Record<string, unknown>,
   ) {
-    return this.listMyReservationsUseCase.execute(
-      request.user!.sub,
-      parseReservationQuery(query),
+    return QueryBus.execute(
+      new ListMyReservationsQuery(
+        request.user!.sub,
+        parseReservationQuery(query),
+      ),
     );
   }
 
@@ -63,10 +56,12 @@ export class ReservationController {
   stats(@Req() request: { user?: JwtPayload }) {
     const user = request.user!;
 
-    return this.getReservationStatsUseCase.execute(user.sub, {
-      canReadAll: hasPermission(user, ['reservations.read']),
-      canReadHost: hasPermission(user, ['host.reservations.read']),
-    });
+    return QueryBus.execute(
+      new GetReservationStatsQuery(user.sub, {
+        canReadAll: hasPermission(user, ['reservations.read']),
+        canReadHost: hasPermission(user, ['host.reservations.read']),
+      }),
+    );
   }
 
   @Get('bookings/host')
@@ -75,16 +70,20 @@ export class ReservationController {
     @Req() request: { user?: JwtPayload },
     @Query() query: Record<string, unknown>,
   ) {
-    return this.listHostReservationsUseCase.execute(
-      request.user!.sub,
-      parseReservationQuery(query),
+    return QueryBus.execute(
+      new ListHostBookingOrdersQuery(
+        request.user!.sub,
+        parseReservationQuery(query),
+      ),
     );
   }
 
   @Get('bookings')
   @RequirePermissions('reservations.read')
   listBookingOrders(@Query() query: Record<string, unknown>) {
-    return this.listBookingOrdersUseCase.execute(parseReservationQuery(query));
+    return QueryBus.execute(
+      new ListBookingOrdersQuery(parseReservationQuery(query)),
+    );
   }
 
   @Get('bookings/:paymentId')
@@ -95,11 +94,13 @@ export class ReservationController {
     const user = request.user!;
     const parsedPaymentId = Number.parseInt(paymentId, 10);
 
-    return this.getBookingOrderUseCase.execute(parsedPaymentId, {
-      authId: user.sub,
-      canReadAll: hasPermission(user, ['reservations.read']),
-      canReadHost: hasPermission(user, ['host.reservations.read']),
-    });
+    return QueryBus.execute(
+      new GetBookingOrderQuery(parsedPaymentId, {
+        authId: user.sub,
+        canReadAll: hasPermission(user, ['reservations.read']),
+        canReadHost: hasPermission(user, ['host.reservations.read']),
+      }),
+    );
   }
 
   @Get('host')
@@ -108,16 +109,20 @@ export class ReservationController {
     @Req() request: { user?: JwtPayload },
     @Query() query: Record<string, unknown>,
   ) {
-    return this.listHostReservationsUseCase.execute(
-      request.user!.sub,
-      parseReservationQuery(query),
+    return QueryBus.execute(
+      new ListHostReservationsQuery(
+        request.user!.sub,
+        parseReservationQuery(query),
+      ),
     );
   }
 
   @Get()
   @RequirePermissions('reservations.read')
   list(@Query() query: Record<string, unknown>) {
-    return this.listReservationsUseCase.execute(parseReservationQuery(query));
+    return QueryBus.execute(
+      new ListReservationsQuery(parseReservationQuery(query)),
+    );
   }
 
   @Get(':id')
@@ -125,11 +130,13 @@ export class ReservationController {
     const user = request.user!;
     const parsedId = Number.parseInt(id, 10);
 
-    return this.getReservationUseCase.execute(parsedId, {
-      authId: user.sub,
-      canReadAll: hasPermission(user, ['reservations.read']),
-      canReadHost: hasPermission(user, ['host.reservations.read']),
-    });
+    return QueryBus.execute(
+      new GetReservationQuery(parsedId, {
+        authId: user.sub,
+        canReadAll: hasPermission(user, ['reservations.read']),
+        canReadHost: hasPermission(user, ['host.reservations.read']),
+      }),
+    );
   }
 
   @Post('cancel/:id')
@@ -139,10 +146,12 @@ export class ReservationController {
     const user = request.user!;
     const parsedId = Number.parseInt(id, 10);
 
-    return this.cancelReservationUseCase.execute(parsedId, {
-      authId: user.sub,
-      canCancelAll: hasPermission(user, ['reservations.cancel']),
-      canCancelHost: hasPermission(user, ['host.reservations.read']),
-    });
+    return CommandBus.execute(
+      new CancelReservationCommand(parsedId, {
+        authId: user.sub,
+        canCancelAll: hasPermission(user, ['reservations.cancel']),
+        canCancelHost: hasPermission(user, ['host.reservations.read']),
+      }),
+    );
   }
 }

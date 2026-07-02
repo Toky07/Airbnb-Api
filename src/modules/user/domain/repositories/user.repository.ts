@@ -1,5 +1,5 @@
 import type { PaginatedResult, PaginationParams } from '../../../../shared/pagination/pagination.types';
-import type { AccountStatus } from '../../../account-activation/domain/constants/account-status.constant';
+import type { AccountStatus } from '../../../authentication/domain/constants/account-status.constant';
 import { User } from '../entities/user.entity';
 
 export interface IUserRepository {

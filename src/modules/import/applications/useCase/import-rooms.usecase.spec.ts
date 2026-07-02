@@ -1,10 +1,21 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ImportRoomsUseCase } from './import-rooms.usecase';
 import { createImportBatchContext } from './import-test.helpers';
+import { CreateRoomCommand } from '../../../rooms/applications/useCase/commands/CreateRoomCommand';
+
+const mockExecute = vi.fn();
+
+vi.mock('../../../../shared/useCase/bus/bus', () => ({
+  CommandBus: { execute: (...args: unknown[]) => mockExecute(...args) },
+}));
 
 describe('ImportRoomsUseCase', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockExecute.mockResolvedValue({ id: 1 });
+  });
+
   it('crée une chambre pour un établissement connu', async () => {
-    const createRoom = { execute: vi.fn().mockResolvedValue({ id: 1 }) };
     const propertyRepository = {
       findById: vi.fn().mockResolvedValue({ id: 3, name: 'Hôtel Azur' }),
     };
@@ -13,10 +24,7 @@ describe('ImportRoomsUseCase', () => {
       propertyNameToId: new Map([['Hôtel Azur', 3]]),
     });
 
-    const useCase = new ImportRoomsUseCase(
-      createRoom as never,
-      propertyRepository as never,
-    );
+    const useCase = new ImportRoomsUseCase(propertyRepository as never);
 
     const result = await useCase.execute(
       [
@@ -38,12 +46,12 @@ describe('ImportRoomsUseCase', () => {
     );
 
     expect(result.created).toBe(1);
-    expect(createRoom.execute).toHaveBeenCalledTimes(1);
+    expect(mockExecute).toHaveBeenCalledTimes(1);
+    expect(mockExecute.mock.calls[0]?.[0]).toBeInstanceOf(CreateRoomCommand);
   });
 
   it('signale un établissement introuvable', async () => {
     const useCase = new ImportRoomsUseCase(
-      { execute: vi.fn() } as never,
       { findById: vi.fn() } as never,
     );
 

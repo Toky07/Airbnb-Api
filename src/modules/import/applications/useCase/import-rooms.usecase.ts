@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateRoomUseCase } from '../../../rooms/applications/useCase/createRoom.usecase';
+import { CommandBus } from '../../../../shared/useCase/bus/bus';
+import { CreateRoomCommand } from '../../../rooms/applications/useCase/commands/CreateRoomCommand';
 import { PROPERTY_REPOSITORY } from '../../../properties/infrastructure/repositories/property.repository';
 import type { IPropertyRepository } from '../../../properties/domain/repositories/property.repository';
 import { fetchImageFromUrl } from '../../../media/utils/fetch-image-from-url';
@@ -13,7 +14,6 @@ import { validateImportRoomRow } from '../validation/validate-import-room-row';
 @Injectable()
 export class ImportRoomsUseCase {
   constructor(
-    private readonly createRoom: CreateRoomUseCase,
     @Inject(PROPERTY_REPOSITORY)
     private readonly propertyRepository: IPropertyRepository,
   ) {}
@@ -69,21 +69,23 @@ export class ImportRoomsUseCase {
           await Promise.all(imageUrls.map((url) => fetchImageFromUrl(url)))
         ).filter((file): file is NonNullable<typeof file> => file !== null);
 
-        await this.createRoom.execute(
-          {
-            name: row.name.trim(),
-            description: row.description.trim(),
-            pricePerNight: Number(row.pricePerNight),
-            maxGuests: Number(row.maxGuests),
-            bedrooms: Number(row.bedrooms),
-            bathrooms: Number(row.bathrooms),
-            beds: Number(row.beds),
-            quantity: Number(row.quantity),
-            size: Number(row.size),
-            status: row.status.trim(),
-            property,
-          },
-          imageFiles.length > 0 ? imageFiles : undefined,
+        await CommandBus.execute(
+          new CreateRoomCommand(
+            {
+              name: row.name.trim(),
+              description: row.description.trim(),
+              pricePerNight: Number(row.pricePerNight),
+              maxGuests: Number(row.maxGuests),
+              bedrooms: Number(row.bedrooms),
+              bathrooms: Number(row.bathrooms),
+              beds: Number(row.beds),
+              quantity: Number(row.quantity),
+              size: Number(row.size),
+              status: row.status.trim(),
+              property,
+            },
+            imageFiles.length > 0 ? imageFiles : undefined,
+          ),
         );
         result.created += 1;
       } catch (cause) {

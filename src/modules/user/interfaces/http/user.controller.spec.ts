@@ -8,7 +8,6 @@ import { DataSource } from 'typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthEntity } from '../../../authentication/infrastructure/entity/auth.entity';
 import { AuthModule } from '../../../authentication/auth.module';
-import { rm } from 'fs/promises';
 import {
   AUTH_TEST_ENTITIES,
   DOMAIN_TEST_ENTITIES,
@@ -186,7 +185,7 @@ describe('UserController', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(201);
 
-    expect(response.body.avatar).toMatch(/uploads\/users\/\d+\/.+\.jpg$/);
+    expect(response.body.avatar).toMatch(/uploads\/users\/\d+\/avatar\/.+\.jpg$/);
     expect(response.body.firstName).toBe('Jane');
   });
 
@@ -206,7 +205,7 @@ describe('UserController', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(201);
 
-    expect(response.body.avatar).toMatch(/uploads\/users\/\d+\/.+\.png$/);
+    expect(response.body.avatar).toMatch(/uploads\/users\/\d+\/avatar\/.+\.png$/);
   });
 
   it('/PUT users/:id', async () => {
@@ -265,7 +264,7 @@ describe('UserController', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    expect(response.body.avatar).toMatch(/uploads\/users\/\d+\/.+\.jpg$/);
+    expect(response.body.avatar).toMatch(/uploads\/users\/\d+\/avatar\/.+\.jpg$/);
   });
 
   it('/DELETE users/:id', async () => {
@@ -305,6 +304,5 @@ describe('UserController', () => {
 
   afterAll(async () => {
     await app.close();
-    await rm('uploads', { recursive: true, force: true });
   });
 });

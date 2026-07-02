@@ -1,5 +1,5 @@
 import { User } from '../entities/user.entity';
-import type { AccountStatus } from '../../../account-activation/domain/constants/account-status.constant';
+import type { AccountStatus } from '../../../authentication/domain/constants/account-status.constant';
 
 export type UserRoleSummary = {
   slug: string;

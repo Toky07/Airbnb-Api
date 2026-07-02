@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePropertyUseCase } from '../../../properties/applications/useCase/createProperty.usecase';
+import { CommandBus } from '../../../../shared/useCase/bus/bus';
+import { CreatePropertyCommand } from '../../../properties/applications/useCase/commands/CreatePropertyCommand';
 import { fetchImageFromUrl } from '../../../media/utils/fetch-image-from-url';
 import type { ImportPropertyRowDto } from '../dto/import-batch.dto';
 import type { ImportEntityResult } from '../dto/import-entity-result.dto';
@@ -12,8 +13,6 @@ import { validateImportPropertyRow } from '../validation/validate-import-propert
 
 @Injectable()
 export class ImportPropertiesUseCase {
-  constructor(private readonly createProperty: CreatePropertyUseCase) {}
-
   async execute(
     rows: ImportPropertyRowDto[] | undefined,
     context: ImportBatchContext,
@@ -63,20 +62,22 @@ export class ImportPropertiesUseCase {
         const imageFile = row.imageUrl
           ? await fetchImageFromUrl(row.imageUrl)
           : null;
-        const created = await this.createProperty.execute(
-          {
-            name: row.name.trim(),
-            description: row.description.trim(),
-            address: row.address.trim(),
-            city: row.city.trim(),
-            country: row.country.trim(),
-            latitude: Number(row.latitude),
-            longitude: Number(row.longitude),
-            checkInTime: row.checkInTime.trim(),
-            checkOutTime: row.checkOutTime.trim(),
-            ownerId,
-          },
-          imageFile ?? undefined,
+        const created = await CommandBus.execute<{ id: number; name: string }>(
+          new CreatePropertyCommand(
+            {
+              name: row.name.trim(),
+              description: row.description.trim(),
+              address: row.address.trim(),
+              city: row.city.trim(),
+              country: row.country.trim(),
+              latitude: Number(row.latitude),
+              longitude: Number(row.longitude),
+              checkInTime: row.checkInTime.trim(),
+              checkOutTime: row.checkOutTime.trim(),
+              ownerId,
+            },
+            imageFile ?? undefined,
+          ),
         );
         context.propertyKeyToId.set(key, created.id);
         context.propertyNameToId.set(created.name.trim(), created.id);

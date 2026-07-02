@@ -2,7 +2,7 @@ import { Auth } from '../../domain/entities/user.entity';
 import { AuthEntity } from '../entity/auth.entity';
 import { EmailVO } from '../../../../shared/valueObject/email.vo';
 import { RoleMapper } from './role.mappers';
-import type { AccountStatus } from '../../../account-activation/domain/constants/account-status.constant';
+import type { AccountStatus } from '../../domain/constants/account-status.constant';
 
 export class AuthMapper {
   static toDomain(auth: AuthEntity): Auth {

@@ -1,0 +1,69 @@
+import type { Repository } from 'typeorm';
+import type { ReservationItemOrmEntity } from '../reservation/infrastructure/entities/reservation-item.orm-entity';
+import type { IRoomRepository } from './domain/repositories/room.repository';
+import type { IRoomTypeRepository } from './domain/repositories/room-type.repository';
+import { RoomDetailResolver } from './applications/services/room-detail.resolver';
+import type { RoomMediaPresenter } from './applications/presenters/room-media.presenter';
+import type { GenerateRoomSlugService } from './applications/services/generate-room-slug.service';
+import { CreateRoomCommandHandler } from './applications/useCase/handlers/CreateRoomCommandHandler';
+import { UpdateRoomCommandHandler } from './applications/useCase/handlers/UpdateRoomCommandHandler';
+import { DeleteRoomCommandHandler } from './applications/useCase/handlers/DeleteRoomCommandHandler';
+import { FindRoomQueryHandler } from './applications/useCase/handlers/FindRoomQueryHandler';
+import { ListRoomsQueryHandler } from './applications/useCase/handlers/ListRoomsQueryHandler';
+import { CreateRoomTypeCommandHandler } from './applications/useCase/handlers/CreateRoomTypeCommandHandler';
+import { UpdateRoomTypeCommandHandler } from './applications/useCase/handlers/UpdateRoomTypeCommandHandler';
+import { DeleteRoomTypeCommandHandler } from './applications/useCase/handlers/DeleteRoomTypeCommandHandler';
+import { ListRoomTypesQueryHandler } from './applications/useCase/handlers/ListRoomTypesQueryHandler';
+import { ListRoomTypeOptionsQueryHandler } from './applications/useCase/handlers/ListRoomTypeOptionsQueryHandler';
+
+export class RoomsBootstrap {
+  static create(deps: {
+    roomRepository: IRoomRepository;
+    roomTypeRepository: IRoomTypeRepository;
+    roomMediaPresenter: RoomMediaPresenter;
+    generateRoomSlug: GenerateRoomSlugService;
+    reservationItemRepo: Repository<ReservationItemOrmEntity>;
+  }) {
+    const roomDetailResolver = new RoomDetailResolver(
+      deps.roomMediaPresenter,
+      deps.reservationItemRepo,
+    );
+
+    return {
+      createRoomCommandHandler: new CreateRoomCommandHandler(
+        deps.roomRepository,
+        deps.roomMediaPresenter,
+        deps.generateRoomSlug,
+      ),
+      updateRoomCommandHandler: new UpdateRoomCommandHandler(
+        deps.roomRepository,
+        deps.roomMediaPresenter,
+        deps.generateRoomSlug,
+      ),
+      deleteRoomCommandHandler: new DeleteRoomCommandHandler(deps.roomRepository),
+      findRoomQueryHandler: new FindRoomQueryHandler(
+        deps.roomRepository,
+        roomDetailResolver,
+      ),
+      listRoomsQueryHandler: new ListRoomsQueryHandler(
+        deps.roomRepository,
+        deps.roomMediaPresenter,
+      ),
+      createRoomTypeCommandHandler: new CreateRoomTypeCommandHandler(
+        deps.roomTypeRepository,
+      ),
+      updateRoomTypeCommandHandler: new UpdateRoomTypeCommandHandler(
+        deps.roomTypeRepository,
+      ),
+      deleteRoomTypeCommandHandler: new DeleteRoomTypeCommandHandler(
+        deps.roomTypeRepository,
+      ),
+      listRoomTypesQueryHandler: new ListRoomTypesQueryHandler(
+        deps.roomTypeRepository,
+      ),
+      listRoomTypeOptionsQueryHandler: new ListRoomTypeOptionsQueryHandler(
+        deps.roomTypeRepository,
+      ),
+    };
+  }
+}

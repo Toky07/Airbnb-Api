@@ -1,16 +1,16 @@
 import {
   ForbiddenException,
-  Inject,
   Injectable,
-  NotFoundException,
 } from '@nestjs/common';
 import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
 import type { PaginatedResult, PaginationParams } from '../../../../shared/pagination/pagination.types';
-import { ListRoomsUseCase } from '../../../rooms/applications/useCase/listRoom.usecase';
-import { CreateRoomUseCase } from '../../../rooms/applications/useCase/createRoom.usecase';
-import { UpdateRoomUseCase } from '../../../rooms/applications/useCase/updateRoom.usecase';
-import { DeleteRoomUseCase } from '../../../rooms/applications/useCase/deleteRoom.usecase';
-import { FindOneRoomUseCase } from '../../../rooms/applications/useCase/findOneRoom.usecase';
+import { CommandBus } from '../../../../shared/useCase/bus/bus';
+import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
+import { CreateRoomCommand } from '../../../rooms/applications/useCase/commands/CreateRoomCommand';
+import { UpdateRoomCommand } from '../../../rooms/applications/useCase/commands/UpdateRoomCommand';
+import { DeleteRoomCommand } from '../../../rooms/applications/useCase/commands/DeleteRoomCommand';
+import { FindRoomQuery } from '../../../rooms/applications/useCase/queries/FindRoomQuery';
+import { ListRoomsQuery } from '../../../rooms/applications/useCase/queries/ListRoomsQuery';
 import type { CreateRoomDto } from '../../../rooms/applications/dto/createRoom.dto';
 import { RoomOutput } from '../../../rooms/applications/dto/room.output';
 import type { UploadFile } from '../../../media/types/upload-file';
@@ -20,7 +20,6 @@ import { ResolveHostPropertyService } from '../services/resolve-host-property.se
 export class ListHostRoomsUseCase {
   constructor(
     private readonly resolveHostProperty: ResolveHostPropertyService,
-    private readonly listRoomsUseCase: ListRoomsUseCase,
   ) {}
 
   async execute(
@@ -30,10 +29,12 @@ export class ListHostRoomsUseCase {
   ): Promise<PaginatedResult<RoomOutput>> {
     await this.resolveHostProperty.requireOwned(authUser, propertyId);
 
-    return this.listRoomsUseCase.execute({
-      ...params,
-      propertyId,
-    });
+    return QueryBus.execute(
+      new ListRoomsQuery({
+        ...params,
+        propertyId,
+      }),
+    );
   }
 }
 
@@ -41,7 +42,6 @@ export class ListHostRoomsUseCase {
 export class CreateHostRoomUseCase {
   constructor(
     private readonly resolveHostProperty: ResolveHostPropertyService,
-    private readonly createRoomUseCase: CreateRoomUseCase,
   ) {}
 
   async execute(
@@ -52,9 +52,8 @@ export class CreateHostRoomUseCase {
   ): Promise<RoomOutput> {
     const property = await this.resolveHostProperty.requireOwned(authUser, propertyId);
 
-    return this.createRoomUseCase.execute(
-      { ...dto, property },
-      images,
+    return CommandBus.execute(
+      new CreateRoomCommand({ ...dto, property }, images),
     );
   }
 }
@@ -63,8 +62,6 @@ export class CreateHostRoomUseCase {
 export class UpdateHostRoomUseCase {
   constructor(
     private readonly resolveHostProperty: ResolveHostPropertyService,
-    private readonly findOneRoomUseCase: FindOneRoomUseCase,
-    private readonly updateRoomUseCase: UpdateRoomUseCase,
   ) {}
 
   async execute(
@@ -76,17 +73,16 @@ export class UpdateHostRoomUseCase {
     keptImages?: string[],
   ): Promise<RoomOutput> {
     const property = await this.resolveHostProperty.requireOwned(authUser, propertyId);
-    const room = await this.findOneRoomUseCase.execute(roomId);
+    const room = await QueryBus.execute<RoomOutput | null>(
+      new FindRoomQuery({ id: roomId }),
+    );
 
     if (!room || room.property.id !== property.id) {
       throw new ForbiddenException('Chambre introuvable ou accès refusé.');
     }
 
-    return this.updateRoomUseCase.execute(
-      roomId,
-      { ...dto, property },
-      images,
-      keptImages,
+    return CommandBus.execute(
+      new UpdateRoomCommand(roomId, { ...dto, property }, images, keptImages),
     );
   }
 }
@@ -95,8 +91,6 @@ export class UpdateHostRoomUseCase {
 export class DeleteHostRoomUseCase {
   constructor(
     private readonly resolveHostProperty: ResolveHostPropertyService,
-    private readonly findOneRoomUseCase: FindOneRoomUseCase,
-    private readonly deleteRoomUseCase: DeleteRoomUseCase,
   ) {}
 
   async execute(
@@ -105,13 +99,17 @@ export class DeleteHostRoomUseCase {
     roomId: number,
   ): Promise<{ status: boolean }> {
     const property = await this.resolveHostProperty.requireOwned(authUser, propertyId);
-    const room = await this.findOneRoomUseCase.execute(roomId);
+    const room = await QueryBus.execute<RoomOutput | null>(
+      new FindRoomQuery({ id: roomId }),
+    );
 
     if (!room || room.property.id !== property.id) {
       throw new ForbiddenException('Chambre introuvable ou accès refusé.');
     }
 
-    const status = await this.deleteRoomUseCase.execute(roomId);
+    const status = await CommandBus.execute<boolean>(
+      new DeleteRoomCommand(roomId),
+    );
     return { status };
   }
 }

@@ -6,38 +6,32 @@ import type {
   UpdateRoomTypeDto,
 } from '../../applications/dto/create-room-type.dto';
 import { RoomTypeOutput } from '../../applications/dto/room-type.output';
-import { CreateRoomTypeUseCase } from '../../applications/useCase/create-room-type.usecase';
-import { DeleteRoomTypeUseCase } from '../../applications/useCase/delete-room-type.usecase';
-import { ListRoomTypeOptionsUseCase } from '../../applications/useCase/list-room-type-options.usecase';
-import { ListRoomTypesUseCase } from '../../applications/useCase/list-room-types.usecase';
-import { UpdateRoomTypeUseCase } from '../../applications/useCase/update-room-type.usecase';
+import { CommandBus } from '../../../../shared/useCase/bus/bus';
+import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
+import { CreateRoomTypeCommand } from '../../applications/useCase/commands/CreateRoomTypeCommand';
+import { UpdateRoomTypeCommand } from '../../applications/useCase/commands/UpdateRoomTypeCommand';
+import { DeleteRoomTypeCommand } from '../../applications/useCase/commands/DeleteRoomTypeCommand';
+import { ListRoomTypesQuery } from '../../applications/useCase/queries/ListRoomTypesQuery';
+import { ListRoomTypeOptionsQuery } from '../../applications/useCase/queries/ListRoomTypeOptionsQuery';
 
 @Controller('room-types')
 export class RoomTypeController {
-  constructor(
-    private readonly listRoomTypesUseCase: ListRoomTypesUseCase,
-    private readonly listRoomTypeOptionsUseCase: ListRoomTypeOptionsUseCase,
-    private readonly createRoomTypeUseCase: CreateRoomTypeUseCase,
-    private readonly updateRoomTypeUseCase: UpdateRoomTypeUseCase,
-    private readonly deleteRoomTypeUseCase: DeleteRoomTypeUseCase,
-  ) {}
-
   @Get()
   @RequireSuperAdmin()
   list(): Promise<RoomTypeOutput[]> {
-    return this.listRoomTypesUseCase.execute();
+    return QueryBus.execute(new ListRoomTypesQuery());
   }
 
   @Get('options')
   @RequirePermissions('rooms.read')
   listOptions(): Promise<RoomTypeOutput[]> {
-    return this.listRoomTypeOptionsUseCase.execute();
+    return QueryBus.execute(new ListRoomTypeOptionsQuery());
   }
 
   @Post()
   @RequireSuperAdmin()
   create(@Body() body: CreateRoomTypeDto): Promise<RoomTypeOutput> {
-    return this.createRoomTypeUseCase.execute(body);
+    return CommandBus.execute(new CreateRoomTypeCommand(body));
   }
 
   @Put(':id')
@@ -46,12 +40,12 @@ export class RoomTypeController {
     @Param('id') id: number,
     @Body() body: UpdateRoomTypeDto,
   ): Promise<RoomTypeOutput> {
-    return this.updateRoomTypeUseCase.execute(Number(id), body);
+    return CommandBus.execute(new UpdateRoomTypeCommand(Number(id), body));
   }
 
   @Delete(':id')
   @RequireSuperAdmin()
   delete(@Param('id') id: number): Promise<boolean> {
-    return this.deleteRoomTypeUseCase.execute(Number(id));
+    return CommandBus.execute(new DeleteRoomTypeCommand(Number(id)));
   }
 }

@@ -19,6 +19,8 @@ import {
 } from '../../../../test/controller-test.helpers';
 import { ReservationOrmEntity } from '../../infrastructure/entities/reservation.orm-entity';
 import { PaymentOrmEntity } from '../../../payment/infrastructure/entities/payment.orm-entity';
+import { PAYMENT_GATEWAY } from '../../../payment/domain/ports/payment-gateway.port';
+import { createPaymentGatewayMock } from '../../../payment/applications/useCase/payment-test.helpers';
 
 describe('ReservationController', () => {
   let app: INestApplication;
@@ -48,7 +50,10 @@ describe('ReservationController', () => {
         RoomsModule,
         ReservationModule,
       ],
-    }).compile();
+    })
+      .overrideProvider(PAYMENT_GATEWAY)
+      .useValue(createPaymentGatewayMock())
+      .compile();
 
     dataSource = moduleRef.get(DataSource);
     app = moduleRef.createNestApplication();

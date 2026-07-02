@@ -1,53 +1,62 @@
+import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import type { IPaymentRepository } from '../../../domain/repositories/payment.repository';
 import type { CreatePaymentCommand } from '../commands/CreatePaymentCommand';
+import type { IPaymentGateway } from '../../../domain/ports/payment-gateway.port';
 import { Payment } from '../../../domain/entities/payment.entity';
-import { IPaymentGateway } from '../../../domain/ports/payment-gateway.port';
-import { PaymentCreatedEvent } from '../../../domain/events/payment-created.event';
 import { EventBus } from '../../../../../shared/domain/event.bus';
+import { PaymentCreatedEvent } from '../../../domain/events/payment-created.event';
+import { getStripePublishableKey } from '../../../infrastructure/stripe/stripe.config';
 
-export class CreatePaymentCommandHandler {
-    constructor(
-        private readonly repository: IPaymentRepository,
-        private readonly paymentGateway: IPaymentGateway,
-    ) {}
+export type CreatePaymentResult = {
+  paymentId: number;
+  clientSecret: string | null;
+  amount: number;
+  currency: string;
+  publishableKey: string;
+};
 
-    async execute(command: CreatePaymentCommand) {
-        const paymentIntentId = await this.createPayment(command);
+export class CreatePaymentCommandHandler
+  implements ICommandHandler<CreatePaymentCommand, CreatePaymentResult>
+{
+  constructor(
+    private readonly repository: IPaymentRepository,
+    private readonly paymentGateway: IPaymentGateway,
+  ) {}
 
-        const payment = await this.savePayment(command, paymentIntentId);
+  async execute(command: CreatePaymentCommand): Promise<CreatePaymentResult> {
+    const paymentIntent = await this.paymentGateway.createPaymentIntent({
+      amount: command.amount,
+      currency: command.currency,
+      metadata: {
+        userId: command.userId.toString(),
+        propertyType: command.propertyType,
+        propertyId: command.propertyId.toString(),
+      },
+    });
 
-        await EventBus.getInstance().publish(new PaymentCreatedEvent(
-            payment.id!,
-            command.propertyType,
-            command.propertyId,
-          ))
-    }
+    const payment = await this.repository.create(
+      Payment.create({
+        amount: command.amount,
+        currency: command.currency,
+        provider: command.provider,
+        userId: command.userId,
+        propertyType: command.propertyType,
+        propertyId: command.propertyId,
+        transactionId: paymentIntent.id,
+        cartId: command.cartId,
+      }),
+    );
 
-    private async createPayment(command: CreatePaymentCommand): Promise<string> {
-        const paymentIntent = await this.paymentGateway.createPaymentIntent({
-            amount: command.amount,
-            currency: command.currency,
-            metadata: {
-                userId: command.userId.toString(),
-                propertyType: command.propertyType,
-                propertyId: command.propertyId.toString(),
-            },
-        });
+    await EventBus.getInstance().publish(
+      new PaymentCreatedEvent(payment.id!, command.propertyType, command.propertyId),
+    );
 
-        return paymentIntent.id;
-    }
-
-    private async savePayment(command: CreatePaymentCommand, paymentIntentId: string): Promise<Payment> {
-        const payment = Payment.create({
-            amount: command.amount,
-            currency: command.currency,
-            provider: command.provider,
-            userId: command.userId,
-            propertyType: command.propertyType,
-            propertyId: command.propertyId,
-            transactionId: paymentIntentId,
-        });
-
-        return this.repository.create(payment);
-    }
+    return {
+      paymentId: payment.id!,
+      clientSecret: paymentIntent.clientSecret,
+      amount: command.amount,
+      currency: command.currency,
+      publishableKey: getStripePublishableKey(),
+    };
+  }
 }

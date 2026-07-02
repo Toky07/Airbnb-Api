@@ -12,7 +12,6 @@ import { PropertyTypeEntity } from '../../../properties/infrastructure/entities/
 import { MediaOrmEntity } from '../../../media/infrastructure/entities/media-orm.entity';
 import { AuthModule } from '../../../authentication/auth.module';
 import { UserModule } from '../../../user/user.module';
-import { rm } from 'fs/promises';
 import {
   AUTH_TEST_ENTITIES,
   DOMAIN_TEST_ENTITIES,
@@ -161,8 +160,8 @@ describe('RoomController', () => {
       .expect(201);
 
     expect(response.body.images).toHaveLength(2);
-    expect(response.body.images[0]).toMatch(/uploads\/rooms\/\d+\/.+\.jpg$/);
-    expect(response.body.images[1]).toMatch(/uploads\/rooms\/\d+\/.+\.jpg$/);
+    expect(response.body.images[0]).toMatch(/uploads\/\d+\/room\/\d+\/.+\.jpg$/);
+    expect(response.body.images[1]).toMatch(/uploads\/\d+\/room\/\d+\/.+\.jpg$/);
   });
 
   it('/PUT rooms/:id', async () => {
@@ -213,6 +212,5 @@ describe('RoomController', () => {
 
   afterAll(async () => {
     await app.close();
-    await rm('uploads', { recursive: true, force: true });
   });
 });

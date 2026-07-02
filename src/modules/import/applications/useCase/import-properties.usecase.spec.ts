@@ -1,21 +1,28 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ImportPropertiesUseCase } from './import-properties.usecase';
 import { createImportBatchContext } from './import-test.helpers';
 
-describe('ImportPropertiesUseCase', () => {
-  it('crée un établissement pour un propriétaire connu', async () => {
-    const createProperty = {
-      execute: vi.fn().mockResolvedValue({
-        id: 10,
-        name: 'Hôtel Azur',
-      }),
-    };
+const mockExecute = vi.fn();
 
+vi.mock('../../../../shared/useCase/bus/bus', () => ({
+  CommandBus: { execute: (...args: unknown[]) => mockExecute(...args) },
+}));
+
+describe('ImportPropertiesUseCase', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockExecute.mockResolvedValue({
+      id: 10,
+      name: 'Hôtel Azur',
+    });
+  });
+
+  it('crée un établissement pour un propriétaire connu', async () => {
     const context = createImportBatchContext({
       emailToUserId: new Map([['owner@example.com', 5]]),
     });
 
-    const useCase = new ImportPropertiesUseCase(createProperty as never);
+    const useCase = new ImportPropertiesUseCase();
     const result = await useCase.execute(
       [
         {
@@ -39,7 +46,7 @@ describe('ImportPropertiesUseCase', () => {
   });
 
   it('signale un propriétaire introuvable', async () => {
-    const useCase = new ImportPropertiesUseCase({ execute: vi.fn() } as never);
+    const useCase = new ImportPropertiesUseCase();
     const result = await useCase.execute(
       [
         {

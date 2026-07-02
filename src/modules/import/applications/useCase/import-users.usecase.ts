@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserUseCase } from '../../../user/application/useCase/createuser.usecase';
+import { CommandBus } from '../../../../shared/useCase/bus/bus';
+import { CreateUserCommand } from '../../../user/application/useCase/commands/CreateUserCommand';
 import { fetchImageFromUrl } from '../../../media/utils/fetch-image-from-url';
 import type { ImportUserRowDto } from '../dto/import-batch.dto';
 import type { ImportEntityResult } from '../dto/import-entity-result.dto';
@@ -9,8 +10,6 @@ import { validateImportUserRow } from '../validation/validate-import-user-row';
 
 @Injectable()
 export class ImportUsersUseCase {
-  constructor(private readonly createUser: CreateUserUseCase) {}
-
   async execute(
     rows: ImportUserRowDto[] | undefined,
     context: ImportBatchContext,
@@ -49,15 +48,17 @@ export class ImportUsersUseCase {
         const avatarFile = row.avatarUrl
           ? await fetchImageFromUrl(row.avatarUrl)
           : null;
-        const created = await this.createUser.execute(
-          {
-            firstName: row.firstName.trim(),
-            lastName: row.lastName.trim(),
-            email: row.email.trim(),
-            phoneNumber: row.phoneNumber.trim(),
-            avatar: row.avatarUrl?.trim() ?? '',
-          },
-          avatarFile ?? undefined,
+        const created = await CommandBus.execute<{ id: number }>(
+          new CreateUserCommand(
+            {
+              firstName: row.firstName.trim(),
+              lastName: row.lastName.trim(),
+              email: row.email.trim(),
+              phoneNumber: row.phoneNumber.trim(),
+              avatar: row.avatarUrl?.trim() ?? '',
+            },
+            avatarFile ?? undefined,
+          ),
         );
         context.emailToUserId.set(emailKey, created.id);
         result.created += 1;

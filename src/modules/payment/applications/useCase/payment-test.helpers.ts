@@ -4,6 +4,7 @@ import { PAYMENT_STATUS } from '../../domain/constants/payment-status.constant';
 import { Payment } from '../../domain/entities/payment.entity';
 import type { IPaymentGateway } from '../../domain/ports/payment-gateway.port';
 import type { IPaymentRepository } from '../../domain/repositories/payment.repository';
+import type { IWebhookVerifier } from '../../domain/ports/webhook-verifier.port';
 import { PAYMENT_TYPE } from '../../domain/types/payment.type';
 
 export function createSamplePayment(overrides: Partial<{
@@ -14,7 +15,6 @@ export function createSamplePayment(overrides: Partial<{
   propertyId: number;
   cartId: number | null;
 }> = {}): Payment {
-
   return Payment.create({
     amount: 20000,
     currency: 'eur',
@@ -62,13 +62,21 @@ export function createPaymentGatewayMock(
       clientSecret: 'pi_test_123_secret',
       status: 'requires_payment_method',
     }),
-    constructWebhookEvent: vi.fn().mockReturnValue({
+    retrievePaymentIntent: vi.fn(),
+    ...overrides,
+  } as unknown as IPaymentGateway;
+}
+
+export function createWebhookVerifierMock(
+  overrides: Partial<IWebhookVerifier> = {},
+): IWebhookVerifier {
+  return {
+    verify: vi.fn().mockReturnValue({
       type: 'payment_intent.succeeded',
       paymentIntentId: 'pi_test_123',
       status: 'succeeded',
       errorMessage: null,
     }),
-    retrievePaymentIntent: vi.fn(),
     ...overrides,
-  } as unknown as IPaymentGateway;
+  };
 }

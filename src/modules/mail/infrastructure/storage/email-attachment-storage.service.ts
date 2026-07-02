@@ -1,33 +1,37 @@
 import { mkdir, writeFile } from 'fs/promises';
-import { join } from 'path';
+import { join, dirname } from 'path';
 import { randomUUID } from 'crypto';
 import { Injectable } from '@nestjs/common';
+import { UPLOAD_ROOT } from '../../../media/constant';
+import { toDiskPath } from '../../../media/utils/build-upload-path';
+import { resolveUploadRoot } from '../../../media/utils/resolve-upload-root';
 import type { UploadFile } from '../../../media/types/upload-file';
 import type { EmailAttachment } from '../../domain/entities/email-attachment.entity';
 
 @Injectable()
 export class EmailAttachmentStorageService {
-  private readonly rootDir = join(process.cwd(), 'uploads', 'emails');
-
   async saveMany(emailId: number, files: UploadFile[] = []): Promise<EmailAttachment[]> {
     if (!files.length) {
       return [];
     }
-
-    const directory = join(this.rootDir, String(emailId));
-    await mkdir(directory, { recursive: true });
 
     const attachments: EmailAttachment[] = [];
 
     for (const file of files) {
       const safeName = file.originalname.replace(/[^\w.\- ]+/g, '_');
       const storedName = `${randomUUID()}-${safeName}`;
-      const absolutePath = join(directory, storedName);
+      const relativePath = join(UPLOAD_ROOT, 'emails', String(emailId), storedName).replace(
+        /\\/g,
+        '/',
+      );
+      const absolutePath = toDiskPath(relativePath, resolveUploadRoot());
+
+      await mkdir(dirname(absolutePath), { recursive: true });
       await writeFile(absolutePath, file.buffer);
 
       attachments.push({
         originalName: file.originalname,
-        storedPath: join('uploads', 'emails', String(emailId), storedName).replace(/\\/g, '/'),
+        storedPath: relativePath,
         mimeType: file.mimetype,
         size: file.size,
       });

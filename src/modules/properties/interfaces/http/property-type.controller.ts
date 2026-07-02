@@ -6,38 +6,32 @@ import type {
   UpdatePropertyTypeDto,
 } from '../../applications/dto/create-property-type.dto';
 import { PropertyTypeOutput } from '../../applications/dto/property-type.output';
-import { CreatePropertyTypeUseCase } from '../../applications/useCase/create-property-type.usecase';
-import { DeletePropertyTypeUseCase } from '../../applications/useCase/delete-property-type.usecase';
-import { ListPropertyTypeOptionsUseCase } from '../../applications/useCase/list-property-type-options.usecase';
-import { ListPropertyTypesUseCase } from '../../applications/useCase/list-property-types.usecase';
-import { UpdatePropertyTypeUseCase } from '../../applications/useCase/update-property-type.usecase';
+import { CommandBus } from '../../../../shared/useCase/bus/bus';
+import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
+import { CreatePropertyTypeCommand } from '../../applications/useCase/commands/CreatePropertyTypeCommand';
+import { UpdatePropertyTypeCommand } from '../../applications/useCase/commands/UpdatePropertyTypeCommand';
+import { DeletePropertyTypeCommand } from '../../applications/useCase/commands/DeletePropertyTypeCommand';
+import { ListPropertyTypesQuery } from '../../applications/useCase/queries/ListPropertyTypesQuery';
+import { ListPropertyTypeOptionsQuery } from '../../applications/useCase/queries/ListPropertyTypeOptionsQuery';
 
 @Controller('property-types')
 export class PropertyTypeController {
-  constructor(
-    private readonly listPropertyTypesUseCase: ListPropertyTypesUseCase,
-    private readonly listPropertyTypeOptionsUseCase: ListPropertyTypeOptionsUseCase,
-    private readonly createPropertyTypeUseCase: CreatePropertyTypeUseCase,
-    private readonly updatePropertyTypeUseCase: UpdatePropertyTypeUseCase,
-    private readonly deletePropertyTypeUseCase: DeletePropertyTypeUseCase,
-  ) {}
-
   @Get()
   @RequireSuperAdmin()
   list(): Promise<PropertyTypeOutput[]> {
-    return this.listPropertyTypesUseCase.execute();
+    return QueryBus.execute(new ListPropertyTypesQuery());
   }
 
   @Get('options')
   @RequirePermissions('properties.read')
   listOptions(): Promise<PropertyTypeOutput[]> {
-    return this.listPropertyTypeOptionsUseCase.execute();
+    return QueryBus.execute(new ListPropertyTypeOptionsQuery());
   }
 
   @Post()
   @RequireSuperAdmin()
   create(@Body() body: CreatePropertyTypeDto): Promise<PropertyTypeOutput> {
-    return this.createPropertyTypeUseCase.execute(body);
+    return CommandBus.execute(new CreatePropertyTypeCommand(body));
   }
 
   @Put(':id')
@@ -46,12 +40,12 @@ export class PropertyTypeController {
     @Param('id') id: number,
     @Body() body: UpdatePropertyTypeDto,
   ): Promise<PropertyTypeOutput> {
-    return this.updatePropertyTypeUseCase.execute(Number(id), body);
+    return CommandBus.execute(new UpdatePropertyTypeCommand(Number(id), body));
   }
 
   @Delete(':id')
   @RequireSuperAdmin()
   delete(@Param('id') id: number): Promise<boolean> {
-    return this.deletePropertyTypeUseCase.execute(Number(id));
+    return CommandBus.execute(new DeletePropertyTypeCommand(Number(id)));
   }
 }

@@ -18,10 +18,11 @@ export type EntityType = (typeof ENTITY_TYPE)[keyof typeof ENTITY_TYPE];
 
 export const UPLOAD_ROOT = 'uploads';
 
-export const UPLOAD_DIRS = {
-  [ENTITY_TYPE.PROPERTY]: 'properties',
-  [ENTITY_TYPE.ROOM]: 'rooms',
-  [ENTITY_TYPE.USER]: 'users',
+/** Sous-dossiers par type de média (structure: uploads/{propertyId}/property|room/...). */
+export const UPLOAD_KIND = {
+  PROPERTY: 'property',
+  ROOM: 'room',
+  AVATAR: 'avatar',
 } as const;
 
 /** Nombre maximum de médias par type d'entité (extensible pour de nouvelles entités). */

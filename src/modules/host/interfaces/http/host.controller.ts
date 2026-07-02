@@ -24,8 +24,9 @@ import { parseKeptImages } from '../../../rooms/interfaces/http/parse-kept-image
 import type { CreateRoomDto } from '../../../rooms/applications/dto/createRoom.dto';
 import { ENTITY_MEDIA_LIMITS, ENTITY_TYPE } from '../../../media/constant';
 import type { UploadFile } from '../../../media/types/upload-file';
-import { ListPropertyTypeOptionsUseCase } from '../../../properties/applications/useCase/list-property-type-options.usecase';
-import { ListRoomTypeOptionsUseCase } from '../../../rooms/applications/useCase/list-room-type-options.usecase';
+import { ListPropertyTypeOptionsQuery } from '../../../properties/applications/useCase/queries/ListPropertyTypeOptionsQuery';
+import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
+import { ListRoomTypeOptionsQuery } from '../../../rooms/applications/useCase/queries/ListRoomTypeOptionsQuery';
 import { AMENITY_SCOPE } from '../../../amenity/domain/constants/amenity-scope.constant';
 import type { SyncAmenitiesDto } from '../../../amenity/applications/dto/create-amenity.dto';
 import { GetHostProfileUseCase } from '../../application/useCase/get-host-profile.usecase';
@@ -70,8 +71,6 @@ export class HostController {
     private readonly createHostRoomUseCase: CreateHostRoomUseCase,
     private readonly updateHostRoomUseCase: UpdateHostRoomUseCase,
     private readonly deleteHostRoomUseCase: DeleteHostRoomUseCase,
-    private readonly listPropertyTypeOptionsUseCase: ListPropertyTypeOptionsUseCase,
-    private readonly listRoomTypeOptionsUseCase: ListRoomTypeOptionsUseCase,
     private readonly hostListAmenityOptionsUseCase: HostListAmenityOptionsUseCase,
     private readonly hostGetPropertyAmenitiesUseCase: HostGetPropertyAmenitiesUseCase,
     private readonly hostSyncPropertyAmenitiesUseCase: HostSyncPropertyAmenitiesUseCase,
@@ -221,13 +220,13 @@ export class HostController {
   @Get('property-types/options')
   @RequirePermissions('host.property.read')
   propertyTypeOptions() {
-    return this.listPropertyTypeOptionsUseCase.execute();
+    return QueryBus.execute(new ListPropertyTypeOptionsQuery());
   }
 
   @Get('room-types/options')
   @RequirePermissions('host.rooms.read')
   roomTypeOptions() {
-    return this.listRoomTypeOptionsUseCase.execute();
+    return QueryBus.execute(new ListRoomTypeOptionsQuery());
   }
 
   @Get('amenities/property/options')

@@ -14,34 +14,29 @@ import type { JwtPayload } from '../../../authentication/domain/types/jwt-payloa
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
 import type { UploadFile } from '../../../media/types/upload-file';
-import { GetEmailUseCase } from '../../applications/useCase/get-email.usecase';
-import { ListEmailsUseCase } from '../../applications/useCase/list-emails.usecase';
-import { RetryEmailUseCase } from '../../applications/useCase/retry-email.usecase';
-import { SendEmailUseCase } from '../../applications/useCase/send-email.usecase';
 import type { SendEmailDto } from '../../applications/dto/send-email.dto';
 import { parseEmailBody } from './parse-email-body';
+import { CommandBus } from '../../../../shared/useCase/bus/bus';
+import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
+import { SendEmailCommand } from '../../applications/useCase/commands/SendEmailCommand';
+import { RetryEmailCommand } from '../../applications/useCase/commands/RetryEmailCommand';
+import { GetEmailQuery } from '../../applications/useCase/queries/GetEmailQuery';
+import { ListEmailsQuery } from '../../applications/useCase/queries/ListEmailsQuery';
 
 const MAX_ATTACHMENTS = 5;
 
 @Controller('emails')
 export class MailController {
-  constructor(
-    private readonly listEmailsUseCase: ListEmailsUseCase,
-    private readonly getEmailUseCase: GetEmailUseCase,
-    private readonly sendEmailUseCase: SendEmailUseCase,
-    private readonly retryEmailUseCase: RetryEmailUseCase,
-  ) {}
-
   @Get()
   @RequirePermissions('emails.read')
   list(@Query() query: Record<string, unknown>) {
-    return this.listEmailsUseCase.execute(parsePaginationQuery(query));
+    return QueryBus.execute(new ListEmailsQuery(parsePaginationQuery(query)));
   }
 
   @Get(':id')
   @RequirePermissions('emails.read')
   getById(@Param('id') id: number) {
-    return this.getEmailUseCase.execute(Number(id));
+    return QueryBus.execute(new GetEmailQuery(Number(id)));
   }
 
   @Post('send')
@@ -57,17 +52,19 @@ export class MailController {
         ? (body as SendEmailDto)
         : parseEmailBody(body as Record<string, unknown>);
 
-    return this.sendEmailUseCase.execute({
-      ...dto,
-      sentByAuthId: request.user?.sub ?? null,
-      files: attachments,
-      sourceModule: dto.sourceModule ?? 'dashboard',
-    });
+    return CommandBus.execute(
+      new SendEmailCommand({
+        ...dto,
+        sentByAuthId: request.user?.sub ?? null,
+        files: attachments,
+        sourceModule: dto.sourceModule ?? 'dashboard',
+      }),
+    );
   }
 
   @Post(':id/retry')
   @RequirePermissions('emails.send')
   retry(@Param('id') id: number) {
-    return this.retryEmailUseCase.execute(Number(id));
+    return CommandBus.execute(new RetryEmailCommand(Number(id)));
   }
 }

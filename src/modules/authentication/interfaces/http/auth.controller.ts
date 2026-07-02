@@ -12,34 +12,25 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CreateCredentialsUseCase } from '../../useCase/create-credentials.usecase';
-import { RegisterHostUseCase } from '../../../user/application/useCase/register-host.usecase';
-import { UpdateMyProfileUseCase } from '../../../user/application/useCase/update-my-profile.usecase';
 import { parseMyProfileBody } from '../../../user/interfaces/http/parse-my-profile-body';
-import { LoginUseCase } from '../../useCase/login.usecase';
-import { AssignRoleUseCase } from '../../useCase/assign-role.usecase';
-import { GetMeUseCase } from '../../useCase/get-me.usecase';
 import { Public } from '../decorators/public.decorator';
 import { RequirePermissions } from '../decorators/require-permissions.decorator';
 import type { JwtPayload } from '../../domain/types/jwt-payload';
 import type { MeOutput } from '../../application/dto/me.output';
 import type { UploadFile } from '../../../media/types/upload-file';
 import { UserOutput } from '../../../user/domain/dtos/user.output';
-import { ValidatePasswordSetupTokenUseCase } from '../../../account-activation/application/useCase/validate-password-setup-token.usecase';
-import { SetPasswordWithTokenUseCase } from '../../../account-activation/application/useCase/set-password-with-token.usecase';
+import { CommandBus } from '../../../../shared/useCase/bus/bus';
+import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
+import { SetPasswordWithTokenCommand } from '../../useCase/commands/SetPasswordWithTokenCommand';
+import { ValidatePasswordSetupTokenQuery } from '../../useCase/queries/ValidatePasswordSetupTokenQuery';
+import { RegisterHostCommand } from '../../../user/application/useCase/commands/RegisterHostCommand';
+import { UpdateMyProfileCommand } from '../../../user/application/useCase/commands/UpdateMyProfileCommand';
+import { LoginCommand } from '../../useCase/commands/LoginCommand';
+import { AssignRoleCommand } from '../../useCase/commands/AssignRoleCommand';
+import { GetMeQuery } from '../../useCase/queries/GetMeQuery';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly createCredentialsUseCase: CreateCredentialsUseCase,
-    private readonly registerHostUseCase: RegisterHostUseCase,
-    private readonly loginUseCase: LoginUseCase,
-    private readonly assignRoleUseCase: AssignRoleUseCase,
-    private readonly getMeUseCase: GetMeUseCase,
-    private readonly updateMyProfileUseCase: UpdateMyProfileUseCase,
-    private readonly validatePasswordSetupTokenUseCase: ValidatePasswordSetupTokenUseCase,
-    private readonly setPasswordWithTokenUseCase: SetPasswordWithTokenUseCase,
-  ) {}
 
   @Public()
   @Post('register')
@@ -52,7 +43,9 @@ export class AuthController {
       phoneNumber: string;
     },
   ): Promise<{ success: boolean }> {
-    const response = await this.registerHostUseCase.execute(registerHostDto);
+    const response = await CommandBus.execute<boolean>(
+      new RegisterHostCommand(registerHostDto),
+    );
     return { success: Boolean(response) };
   }
 
@@ -62,14 +55,16 @@ export class AuthController {
   async login(
     @Body() loginCredentialsDto: { email: string; password: string },
   ): Promise<{ token: string | null }> {
-    const response = await this.loginUseCase.execute(loginCredentialsDto);
+    const response = await CommandBus.execute<string>(
+      new LoginCommand(loginCredentialsDto.email, loginCredentialsDto.password),
+    );
     return { token: response };
   }
 
   @Public()
   @Get('password-setup/validate')
   async validatePasswordSetup(@Query('token') token: string) {
-    return this.validatePasswordSetupTokenUseCase.execute(token);
+    return QueryBus.execute(new ValidatePasswordSetupTokenQuery(token));
   }
 
   @Public()
@@ -78,7 +73,9 @@ export class AuthController {
   async setPassword(
     @Body() body: { token: string; password: string },
   ): Promise<{ success: boolean }> {
-    await this.setPasswordWithTokenUseCase.execute(body.token, body.password);
+    await CommandBus.execute(
+      new SetPasswordWithTokenCommand(body.token, body.password),
+    );
     return { success: true };
   }
 
@@ -87,7 +84,7 @@ export class AuthController {
     if (!request.user?.sub) {
       throw new UnauthorizedException();
     }
-    return this.getMeUseCase.execute(request.user.sub);
+    return QueryBus.execute(new GetMeQuery(request.user.sub));
   }
 
   @Put('profile')
@@ -101,10 +98,12 @@ export class AuthController {
       throw new UnauthorizedException();
     }
 
-    return this.updateMyProfileUseCase.execute(
-      request.user.sub,
-      parseMyProfileBody(body),
-      avatar,
+    return CommandBus.execute(
+      new UpdateMyProfileCommand(
+        request.user.sub,
+        parseMyProfileBody(body),
+        avatar,
+      ),
     );
   }
 
@@ -114,9 +113,8 @@ export class AuthController {
   async assignRole(
     @Body() assignRoleDto: { userId: number; roleId: number[] },
   ): Promise<{ success: boolean }> {
-    const response = await this.assignRoleUseCase.execute(
-      assignRoleDto.userId,
-      assignRoleDto.roleId,
+    const response = await CommandBus.execute<boolean>(
+      new AssignRoleCommand(assignRoleDto.userId, assignRoleDto.roleId),
     );
     return { success: response };
   }

@@ -1,6 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ENTITY_TYPE } from '../../../media/constant';
-import { GetMediasByEntityUseCase } from '../../../media/applications/useCase/getMediasByEntity.usecase';
+import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
+import { GetMediasByEntityQuery } from '../../../media/applications/useCase/queries/GetMediasByEntityQuery';
+import { Media } from '../../../media/domain/entities/media.entity';
 import {
   ROOM_REPOSITORY,
   type IRoomRepository,
@@ -19,7 +21,6 @@ export class RoomProductSummaryService {
   constructor(
     @Inject(ROOM_REPOSITORY)
     private readonly roomRepository: IRoomRepository,
-    private readonly getMediasByEntity: GetMediasByEntityUseCase,
   ) {}
 
   async getByRoomId(roomId: number): Promise<RoomProductSummary | null> {
@@ -28,7 +29,9 @@ export class RoomProductSummaryService {
       return null;
     }
 
-    const medias = await this.getMediasByEntity.execute(ENTITY_TYPE.ROOM, room.id);
+    const medias = await QueryBus.execute<Media[]>(
+      new GetMediasByEntityQuery(ENTITY_TYPE.ROOM, room.id),
+    );
 
     return {
       roomName: room.name,

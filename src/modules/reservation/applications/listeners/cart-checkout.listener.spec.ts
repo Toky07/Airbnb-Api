@@ -4,15 +4,17 @@ import { CartCheckoutRequestedEvent } from '../../../cart/domain/events/cart-che
 import { CartCheckoutReservationCreatedEvent } from '../../../cart/domain/events/cart-checkout-reservation-created.event';
 import { CartCheckoutListener } from './cart-checkout.listener';
 
-describe('CartCheckoutListener', () => {
-  const createReservationUseCase = {
-    execute: vi.fn(),
-  };
+const mockExecute = vi.fn();
 
+vi.mock('../../../../shared/useCase/bus/bus', () => ({
+  CommandBus: { execute: (...args: unknown[]) => mockExecute(...args) },
+}));
+
+describe('CartCheckoutListener', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     EventBus.getInstance()['handlers'] = new Map();
-    createReservationUseCase.execute.mockResolvedValue({ id: 12 });
+    mockExecute.mockResolvedValue({ id: 12 });
   });
 
   it('crée une réservation puis publie cart.checkout.reservation.created', async () => {
@@ -24,7 +26,7 @@ describe('CartCheckoutListener', () => {
       },
     );
 
-    const listener = new CartCheckoutListener(createReservationUseCase as never);
+    const listener = new CartCheckoutListener();
     await listener.listen();
 
     await EventBus.getInstance().publish(
@@ -39,7 +41,7 @@ describe('CartCheckoutListener', () => {
       ]),
     );
 
-    expect(createReservationUseCase.execute).toHaveBeenCalled();
+    expect(mockExecute).toHaveBeenCalled();
     expect(published[0]?.reservationId).toBe(12);
   });
 });

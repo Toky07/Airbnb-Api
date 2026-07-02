@@ -8,40 +8,30 @@ import type {
 } from '../../applications/dto/create-amenity.dto';
 import { AmenityOutput } from '../../applications/dto/amenity.output';
 import { parseAmenityScope } from '../../applications/utils/parse-amenity-scope';
-import { CreateAmenityUseCase } from '../../applications/useCase/create-amenity.usecase';
-import { DeleteAmenityUseCase } from '../../applications/useCase/delete-amenity.usecase';
-import { ListAmenitiesUseCase } from '../../applications/useCase/list-amenities.usecase';
-import { ListAmenityOptionsUseCase } from '../../applications/useCase/list-amenity-options.usecase';
-import { ListPropertyAmenitiesUseCase } from '../../applications/useCase/list-property-amenities.usecase';
-import { ListRoomAmenitiesUseCase } from '../../applications/useCase/list-room-amenities.usecase';
-import { SyncPropertyAmenitiesUseCase } from '../../applications/useCase/sync-property-amenities.usecase';
-import { SyncRoomAmenitiesUseCase } from '../../applications/useCase/sync-room-amenities.usecase';
-import { UpdateAmenityUseCase } from '../../applications/useCase/update-amenity.usecase';
+import { CommandBus } from '../../../../shared/useCase/bus/bus';
+import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
+import { CreateAmenityCommand } from '../../applications/useCase/commands/CreateAmenityCommand';
+import { UpdateAmenityCommand } from '../../applications/useCase/commands/UpdateAmenityCommand';
+import { DeleteAmenityCommand } from '../../applications/useCase/commands/DeleteAmenityCommand';
+import { SyncPropertyAmenitiesCommand } from '../../applications/useCase/commands/SyncPropertyAmenitiesCommand';
+import { SyncRoomAmenitiesCommand } from '../../applications/useCase/commands/SyncRoomAmenitiesCommand';
+import { ListAmenitiesQuery } from '../../applications/useCase/queries/ListAmenitiesQuery';
+import { ListAmenityOptionsQuery } from '../../applications/useCase/queries/ListAmenityOptionsQuery';
+import { ListPropertyAmenitiesQuery } from '../../applications/useCase/queries/ListPropertyAmenitiesQuery';
+import { ListRoomAmenitiesQuery } from '../../applications/useCase/queries/ListRoomAmenitiesQuery';
 
 @Controller('amenities')
 export class AmenityController {
-  constructor(
-    private readonly listAmenitiesUseCase: ListAmenitiesUseCase,
-    private readonly listAmenityOptionsUseCase: ListAmenityOptionsUseCase,
-    private readonly createAmenityUseCase: CreateAmenityUseCase,
-    private readonly updateAmenityUseCase: UpdateAmenityUseCase,
-    private readonly deleteAmenityUseCase: DeleteAmenityUseCase,
-    private readonly listPropertyAmenitiesUseCase: ListPropertyAmenitiesUseCase,
-    private readonly syncPropertyAmenitiesUseCase: SyncPropertyAmenitiesUseCase,
-    private readonly listRoomAmenitiesUseCase: ListRoomAmenitiesUseCase,
-    private readonly syncRoomAmenitiesUseCase: SyncRoomAmenitiesUseCase,
-  ) {}
-
   @Get()
   @RequireSuperAdmin()
   list(@Query() query: Record<string, unknown>): Promise<AmenityOutput[]> {
-    return this.listAmenitiesUseCase.execute(parseAmenityScope(query.scope));
+    return QueryBus.execute(new ListAmenitiesQuery(parseAmenityScope(query.scope)));
   }
 
   @Get('options')
   @RequirePermissions('amenities.read')
   listOptions(@Query() query: Record<string, unknown>): Promise<AmenityOutput[]> {
-    return this.listAmenityOptionsUseCase.execute(parseAmenityScope(query.scope));
+    return QueryBus.execute(new ListAmenityOptionsQuery(parseAmenityScope(query.scope)));
   }
 
   @Get('properties/:propertyId')
@@ -49,7 +39,7 @@ export class AmenityController {
   listForProperty(
     @Param('propertyId') propertyId: number,
   ): Promise<AmenityOutput[]> {
-    return this.listPropertyAmenitiesUseCase.execute(Number(propertyId));
+    return QueryBus.execute(new ListPropertyAmenitiesQuery(Number(propertyId)));
   }
 
   @Put('properties/:propertyId')
@@ -58,13 +48,15 @@ export class AmenityController {
     @Param('propertyId') propertyId: number,
     @Body() body: SyncAmenitiesDto,
   ): Promise<AmenityOutput[]> {
-    return this.syncPropertyAmenitiesUseCase.execute(Number(propertyId), body);
+    return CommandBus.execute(
+      new SyncPropertyAmenitiesCommand(Number(propertyId), body),
+    );
   }
 
   @Get('rooms/:roomId')
   @RequirePermissions('rooms.read')
   listForRoom(@Param('roomId') roomId: number): Promise<AmenityOutput[]> {
-    return this.listRoomAmenitiesUseCase.execute(Number(roomId));
+    return QueryBus.execute(new ListRoomAmenitiesQuery(Number(roomId)));
   }
 
   @Put('rooms/:roomId')
@@ -73,13 +65,13 @@ export class AmenityController {
     @Param('roomId') roomId: number,
     @Body() body: SyncAmenitiesDto,
   ): Promise<AmenityOutput[]> {
-    return this.syncRoomAmenitiesUseCase.execute(Number(roomId), body);
+    return CommandBus.execute(new SyncRoomAmenitiesCommand(Number(roomId), body));
   }
 
   @Post()
   @RequireSuperAdmin()
   create(@Body() body: CreateAmenityDto): Promise<AmenityOutput> {
-    return this.createAmenityUseCase.execute(body);
+    return CommandBus.execute(new CreateAmenityCommand(body));
   }
 
   @Put(':id')
@@ -88,12 +80,12 @@ export class AmenityController {
     @Param('id') id: number,
     @Body() body: UpdateAmenityDto,
   ): Promise<AmenityOutput> {
-    return this.updateAmenityUseCase.execute(Number(id), body);
+    return CommandBus.execute(new UpdateAmenityCommand(Number(id), body));
   }
 
   @Delete(':id')
   @RequireSuperAdmin()
   delete(@Param('id') id: number): Promise<boolean> {
-    return this.deleteAmenityUseCase.execute(Number(id));
+    return CommandBus.execute(new DeleteAmenityCommand(Number(id)));
   }
 }

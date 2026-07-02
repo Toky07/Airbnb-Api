@@ -2,33 +2,26 @@ import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
 import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
 import { type CreateRoleDto } from '../../application/dto/create-role.dto';
-import { CreateRoleUseCase } from '../../useCase/create-role.usecase';
 import { RoleOutput } from '../../application/dto/role.output';
-import { ListRolesUseCase } from '../../useCase/list-role.usecase';
 import type { UpdateRoleDto } from '../../application/dto/update-role.dto';
-import { UpdateRoleUseCase } from '../../useCase/update-role.usecase';
-import { DeleteRoleUseCase } from '../../useCase/delete-role.usecase';
-import { ListPermissionsUseCase } from '../../useCase/list-permissions.usecase';
 import { PermissionOutput } from '../../application/dto/permission.output';
-import { SetRolePermissionsUseCase } from '../../useCase/set-role-permissions.usecase';
 import type { SetRolePermissionsDto } from '../../application/dto/set-role-permissions.dto';
 import { RequirePermissions } from '../decorators/require-permissions.decorator';
+import { CommandBus } from '../../../../shared/useCase/bus/bus';
+import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
+import { CreateRoleCommand } from '../../useCase/commands/CreateRoleCommand';
+import { UpdateRoleCommand } from '../../useCase/commands/UpdateRoleCommand';
+import { DeleteRoleCommand } from '../../useCase/commands/DeleteRoleCommand';
+import { SetRolePermissionsCommand } from '../../useCase/commands/SetRolePermissionsCommand';
+import { ListRolesQuery } from '../../useCase/queries/ListRolesQuery';
+import { ListPermissionsQuery } from '../../useCase/queries/ListPermissionsQuery';
 
 @Controller('auth')
 export class RoleController {
-  constructor(
-    private readonly createRoleUseCase: CreateRoleUseCase,
-    private readonly listRolesUseCase: ListRolesUseCase,
-    private readonly updateRoleUseCase: UpdateRoleUseCase,
-    private readonly deleteRoleUseCase: DeleteRoleUseCase,
-    private readonly listPermissionsUseCase: ListPermissionsUseCase,
-    private readonly setRolePermissionsUseCase: SetRolePermissionsUseCase,
-  ) {}
-
   @Get('permissions')
   @RequirePermissions('roles.read')
-  listPermissions(): PermissionOutput[] {
-    return this.listPermissionsUseCase.execute();
+  listPermissions(): Promise<PermissionOutput[]> {
+    return QueryBus.execute(new ListPermissionsQuery());
   }
 
   @Get('roles')
@@ -36,13 +29,13 @@ export class RoleController {
   list(
     @Query() query: Record<string, unknown>,
   ): Promise<PaginatedResult<RoleOutput>> {
-    return this.listRolesUseCase.execute(parsePaginationQuery(query));
+    return QueryBus.execute(new ListRolesQuery(parsePaginationQuery(query)));
   }
 
   @Post('roles')
   @RequirePermissions('roles.manage')
   create(@Body() createRoleDto: CreateRoleDto): Promise<RoleOutput> {
-    return this.createRoleUseCase.execute(createRoleDto);
+    return CommandBus.execute(new CreateRoleCommand(createRoleDto));
   }
 
   @Put('roles/:id')
@@ -51,11 +44,13 @@ export class RoleController {
     @Param('id') id: number,
     @Body() updateRoleDto: UpdateRoleDto,
   ): Promise<RoleOutput> {
-    return this.updateRoleUseCase.execute({
-      id: Number(id),
-      name: updateRoleDto.name,
-      description: updateRoleDto.description,
-    });
+    return CommandBus.execute(
+      new UpdateRoleCommand({
+        id: Number(id),
+        name: updateRoleDto.name,
+        description: updateRoleDto.description,
+      }),
+    );
   }
 
   @Put('roles/:id/permissions')
@@ -64,15 +59,14 @@ export class RoleController {
     @Param('id') id: number,
     @Body() body: SetRolePermissionsDto,
   ): Promise<RoleOutput> {
-    return this.setRolePermissionsUseCase.execute(
-      Number(id),
-      body.permissionKeys ?? [],
+    return CommandBus.execute(
+      new SetRolePermissionsCommand(Number(id), body.permissionKeys ?? []),
     );
   }
 
   @Delete('roles/:id')
   @RequirePermissions('roles.manage')
   delete(@Param('id') id: number): Promise<boolean> {
-    return this.deleteRoleUseCase.execute(Number(id));
+    return CommandBus.execute(new DeleteRoleCommand(Number(id)));
   }
 }

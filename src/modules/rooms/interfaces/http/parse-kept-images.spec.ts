@@ -9,8 +9,8 @@ describe('parseKeptImages', () => {
   it('parse un tableau JSON', () => {
     expect(
       parseKeptImages({
-        keptImages: JSON.stringify(['uploads/rooms/1/a.jpg']),
+        keptImages: JSON.stringify(['uploads/1/room/2/a.jpg']),
       }),
-    ).toEqual(['uploads/rooms/1/a.jpg']);
+    ).toEqual(['uploads/1/room/2/a.jpg']);
   });
 });

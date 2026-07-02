@@ -4,5 +4,6 @@ export default defineConfig({
   plugins: [],
   test: {
     globals: true,
+    setupFiles: ['./src/test/vitest.setup.ts'],
   },
 })

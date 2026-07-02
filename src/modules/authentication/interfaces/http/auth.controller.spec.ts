@@ -2,8 +2,11 @@ import request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtModule } from '@nestjs/jwt';
 import { DataSource } from 'typeorm';
 import { AuthModule } from '../../auth.module';
+import { MailModule } from '../../../mail/mail.module';
+import { UserModule } from '../../../user/user.module';
 import { AuthEntity } from '../../infrastructure/entity/auth.entity';
 import * as bcrypt from 'bcrypt';
 import { Role } from '../../infrastructure/entity/role.entity';
@@ -34,6 +37,13 @@ describe('Auth', () => {
           entities: [...AUTH_TEST_ENTITIES, ...DOMAIN_TEST_ENTITIES],
           synchronize: true,
         }),
+        JwtModule.register({
+          global: true,
+          secret: '1234',
+          signOptions: { expiresIn: '5h' },
+        }),
+        MailModule,
+        UserModule,
         AuthModule,
       ],
     }).compile();

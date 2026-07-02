@@ -11,8 +11,6 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ListUsersUseCase } from '../../application/useCase/listeUser.usecase';
-import { ListUserOptionsUseCase } from '../../application/useCase/listUserOptions.usecase';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
 import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
 import { UserOutput } from '../../domain/dtos/user.output';
@@ -20,32 +18,26 @@ import type {
   CreateUserDto,
   UpdateUserDto,
 } from '../../domain/dtos/createUser.dto';
-import { CreateUserUseCase } from '../../application/useCase/createuser.usecase';
-import { UpdateUserUseCase } from '../../application/useCase/updateUser.usecase';
-import { DeleteUserUseCase } from '../../application/useCase/deleteUser.usecase';
-import { FindUserUseCase } from '../../application/useCase/findUser.usecase';
-import { AssignUserRolesUseCase } from '../../application/useCase/assignUserRoles.usecase';
 import type { AssignUserRolesDto } from '../../application/dto/assign-user-roles.dto';
 import { parseUserBody } from './parse-user-body';
 import type { UploadFile } from '../../../media/types/upload-file';
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
+import { CommandBus } from '../../../../shared/useCase/bus/bus';
+import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
+import { CreateUserCommand } from '../../application/useCase/commands/CreateUserCommand';
+import { UpdateUserCommand } from '../../application/useCase/commands/UpdateUserCommand';
+import { DeleteUserCommand } from '../../application/useCase/commands/DeleteUserCommand';
+import { AssignUserRolesCommand } from '../../application/useCase/commands/AssignUserRolesCommand';
+import { FindUserQuery } from '../../application/useCase/queries/FindUserQuery';
+import { ListUsersQuery } from '../../application/useCase/queries/ListUsersQuery';
+import { ListUserOptionsQuery } from '../../application/useCase/queries/ListUserOptionsQuery';
 
 @Controller('users')
 export class UserController {
-  constructor(
-    private readonly listUsersUseCase: ListUsersUseCase,
-    private readonly listUserOptionsUseCase: ListUserOptionsUseCase,
-    private readonly createUserUseCase: CreateUserUseCase,
-    private readonly updateUserUseCase: UpdateUserUseCase,
-    private readonly deleteUserUseCase: DeleteUserUseCase,
-    private readonly findUserUseCase: FindUserUseCase,
-    private readonly assignUserRolesUseCase: AssignUserRolesUseCase,
-  ) {}
-
   @Get('options')
   @RequirePermissions('users.read')
   async listOptions(): Promise<UserOutput[]> {
-    return this.listUserOptionsUseCase.execute();
+    return QueryBus.execute(new ListUserOptionsQuery());
   }
 
   @Get()
@@ -53,13 +45,13 @@ export class UserController {
   async findAll(
     @Query() query: Record<string, unknown>,
   ): Promise<PaginatedResult<UserOutput>> {
-    return this.listUsersUseCase.execute(parsePaginationQuery(query));
+    return QueryBus.execute(new ListUsersQuery(parsePaginationQuery(query)));
   }
 
   @Get(':id')
   @RequirePermissions('users.read')
   async findById(@Param('id') id: string): Promise<UserOutput> {
-    return this.findUserUseCase.execute(Number(id)) as unknown as UserOutput;
+    return QueryBus.execute(new FindUserQuery(Number(id)));
   }
 
   @Post()
@@ -73,7 +65,7 @@ export class UserController {
       typeof (body as CreateUserDto).email === 'string'
         ? (body as CreateUserDto)
         : parseUserBody(body as Record<string, unknown>);
-    return this.createUserUseCase.execute(createUserDto, avatar);
+    return CommandBus.execute(new CreateUserCommand(createUserDto, avatar));
   }
 
   @Put(':id/roles')
@@ -82,9 +74,8 @@ export class UserController {
     @Param('id') id: string,
     @Body() body: AssignUserRolesDto,
   ): Promise<UserOutput> {
-    return this.assignUserRolesUseCase.execute(
-      Number(id),
-      body.roleIds ?? [],
+    return CommandBus.execute(
+      new AssignUserRolesCommand(Number(id), body.roleIds ?? []),
     );
   }
 
@@ -100,15 +91,14 @@ export class UserController {
       typeof (body as UpdateUserDto).email === 'string'
         ? (body as UpdateUserDto)
         : parseUserBody(body as Record<string, unknown>);
-    return this.updateUserUseCase.execute(
-      { ...updateUserDto, id: Number(id) },
-      avatar,
+    return CommandBus.execute(
+      new UpdateUserCommand({ ...updateUserDto, id: Number(id) }, avatar),
     );
   }
 
   @Delete(':id')
   @RequirePermissions('users.delete')
   async delete(@Param('id') id: string): Promise<void> {
-    await this.deleteUserUseCase.execute(Number(id));
+    await CommandBus.execute(new DeleteUserCommand(Number(id)));
   }
 }

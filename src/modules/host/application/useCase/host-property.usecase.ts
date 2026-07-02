@@ -1,13 +1,14 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
 import type { CreatePropertyDto } from '../../../properties/applications/dto/createProperty.dto';
-import { CreatePropertyUseCase } from '../../../properties/applications/useCase/createProperty.usecase';
-import { UpdatePropertyUseCase } from '../../../properties/applications/useCase/updateProperty.usecase';
 import { PropertyMediaPresenter } from '../../../properties/applications/presenters/property-media.presenter';
 import { PropertyOutput } from '../../../properties/applications/dto/property.outup';
 import type { UploadFile } from '../../../media/types/upload-file';
 import { ResolveHostUserService } from '../services/resolve-host-user.service';
 import { ResolveHostPropertyService } from '../services/resolve-host-property.service';
+import { CommandBus } from '../../../../shared/useCase/bus/bus';
+import { CreatePropertyCommand } from '../../../properties/applications/useCase/commands/CreatePropertyCommand';
+import { UpdatePropertyCommand } from '../../../properties/applications/useCase/commands/UpdatePropertyCommand';
 
 @Injectable()
 export class ListHostPropertiesUseCase {
@@ -40,10 +41,7 @@ export class GetHostPropertyUseCase {
 
 @Injectable()
 export class CreateHostPropertyUseCase {
-  constructor(
-    private readonly resolveHostUser: ResolveHostUserService,
-    private readonly createPropertyUseCase: CreatePropertyUseCase,
-  ) {}
+  constructor(private readonly resolveHostUser: ResolveHostUserService) {}
 
   async execute(
     authUser: JwtPayload,
@@ -52,9 +50,8 @@ export class CreateHostPropertyUseCase {
   ): Promise<PropertyOutput> {
     const user = await this.resolveHostUser.resolve(authUser.sub);
 
-    return this.createPropertyUseCase.execute(
-      { ...dto, ownerId: user.id! },
-      image,
+    return CommandBus.execute(
+      new CreatePropertyCommand({ ...dto, ownerId: user.id! }, image),
     );
   }
 }
@@ -64,7 +61,6 @@ export class UpdateHostPropertyUseCase {
   constructor(
     private readonly resolveHostProperty: ResolveHostPropertyService,
     private readonly resolveHostUser: ResolveHostUserService,
-    private readonly updatePropertyUseCase: UpdatePropertyUseCase,
   ) {}
 
   async execute(
@@ -76,10 +72,12 @@ export class UpdateHostPropertyUseCase {
     const user = await this.resolveHostUser.resolve(authUser.sub);
     await this.resolveHostProperty.requireOwned(authUser, propertyId);
 
-    return this.updatePropertyUseCase.execute(
-      propertyId,
-      { ...dto, ownerId: user.id! },
-      image,
+    return CommandBus.execute(
+      new UpdatePropertyCommand(
+        propertyId,
+        { ...dto, ownerId: user.id! },
+        image,
+      ),
     );
   }
 }

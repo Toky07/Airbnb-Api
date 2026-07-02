@@ -2,11 +2,15 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { EventBus } from '../../../../shared/domain/event.bus';
 import { EmailSendRequestedEvent } from '../../domain/events/email-send-requested.event';
 import { MailEvent } from '../events/register-mail.event';
+import { SendEmailCommand } from '../useCase/commands/SendEmailCommand';
+
+const mockExecute = vi.fn();
+
+vi.mock('../../../../shared/useCase/bus/bus', () => ({
+  CommandBus: { execute: (...args: unknown[]) => mockExecute(...args) },
+}));
 
 describe('MailEvent', () => {
-  const sendEmail = {
-    execute: vi.fn(),
-  };
   const loadAttachments = {
     execute: vi.fn(),
   };
@@ -14,7 +18,7 @@ describe('MailEvent', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     EventBus.getInstance()['handlers'] = new Map();
-    sendEmail.execute.mockResolvedValue({});
+    mockExecute.mockResolvedValue({});
     loadAttachments.execute.mockResolvedValue([
       {
         fieldname: 'attachments',
@@ -28,10 +32,7 @@ describe('MailEvent', () => {
   });
 
   it('envoie un email à partir de email.send.requested', async () => {
-    const mailEvent = new MailEvent(
-      sendEmail as never,
-      loadAttachments as never,
-    );
+    const mailEvent = new MailEvent(loadAttachments as never);
     await mailEvent.onModuleInit();
 
     await EventBus.getInstance().publish(
@@ -46,7 +47,10 @@ describe('MailEvent', () => {
     );
 
     expect(loadAttachments.execute).toHaveBeenCalled();
-    expect(sendEmail.execute).toHaveBeenCalledWith(
+    expect(mockExecute).toHaveBeenCalledTimes(1);
+    const command = mockExecute.mock.calls[0]?.[0] as SendEmailCommand;
+    expect(command).toBeInstanceOf(SendEmailCommand);
+    expect(command.options).toEqual(
       expect.objectContaining({
         to: 'client@test.com',
         subject: 'Confirmation de paiement',

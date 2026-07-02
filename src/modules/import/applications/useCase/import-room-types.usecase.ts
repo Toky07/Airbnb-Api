@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { CreateRoomTypeUseCase } from '../../../rooms/applications/useCase/create-room-type.usecase';
+import { CommandBus } from '../../../../shared/useCase/bus/bus';
+import { CreateRoomTypeCommand } from '../../../rooms/applications/useCase/commands/CreateRoomTypeCommand';
+import { RoomTypeOutput } from '../../../rooms/applications/dto/room-type.output';
 import { slugify } from '../../../../shared/utils/slug.util';
 import type { ImportCategoryTypeRowDto } from '../dto/import-batch.dto';
 import type { ImportEntityResult } from '../dto/import-entity-result.dto';
@@ -9,8 +11,6 @@ import { validateImportCategoryTypeRow } from '../validation/validate-import-cat
 
 @Injectable()
 export class ImportRoomTypesUseCase {
-  constructor(private readonly createRoomType: CreateRoomTypeUseCase) {}
-
   async execute(
     rows: ImportCategoryTypeRowDto[] | undefined,
     context: ImportBatchContext,
@@ -46,11 +46,13 @@ export class ImportRoomTypesUseCase {
       }
 
       try {
-        const created = await this.createRoomType.execute({
-          name: row.name.trim(),
-          sortOrder: Number(row.sortOrder),
-          isActive: row.isActive,
-        });
+        const created = await CommandBus.execute<RoomTypeOutput>(
+          new CreateRoomTypeCommand({
+            name: row.name.trim(),
+            sortOrder: Number(row.sortOrder),
+            isActive: row.isActive,
+          }),
+        );
         context.roomTypeSlugs.add(created.slug);
         result.created += 1;
       } catch (cause) {
