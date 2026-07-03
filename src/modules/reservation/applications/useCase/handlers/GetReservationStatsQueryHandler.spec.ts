@@ -9,10 +9,13 @@ describe('GetReservationStatsQueryHandler', () => {
     sumConfirmedRevenueForMonth: vi.fn(),
     sumConfirmedNightsForMonth: vi.fn(),
     findRecentItems: vi.fn(),
+    findByIds: vi.fn(),
+    findPaginated: vi.fn(),
   };
   const resolveStatsScope = { resolve: vi.fn() };
   const countScopedRooms = { count: vi.fn() };
   const enrichReservationOutputs = { enrichItems: vi.fn() };
+  const userRepository = { findById: vi.fn() };
 
   let handler: GetReservationStatsQueryHandler;
 
@@ -27,6 +30,8 @@ describe('GetReservationStatsQueryHandler', () => {
     reservationRepository.sumConfirmedRevenueForMonth.mockResolvedValue(500);
     reservationRepository.sumConfirmedNightsForMonth.mockResolvedValue(10);
     reservationRepository.findRecentItems.mockResolvedValue([]);
+    reservationRepository.findByIds.mockResolvedValue([]);
+    reservationRepository.findPaginated.mockResolvedValue({ data: [], meta: { page: 1, limit: 20, total: 0, totalPages: 0 } });
     countScopedRooms.count.mockResolvedValue(5);
     enrichReservationOutputs.enrichItems.mockResolvedValue([]);
     handler = new GetReservationStatsQueryHandler(
@@ -34,6 +39,7 @@ describe('GetReservationStatsQueryHandler', () => {
       resolveStatsScope as never,
       countScopedRooms as never,
       enrichReservationOutputs as never,
+      userRepository as never,
     );
   });
 
@@ -47,5 +53,6 @@ describe('GetReservationStatsQueryHandler', () => {
     expect(result.totalCount).toBe(3);
     expect(result.monthlyRevenue).toBe(500);
     expect(result.recentActivity).toEqual([]);
+    expect(result.recentCustomers).toEqual([]);
   });
 });

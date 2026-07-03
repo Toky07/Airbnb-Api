@@ -86,6 +86,7 @@ export class ReservationBootstrap {
         deps.resolveReservationStatsScope,
         deps.countScopedRooms,
         deps.enrichReservationOutputs,
+        deps.userRepository,
       ),
       listBookingOrdersQueryHandler,
       listHostBookingOrdersQueryHandler: new ListHostBookingOrdersQueryHandler(
