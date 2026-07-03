@@ -40,7 +40,9 @@ export function createSampleCart(
     items: CartItem[];
   }> = {},
 ): Cart {
-  const items = overrides.items ?? [createSampleCartItem({ cartId: overrides.id ?? 5 })];
+  const items = overrides.items ?? [
+    createSampleCartItem({ cartId: overrides.id ?? 5 }),
+  ];
   return new Cart(
     overrides.sessionId ?? 'session-abc',
     items,

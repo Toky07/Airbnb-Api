@@ -25,8 +25,8 @@ describe('ResolveHostPropertyService', () => {
   it('refuse un établissement non possédé', async () => {
     propertyRepository.findByIdForOwner.mockResolvedValue(null);
 
-    await expect(service.requireOwned({ sub: 99 } as never, 2)).rejects.toBeInstanceOf(
-      ForbiddenException,
-    );
+    await expect(
+      service.requireOwned({ sub: 99 } as never, 2),
+    ).rejects.toBeInstanceOf(ForbiddenException);
   });
 });

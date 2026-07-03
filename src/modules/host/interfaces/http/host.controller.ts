@@ -83,10 +83,7 @@ export class HostController {
 
   @Get('properties/:id')
   @RequirePermissions('host.property.read')
-  property(
-    @Req() request: { user: JwtPayload },
-    @Param('id') id: number,
-  ) {
+  property(@Req() request: { user: JwtPayload }, @Param('id') id: number) {
     return this.getHostPropertyUseCase.execute(request.user, Number(id));
   }
 
@@ -101,7 +98,7 @@ export class HostController {
     const dto =
       typeof (body as CreatePropertyDto).latitude === 'number'
         ? (body as CreatePropertyDto)
-        : parsePropertyBody(body as Record<string, unknown>);
+        : parsePropertyBody(body);
     const { ownerId: _ownerId, ...fields } = dto;
     return this.createHostPropertyUseCase.execute(request.user, fields, image);
   }
@@ -118,7 +115,7 @@ export class HostController {
     const dto =
       typeof (body as CreatePropertyDto).latitude === 'number'
         ? (body as CreatePropertyDto)
-        : parsePropertyBody(body as Record<string, unknown>);
+        : parsePropertyBody(body);
     const { ownerId: _ownerId, ...fields } = dto;
     return this.updateHostPropertyUseCase.execute(
       request.user,
@@ -144,7 +141,9 @@ export class HostController {
 
   @Post('rooms')
   @RequirePermissions('host.rooms.create')
-  @UseInterceptors(FilesInterceptor('images', ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM]))
+  @UseInterceptors(
+    FilesInterceptor('images', ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM]),
+  )
   createRoom(
     @Req() request: { user: JwtPayload },
     @Query() query: Record<string, unknown>,
@@ -155,7 +154,7 @@ export class HostController {
     const parsed =
       typeof (body as CreateRoomDto).pricePerNight === 'number'
         ? (body as CreateRoomDto)
-        : parseRoomBody(body as Record<string, unknown>);
+        : parseRoomBody(body);
     const { property: _property, ...fields } = parsed;
     return this.createHostRoomUseCase.execute(
       request.user,
@@ -167,7 +166,9 @@ export class HostController {
 
   @Put('rooms/:id')
   @RequirePermissions('host.rooms.update')
-  @UseInterceptors(FilesInterceptor('images', ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM]))
+  @UseInterceptors(
+    FilesInterceptor('images', ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM]),
+  )
   updateRoom(
     @Req() request: { user: JwtPayload },
     @Param('id') id: number,
@@ -238,7 +239,10 @@ export class HostController {
     @Req() request: { user: JwtPayload },
     @Param('id') id: number,
   ) {
-    return this.hostGetPropertyAmenitiesUseCase.execute(request.user, Number(id));
+    return this.hostGetPropertyAmenitiesUseCase.execute(
+      request.user,
+      Number(id),
+    );
   }
 
   @Put('properties/:id/amenities')

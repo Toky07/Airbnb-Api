@@ -19,7 +19,9 @@ export class ImportRolesUseCase {
     @Inject(ROLE_REPOSITORY) private readonly roleRepository: IRoleRepository,
   ) {}
 
-  async execute(rows: ImportRoleRowDto[] | undefined): Promise<ImportEntityResult> {
+  async execute(
+    rows: ImportRoleRowDto[] | undefined,
+  ): Promise<ImportEntityResult> {
     if (!rows?.length) {
       return emptyImportEntityResult();
     }
@@ -27,7 +29,7 @@ export class ImportRolesUseCase {
     const result = emptyImportEntityResult();
 
     for (let index = 0; index < rows.length; index++) {
-      const row = rows[index]!;
+      const row = rows[index];
       const validation = validateImportRoleRow(row);
       if (!validation.ok) {
         result.errors.push({
@@ -60,7 +62,8 @@ export class ImportRolesUseCase {
               entity: 'role',
               index,
               field: 'slug',
-              message: 'Le rôle super administrateur doit exister avant import.',
+              message:
+                'Le rôle super administrateur doit exister avant import.',
             });
           }
           continue;
@@ -96,7 +99,8 @@ export class ImportRolesUseCase {
         result.errors.push({
           entity: 'role',
           index,
-          message: cause instanceof Error ? cause.message : 'Import impossible.',
+          message:
+            cause instanceof Error ? cause.message : 'Import impossible.',
         });
       }
     }

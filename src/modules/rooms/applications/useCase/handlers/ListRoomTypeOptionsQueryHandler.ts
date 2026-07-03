@@ -3,9 +3,10 @@ import type { IRoomTypeRepository } from '../../../domain/repositories/room-type
 import { RoomTypeOutput } from '../../dto/room-type.output';
 import type { ListRoomTypeOptionsQuery } from '../queries/ListRoomTypeOptionsQuery';
 
-export class ListRoomTypeOptionsQueryHandler
-  implements IQueryHandler<ListRoomTypeOptionsQuery, RoomTypeOutput[]>
-{
+export class ListRoomTypeOptionsQueryHandler implements IQueryHandler<
+  ListRoomTypeOptionsQuery,
+  RoomTypeOutput[]
+> {
   constructor(private readonly repository: IRoomTypeRepository) {}
 
   async execute(_query: ListRoomTypeOptionsQuery): Promise<RoomTypeOutput[]> {

@@ -1,14 +1,12 @@
-import {
-  BadRequestException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import type { IPropertyTypeRepository } from '../../../domain/repositories/property-type.repository';
 import type { DeletePropertyTypeCommand } from '../commands/DeletePropertyTypeCommand';
 
-export class DeletePropertyTypeCommandHandler
-  implements ICommandHandler<DeletePropertyTypeCommand, boolean>
-{
+export class DeletePropertyTypeCommandHandler implements ICommandHandler<
+  DeletePropertyTypeCommand,
+  boolean
+> {
   constructor(private readonly repository: IPropertyTypeRepository) {}
 
   async execute(command: DeletePropertyTypeCommand): Promise<boolean> {

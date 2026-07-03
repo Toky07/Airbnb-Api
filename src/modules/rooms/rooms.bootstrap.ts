@@ -40,7 +40,9 @@ export class RoomsBootstrap {
         deps.roomMediaPresenter,
         deps.generateRoomSlug,
       ),
-      deleteRoomCommandHandler: new DeleteRoomCommandHandler(deps.roomRepository),
+      deleteRoomCommandHandler: new DeleteRoomCommandHandler(
+        deps.roomRepository,
+      ),
       findRoomQueryHandler: new FindRoomQueryHandler(
         deps.roomRepository,
         roomDetailResolver,

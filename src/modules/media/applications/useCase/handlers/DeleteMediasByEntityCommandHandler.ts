@@ -3,9 +3,10 @@ import type { IMediaRepository } from '../../../domain/repositories/media.reposi
 import type { ILocalStorageService } from '../../../services/localStorage.service';
 import type { DeleteMediasByEntityCommand } from '../commands/DeleteMediasByEntityCommand';
 
-export class DeleteMediasByEntityCommandHandler
-  implements ICommandHandler<DeleteMediasByEntityCommand, void>
-{
+export class DeleteMediasByEntityCommandHandler implements ICommandHandler<
+  DeleteMediasByEntityCommand,
+  void
+> {
   constructor(
     private readonly repository: IMediaRepository,
     private readonly storage: ILocalStorageService,

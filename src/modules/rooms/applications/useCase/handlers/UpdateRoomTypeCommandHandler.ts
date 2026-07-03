@@ -1,7 +1,4 @@
-import {
-  ConflictException,
-  NotFoundException,
-} from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import { slugify } from '../../../../../shared/utils/slug.util';
 import { RoomType } from '../../../domain/entities/room-type.entity';
@@ -9,9 +6,10 @@ import type { IRoomTypeRepository } from '../../../domain/repositories/room-type
 import { RoomTypeOutput } from '../../dto/room-type.output';
 import type { UpdateRoomTypeCommand } from '../commands/UpdateRoomTypeCommand';
 
-export class UpdateRoomTypeCommandHandler
-  implements ICommandHandler<UpdateRoomTypeCommand, RoomTypeOutput>
-{
+export class UpdateRoomTypeCommandHandler implements ICommandHandler<
+  UpdateRoomTypeCommand,
+  RoomTypeOutput
+> {
   constructor(private readonly repository: IRoomTypeRepository) {}
 
   async execute(command: UpdateRoomTypeCommand): Promise<RoomTypeOutput> {

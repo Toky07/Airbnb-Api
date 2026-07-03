@@ -15,9 +15,10 @@ export type CreatePaymentResult = {
   publishableKey: string;
 };
 
-export class CreatePaymentCommandHandler
-  implements ICommandHandler<CreatePaymentCommand, CreatePaymentResult>
-{
+export class CreatePaymentCommandHandler implements ICommandHandler<
+  CreatePaymentCommand,
+  CreatePaymentResult
+> {
   constructor(
     private readonly repository: IPaymentRepository,
     private readonly paymentGateway: IPaymentGateway,
@@ -48,7 +49,11 @@ export class CreatePaymentCommandHandler
     );
 
     await EventBus.getInstance().publish(
-      new PaymentCreatedEvent(payment.id!, command.propertyType, command.propertyId),
+      new PaymentCreatedEvent(
+        payment.id!,
+        command.propertyType,
+        command.propertyId,
+      ),
     );
 
     return {

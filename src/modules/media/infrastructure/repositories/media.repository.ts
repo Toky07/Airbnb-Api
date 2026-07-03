@@ -14,7 +14,10 @@ export class MediaRepository implements IMediaRepository {
     private readonly repository: Repository<MediaOrmEntity>,
   ) {}
 
-  async findByEntity(entityType: EntityType, entityId: number): Promise<Media[]> {
+  async findByEntity(
+    entityType: EntityType,
+    entityId: number,
+  ): Promise<Media[]> {
     const rows = await this.repository.find({
       where: { entityType, entityId },
       order: { id: 'ASC' },

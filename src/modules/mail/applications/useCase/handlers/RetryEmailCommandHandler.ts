@@ -8,9 +8,10 @@ import { EmailOutput } from '../../dto/email.output';
 import { deliverEmail } from '../../services/deliver-email';
 import type { RetryEmailCommand } from '../commands/RetryEmailCommand';
 
-export class RetryEmailCommandHandler
-  implements ICommandHandler<RetryEmailCommand, EmailOutput>
-{
+export class RetryEmailCommandHandler implements ICommandHandler<
+  RetryEmailCommand,
+  EmailOutput
+> {
   constructor(
     private readonly repository: IEmailRepository,
     private readonly transport: IMailTransport,

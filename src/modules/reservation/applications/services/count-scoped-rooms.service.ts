@@ -1,11 +1,14 @@
 import { Inject } from '@nestjs/common';
-import { ROOM_REPOSITORY, type IRoomRepository } from '../../../rooms/domain/repositories/room.repository';
+import {
+  ROOM_REPOSITORY,
+  type IRoomRepository,
+} from '../../../rooms/domain/repositories/room.repository';
 import type { ReservationStatsScope } from '../../domain/repositories/reservation.repository';
 
 export class CountScopedRoomsService {
   constructor(
     @Inject(ROOM_REPOSITORY)
-    private readonly roomRepository: IRoomRepository
+    private readonly roomRepository: IRoomRepository,
   ) {}
 
   async count(scope: ReservationStatsScope): Promise<number> {
@@ -36,7 +39,10 @@ export class CountScopedRoomsService {
       return result.meta.total;
     }
 
-    const result = await this.roomRepository.findPaginated({ page: 1, limit: 10 });
+    const result = await this.roomRepository.findPaginated({
+      page: 1,
+      limit: 10,
+    });
     return result.meta.total;
   }
 }

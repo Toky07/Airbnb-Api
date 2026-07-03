@@ -11,7 +11,10 @@ export class MediaBootstrap {
     storage: ILocalStorageService;
   }) {
     const deleteMediasByEntityCommandHandler =
-      new DeleteMediasByEntityCommandHandler(deps.mediaRepository, deps.storage);
+      new DeleteMediasByEntityCommandHandler(
+        deps.mediaRepository,
+        deps.storage,
+      );
 
     return {
       deleteMediasByEntityCommandHandler,

@@ -1,7 +1,13 @@
 import { Inject, Module, OnModuleInit } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { type IPaymentGateway, PAYMENT_GATEWAY } from './domain/ports/payment-gateway.port';
-import { type IPaymentRepository, PAYMENT_REPOSITORY } from './domain/repositories/payment.repository';
+import {
+  type IPaymentGateway,
+  PAYMENT_GATEWAY,
+} from './domain/ports/payment-gateway.port';
+import {
+  type IPaymentRepository,
+  PAYMENT_REPOSITORY,
+} from './domain/repositories/payment.repository';
 import { PaymentOrmEntity } from './infrastructure/entities/payment.orm-entity';
 import { PaymentRepository } from './infrastructure/repositories/payment.repository';
 import { StripePaymentGateway } from './infrastructure/stripe/stripe-payment-gateway';
@@ -49,8 +55,17 @@ export class PaymentModule implements OnModuleInit {
       this.webhookVerifier,
     );
 
-    CommandBus.register(CreatePaymentCommand, bootstrap.createPaymentCommandHandler);
-    CommandBus.register(ConfirmStripePaymentCommand, bootstrap.confirmStripePaymentCommandHandler);
-    CommandBus.register(VerifyPaymentCommand, bootstrap.verifyPaymentCommandHandler);
+    CommandBus.register(
+      CreatePaymentCommand,
+      bootstrap.createPaymentCommandHandler,
+    );
+    CommandBus.register(
+      ConfirmStripePaymentCommand,
+      bootstrap.confirmStripePaymentCommandHandler,
+    );
+    CommandBus.register(
+      VerifyPaymentCommand,
+      bootstrap.verifyPaymentCommandHandler,
+    );
   }
 }

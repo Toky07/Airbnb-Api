@@ -5,9 +5,10 @@ import { ReservationOutput } from '../../dto/reservation.output';
 import type { EnrichReservationOutputsService } from '../../services/enrich-reservation-outputs.service';
 import type { ListReservationsQuery } from '../queries/ListReservationsQuery';
 
-export class ListReservationsQueryHandler
-  implements IQueryHandler<ListReservationsQuery, PaginatedResult<ReservationOutput>>
-{
+export class ListReservationsQueryHandler implements IQueryHandler<
+  ListReservationsQuery,
+  PaginatedResult<ReservationOutput>
+> {
   constructor(
     private readonly reservationRepository: IReservationRepository,
     private readonly enrichReservationOutputs: EnrichReservationOutputsService,

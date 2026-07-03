@@ -6,9 +6,10 @@ import type { IRoomAmenityRepository } from '../../../domain/repositories/room-a
 import { AmenityOutput } from '../../dto/amenity.output';
 import type { ListRoomAmenitiesQuery } from '../queries/ListRoomAmenitiesQuery';
 
-export class ListRoomAmenitiesQueryHandler
-  implements IQueryHandler<ListRoomAmenitiesQuery, AmenityOutput[]>
-{
+export class ListRoomAmenitiesQueryHandler implements IQueryHandler<
+  ListRoomAmenitiesQuery,
+  AmenityOutput[]
+> {
   constructor(
     private readonly roomRepository: IRoomRepository,
     private readonly roomAmenityRepository: IRoomAmenityRepository,
@@ -21,8 +22,9 @@ export class ListRoomAmenitiesQueryHandler
       throw new NotFoundException('Chambre introuvable');
     }
 
-    const amenityIds =
-      await this.roomAmenityRepository.findAmenityIdsByRoomId(query.roomId);
+    const amenityIds = await this.roomAmenityRepository.findAmenityIdsByRoomId(
+      query.roomId,
+    );
     const amenities = await this.amenityRepository.findByIds(amenityIds);
     return amenities.map(AmenityOutput.fromDomain);
   }

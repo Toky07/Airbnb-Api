@@ -2,7 +2,10 @@ import { Inject, Module, OnModuleInit } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PropertyController } from './interfaces/http/property.controller';
 import { PropertyTypeController } from './interfaces/http/property-type.controller';
-import { PROPERTY_REPOSITORY, PropertyRepository } from './infrastructure/repositories/property.repository';
+import {
+  PROPERTY_REPOSITORY,
+  PropertyRepository,
+} from './infrastructure/repositories/property.repository';
 import type { IPropertyRepository } from './domain/repositories/property.repository';
 import { PROPERTY_TYPE_REPOSITORY } from './domain/repositories/property-type.repository';
 import type { IPropertyTypeRepository } from './domain/repositories/property-type.repository';
@@ -67,17 +70,47 @@ export class PropertiesModule implements OnModuleInit {
       propertyMediaPresenter: this.propertyMediaPresenter,
     });
 
-    CommandBus.register(CreatePropertyCommand, bootstrap.createPropertyCommandHandler);
-    CommandBus.register(UpdatePropertyCommand, bootstrap.updatePropertyCommandHandler);
-    CommandBus.register(DeletePropertyCommand, bootstrap.deletePropertyCommandHandler);
-    CommandBus.register(CreatePropertyTypeCommand, bootstrap.createPropertyTypeCommandHandler);
-    CommandBus.register(UpdatePropertyTypeCommand, bootstrap.updatePropertyTypeCommandHandler);
-    CommandBus.register(DeletePropertyTypeCommand, bootstrap.deletePropertyTypeCommandHandler);
+    CommandBus.register(
+      CreatePropertyCommand,
+      bootstrap.createPropertyCommandHandler,
+    );
+    CommandBus.register(
+      UpdatePropertyCommand,
+      bootstrap.updatePropertyCommandHandler,
+    );
+    CommandBus.register(
+      DeletePropertyCommand,
+      bootstrap.deletePropertyCommandHandler,
+    );
+    CommandBus.register(
+      CreatePropertyTypeCommand,
+      bootstrap.createPropertyTypeCommandHandler,
+    );
+    CommandBus.register(
+      UpdatePropertyTypeCommand,
+      bootstrap.updatePropertyTypeCommandHandler,
+    );
+    CommandBus.register(
+      DeletePropertyTypeCommand,
+      bootstrap.deletePropertyTypeCommandHandler,
+    );
 
     QueryBus.register(FindPropertyQuery, bootstrap.findPropertyQueryHandler);
-    QueryBus.register(ListPropertiesQuery, bootstrap.listPropertiesQueryHandler);
-    QueryBus.register(ListPropertyOptionsQuery, bootstrap.listPropertyOptionsQueryHandler);
-    QueryBus.register(ListPropertyTypesQuery, bootstrap.listPropertyTypesQueryHandler);
-    QueryBus.register(ListPropertyTypeOptionsQuery, bootstrap.listPropertyTypeOptionsQueryHandler);
+    QueryBus.register(
+      ListPropertiesQuery,
+      bootstrap.listPropertiesQueryHandler,
+    );
+    QueryBus.register(
+      ListPropertyOptionsQuery,
+      bootstrap.listPropertyOptionsQueryHandler,
+    );
+    QueryBus.register(
+      ListPropertyTypesQuery,
+      bootstrap.listPropertyTypesQueryHandler,
+    );
+    QueryBus.register(
+      ListPropertyTypeOptionsQuery,
+      bootstrap.listPropertyTypeOptionsQueryHandler,
+    );
   }
 }

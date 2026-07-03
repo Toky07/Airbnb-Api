@@ -35,7 +35,9 @@ export class EmailRepository implements IEmailRepository {
     return entity ? EmailMapper.toDomain(entity) : null;
   }
 
-  async findPaginated(params: PaginationParams): Promise<PaginatedResult<Email>> {
+  async findPaginated(
+    params: PaginationParams,
+  ): Promise<PaginatedResult<Email>> {
     const qb = this.repository
       .createQueryBuilder('email')
       .orderBy('email.createdAt', 'DESC');

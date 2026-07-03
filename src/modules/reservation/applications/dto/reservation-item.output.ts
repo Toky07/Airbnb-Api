@@ -25,7 +25,7 @@ export class ReservationItemOutput {
 
   static fromDomain(
     item: ReservationItem,
-      product?: {
+    product?: {
       roomName?: string | null;
       roomSlug?: string | null;
       propertyId?: number | null;

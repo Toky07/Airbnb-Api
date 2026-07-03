@@ -89,14 +89,17 @@ export class BookingOrderDetailOutput {
   }
 }
 
-export function resolvePaymentReservationIds(payment: Payment): number[] {  
-  const reservationId = payment.propertyType === PAYMENT_TYPE.RESERVATION ? payment.propertyId : null;
+export function resolvePaymentReservationIds(payment: Payment): number[] {
+  const reservationId =
+    payment.propertyType === PAYMENT_TYPE.RESERVATION
+      ? payment.propertyId
+      : null;
 
   if (reservationId) {
     return [reservationId];
-  } 
+  }
 
-  return []; 
+  return [];
 }
 
 function buildPreviewLabel(items: ReservationItemOutput[]): string {
@@ -104,11 +107,11 @@ function buildPreviewLabel(items: ReservationItemOutput[]): string {
     return 'Aucun séjour';
   }
 
-  const first = items[0]!;
+  const first = items[0];
   const firstName =
     first.roomName && first.propertyName
       ? `${first.roomName} · ${first.propertyName}`
-      : first.roomName ?? `Chambre #${first.roomId}`;
+      : (first.roomName ?? `Chambre #${first.roomId}`);
 
   if (items.length === 1) {
     return firstName;

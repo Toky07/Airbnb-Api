@@ -17,12 +17,14 @@ describe('SendEmailCommandHandler', () => {
       createAttachmentStorageMock(),
     );
 
-    const result = await handler.execute(new SendEmailCommand({
-      to: 'client@test.com',
-      subject: 'Bienvenue',
-      body: 'Bonjour',
-      sourceModule: 'test',
-    }));
+    const result = await handler.execute(
+      new SendEmailCommand({
+        to: 'client@test.com',
+        subject: 'Bienvenue',
+        body: 'Bonjour',
+        sourceModule: 'test',
+      }),
+    );
 
     expect(result.status).toBe(EMAIL_STATUS.SENT);
     expect(transport.send).toHaveBeenCalledTimes(1);
@@ -38,11 +40,13 @@ describe('SendEmailCommandHandler', () => {
       createAttachmentStorageMock(),
     );
 
-    const result = await handler.execute(new SendEmailCommand({
-      to: 'client@test.com',
-      subject: 'Erreur',
-      body: 'Test',
-    }));
+    const result = await handler.execute(
+      new SendEmailCommand({
+        to: 'client@test.com',
+        subject: 'Erreur',
+        body: 'Test',
+      }),
+    );
 
     expect(result.status).toBe(EMAIL_STATUS.FAILED);
     expect(result.errorMessage).toBe('SMTP down');
@@ -56,11 +60,13 @@ describe('SendEmailCommandHandler', () => {
     );
 
     await expect(
-      handler.execute(new SendEmailCommand({
-        to: '   ',
-        subject: 'Sans destinataire',
-        body: 'Test',
-      })),
+      handler.execute(
+        new SendEmailCommand({
+          to: '   ',
+          subject: 'Sans destinataire',
+          body: 'Test',
+        }),
+      ),
     ).rejects.toThrow('At least one recipient is required');
   });
 });

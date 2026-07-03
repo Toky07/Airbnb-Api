@@ -20,7 +20,9 @@ describe('ListAmenitiesQueryHandler', () => {
     };
 
     const handler = new ListAmenitiesQueryHandler(repository as never);
-    const result = await handler.execute(new ListAmenitiesQuery(AMENITY_SCOPE.ROOM));
+    const result = await handler.execute(
+      new ListAmenitiesQuery(AMENITY_SCOPE.ROOM),
+    );
 
     expect(result).toHaveLength(1);
     expect(result[0]?.name).toBe('WiFi');

@@ -1,17 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ImportUsersUseCase } from './import-users.usecase';
 import { createImportBatchContext } from './import-test.helpers';
-
-const mockExecute = vi.fn();
-
-vi.mock('../../../../shared/useCase/bus/bus', () => ({
-  CommandBus: { execute: (...args: unknown[]) => mockExecute(...args) },
-}));
+import { commandBusExecuteMock } from '../../../../test/command-bus.mock';
 
 describe('ImportUsersUseCase', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockExecute.mockResolvedValue({
+    commandBusExecuteMock.mockResolvedValue({
       id: 1,
       firstName: 'Jean',
       lastName: 'Dupont',
@@ -48,7 +43,7 @@ describe('ImportUsersUseCase', () => {
     );
 
     expect(result.created).toBe(1);
-    expect(mockExecute).toHaveBeenCalledTimes(1);
+    expect(commandBusExecuteMock).toHaveBeenCalledTimes(1);
     expect(result.errors).toHaveLength(1);
     expect(result.errors[0]?.entity).toBe('user');
     expect(context.emailToUserId.get('jean@example.com')).toBe(1);

@@ -1,7 +1,4 @@
-import {
-  ConflictException,
-  NotFoundException,
-} from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import { slugify } from '../../../../../shared/utils/slug.util';
 import { PropertyType } from '../../../domain/entities/property-type.entity';
@@ -9,12 +6,15 @@ import type { IPropertyTypeRepository } from '../../../domain/repositories/prope
 import { PropertyTypeOutput } from '../../dto/property-type.output';
 import type { UpdatePropertyTypeCommand } from '../commands/UpdatePropertyTypeCommand';
 
-export class UpdatePropertyTypeCommandHandler
-  implements ICommandHandler<UpdatePropertyTypeCommand, PropertyTypeOutput>
-{
+export class UpdatePropertyTypeCommandHandler implements ICommandHandler<
+  UpdatePropertyTypeCommand,
+  PropertyTypeOutput
+> {
   constructor(private readonly repository: IPropertyTypeRepository) {}
 
-  async execute(command: UpdatePropertyTypeCommand): Promise<PropertyTypeOutput> {
+  async execute(
+    command: UpdatePropertyTypeCommand,
+  ): Promise<PropertyTypeOutput> {
     const current = await this.repository.findById(command.id);
     if (!current) {
       throw new NotFoundException('Catégorie introuvable');

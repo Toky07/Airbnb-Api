@@ -1,7 +1,4 @@
-import {
-  ForbiddenException,
-  NotFoundException,
-} from '@nestjs/common';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../shared/useCase/bus/command-handler.interface';
 import type { IRoleRepository } from '../../domain/repositories/role.repository';
 import { RoleOutput } from '../../application/dto/role.output';
@@ -9,9 +6,10 @@ import { UserNameVO } from '../../../user/domain/valueObject/username.vo';
 import { SUPERADMIN_ROLE_SLUG } from '../../domain/constants/permissions.constant';
 import type { UpdateRoleCommand } from '../commands/UpdateRoleCommand';
 
-export class UpdateRoleCommandHandler
-  implements ICommandHandler<UpdateRoleCommand, RoleOutput>
-{
+export class UpdateRoleCommandHandler implements ICommandHandler<
+  UpdateRoleCommand,
+  RoleOutput
+> {
   constructor(private readonly repository: IRoleRepository) {}
 
   async execute(command: UpdateRoleCommand): Promise<RoleOutput> {
@@ -22,8 +20,14 @@ export class UpdateRoleCommandHandler
       throw new NotFoundException('Role not found');
     }
 
-    if (role.slug === SUPERADMIN_ROLE_SLUG && name && name !== role.name.value) {
-      throw new ForbiddenException('Le rôle super administrateur ne peut pas être renommé');
+    if (
+      role.slug === SUPERADMIN_ROLE_SLUG &&
+      name &&
+      name !== role.name.value
+    ) {
+      throw new ForbiddenException(
+        'Le rôle super administrateur ne peut pas être renommé',
+      );
     }
 
     if (name) {

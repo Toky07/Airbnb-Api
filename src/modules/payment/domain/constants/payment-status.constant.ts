@@ -6,4 +6,5 @@ export const PAYMENT_STATUS = {
   CANCELED: 'canceled',
 } as const;
 
-export type PaymentStatus = (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS];
+export type PaymentStatus =
+  (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS];

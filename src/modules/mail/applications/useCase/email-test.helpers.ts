@@ -28,22 +28,24 @@ export function createEmailRepositoryMock(
   overrides: Partial<IEmailRepository> = {},
 ): IEmailRepository {
   return {
-    create: vi.fn().mockImplementation(async (email: Email) => createPersistedEmail(email)),
+    create: vi
+      .fn()
+      .mockImplementation(async (email: Email) => createPersistedEmail(email)),
     update: vi.fn().mockImplementation(async (email: Email) => email),
     findById: vi.fn(),
     findPaginated: vi.fn(),
     ...overrides,
-  } as unknown as IEmailRepository;
+  };
 }
 
 export function createMailTransportMock(
   send: IMailTransport['send'] = vi.fn().mockResolvedValue(undefined),
 ): IMailTransport {
-  return { send } as unknown as IMailTransport;
+  return { send };
 }
 
 export function createAttachmentStorageMock(): EmailAttachmentStorageService {
   return {
     saveMany: vi.fn().mockResolvedValue([]),
-  } as unknown as EmailAttachmentStorageService;
+  };
 }

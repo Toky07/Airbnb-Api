@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, LessThan, Repository } from 'typeorm';
 import {
@@ -33,7 +33,7 @@ export class ReservationRepository implements IReservationRepository {
     const saved = await this.repository.save(
       this.repository.create(ReservationMapper.toEntity(reservation)),
     );
-    
+
     const loaded = await this.repository.findOne({
       where: { id: saved.id },
       relations: ['items'],
@@ -43,16 +43,18 @@ export class ReservationRepository implements IReservationRepository {
 
   async update(reservation: Reservation): Promise<Reservation> {
     const updatedReservation = await this.repository.preload(
-      ReservationMapper.toEntity(reservation)
+      ReservationMapper.toEntity(reservation),
     );
 
     const saved = await this.repository.save(updatedReservation!);
 
-    return ReservationMapper.toDomain(saved!);
+    return ReservationMapper.toDomain(saved);
   }
 
   async setPayment(reservation: Reservation, paymentId: number): Promise<void> {
-    await this.repository.update(reservation.id!, { payment: { id: paymentId } });
+    await this.repository.update(reservation.id!, {
+      payment: { id: paymentId },
+    });
   }
 
   async updateItem(item: ReservationItem): Promise<ReservationItem> {
@@ -84,7 +86,9 @@ export class ReservationRepository implements IReservationRepository {
   }
 
   async findItemsByIds(ids: number[]): Promise<ReservationItem[]> {
-    const uniqueIds = [...new Set(ids.filter((id) => Number.isFinite(id) && id > 0))];
+    const uniqueIds = [
+      ...new Set(ids.filter((id) => Number.isFinite(id) && id > 0)),
+    ];
     if (uniqueIds.length === 0) {
       return [];
     }
@@ -117,10 +121,9 @@ export class ReservationRepository implements IReservationRepository {
 
     if (params.search) {
       const term = `%${params.search}%`;
-      qb.andWhere(
-        '(item.checkIn LIKE :term OR item.checkOut LIKE :term)',
-        { term },
-      );
+      qb.andWhere('(item.checkIn LIKE :term OR item.checkOut LIKE :term)', {
+        term,
+      });
     }
 
     const [entities, total] = await qb
@@ -199,14 +202,16 @@ export class ReservationRepository implements IReservationRepository {
     scope: ReservationStatsScope = {},
   ): Promise<number> {
     const { start, end } = this.getMonthRange(year, month);
-    
+
     const qb = this.itemRepository
       .createQueryBuilder('item')
       .select('COALESCE(SUM(item.price), 0)', 'total')
       .andWhere('item.checkIn >= :start', { start })
       .andWhere('item.checkIn < :end', { end })
       .innerJoin('item.reservation', 'reservation')
-      .andWhere('reservation.status = :status', { status: RESERVATION_STATUS.CONFIRMED });
+      .andWhere('reservation.status = :status', {
+        status: RESERVATION_STATUS.CONFIRMED,
+      });
 
     this.applyItemScope(qb, scope);
 
@@ -248,7 +253,9 @@ export class ReservationRepository implements IReservationRepository {
   }
 
   async findByIds(ids: number[]): Promise<Reservation[]> {
-    const uniqueIds = [...new Set(ids.filter((id) => Number.isFinite(id) && id > 0))];
+    const uniqueIds = [
+      ...new Set(ids.filter((id) => Number.isFinite(id) && id > 0)),
+    ];
     if (uniqueIds.length === 0) {
       return [];
     }
@@ -391,7 +398,10 @@ export class ReservationRepository implements IReservationRepository {
     }
   }
 
-  private getMonthRange(year: number, month: number): { start: string; end: string } {
+  private getMonthRange(
+    year: number,
+    month: number,
+  ): { start: string; end: string } {
     const start = `${year}-${String(month).padStart(2, '0')}-01`;
     const nextMonth = month === 12 ? 1 : month + 1;
     const nextYear = month === 12 ? year + 1 : year;

@@ -3,9 +3,10 @@ import type { IUserRepository } from '../../../domain/repositories/user.reposito
 import { UserOutput } from '../../../domain/dtos/user.output';
 import type { ListUserOptionsQuery } from '../queries/ListUserOptionsQuery';
 
-export class ListUserOptionsQueryHandler
-  implements IQueryHandler<ListUserOptionsQuery, UserOutput[]>
-{
+export class ListUserOptionsQueryHandler implements IQueryHandler<
+  ListUserOptionsQuery,
+  UserOutput[]
+> {
   constructor(private readonly repository: IUserRepository) {}
 
   async execute(_query: ListUserOptionsQuery): Promise<UserOutput[]> {

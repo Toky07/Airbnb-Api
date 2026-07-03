@@ -30,7 +30,10 @@ export class ResolveHostPropertyService {
       .filter((id): id is number => typeof id === 'number' && id > 0);
   }
 
-  async requireOwned(authUser: JwtPayload, propertyId: number): Promise<Property> {
+  async requireOwned(
+    authUser: JwtPayload,
+    propertyId: number,
+  ): Promise<Property> {
     const user = await this.resolveHostUser.resolve(authUser.sub);
     const property = await this.propertyRepository.findByIdForOwner(
       propertyId,
@@ -38,7 +41,9 @@ export class ResolveHostPropertyService {
     );
 
     if (!property) {
-      throw new ForbiddenException('Établissement introuvable ou accès refusé.');
+      throw new ForbiddenException(
+        'Établissement introuvable ou accès refusé.',
+      );
     }
 
     return property;
@@ -49,7 +54,7 @@ export class ResolveHostPropertyService {
     const property = properties[0];
 
     if (!property?.id) {
-      throw new NotFoundException('Créez d\'abord un établissement.');
+      throw new NotFoundException("Créez d'abord un établissement.");
     }
 
     return property;

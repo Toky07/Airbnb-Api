@@ -55,9 +55,8 @@ export class PropertiesBootstrap {
       listPropertyTypesQueryHandler: new ListPropertyTypesQueryHandler(
         deps.propertyTypeRepository,
       ),
-      listPropertyTypeOptionsQueryHandler: new ListPropertyTypeOptionsQueryHandler(
-        deps.propertyTypeRepository,
-      ),
+      listPropertyTypeOptionsQueryHandler:
+        new ListPropertyTypeOptionsQueryHandler(deps.propertyTypeRepository),
     };
   }
 }

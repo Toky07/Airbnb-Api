@@ -6,9 +6,10 @@ import type { ICartRepository } from '../../../domain/repositories/cart.reposito
 import type { CartPresenter } from '../../presenters/cart.presenter';
 import type { ResolveCartService } from '../../services/resolve-cart.service';
 
-export class RemoveCartItemCommandHandler
-  implements ICommandHandler<RemoveCartItemCommand, CartOutput>
-{
+export class RemoveCartItemCommandHandler implements ICommandHandler<
+  RemoveCartItemCommand,
+  CartOutput
+> {
   constructor(
     private readonly resolveCartService: ResolveCartService,
     private readonly cartRepository: ICartRepository,
@@ -17,7 +18,9 @@ export class RemoveCartItemCommandHandler
 
   async execute(command: RemoveCartItemCommand): Promise<CartOutput> {
     const cart = await this.resolveCartService.resolve(command.context);
-    const item = cart.items.find((entry) => entry.id === Number(command.itemId));
+    const item = cart.items.find(
+      (entry) => entry.id === Number(command.itemId),
+    );
 
     if (!item?.id || !cart.id) {
       throw new NotFoundException('Article introuvable.');

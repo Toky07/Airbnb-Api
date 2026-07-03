@@ -20,11 +20,21 @@ describe('UpdateAmenityCommandHandler', () => {
       findById: async () => current,
       findByName: async () => null,
       update: async () =>
-        new Amenity('WiFi Pro', 'wifi', AMENITY_SCOPE.ROOM, true, 1, new Date(), new Date()),
+        new Amenity(
+          'WiFi Pro',
+          'wifi',
+          AMENITY_SCOPE.ROOM,
+          true,
+          1,
+          new Date(),
+          new Date(),
+        ),
     } as unknown as IAmenityRepository;
 
     const handler = new UpdateAmenityCommandHandler(repository);
-    const result = await handler.execute(new UpdateAmenityCommand(1, { name: 'WiFi Pro' }));
+    const result = await handler.execute(
+      new UpdateAmenityCommand(1, { name: 'WiFi Pro' }),
+    );
 
     expect(result.name).toBe('WiFi Pro');
     expect(result.scope).toBe(AMENITY_SCOPE.ROOM);
@@ -37,8 +47,8 @@ describe('UpdateAmenityCommandHandler', () => {
 
     const handler = new UpdateAmenityCommandHandler(repository);
 
-    await expect(handler.execute(new UpdateAmenityCommand(99, { name: 'TV' }))).rejects.toBeInstanceOf(
-      NotFoundException,
-    );
+    await expect(
+      handler.execute(new UpdateAmenityCommand(99, { name: 'TV' })),
+    ).rejects.toBeInstanceOf(NotFoundException);
   });
 });

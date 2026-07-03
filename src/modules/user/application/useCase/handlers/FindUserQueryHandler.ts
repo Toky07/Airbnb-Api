@@ -4,7 +4,10 @@ import type { IUserRepository } from '../../../domain/repositories/user.reposito
 import { UserOutput } from '../../../domain/dtos/user.output';
 import type { FindUserQuery } from '../queries/FindUserQuery';
 
-export class FindUserQueryHandler implements IQueryHandler<FindUserQuery, UserOutput> {
+export class FindUserQueryHandler implements IQueryHandler<
+  FindUserQuery,
+  UserOutput
+> {
   constructor(private readonly repository: IUserRepository) {}
 
   async execute(query: FindUserQuery): Promise<UserOutput> {

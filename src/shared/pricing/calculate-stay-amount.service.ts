@@ -62,6 +62,8 @@ export class CalculateStayAmountService {
 
   private countNights(checkIn: Date, checkOut: Date): number {
     const millisecondsPerDay = 24 * 60 * 60 * 1000;
-    return Math.round((checkOut.getTime() - checkIn.getTime()) / millisecondsPerDay);
+    return Math.round(
+      (checkOut.getTime() - checkIn.getTime()) / millisecondsPerDay,
+    );
   }
 }

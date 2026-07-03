@@ -24,7 +24,10 @@ import { BuildReservationInvoicePayloadService } from './applications/services/b
 import { BuildCustomerInvoiceEmailBodyService } from './applications/services/build-customer-invoice-email-body.service';
 import { BuildHostPaymentNotificationEmailBodyService } from './applications/services/build-host-payment-notification-email-body.service';
 import { ClearExpiredReservationService } from './applications/services/clear-expired-reservation.service';
-import { RESERVATION_REPOSITORY, type IReservationRepository } from './domain/repositories/reservation.repository';
+import {
+  RESERVATION_REPOSITORY,
+  type IReservationRepository,
+} from './domain/repositories/reservation.repository';
 import { ReservationItemOrmEntity } from './infrastructure/entities/reservation-item.orm-entity';
 import { ReservationOrmEntity } from './infrastructure/entities/reservation.orm-entity';
 import { ReservationRepository } from './infrastructure/repositories/reservation.repository';
@@ -118,17 +121,50 @@ export class ReservationModule implements OnModuleInit {
       countScopedRooms: this.countScopedRooms,
     });
 
-    CommandBus.register(CreateReservationCommand, bootstrap.createReservationCommandHandler);
-    CommandBus.register(ConfirmReservationCommand, bootstrap.confirmReservationCommandHandler);
-    CommandBus.register(CancelReservationCommand, bootstrap.cancelReservationCommandHandler);
+    CommandBus.register(
+      CreateReservationCommand,
+      bootstrap.createReservationCommandHandler,
+    );
+    CommandBus.register(
+      ConfirmReservationCommand,
+      bootstrap.confirmReservationCommandHandler,
+    );
+    CommandBus.register(
+      CancelReservationCommand,
+      bootstrap.cancelReservationCommandHandler,
+    );
 
-    QueryBus.register(GetReservationQuery, bootstrap.getReservationQueryHandler);
-    QueryBus.register(ListReservationsQuery, bootstrap.listReservationsQueryHandler);
-    QueryBus.register(ListMyReservationsQuery, bootstrap.listMyReservationsQueryHandler);
-    QueryBus.register(ListHostReservationsQuery, bootstrap.listHostReservationsQueryHandler);
-    QueryBus.register(GetReservationStatsQuery, bootstrap.getReservationStatsQueryHandler);
-    QueryBus.register(ListBookingOrdersQuery, bootstrap.listBookingOrdersQueryHandler);
-    QueryBus.register(ListHostBookingOrdersQuery, bootstrap.listHostBookingOrdersQueryHandler);
-    QueryBus.register(GetBookingOrderQuery, bootstrap.getBookingOrderQueryHandler);
+    QueryBus.register(
+      GetReservationQuery,
+      bootstrap.getReservationQueryHandler,
+    );
+    QueryBus.register(
+      ListReservationsQuery,
+      bootstrap.listReservationsQueryHandler,
+    );
+    QueryBus.register(
+      ListMyReservationsQuery,
+      bootstrap.listMyReservationsQueryHandler,
+    );
+    QueryBus.register(
+      ListHostReservationsQuery,
+      bootstrap.listHostReservationsQueryHandler,
+    );
+    QueryBus.register(
+      GetReservationStatsQuery,
+      bootstrap.getReservationStatsQueryHandler,
+    );
+    QueryBus.register(
+      ListBookingOrdersQuery,
+      bootstrap.listBookingOrdersQueryHandler,
+    );
+    QueryBus.register(
+      ListHostBookingOrdersQuery,
+      bootstrap.listHostBookingOrdersQueryHandler,
+    );
+    QueryBus.register(
+      GetBookingOrderQuery,
+      bootstrap.getBookingOrderQueryHandler,
+    );
   }
 }

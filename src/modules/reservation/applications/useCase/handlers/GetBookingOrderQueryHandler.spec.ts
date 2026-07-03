@@ -65,7 +65,11 @@ describe('GetBookingOrderQueryHandler', () => {
 
   it('retourne les séjours avec status et userId', async () => {
     const result = await handler.execute(
-      new GetBookingOrderQuery(7, { canReadAll: true, canReadHost: false, authId: 0 }),
+      new GetBookingOrderQuery(7, {
+        canReadAll: true,
+        canReadHost: false,
+        authId: 0,
+      }),
     );
 
     expect(result.items).toHaveLength(1);

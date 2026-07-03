@@ -1,7 +1,4 @@
-import {
-  ForbiddenException,
-  Injectable,
-} from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
 import type { AmenityScope } from '../../../amenity/domain/constants/amenity-scope.constant';
 import type { SyncAmenitiesDto } from '../../../amenity/applications/dto/create-amenity.dto';
@@ -30,7 +27,10 @@ export class HostGetPropertyAmenitiesUseCase {
     private readonly resolveHostProperty: ResolveHostPropertyService,
   ) {}
 
-  async execute(authUser: JwtPayload, propertyId: number): Promise<AmenityOutput[]> {
+  async execute(
+    authUser: JwtPayload,
+    propertyId: number,
+  ): Promise<AmenityOutput[]> {
     await this.resolveHostProperty.requireOwned(authUser, propertyId);
     return QueryBus.execute(new ListPropertyAmenitiesQuery(propertyId));
   }
@@ -48,7 +48,9 @@ export class HostSyncPropertyAmenitiesUseCase {
     dto: SyncAmenitiesDto,
   ): Promise<AmenityOutput[]> {
     await this.resolveHostProperty.requireOwned(authUser, propertyId);
-    return CommandBus.execute(new SyncPropertyAmenitiesCommand(propertyId, dto));
+    return CommandBus.execute(
+      new SyncPropertyAmenitiesCommand(propertyId, dto),
+    );
   }
 }
 
@@ -63,7 +65,10 @@ export class HostGetRoomAmenitiesUseCase {
     propertyId: number,
     roomId: number,
   ): Promise<AmenityOutput[]> {
-    const property = await this.resolveHostProperty.requireOwned(authUser, propertyId);
+    const property = await this.resolveHostProperty.requireOwned(
+      authUser,
+      propertyId,
+    );
     const room = await QueryBus.execute<RoomOutput | null>(
       new FindRoomQuery({ id: roomId }),
     );
@@ -97,7 +102,10 @@ export class HostSyncRoomAmenitiesUseCase {
     propertyId: number,
     roomId: number,
   ) {
-    const property = await this.resolveHostProperty.requireOwned(authUser, propertyId);
+    const property = await this.resolveHostProperty.requireOwned(
+      authUser,
+      propertyId,
+    );
     const room = await QueryBus.execute<RoomOutput | null>(
       new FindRoomQuery({ id: roomId }),
     );

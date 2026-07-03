@@ -9,10 +9,6 @@ import {
   mockRoomMediaPresenter,
 } from '../test-helpers/room-usecase.mocks';
 
-vi.mock('../../../../../shared/useCase/bus/bus', () => ({
-  CommandBus: { execute: vi.fn(async () => []) },
-}));
-
 const property = new Property({
   name: 'Room 2',
   description: 'Room 2 description',

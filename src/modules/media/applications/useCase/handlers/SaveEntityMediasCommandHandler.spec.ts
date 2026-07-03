@@ -51,8 +51,16 @@ describe('SaveEntityMediasCommandHandler', () => {
 
   it('should save multiple medias for room entity', async () => {
     const files = [
-      { buffer: Buffer.from('1'), originalname: 'a.jpg', mimetype: 'image/jpeg' },
-      { buffer: Buffer.from('2'), originalname: 'b.jpg', mimetype: 'image/jpeg' },
+      {
+        buffer: Buffer.from('1'),
+        originalname: 'a.jpg',
+        mimetype: 'image/jpeg',
+      },
+      {
+        buffer: Buffer.from('2'),
+        originalname: 'b.jpg',
+        mimetype: 'image/jpeg',
+      },
     ] as UploadFile[];
 
     let createCount = 0;
@@ -77,14 +85,18 @@ describe('SaveEntityMediasCommandHandler', () => {
       },
     } as ILocalStorageService;
 
-    const handler = new SaveEntityMediasCommandHandler(
-      repository,
-      storage,
-      { execute: async () => undefined } as DeleteMediasByEntityCommandHandler,
-    );
+    const handler = new SaveEntityMediasCommandHandler(repository, storage, {
+      execute: async () => undefined,
+    } as DeleteMediasByEntityCommandHandler);
 
     const result = await handler.execute(
-      new SaveEntityMediasCommand(ENTITY_TYPE.ROOM, 5, files, MEDIA_TYPE.IMAGE, 3),
+      new SaveEntityMediasCommand(
+        ENTITY_TYPE.ROOM,
+        5,
+        files,
+        MEDIA_TYPE.IMAGE,
+        3,
+      ),
     );
 
     expect(result).toHaveLength(2);
@@ -106,8 +118,16 @@ describe('SaveEntityMediasCommandHandler', () => {
 
   it('should reject when exceeding entity media limit', async () => {
     const files = [
-      { buffer: Buffer.from('1'), originalname: 'a.jpg', mimetype: 'image/jpeg' },
-      { buffer: Buffer.from('2'), originalname: 'b.jpg', mimetype: 'image/jpeg' },
+      {
+        buffer: Buffer.from('1'),
+        originalname: 'a.jpg',
+        mimetype: 'image/jpeg',
+      },
+      {
+        buffer: Buffer.from('2'),
+        originalname: 'b.jpg',
+        mimetype: 'image/jpeg',
+      },
     ] as UploadFile[];
 
     const handler = new SaveEntityMediasCommandHandler(
@@ -117,7 +137,9 @@ describe('SaveEntityMediasCommandHandler', () => {
     );
 
     await expect(
-      handler.execute(new SaveEntityMediasCommand(ENTITY_TYPE.PROPERTY, 1, files)),
+      handler.execute(
+        new SaveEntityMediasCommand(ENTITY_TYPE.PROPERTY, 1, files),
+      ),
     ).rejects.toThrow('Maximum 1 media file(s) allowed');
   });
 });
@@ -126,7 +148,13 @@ describe('DeleteMediasByEntityCommandHandler', () => {
   it('should delete medias from repository and storage', async () => {
     const repository = {
       deleteByEntity: async () => [
-        new Media('uploads/1/property/a.jpg', 'image', ENTITY_TYPE.PROPERTY, 1, 1),
+        new Media(
+          'uploads/1/property/a.jpg',
+          'image',
+          ENTITY_TYPE.PROPERTY,
+          1,
+          1,
+        ),
       ],
     } as IMediaRepository;
 

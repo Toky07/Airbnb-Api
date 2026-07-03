@@ -16,7 +16,9 @@ const repository = {
 describe('ListRolesQueryHandler', () => {
   it('should list roles', async () => {
     const handler = new ListRolesQueryHandler(repository);
-    const result = await handler.execute(new ListRolesQuery({ page: 1, limit: 10 }));
+    const result = await handler.execute(
+      new ListRolesQuery({ page: 1, limit: 10 }),
+    );
     expect(result.data).toHaveLength(1);
     expect(result.data[0]).toBeInstanceOf(RoleOutput);
   });

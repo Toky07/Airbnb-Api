@@ -15,9 +15,10 @@ export type BuildBookingOrdersPageOptions = {
   propertyIds?: number[];
 };
 
-export class ListBookingOrdersQueryHandler
-  implements IQueryHandler<ListBookingOrdersQuery, PaginatedResult<BookingOrderListItemOutput>>
-{
+export class ListBookingOrdersQueryHandler implements IQueryHandler<
+  ListBookingOrdersQuery,
+  PaginatedResult<BookingOrderListItemOutput>
+> {
   constructor(
     private readonly paymentRepository: IPaymentRepository,
     private readonly userRepository: IUserRepository,
@@ -50,7 +51,9 @@ export class ListBookingOrdersQueryHandler
       const user = users.get(payment.userId) ?? null;
 
       if (propertyIds.length === 0) {
-        data.push(BookingOrderListItemOutput.fromParts(payment, allItems, user));
+        data.push(
+          BookingOrderListItemOutput.fromParts(payment, allItems, user),
+        );
         continue;
       }
 
@@ -59,7 +62,9 @@ export class ListBookingOrdersQueryHandler
 
       for (const [propertyId, items] of groups) {
         data.push(
-          BookingOrderListItemOutput.fromParts(payment, items, user, { propertyId }),
+          BookingOrderListItemOutput.fromParts(payment, items, user, {
+            propertyId,
+          }),
         );
       }
     }

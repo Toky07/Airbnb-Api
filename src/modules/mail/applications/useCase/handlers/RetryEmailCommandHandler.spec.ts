@@ -51,8 +51,8 @@ describe('RetryEmailCommandHandler', () => {
       createMailTransportMock(),
     );
 
-    await expect(handler.execute(new RetryEmailCommand(99))).rejects.toBeInstanceOf(
-      NotFoundException,
-    );
+    await expect(
+      handler.execute(new RetryEmailCommand(99)),
+    ).rejects.toBeInstanceOf(NotFoundException);
   });
 });

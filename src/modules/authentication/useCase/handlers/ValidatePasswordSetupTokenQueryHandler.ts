@@ -5,9 +5,10 @@ import type { PasswordSetupValidationOutput } from '../../application/dto/passwo
 import { PasswordSetupTokenService } from '../../domain/services/password-setup-token.service';
 import type { ValidatePasswordSetupTokenQuery } from '../queries/ValidatePasswordSetupTokenQuery';
 
-export class ValidatePasswordSetupTokenQueryHandler
-  implements IQueryHandler<ValidatePasswordSetupTokenQuery, PasswordSetupValidationOutput>
-{
+export class ValidatePasswordSetupTokenQueryHandler implements IQueryHandler<
+  ValidatePasswordSetupTokenQuery,
+  PasswordSetupValidationOutput
+> {
   constructor(
     private readonly tokenRepository: IPasswordSetupTokenRepository,
     private readonly userRepository: IUserRepository,

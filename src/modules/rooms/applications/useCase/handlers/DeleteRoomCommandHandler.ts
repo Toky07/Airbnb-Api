@@ -5,9 +5,10 @@ import { ENTITY_TYPE } from '../../../../media/constant';
 import { DeleteMediasByEntityCommand } from '../../../../media/applications/useCase/commands/DeleteMediasByEntityCommand';
 import type { DeleteRoomCommand } from '../commands/DeleteRoomCommand';
 
-export class DeleteRoomCommandHandler
-  implements ICommandHandler<DeleteRoomCommand, boolean>
-{
+export class DeleteRoomCommandHandler implements ICommandHandler<
+  DeleteRoomCommand,
+  boolean
+> {
   constructor(private readonly repository: IRoomRepository) {}
 
   async execute(command: DeleteRoomCommand): Promise<boolean> {

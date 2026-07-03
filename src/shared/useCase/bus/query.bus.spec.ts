@@ -6,7 +6,10 @@ class GetGreetingQuery {
   constructor(public readonly name: string) {}
 }
 
-class GetGreetingQueryHandler implements IQueryHandler<GetGreetingQuery, string> {
+class GetGreetingQueryHandler implements IQueryHandler<
+  GetGreetingQuery,
+  string
+> {
   execute(query: GetGreetingQuery): Promise<string> {
     return Promise.resolve(`Hello, ${query.name}`);
   }

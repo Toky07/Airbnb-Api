@@ -4,7 +4,9 @@ import type { GetReservationStatsQuery } from '../useCase/queries/GetReservation
 import { ResolveHostPropertyIdsService } from './resolve-host-property-ids.service';
 
 export class ResolveReservationStatsScopeService {
-  constructor(private readonly resolveHostPropertyIds: ResolveHostPropertyIdsService) {}
+  constructor(
+    private readonly resolveHostPropertyIds: ResolveHostPropertyIdsService,
+  ) {}
 
   async resolve(
     authId: number,

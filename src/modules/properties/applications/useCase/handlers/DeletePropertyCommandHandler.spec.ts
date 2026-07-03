@@ -1,12 +1,7 @@
-import { vi } from 'vitest';
 import { Property } from '../../../domain/entities/property.entity';
 import type { IPropertyRepository } from '../../../domain/repositories/property.repository';
 import { DeletePropertyCommandHandler } from './DeletePropertyCommandHandler';
 import { DeletePropertyCommand } from '../commands/DeletePropertyCommand';
-
-vi.mock('../../../../../shared/useCase/bus/bus', () => ({
-  CommandBus: { execute: vi.fn(async () => undefined) },
-}));
 
 const repository = {
   findById: async (): Promise<Property> =>

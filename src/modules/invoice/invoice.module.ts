@@ -39,7 +39,10 @@ export class InvoiceModule implements OnModuleInit {
       invoiceStorage: this.invoiceStorage,
     });
 
-    CommandBus.register(CreateInvoiceCommand, bootstrap.createInvoiceCommandHandler);
+    CommandBus.register(
+      CreateInvoiceCommand,
+      bootstrap.createInvoiceCommandHandler,
+    );
 
     EventBus.getInstance().subscribe(
       'invoice.generate.requested',

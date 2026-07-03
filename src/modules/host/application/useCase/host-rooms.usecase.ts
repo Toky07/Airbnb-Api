@@ -1,9 +1,9 @@
-import {
-  ForbiddenException,
-  Injectable,
-} from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
-import type { PaginatedResult, PaginationParams } from '../../../../shared/pagination/pagination.types';
+import type {
+  PaginatedResult,
+  PaginationParams,
+} from '../../../../shared/pagination/pagination.types';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
 import { CreateRoomCommand } from '../../../rooms/applications/useCase/commands/CreateRoomCommand';
@@ -50,7 +50,10 @@ export class CreateHostRoomUseCase {
     dto: Omit<CreateRoomDto, 'property'>,
     images?: UploadFile[],
   ): Promise<RoomOutput> {
-    const property = await this.resolveHostProperty.requireOwned(authUser, propertyId);
+    const property = await this.resolveHostProperty.requireOwned(
+      authUser,
+      propertyId,
+    );
 
     return CommandBus.execute(
       new CreateRoomCommand({ ...dto, property }, images),
@@ -72,7 +75,10 @@ export class UpdateHostRoomUseCase {
     images?: UploadFile[],
     keptImages?: string[],
   ): Promise<RoomOutput> {
-    const property = await this.resolveHostProperty.requireOwned(authUser, propertyId);
+    const property = await this.resolveHostProperty.requireOwned(
+      authUser,
+      propertyId,
+    );
     const room = await QueryBus.execute<RoomOutput | null>(
       new FindRoomQuery({ id: roomId }),
     );
@@ -98,7 +104,10 @@ export class DeleteHostRoomUseCase {
     propertyId: number,
     roomId: number,
   ): Promise<{ status: boolean }> {
-    const property = await this.resolveHostProperty.requireOwned(authUser, propertyId);
+    const property = await this.resolveHostProperty.requireOwned(
+      authUser,
+      propertyId,
+    );
     const room = await QueryBus.execute<RoomOutput | null>(
       new FindRoomQuery({ id: roomId }),
     );

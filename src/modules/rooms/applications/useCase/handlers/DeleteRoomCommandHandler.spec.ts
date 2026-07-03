@@ -1,11 +1,6 @@
-import { vi } from 'vitest';
 import { IRoomRepository } from '../../../domain/repositories/room.repository';
 import { DeleteRoomCommandHandler } from './DeleteRoomCommandHandler';
 import { DeleteRoomCommand } from '../commands/DeleteRoomCommand';
-
-vi.mock('../../../../../shared/useCase/bus/bus', () => ({
-  CommandBus: { execute: vi.fn(async () => undefined) },
-}));
 
 const repository = {
   delete: async (): Promise<boolean> => true,

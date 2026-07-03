@@ -3,7 +3,10 @@ import type { IRoomRepository } from '../../../domain/repositories/room.reposito
 import type { RoomDetailResolver } from '../../services/room-detail.resolver';
 import type { FindRoomQuery } from '../queries/FindRoomQuery';
 
-export class FindRoomQueryHandler implements IQueryHandler<FindRoomQuery, Awaited<ReturnType<RoomDetailResolver['resolve']>>> {
+export class FindRoomQueryHandler implements IQueryHandler<
+  FindRoomQuery,
+  Awaited<ReturnType<RoomDetailResolver['resolve']>>
+> {
   constructor(
     private readonly repository: IRoomRepository,
     private readonly roomDetailResolver: RoomDetailResolver,

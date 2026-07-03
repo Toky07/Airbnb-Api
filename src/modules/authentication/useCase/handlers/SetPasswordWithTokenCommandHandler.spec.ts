@@ -58,7 +58,9 @@ describe('SetPasswordWithTokenCommandHandler', () => {
       ),
     );
 
-    await handler.execute(new SetPasswordWithTokenCommand('token-abc', 'secret12'));
+    await handler.execute(
+      new SetPasswordWithTokenCommand('token-abc', 'secret12'),
+    );
 
     expect(authRepository.activateWithPassword).toHaveBeenCalledWith(
       1,

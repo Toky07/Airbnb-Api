@@ -1,16 +1,14 @@
-import {
-  ConflictException,
-  NotFoundException,
-} from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import { Amenity } from '../../../domain/entities/amenity.entity';
 import type { IAmenityRepository } from '../../../domain/repositories/amenity.repository';
 import { AmenityOutput } from '../../dto/amenity.output';
 import type { UpdateAmenityCommand } from '../commands/UpdateAmenityCommand';
 
-export class UpdateAmenityCommandHandler
-  implements ICommandHandler<UpdateAmenityCommand, AmenityOutput>
-{
+export class UpdateAmenityCommandHandler implements ICommandHandler<
+  UpdateAmenityCommand,
+  AmenityOutput
+> {
   constructor(private readonly repository: IAmenityRepository) {}
 
   async execute(command: UpdateAmenityCommand): Promise<AmenityOutput> {

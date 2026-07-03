@@ -53,7 +53,9 @@ export class RoomController {
 
   @Post()
   @RequirePermissions('rooms.create')
-  @UseInterceptors(FilesInterceptor('images', ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM]))
+  @UseInterceptors(
+    FilesInterceptor('images', ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM]),
+  )
   async create(
     @Body() body: CreateRoomDto | Record<string, unknown>,
     @UploadedFiles() images?: UploadFile[],
@@ -61,13 +63,15 @@ export class RoomController {
     const createRoomDto =
       typeof (body as CreateRoomDto).pricePerNight === 'number'
         ? (body as CreateRoomDto)
-        : parseRoomBody(body as Record<string, unknown>);
+        : parseRoomBody(body);
     return CommandBus.execute(new CreateRoomCommand(createRoomDto, images));
   }
 
   @Put(':id')
   @RequirePermissions('rooms.update')
-  @UseInterceptors(FilesInterceptor('images', ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM]))
+  @UseInterceptors(
+    FilesInterceptor('images', ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM]),
+  )
   async update(
     @Param('id') id: number,
     @Body() body: CreateRoomDto | Record<string, unknown>,

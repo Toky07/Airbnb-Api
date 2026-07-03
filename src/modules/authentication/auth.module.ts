@@ -9,7 +9,7 @@ import { AuthRepository } from './infrastructure/repositories/auth.repository';
 import { TOKEN_GENERATOR } from './domain/generator/token.generator';
 import type { TokenGenerator } from './domain/generator/token.generator';
 import { JwtTokenGenerator } from './infrastructure/generator/jwt-token.generator';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 import { RoleController } from './interfaces/http/role.conroller';
 import { ROLE_REPOSITORY } from './domain/repositories/role.repository';
 import type { IRoleRepository } from './domain/repositories/role.repository';
@@ -136,13 +136,19 @@ export class AuthModule implements OnModuleInit {
       mailService: this.mailService,
     });
 
-    CommandBus.register(CreateCredentialsCommand, bootstrap.createCredentialsCommandHandler);
+    CommandBus.register(
+      CreateCredentialsCommand,
+      bootstrap.createCredentialsCommandHandler,
+    );
     CommandBus.register(LoginCommand, bootstrap.loginCommandHandler);
     CommandBus.register(AssignRoleCommand, bootstrap.assignRoleCommandHandler);
     CommandBus.register(CreateRoleCommand, bootstrap.createRoleCommandHandler);
     CommandBus.register(UpdateRoleCommand, bootstrap.updateRoleCommandHandler);
     CommandBus.register(DeleteRoleCommand, bootstrap.deleteRoleCommandHandler);
-    CommandBus.register(SetRolePermissionsCommand, bootstrap.setRolePermissionsCommandHandler);
+    CommandBus.register(
+      SetRolePermissionsCommand,
+      bootstrap.setRolePermissionsCommandHandler,
+    );
     CommandBus.register(
       SendAccountInvitationCommand,
       bootstrap.sendAccountInvitationCommandHandler,
@@ -154,7 +160,10 @@ export class AuthModule implements OnModuleInit {
 
     QueryBus.register(GetMeQuery, bootstrap.getMeQueryHandler);
     QueryBus.register(ListRolesQuery, bootstrap.listRolesQueryHandler);
-    QueryBus.register(ListPermissionsQuery, bootstrap.listPermissionsQueryHandler);
+    QueryBus.register(
+      ListPermissionsQuery,
+      bootstrap.listPermissionsQueryHandler,
+    );
     QueryBus.register(
       ValidatePasswordSetupTokenQuery,
       bootstrap.validatePasswordSetupTokenQueryHandler,

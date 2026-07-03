@@ -2,11 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { RegisterHostCommandHandler } from './RegisterHostCommandHandler';
 import { RegisterHostCommand } from '../commands/RegisterHostCommand';
-import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-
-vi.mock('../../../../../shared/useCase/bus/bus', () => ({
-  CommandBus: { execute: vi.fn() },
-}));
+import { commandBusExecuteMock } from '../../../../../test/command-bus.mock';
 
 describe('RegisterHostCommandHandler', () => {
   const authRepository = {
@@ -47,7 +43,7 @@ describe('RegisterHostCommandHandler', () => {
 
     expect(result).toBe(true);
     expect(userRepository.linkAuthAccount).toHaveBeenCalledWith(5, 10);
-    expect(CommandBus.execute).toHaveBeenCalled();
+    expect(commandBusExecuteMock).toHaveBeenCalled();
   });
 
   it('refuse un email déjà utilisé', async () => {

@@ -6,9 +6,10 @@ import { validateUserFields } from '../../validation/validate-user-fields';
 import type { SaveUserAvatarService } from '../../services/save-user-avatar.service';
 import type { UpdateMyProfileCommand } from '../commands/UpdateMyProfileCommand';
 
-export class UpdateMyProfileCommandHandler
-  implements ICommandHandler<UpdateMyProfileCommand, UserOutput>
-{
+export class UpdateMyProfileCommandHandler implements ICommandHandler<
+  UpdateMyProfileCommand,
+  UserOutput
+> {
   constructor(
     private readonly repository: IUserRepository,
     private readonly saveUserAvatar: SaveUserAvatarService,

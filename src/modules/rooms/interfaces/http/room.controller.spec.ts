@@ -80,7 +80,9 @@ describe('RoomController', () => {
 
   it(`/GET rooms`, async () => {
     const repository = dataSource.getRepository(RoomEntity);
-    const property = await dataSource.getRepository(PropertyEntity).save({ ...defaultProperty });
+    const property = await dataSource
+      .getRepository(PropertyEntity)
+      .save({ ...defaultProperty });
 
     await repository.save({ ...defaultRoom, propertyId: property.id });
 
@@ -88,15 +90,17 @@ describe('RoomController', () => {
       .get('/rooms')
       .expect(200);
 
-    expect(response.body.data[0]).toEqual(expect.objectContaining({
-      id: expect.any(Number),
-      ...defaultRoom,
-      roomTypeId: null,
-      roomType: null,
-      images: [],
-      createdAt: expect.any(String),
-      updatedAt: expect.any(String),
-    }));
+    expect(response.body.data[0]).toEqual(
+      expect.objectContaining({
+        id: expect.any(Number),
+        ...defaultRoom,
+        roomTypeId: null,
+        roomType: null,
+        images: [],
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+      }),
+    );
   });
 
   it(`/GET rooms/:id`, async () => {
@@ -107,33 +111,37 @@ describe('RoomController', () => {
       .get(`/rooms/${room.id}`)
       .expect(200);
 
-    expect(response.body).toEqual(expect.objectContaining({
-      id: room.id,
-      ...defaultRoom,
-      roomTypeId: null,
-      roomType: null,
-      images: [],
-      createdAt: expect.any(String),
-      updatedAt: expect.any(String),
-    }));
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        id: room.id,
+        ...defaultRoom,
+        roomTypeId: null,
+        roomType: null,
+        images: [],
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+      }),
+    );
   });
 
   it('/POST rooms', async () => {
     const response = await request(app.getHttpServer())
       .post('/rooms')
-      .send({...defaultRoom})
+      .send({ ...defaultRoom })
       .set('Authorization', `Bearer ${token}`)
       .expect(201);
 
-    expect(response.body).toEqual(expect.objectContaining({
-      id: expect.any(Number),
-      ...defaultRoom,
-      roomTypeId: null,
-      roomType: null,
-      images: [],
-      createdAt: expect.any(String),
-      updatedAt: expect.any(String),
-    }));
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        id: expect.any(Number),
+        ...defaultRoom,
+        roomTypeId: null,
+        roomType: null,
+        images: [],
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+      }),
+    );
   });
 
   it('/POST rooms with images', async () => {
@@ -160,27 +168,36 @@ describe('RoomController', () => {
       .expect(201);
 
     expect(response.body.images).toHaveLength(2);
-    expect(response.body.images[0]).toMatch(/uploads\/\d+\/room\/\d+\/.+\.jpg$/);
-    expect(response.body.images[1]).toMatch(/uploads\/\d+\/room\/\d+\/.+\.jpg$/);
+    expect(response.body.images[0]).toMatch(
+      /uploads\/\d+\/room\/\d+\/.+\.jpg$/,
+    );
+    expect(response.body.images[1]).toMatch(
+      /uploads\/\d+\/room\/\d+\/.+\.jpg$/,
+    );
   });
 
   it('/PUT rooms/:id', async () => {
     const repository = dataSource.getRepository(RoomEntity);
-    const property = await dataSource.getRepository(PropertyEntity).save({ ...defaultProperty });
+    const property = await dataSource
+      .getRepository(PropertyEntity)
+      .save({ ...defaultProperty });
     const updatedData = {
-        name: 'Updated Room',
-        description: 'Updated Description',
-        pricePerNight: 150,
-        maxGuests: 3,
-        bedrooms: 2,
-        bathrooms: 2,
-        beds: 2,
-        quantity: 2,
-        size: 2,
-        status: 'available',
+      name: 'Updated Room',
+      description: 'Updated Description',
+      pricePerNight: 150,
+      maxGuests: 3,
+      bedrooms: 2,
+      bathrooms: 2,
+      beds: 2,
+      quantity: 2,
+      size: 2,
+      status: 'available',
     };
 
-    const room = await repository.save({ ...defaultRoom, propertyId: property.id });
+    const room = await repository.save({
+      ...defaultRoom,
+      propertyId: property.id,
+    });
 
     await request(app.getHttpServer())
       .put(`/rooms/${room.id}`)
@@ -190,10 +207,12 @@ describe('RoomController', () => {
 
     const updatedRoom = await repository.findOne({ where: { id: room.id } });
 
-    expect(updatedRoom).toEqual(expect.objectContaining({
-      id: expect.any(Number),
-      ...updatedData,
-    }));
+    expect(updatedRoom).toEqual(
+      expect.objectContaining({
+        id: expect.any(Number),
+        ...updatedData,
+      }),
+    );
   });
 
   it('/DELETE rooms/:id', async () => {

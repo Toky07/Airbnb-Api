@@ -5,9 +5,10 @@ import { RoomOutput } from '../../dto/room.output';
 import type { RoomMediaPresenter } from '../../presenters/room-media.presenter';
 import type { ListRoomsQuery } from '../queries/ListRoomsQuery';
 
-export class ListRoomsQueryHandler
-  implements IQueryHandler<ListRoomsQuery, PaginatedResult<RoomOutput>>
-{
+export class ListRoomsQueryHandler implements IQueryHandler<
+  ListRoomsQuery,
+  PaginatedResult<RoomOutput>
+> {
   constructor(
     private readonly repository: IRoomRepository,
     private readonly presenter: RoomMediaPresenter,

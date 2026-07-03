@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
 import { RequireSuperAdmin } from '../../../authentication/interfaces/decorators/require-superadmin.decorator';
 import type {

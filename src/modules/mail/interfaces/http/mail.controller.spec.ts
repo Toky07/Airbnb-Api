@@ -54,7 +54,9 @@ describe('MailController', () => {
 
     dataSource = moduleRef.get(DataSource);
     app = moduleRef.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+    app.useGlobalPipes(
+      new ValidationPipe({ whitelist: true, transform: true }),
+    );
     await app.init();
 
     await request(app.getHttpServer())
@@ -67,7 +69,11 @@ describe('MailController', () => {
       })
       .expect(201);
 
-    await activateAuthAccountForTests(dataSource, 'mail-host@test.com', '123456');
+    await activateAuthAccountForTests(
+      dataSource,
+      'mail-host@test.com',
+      '123456',
+    );
 
     const login = await request(app.getHttpServer())
       .post('/auth/login')
@@ -92,15 +98,21 @@ describe('MailController', () => {
   async function grantHostEmailPermissions(): Promise<string> {
     const permissionRepo = dataSource.getRepository(PermissionEntity);
     const roleRepo = dataSource.getRepository(Role);
-    const readPermission = await permissionRepo.findOne({ where: { key: 'emails.read' } });
-    const sendPermission = await permissionRepo.findOne({ where: { key: 'emails.send' } });
+    const readPermission = await permissionRepo.findOne({
+      where: { key: 'emails.read' },
+    });
+    const sendPermission = await permissionRepo.findOne({
+      where: { key: 'emails.send' },
+    });
     const hostRole = await roleRepo.findOne({
       where: { slug: HOST_ROLE_SLUG },
       relations: ['permissions'],
     });
 
     if (hostRole && readPermission && sendPermission) {
-      const keys = new Set((hostRole.permissions ?? []).map((permission) => permission.key));
+      const keys = new Set(
+        (hostRole.permissions ?? []).map((permission) => permission.key),
+      );
       hostRole.permissions = [
         ...(hostRole.permissions ?? []),
         ...(keys.has('emails.read') ? [] : [readPermission]),

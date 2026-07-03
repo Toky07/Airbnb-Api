@@ -7,7 +7,7 @@ export class QueryBus {
     queryClass: { name: string },
     handler: IQueryHandler<TQuery, TResult>,
   ) {
-    this.handlers.set(queryClass.name, handler as IQueryHandler<unknown, unknown>);
+    this.handlers.set(queryClass.name, handler);
   }
 
   async execute<TResult = unknown>(query: object): Promise<TResult> {

@@ -27,14 +27,19 @@ export interface IReservationRepository {
   findById(id: number): Promise<Reservation | null>;
   findItemById(id: number): Promise<ReservationItem | null>;
   findItemsByIds(ids: number[]): Promise<ReservationItem[]>;
-  findPaginated(params: ReservationListParams): Promise<PaginatedResult<Reservation>>;
+  findPaginated(
+    params: ReservationListParams,
+  ): Promise<PaginatedResult<Reservation>>;
   findOverlapping(
     roomId: number,
     checkIn: string,
     checkOut: string,
     excludeItemId?: number,
   ): Promise<ReservationItem[]>;
-  countByScope(scope: ReservationStatsScope, status?: ReservationStatus): Promise<number>;
+  countByScope(
+    scope: ReservationStatsScope,
+    status?: ReservationStatus,
+  ): Promise<number>;
   sumConfirmedRevenueForMonth(
     year: number,
     month: number,
@@ -45,11 +50,16 @@ export interface IReservationRepository {
     month: number,
     scope?: ReservationStatsScope,
   ): Promise<number>;
-  findRecentItems(limit: number, scope?: ReservationStatsScope): Promise<ReservationItem[]>;
+  findRecentItems(
+    limit: number,
+    scope?: ReservationStatsScope,
+  ): Promise<ReservationItem[]>;
   findByIds(ids: number[]): Promise<Reservation[]>;
   findIdsByPropertyId(propertyId: number): Promise<number[]>;
   findIdsByPropertyIds(propertyIds: number[]): Promise<number[]>;
-  findIdsByFilters(params: Omit<ReservationListParams, 'page' | 'limit'>): Promise<number[]>;
+  findIdsByFilters(
+    params: Omit<ReservationListParams, 'page' | 'limit'>,
+  ): Promise<number[]>;
   findByPaymentId(paymentId: number): Promise<Reservation | null>;
   clearExpiredReservations(): Promise<void>;
 }

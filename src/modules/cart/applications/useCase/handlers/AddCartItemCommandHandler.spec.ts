@@ -34,13 +34,16 @@ describe('AddCartItemCommandHandler', () => {
 
   it('ajoute un article au panier', async () => {
     await handler.execute(
-      new AddCartItemCommand({ authId: 1 }, {
-        itemType: CART_ITEM_TYPE.RESERVATION,
-        roomId: 10,
-        startDate: '2026-07-01',
-        endDate: '2026-07-04',
-        guestCount: 2,
-      }),
+      new AddCartItemCommand(
+        { authId: 1 },
+        {
+          itemType: CART_ITEM_TYPE.RESERVATION,
+          roomId: 10,
+          startDate: '2026-07-01',
+          endDate: '2026-07-04',
+          guestCount: 2,
+        },
+      ),
     );
 
     expect(cartRepository.addItem).toHaveBeenCalled();
@@ -51,13 +54,16 @@ describe('AddCartItemCommandHandler', () => {
 
     await expect(
       handler.execute(
-        new AddCartItemCommand({ authId: 1 }, {
-          itemType: CART_ITEM_TYPE.RESERVATION,
-          roomId: 10,
-          startDate: '2026-07-01',
-          endDate: '2026-07-04',
-          guestCount: 2,
-        }),
+        new AddCartItemCommand(
+          { authId: 1 },
+          {
+            itemType: CART_ITEM_TYPE.RESERVATION,
+            roomId: 10,
+            startDate: '2026-07-01',
+            endDate: '2026-07-04',
+            guestCount: 2,
+          },
+        ),
       ),
     ).rejects.toBeInstanceOf(BadRequestException);
   });

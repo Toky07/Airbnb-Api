@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import type { ImportBatchDto, ImportBatchResult } from '../dto/import-batch.dto';
+import type {
+  ImportBatchDto,
+  ImportBatchResult,
+} from '../dto/import-batch.dto';
 import { ImportBatchContextService } from '../services/import-batch-context.service';
 import { ImportPropertiesUseCase } from './import-properties.usecase';
 import { ImportPropertyTypesUseCase } from './import-property-types.usecase';
@@ -24,13 +27,19 @@ export class ImportDataUseCase {
     const context = await this.importBatchContext.create();
 
     const users = await this.importUsers.execute(batch.users, context);
-    const properties = await this.importProperties.execute(batch.properties, context);
+    const properties = await this.importProperties.execute(
+      batch.properties,
+      context,
+    );
     const rooms = await this.importRooms.execute(batch.rooms, context);
     const propertyTypes = await this.importPropertyTypes.execute(
       batch.propertyTypes,
       context,
     );
-    const roomTypes = await this.importRoomTypes.execute(batch.roomTypes, context);
+    const roomTypes = await this.importRoomTypes.execute(
+      batch.roomTypes,
+      context,
+    );
     const roles = await this.importRoles.execute(batch.roles);
 
     return {

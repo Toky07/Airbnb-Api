@@ -1,15 +1,17 @@
+import { toOptionalScalarString } from '../../../../shared/http/to-scalar-string';
 import type { CreateUserDto } from '../../domain/dtos/createUser.dto';
 
 export function parseUserBody(body: Record<string, unknown>): CreateUserDto {
   const dto: CreateUserDto = {
-    firstName: String(body.firstName),
-    lastName: String(body.lastName),
-    email: String(body.email),
-    phoneNumber: String(body.phoneNumber),
+    firstName: toOptionalScalarString(body.firstName) ?? '',
+    lastName: toOptionalScalarString(body.lastName) ?? '',
+    email: toOptionalScalarString(body.email) ?? '',
+    phoneNumber: toOptionalScalarString(body.phoneNumber) ?? '',
   };
 
-  if (body.avatar !== undefined && body.avatar !== null && body.avatar !== '') {
-    dto.avatar = String(body.avatar);
+  const avatar = toOptionalScalarString(body.avatar);
+  if (avatar !== undefined) {
+    dto.avatar = avatar;
   }
 
   return dto;

@@ -45,29 +45,38 @@ describe('InvoiceCreatedListener', () => {
     buildReservationInvoicePayload.execute.mockResolvedValue(
       createSampleReservationInvoiceContext(),
     );
-    buildReservationInvoicePayload.buildHostNotificationGroups.mockResolvedValue([
-      {
-        ownerId: 5,
-        ownerEmail: 'host@test.com',
-        ownerName: 'Marie Martin',
-        items: createSampleReservationInvoiceContext().lineItems,
-      },
-    ]);
-    buildCustomerInvoiceEmailBody.execute.mockReturnValue('<p>Confirmation</p>');
-    buildHostPaymentNotificationEmailBody.execute.mockReturnValue('<p>Host</p>');
+    buildReservationInvoicePayload.buildHostNotificationGroups.mockResolvedValue(
+      [
+        {
+          ownerId: 5,
+          ownerEmail: 'host@test.com',
+          ownerName: 'Marie Martin',
+          items: createSampleReservationInvoiceContext().lineItems,
+        },
+      ],
+    );
+    buildCustomerInvoiceEmailBody.execute.mockReturnValue(
+      '<p>Confirmation</p>',
+    );
+    buildHostPaymentNotificationEmailBody.execute.mockReturnValue(
+      '<p>Host</p>',
+    );
   });
 
   it('publie les emails client et hôte après invoice.created', async () => {
     const published: EmailSendRequestedEvent[] = [];
-    EventBus.getInstance().subscribe('email.send.requested', async (event: EmailSendRequestedEvent) => {
-      published.push(event);
-    });
+    EventBus.getInstance().subscribe(
+      'email.send.requested',
+      async (event: EmailSendRequestedEvent) => {
+        published.push(event);
+      },
+    );
 
     const listener = new InvoiceCreatedListener(
       paymentRepository as never,
       buildReservationInvoicePayload as never,
-      buildCustomerInvoiceEmailBody as never,
-      buildHostPaymentNotificationEmailBody as never,
+      buildCustomerInvoiceEmailBody,
+      buildHostPaymentNotificationEmailBody,
     );
     await listener.listen();
 

@@ -64,7 +64,7 @@ export class UserController {
     const createUserDto =
       typeof (body as CreateUserDto).email === 'string'
         ? (body as CreateUserDto)
-        : parseUserBody(body as Record<string, unknown>);
+        : parseUserBody(body);
     return CommandBus.execute(new CreateUserCommand(createUserDto, avatar));
   }
 
@@ -90,7 +90,7 @@ export class UserController {
     const updateUserDto =
       typeof (body as UpdateUserDto).email === 'string'
         ? (body as UpdateUserDto)
-        : parseUserBody(body as Record<string, unknown>);
+        : parseUserBody(body);
     return CommandBus.execute(
       new UpdateUserCommand({ ...updateUserDto, id: Number(id) }, avatar),
     );

@@ -19,14 +19,15 @@ export class RoomDetailResolver {
     }
 
     const propertyId = room.property?.id;
-    const [output, unavailableDates, amenities, propertyAmenities] = await Promise.all([
-      this.presenter.toOutput(room),
-      this.findUnavailableDates(room.id!),
-      QueryBus.execute(new ListRoomAmenitiesQuery(room.id!)),
-      propertyId
-        ? QueryBus.execute(new ListPropertyAmenitiesQuery(propertyId))
-        : Promise.resolve([]),
-    ]);
+    const [output, unavailableDates, amenities, propertyAmenities] =
+      await Promise.all([
+        this.presenter.toOutput(room),
+        this.findUnavailableDates(room.id!),
+        QueryBus.execute(new ListRoomAmenitiesQuery(room.id!)),
+        propertyId
+          ? QueryBus.execute(new ListPropertyAmenitiesQuery(propertyId))
+          : Promise.resolve([]),
+      ]);
 
     return {
       ...output,
@@ -36,7 +37,9 @@ export class RoomDetailResolver {
     };
   }
 
-  private async findUnavailableDates(roomId: number): Promise<UnavailableDateRange[]> {
+  private async findUnavailableDates(
+    roomId: number,
+  ): Promise<UnavailableDateRange[]> {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const todayStr = this.formatDate(today);

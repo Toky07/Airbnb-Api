@@ -8,9 +8,10 @@ import { SaveEntityMediasCommand } from '../../../../media/applications/useCase/
 import type { PropertyMediaPresenter } from '../../presenters/property-media.presenter';
 import type { CreatePropertyCommand } from '../commands/CreatePropertyCommand';
 
-export class CreatePropertyCommandHandler
-  implements ICommandHandler<CreatePropertyCommand, PropertyOutput>
-{
+export class CreatePropertyCommandHandler implements ICommandHandler<
+  CreatePropertyCommand,
+  PropertyOutput
+> {
   constructor(
     private readonly repository: IPropertyRepository,
     private readonly presenter: PropertyMediaPresenter,
@@ -22,11 +23,9 @@ export class CreatePropertyCommandHandler
 
     if (command.image) {
       await CommandBus.execute(
-        new SaveEntityMediasCommand(
-          ENTITY_TYPE.PROPERTY,
-          newProperty.id!,
-          [command.image],
-        ),
+        new SaveEntityMediasCommand(ENTITY_TYPE.PROPERTY, newProperty.id!, [
+          command.image,
+        ]),
       );
     }
 

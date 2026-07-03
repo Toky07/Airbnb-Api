@@ -1,7 +1,4 @@
-import {
-  ForbiddenException,
-  NotFoundException,
-} from '@nestjs/common';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
 import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
 import type { IPaymentRepository } from '../../../../payment/domain/repositories/payment.repository';
@@ -12,9 +9,10 @@ import type { ResolvePaymentReservationsService } from '../../services/resolve-p
 import { filterItemsByPropertyIds } from '../../services/scope-booking-order-items.service';
 import type { GetBookingOrderQuery } from '../queries/GetBookingOrderQuery';
 
-export class GetBookingOrderQueryHandler
-  implements IQueryHandler<GetBookingOrderQuery, BookingOrderDetailOutput>
-{
+export class GetBookingOrderQueryHandler implements IQueryHandler<
+  GetBookingOrderQuery,
+  BookingOrderDetailOutput
+> {
   constructor(
     private readonly paymentRepository: IPaymentRepository,
     private readonly userRepository: IUserRepository,
@@ -22,7 +20,9 @@ export class GetBookingOrderQueryHandler
     private readonly resolvePaymentReservations: ResolvePaymentReservationsService,
   ) {}
 
-  async execute(query: GetBookingOrderQuery): Promise<BookingOrderDetailOutput> {
+  async execute(
+    query: GetBookingOrderQuery,
+  ): Promise<BookingOrderDetailOutput> {
     if (!Number.isFinite(query.paymentId) || query.paymentId <= 0) {
       throw new NotFoundException('Réservation introuvable.');
     }
@@ -32,9 +32,10 @@ export class GetBookingOrderQueryHandler
       throw new NotFoundException('Réservation introuvable.');
     }
 
-    const allItems = await this.resolvePaymentReservations.resolveBookingItemsForPayment(
-      payment,
-    );
+    const allItems =
+      await this.resolvePaymentReservations.resolveBookingItemsForPayment(
+        payment,
+      );
 
     if (!query.access.canReadAll) {
       await this.assertHostAccess(query.access, allItems);
@@ -77,7 +78,8 @@ export class GetBookingOrderQueryHandler
 
     const allowedPropertyIds = new Set(propertyIds);
     const hasAllowedItem = items.some(
-      (item) => item.propertyId != null && allowedPropertyIds.has(item.propertyId),
+      (item) =>
+        item.propertyId != null && allowedPropertyIds.has(item.propertyId),
     );
 
     if (!hasAllowedItem) {

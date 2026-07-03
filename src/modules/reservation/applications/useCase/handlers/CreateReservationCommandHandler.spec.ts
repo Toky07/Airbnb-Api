@@ -68,8 +68,12 @@ describe('CreateReservationCommandHandler', () => {
     const reservationRepository = createReservationRepositoryMock();
     const handler = new CreateReservationCommandHandler(
       reservationRepository,
-      { findById: vi.fn().mockResolvedValue(room) } as unknown as IRoomRepository,
-      { findByAuthId: vi.fn().mockResolvedValue(user) } as unknown as IUserRepository,
+      {
+        findById: vi.fn().mockResolvedValue(room),
+      } as unknown as IRoomRepository,
+      {
+        findByAuthId: vi.fn().mockResolvedValue(user),
+      } as unknown as IUserRepository,
       new CheckRoomAvailabilityService(reservationRepository),
       new CalculateStayAmountService(),
       createEnrichMock() as never,
@@ -100,8 +104,12 @@ describe('CreateReservationCommandHandler', () => {
 
     const handler = new CreateReservationCommandHandler(
       reservationRepository,
-      { findById: vi.fn().mockResolvedValue(room) } as unknown as IRoomRepository,
-      { findByAuthId: vi.fn().mockResolvedValue(user) } as unknown as IUserRepository,
+      {
+        findById: vi.fn().mockResolvedValue(room),
+      } as unknown as IRoomRepository,
+      {
+        findByAuthId: vi.fn().mockResolvedValue(user),
+      } as unknown as IUserRepository,
       new CheckRoomAvailabilityService(reservationRepository),
       new CalculateStayAmountService(),
       createEnrichMock() as never,
@@ -125,7 +133,9 @@ describe('CreateReservationCommandHandler', () => {
     const handler = new CreateReservationCommandHandler(
       createReservationRepositoryMock(),
       { findById: vi.fn() } as unknown as IRoomRepository,
-      { findByAuthId: vi.fn().mockResolvedValue(null) } as unknown as IUserRepository,
+      {
+        findByAuthId: vi.fn().mockResolvedValue(null),
+      } as unknown as IUserRepository,
       new CheckRoomAvailabilityService(createReservationRepositoryMock()),
       new CalculateStayAmountService(),
       createEnrichMock() as never,
@@ -148,8 +158,12 @@ describe('CreateReservationCommandHandler', () => {
   it('lève une erreur si la chambre est introuvable', async () => {
     const handler = new CreateReservationCommandHandler(
       createReservationRepositoryMock(),
-      { findById: vi.fn().mockResolvedValue(null) } as unknown as IRoomRepository,
-      { findByAuthId: vi.fn().mockResolvedValue(user) } as unknown as IUserRepository,
+      {
+        findById: vi.fn().mockResolvedValue(null),
+      } as unknown as IRoomRepository,
+      {
+        findByAuthId: vi.fn().mockResolvedValue(user),
+      } as unknown as IUserRepository,
       new CheckRoomAvailabilityService(createReservationRepositoryMock()),
       new CalculateStayAmountService(),
       createEnrichMock() as never,

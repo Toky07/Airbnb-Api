@@ -4,7 +4,10 @@ import type { CartOutput } from '../../dto/cart.output';
 import type { CartPresenter } from '../../presenters/cart.presenter';
 import type { ResolveCartService } from '../../services/resolve-cart.service';
 
-export class GetCartQueryHandler implements IQueryHandler<GetCartQuery, CartOutput> {
+export class GetCartQueryHandler implements IQueryHandler<
+  GetCartQuery,
+  CartOutput
+> {
   constructor(
     private readonly resolveCartService: ResolveCartService,
     private readonly cartPresenter: CartPresenter,

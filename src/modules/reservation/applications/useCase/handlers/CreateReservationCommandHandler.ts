@@ -17,9 +17,10 @@ import type { CheckRoomAvailabilityService } from '../../services/check-room-ava
 import type { EnrichReservationOutputsService } from '../../services/enrich-reservation-outputs.service';
 import type { CreateReservationCommand } from '../commands/CreateReservationCommand';
 
-export class CreateReservationCommandHandler
-  implements ICommandHandler<CreateReservationCommand, ReservationOutput>
-{
+export class CreateReservationCommandHandler implements ICommandHandler<
+  CreateReservationCommand,
+  ReservationOutput
+> {
   constructor(
     private readonly reservationRepository: IReservationRepository,
     private readonly roomRepository: IRoomRepository,
@@ -100,6 +101,10 @@ export class CreateReservationCommandHandler
       );
     }
 
-    await this.checkRoomAvailability.ensureAvailable(room.id!, startDate, endDate);
+    await this.checkRoomAvailability.ensureAvailable(
+      room.id!,
+      startDate,
+      endDate,
+    );
   }
 }

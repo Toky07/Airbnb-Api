@@ -19,7 +19,9 @@ export class ListHostPropertiesUseCase {
 
   async execute(authUser: JwtPayload): Promise<PropertyOutput[]> {
     const properties = await this.resolveHostProperty.listOwned(authUser);
-    return Promise.all(properties.map((property) => this.propertyPresenter.toOutput(property)));
+    return Promise.all(
+      properties.map((property) => this.propertyPresenter.toOutput(property)),
+    );
   }
 }
 
@@ -34,7 +36,10 @@ export class GetHostPropertyUseCase {
     authUser: JwtPayload,
     propertyId: number,
   ): Promise<PropertyOutput> {
-    const property = await this.resolveHostProperty.requireOwned(authUser, propertyId);
+    const property = await this.resolveHostProperty.requireOwned(
+      authUser,
+      propertyId,
+    );
     return this.propertyPresenter.toOutput(property);
   }
 }

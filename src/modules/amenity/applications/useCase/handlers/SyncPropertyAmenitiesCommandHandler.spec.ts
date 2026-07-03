@@ -20,11 +20,19 @@ describe('SyncPropertyAmenitiesCommandHandler', () => {
 
     const amenityRepository = {
       findByIds: async () => [
-        new Amenity('Parking', 'square-parking', AMENITY_SCOPE.PROPERTY, true, 1),
+        new Amenity(
+          'Parking',
+          'square-parking',
+          AMENITY_SCOPE.PROPERTY,
+          true,
+          1,
+        ),
       ],
     } as unknown as IAmenityRepository;
 
-    const resolveAmenitiesService = new ResolveAmenitiesService(amenityRepository);
+    const resolveAmenitiesService = new ResolveAmenitiesService(
+      amenityRepository,
+    );
     const handler = new SyncPropertyAmenitiesCommandHandler(
       propertyRepository,
       propertyAmenityRepository,
@@ -51,7 +59,9 @@ describe('SyncPropertyAmenitiesCommandHandler', () => {
     );
 
     await expect(
-      handler.execute(new SyncPropertyAmenitiesCommand(99, { amenityIds: [1] })),
+      handler.execute(
+        new SyncPropertyAmenitiesCommand(99, { amenityIds: [1] }),
+      ),
     ).rejects.toBeInstanceOf(NotFoundException);
   });
 });

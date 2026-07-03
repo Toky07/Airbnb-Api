@@ -32,7 +32,9 @@ export class AuthGuard implements CanActivate {
 
     if (token) {
       try {
-        const payload = await this.jwtService.verifyAsync<{ sub?: number }>(token);
+        const payload = await this.jwtService.verifyAsync<{ sub?: number }>(
+          token,
+        );
         const authId = payload.sub;
 
         if (typeof authId === 'number') {

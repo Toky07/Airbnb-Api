@@ -31,7 +31,6 @@ import { GetMeQuery } from '../../useCase/queries/GetMeQuery';
 
 @Controller('auth')
 export class AuthController {
-
   @Public()
   @Post('register')
   async create(

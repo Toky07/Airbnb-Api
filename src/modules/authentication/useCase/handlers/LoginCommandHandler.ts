@@ -2,7 +2,10 @@ import type { ICommandHandler } from '../../../../shared/useCase/bus/command-han
 import type { TokenGenerator } from '../../domain/generator/token.generator';
 import type { LoginCommand } from '../commands/LoginCommand';
 
-export class LoginCommandHandler implements ICommandHandler<LoginCommand, string> {
+export class LoginCommandHandler implements ICommandHandler<
+  LoginCommand,
+  string
+> {
   constructor(private readonly tokenGenerator: TokenGenerator) {}
 
   async execute(command: LoginCommand): Promise<string> {

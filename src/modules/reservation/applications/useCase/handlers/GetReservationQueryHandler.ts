@@ -1,7 +1,4 @@
-import {
-  ForbiddenException,
-  NotFoundException,
-} from '@nestjs/common';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
 import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
 import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
@@ -12,9 +9,10 @@ import { ReservationOutput } from '../../dto/reservation.output';
 import type { EnrichReservationOutputsService } from '../../services/enrich-reservation-outputs.service';
 import type { GetReservationQuery } from '../queries/GetReservationQuery';
 
-export class GetReservationQueryHandler
-  implements IQueryHandler<GetReservationQuery, ReservationOutput>
-{
+export class GetReservationQueryHandler implements IQueryHandler<
+  GetReservationQuery,
+  ReservationOutput
+> {
   constructor(
     private readonly reservationRepository: IReservationRepository,
     private readonly userRepository: IUserRepository,
@@ -40,7 +38,9 @@ export class GetReservationQueryHandler
     }
 
     if (query.access.canReadHost && user?.id) {
-      const properties = await this.propertyRepository.findAllByOwnerId(user.id);
+      const properties = await this.propertyRepository.findAllByOwnerId(
+        user.id,
+      );
       const propertyIds = new Set(
         properties
           .map((property) => property.id)
@@ -60,7 +60,9 @@ export class GetReservationQueryHandler
     throw new ForbiddenException('Accès refusé.');
   }
 
-  private async toEnrichedOutput(reservation: Reservation): Promise<ReservationOutput> {
+  private async toEnrichedOutput(
+    reservation: Reservation,
+  ): Promise<ReservationOutput> {
     const [output] = await this.enrichReservationOutputs.enrich([
       ReservationOutput.fromDomain(reservation),
     ]);

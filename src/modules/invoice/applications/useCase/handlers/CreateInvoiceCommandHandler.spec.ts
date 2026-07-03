@@ -28,7 +28,14 @@ describe('CreateInvoiceCommandHandler', () => {
 
     invoiceRepository.findByPayment.mockResolvedValue(null);
     invoiceRepository.create.mockResolvedValue(
-      new Invoice(1, INVOICE_PAYMENT_TYPE.RESERVATION, 42, 'uploads/invoices/facture.pdf', 'FACT-2026-000042', 9),
+      new Invoice(
+        1,
+        INVOICE_PAYMENT_TYPE.RESERVATION,
+        42,
+        'uploads/invoices/facture.pdf',
+        'FACT-2026-000042',
+        9,
+      ),
     );
     generateInvoicePdf.execute.mockResolvedValue(Buffer.from('%PDF-test'));
     invoiceStorage.savePdf.mockResolvedValue({
@@ -37,17 +44,20 @@ describe('CreateInvoiceCommandHandler', () => {
     });
 
     handler = new CreateInvoiceCommandHandler(
-      invoiceRepository as never,
+      invoiceRepository,
       generateInvoicePdf as unknown as GenerateInvoicePdfService,
-      invoiceStorage as never,
+      invoiceStorage,
     );
   });
 
   it('génère, enregistre et publie invoice.created', async () => {
     const published: InvoiceCreatedEvent[] = [];
-    EventBus.getInstance().subscribe('invoice.created', async (event: InvoiceCreatedEvent) => {
-      published.push(event);
-    });
+    EventBus.getInstance().subscribe(
+      'invoice.created',
+      async (event: InvoiceCreatedEvent) => {
+        published.push(event);
+      },
+    );
 
     await handler.execute(
       new CreateInvoiceCommand(
@@ -73,7 +83,14 @@ describe('CreateInvoiceCommandHandler', () => {
 
   it('ignore la génération si une facture existe déjà', async () => {
     invoiceRepository.findByPayment.mockResolvedValue(
-      new Invoice(1, INVOICE_PAYMENT_TYPE.RESERVATION, 42, 'uploads/invoices/existing.pdf', 'FACT-2026-000042', 9),
+      new Invoice(
+        1,
+        INVOICE_PAYMENT_TYPE.RESERVATION,
+        42,
+        'uploads/invoices/existing.pdf',
+        'FACT-2026-000042',
+        9,
+      ),
     );
 
     await handler.execute(

@@ -32,7 +32,9 @@ describe('RemoveCartItemCommandHandler', () => {
   });
 
   it('lève une erreur si l’article est introuvable', async () => {
-    resolveCartService.resolve.mockResolvedValue(createSampleCart({ items: [] }));
+    resolveCartService.resolve.mockResolvedValue(
+      createSampleCart({ items: [] }),
+    );
 
     await expect(
       handler.execute(new RemoveCartItemCommand({ authId: 1 }, 99)),

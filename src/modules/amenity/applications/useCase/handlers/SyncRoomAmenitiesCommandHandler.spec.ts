@@ -19,10 +19,14 @@ describe('SyncRoomAmenitiesCommandHandler', () => {
     } as unknown as IRoomAmenityRepository;
 
     const amenityRepository = {
-      findByIds: async () => [new Amenity('TV', 'tv', AMENITY_SCOPE.ROOM, true, 2)],
+      findByIds: async () => [
+        new Amenity('TV', 'tv', AMENITY_SCOPE.ROOM, true, 2),
+      ],
     } as unknown as IAmenityRepository;
 
-    const resolveAmenitiesService = new ResolveAmenitiesService(amenityRepository);
+    const resolveAmenitiesService = new ResolveAmenitiesService(
+      amenityRepository,
+    );
     const handler = new SyncRoomAmenitiesCommandHandler(
       roomRepository,
       roomAmenityRepository,

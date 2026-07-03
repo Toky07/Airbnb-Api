@@ -2,17 +2,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ImportRoomsUseCase } from './import-rooms.usecase';
 import { createImportBatchContext } from './import-test.helpers';
 import { CreateRoomCommand } from '../../../rooms/applications/useCase/commands/CreateRoomCommand';
-
-const mockExecute = vi.fn();
-
-vi.mock('../../../../shared/useCase/bus/bus', () => ({
-  CommandBus: { execute: (...args: unknown[]) => mockExecute(...args) },
-}));
+import { commandBusExecuteMock } from '../../../../test/command-bus.mock';
 
 describe('ImportRoomsUseCase', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockExecute.mockResolvedValue({ id: 1 });
+    commandBusExecuteMock.mockResolvedValue({ id: 1 });
   });
 
   it('crée une chambre pour un établissement connu', async () => {
@@ -46,14 +41,14 @@ describe('ImportRoomsUseCase', () => {
     );
 
     expect(result.created).toBe(1);
-    expect(mockExecute).toHaveBeenCalledTimes(1);
-    expect(mockExecute.mock.calls[0]?.[0]).toBeInstanceOf(CreateRoomCommand);
+    expect(commandBusExecuteMock).toHaveBeenCalledTimes(1);
+    expect(commandBusExecuteMock.mock.calls[0]?.[0]).toBeInstanceOf(
+      CreateRoomCommand,
+    );
   });
 
   it('signale un établissement introuvable', async () => {
-    const useCase = new ImportRoomsUseCase(
-      { findById: vi.fn() } as never,
-    );
+    const useCase = new ImportRoomsUseCase({ findById: vi.fn() } as never);
 
     const result = await useCase.execute(
       [

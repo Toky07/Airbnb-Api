@@ -62,12 +62,12 @@ describe('Auth', () => {
     process.env.MAIL_TRANSPORT = 'console';
     const repository = dataSource.getRepository(AuthEntity);
     const data = {
-        email: 'test@test.com',
-        firstName: 'Test',
-        lastName: 'User',
-        phoneNumber: '+33601020304',
-      };
-    
+      email: 'test@test.com',
+      firstName: 'Test',
+      lastName: 'User',
+      phoneNumber: '+33601020304',
+    };
+
     const response = await request(app.getHttpServer())
       .post('/auth/register')
       .send(data)
@@ -110,7 +110,7 @@ describe('Auth', () => {
       email: 'test@test.com',
       password: 'password',
     };
-    
+
     const response = await request(app.getHttpServer())
       .post('/auth/login')
       .send(data)

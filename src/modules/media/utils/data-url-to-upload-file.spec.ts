@@ -12,6 +12,8 @@ describe('dataUrlToUploadFile', () => {
   });
 
   it('should throw for invalid data URL', () => {
-    expect(() => dataUrlToUploadFile('not-a-data-url')).toThrow('Invalid data URL');
+    expect(() => dataUrlToUploadFile('not-a-data-url')).toThrow(
+      'Invalid data URL',
+    );
   });
 });

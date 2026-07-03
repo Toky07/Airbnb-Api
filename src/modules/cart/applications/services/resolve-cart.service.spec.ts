@@ -13,7 +13,7 @@ describe('ResolveCartService', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    service = new ResolveCartService(cartRepository as never, cartUserPort as never);
+    service = new ResolveCartService(cartRepository as never, cartUserPort);
   });
 
   it('retourne le panier utilisateur existant', async () => {

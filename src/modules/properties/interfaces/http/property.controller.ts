@@ -40,7 +40,9 @@ export class PropertyController {
   findAll(
     @Query() query: Record<string, unknown>,
   ): Promise<PaginatedResult<PropertyOutput>> {
-    return QueryBus.execute(new ListPropertiesQuery(parsePaginationQuery(query)));
+    return QueryBus.execute(
+      new ListPropertiesQuery(parsePaginationQuery(query)),
+    );
   }
 
   @Get(':id')
@@ -59,8 +61,10 @@ export class PropertyController {
     const createPropertyDto =
       typeof (body as CreatePropertyDto).latitude === 'number'
         ? (body as CreatePropertyDto)
-        : parsePropertyBody(body as Record<string, unknown>);
-    return CommandBus.execute(new CreatePropertyCommand(createPropertyDto, image));
+        : parsePropertyBody(body);
+    return CommandBus.execute(
+      new CreatePropertyCommand(createPropertyDto, image),
+    );
   }
 
   @Put(':id')
@@ -74,7 +78,7 @@ export class PropertyController {
     const updatePropertyDto =
       typeof (body as CreatePropertyDto).latitude === 'number'
         ? (body as CreatePropertyDto)
-        : parsePropertyBody(body as Record<string, unknown>);
+        : parsePropertyBody(body);
     return CommandBus.execute(
       new UpdatePropertyCommand(id, updatePropertyDto, image),
     );

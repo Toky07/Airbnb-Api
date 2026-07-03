@@ -3,7 +3,7 @@ import type { Auth } from '../entities/user.entity';
 import type { JwtPayload } from '../types/jwt-payload';
 
 export function buildJwtPayload(auth: Auth): JwtPayload {
-  const roleSlugs = auth.roles.map((r) => r.slug).filter(Boolean) as string[];
+  const roleSlugs = auth.roles.map((r) => r.slug).filter(Boolean);
   const isSuperAdmin = roleSlugs.includes(SUPERADMIN_ROLE_SLUG);
   const permissionSet = new Set<string>();
 

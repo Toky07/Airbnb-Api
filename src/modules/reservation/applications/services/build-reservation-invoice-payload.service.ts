@@ -40,7 +40,7 @@ export class BuildReservationInvoicePayloadService {
       this.resolvePaymentReservations.resolveForPayment(payment),
       this.userRepository.findById(payment.userId),
     ]);
-    
+
     if (!customer) return null;
 
     const lineItems = await this.buildLineItems(items);
@@ -94,9 +94,9 @@ export class BuildReservationInvoicePayloadService {
       ],
       items: context.lineItems.map((item) => ({
         label: item.roomName,
-        subtitle: [item.propertyName, item.propertyCity]
-          .filter(Boolean)
-          .join(' · ') || undefined,
+        subtitle:
+          [item.propertyName, item.propertyCity].filter(Boolean).join(' · ') ||
+          undefined,
         quantity: item.nights,
         unitPriceCents: Math.round(item.unitPrice * 100),
         totalPriceCents: Math.round(item.totalPrice * 100),
@@ -139,7 +139,9 @@ export class BuildReservationInvoicePayloadService {
     return groups;
   }
 
-  private async buildLineItems(items: ReservationItemOutput[]): Promise<ReservationInvoiceLineItem[] | null> {
+  private async buildLineItems(
+    items: ReservationItemOutput[],
+  ): Promise<ReservationInvoiceLineItem[] | null> {
     if (items.length === 0) {
       return null;
     }

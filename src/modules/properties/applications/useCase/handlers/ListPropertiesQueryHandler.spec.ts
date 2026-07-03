@@ -34,7 +34,9 @@ describe('ListPropertiesQueryHandler', () => {
       mockPropertyMediaPresenter,
     );
 
-    const result = await handler.execute(new ListPropertiesQuery({ page: 1, limit: 10 }));
+    const result = await handler.execute(
+      new ListPropertiesQuery({ page: 1, limit: 10 }),
+    );
 
     expect(result.data).toHaveLength(1);
     expect(result.data[0]).toBeInstanceOf(PropertyOutput);

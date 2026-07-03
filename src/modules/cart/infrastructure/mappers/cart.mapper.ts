@@ -23,7 +23,9 @@ export class CartMapper {
     }
     entity.sessionId = cart.sessionId;
     entity.userId = cart.userId;
-    entity.items = cart.items.map((item) => CartMapper.itemToEntity(item, cart.id));
+    entity.items = cart.items.map((item) =>
+      CartMapper.itemToEntity(item, cart.id),
+    );
     return entity;
   }
 

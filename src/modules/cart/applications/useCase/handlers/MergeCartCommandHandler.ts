@@ -8,9 +8,10 @@ import type { ICartUserPort } from '../../../domain/ports/cart-user.port';
 import type { ICartRepository } from '../../../domain/repositories/cart.repository';
 import type { CartPresenter } from '../../presenters/cart.presenter';
 
-export class MergeCartCommandHandler
-  implements ICommandHandler<MergeCartCommand, CartOutput>
-{
+export class MergeCartCommandHandler implements ICommandHandler<
+  MergeCartCommand,
+  CartOutput
+> {
   constructor(
     private readonly cartRepository: ICartRepository,
     private readonly cartUserPort: ICartUserPort,

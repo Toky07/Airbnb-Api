@@ -6,12 +6,15 @@ import type { IPropertyTypeRepository } from '../../../domain/repositories/prope
 import { PropertyTypeOutput } from '../../dto/property-type.output';
 import type { CreatePropertyTypeCommand } from '../commands/CreatePropertyTypeCommand';
 
-export class CreatePropertyTypeCommandHandler
-  implements ICommandHandler<CreatePropertyTypeCommand, PropertyTypeOutput>
-{
+export class CreatePropertyTypeCommandHandler implements ICommandHandler<
+  CreatePropertyTypeCommand,
+  PropertyTypeOutput
+> {
   constructor(private readonly repository: IPropertyTypeRepository) {}
 
-  async execute(command: CreatePropertyTypeCommand): Promise<PropertyTypeOutput> {
+  async execute(
+    command: CreatePropertyTypeCommand,
+  ): Promise<PropertyTypeOutput> {
     const name = command.dto.name?.trim();
     if (!name) {
       throw new ConflictException('Le nom est requis');

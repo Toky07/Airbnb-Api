@@ -35,7 +35,10 @@ export class GenerateInvoicePdfService {
     });
   }
 
-  private drawHeader(doc: InstanceType<typeof PDFDocument>, data: InvoiceData): void {
+  private drawHeader(
+    doc: InstanceType<typeof PDFDocument>,
+    data: InvoiceData,
+  ): void {
     doc.rect(0, 0, doc.page.width, 120).fill(INVOICE_BRAND.color);
 
     doc
@@ -44,10 +47,7 @@ export class GenerateInvoicePdfService {
       .fontSize(28)
       .text(INVOICE_BRAND.name, 50, 36);
 
-    doc
-      .font('Helvetica')
-      .fontSize(12)
-      .text('Facture', 50, 72);
+    doc.font('Helvetica').fontSize(12).text('Facture', 50, 72);
 
     doc
       .font('Helvetica-Bold')
@@ -64,10 +64,15 @@ export class GenerateInvoicePdfService {
         width: 150,
         align: 'right',
       })
-      .text(`Date : ${formatInvoiceDate(data.paidAt)}`, doc.page.width - 200, 84, {
-        width: 150,
-        align: 'right',
-      });
+      .text(
+        `Date : ${formatInvoiceDate(data.paidAt)}`,
+        doc.page.width - 200,
+        84,
+        {
+          width: 150,
+          align: 'right',
+        },
+      );
 
     doc.fillColor('#111827');
   }
@@ -112,10 +117,15 @@ export class GenerateInvoicePdfService {
         .font('Helvetica')
         .fontSize(11)
         .fillColor('#374151')
-        .text(`${reference.label} : ${reference.value}`, doc.page.width - 250, referenceY, {
-          width: 200,
-          align: 'right',
-        });
+        .text(
+          `${reference.label} : ${reference.value}`,
+          doc.page.width - 250,
+          referenceY,
+          {
+            width: 200,
+            align: 'right',
+          },
+        );
       referenceY += 16;
     }
   }
@@ -158,9 +168,7 @@ export class GenerateInvoicePdfService {
       }
 
       if (index % 2 === 1) {
-        doc
-          .rect(40, rowY - 6, doc.page.width - 80, 52)
-          .fill('#F9FAFB');
+        doc.rect(40, rowY - 6, doc.page.width - 80, 52).fill('#F9FAFB');
       }
 
       doc
@@ -181,7 +189,9 @@ export class GenerateInvoicePdfService {
         .font('Helvetica')
         .fontSize(9)
         .fillColor('#374151')
-        .text(item.columns?.dates ?? '—', columns.dates, rowY + 6, { width: 95 })
+        .text(item.columns?.dates ?? '—', columns.dates, rowY + 6, {
+          width: 95,
+        })
         .text(String(item.columns?.guests ?? '—'), columns.guests, rowY + 6)
         .text(String(item.columns?.nights ?? '—'), columns.nights, rowY + 6)
         .text(
@@ -201,13 +211,14 @@ export class GenerateInvoicePdfService {
     }
   }
 
-  private drawTotals(doc: InstanceType<typeof PDFDocument>, data: InvoiceData): void {
+  private drawTotals(
+    doc: InstanceType<typeof PDFDocument>,
+    data: InvoiceData,
+  ): void {
     const boxTop = doc.page.height - 170;
     const boxLeft = doc.page.width - 260;
 
-    doc
-      .roundedRect(boxLeft - 20, boxTop, 220, 72, 8)
-      .fill('#FFF1F2');
+    doc.roundedRect(boxLeft - 20, boxTop, 220, 72, 8).fill('#FFF1F2');
 
     doc
       .font('Helvetica')
@@ -236,7 +247,10 @@ export class GenerateInvoicePdfService {
       );
   }
 
-  private drawFooter(doc: InstanceType<typeof PDFDocument>, data: InvoiceData): void {
+  private drawFooter(
+    doc: InstanceType<typeof PDFDocument>,
+    data: InvoiceData,
+  ): void {
     doc
       .font('Helvetica')
       .fontSize(9)

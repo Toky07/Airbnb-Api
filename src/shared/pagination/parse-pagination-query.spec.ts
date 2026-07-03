@@ -3,7 +3,11 @@ import { parsePaginationQuery } from './parse-pagination-query';
 
 describe('parsePaginationQuery', () => {
   it('uses defaults', () => {
-    expect(parsePaginationQuery({})).toEqual({ page: 1, limit: 10, search: undefined });
+    expect(parsePaginationQuery({})).toEqual({
+      page: 1,
+      limit: 10,
+      search: undefined,
+    });
   });
 
   it('normalizes invalid limit to 10', () => {

@@ -14,7 +14,9 @@ const repository = {
 describe('UpdateRoleCommandHandler', () => {
   it('should update a role', async () => {
     const handler = new UpdateRoleCommandHandler(repository);
-    const role = await handler.execute(new UpdateRoleCommand({ id: 1, name: 'updated' }));
+    const role = await handler.execute(
+      new UpdateRoleCommand({ id: 1, name: 'updated' }),
+    );
     expect(role.name).toBe('updated');
   });
 

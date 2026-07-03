@@ -74,12 +74,16 @@ export class CartRepository implements ICartRepository {
 
   async addItem(cartId: number, item: CartItem): Promise<CartItem> {
     const entity = CartMapper.itemToEntity(item, cartId);
-    const saved = await this.itemRepository.save(this.itemRepository.create(entity));
+    const saved = await this.itemRepository.save(
+      this.itemRepository.create(entity),
+    );
     return CartMapper.itemToDomain(saved);
   }
 
   async updateItem(item: CartItem): Promise<CartItem> {
-    const saved = await this.itemRepository.save(CartMapper.itemToEntity(item, item.cartId));
+    const saved = await this.itemRepository.save(
+      CartMapper.itemToEntity(item, item.cartId),
+    );
     return CartMapper.itemToDomain(saved);
   }
 

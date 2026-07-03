@@ -29,7 +29,7 @@ export class ImportRoomsUseCase {
     const result = emptyImportEntityResult();
 
     for (let index = 0; index < rows.length; index++) {
-      const row = rows[index]!;
+      const row = rows[index];
       const validation = validateImportRoomRow(row);
       if (!validation.ok) {
         result.errors.push({
@@ -92,7 +92,8 @@ export class ImportRoomsUseCase {
         result.errors.push({
           entity: 'room',
           index,
-          message: cause instanceof Error ? cause.message : 'Création impossible.',
+          message:
+            cause instanceof Error ? cause.message : 'Création impossible.',
         });
       }
     }

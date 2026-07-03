@@ -76,19 +76,21 @@ describe('UserController', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    expect(response.body.data[0]).toEqual(expect.objectContaining({
-      id: expect.any(Number),
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'test@test.com',
-      phoneNumber: '+1234567890',
-      avatar: 'avatar.png',
-      roles: expect.any(Array),
-      authLinked: expect.any(Boolean),
-      status: expect.any(String),
-      createdAt: expect.any(String),
-      updatedAt: expect.any(String),
-    }));
+    expect(response.body.data[0]).toEqual(
+      expect.objectContaining({
+        id: expect.any(Number),
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'test@test.com',
+        phoneNumber: '+1234567890',
+        avatar: 'avatar.png',
+        roles: expect.any(Array),
+        authLinked: expect.any(Boolean),
+        status: expect.any(String),
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+      }),
+    );
   });
 
   it(`/GET users/:id`, async () => {
@@ -185,7 +187,9 @@ describe('UserController', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(201);
 
-    expect(response.body.avatar).toMatch(/uploads\/users\/\d+\/avatar\/.+\.jpg$/);
+    expect(response.body.avatar).toMatch(
+      /uploads\/users\/\d+\/avatar\/.+\.jpg$/,
+    );
     expect(response.body.firstName).toBe('Jane');
   });
 
@@ -205,7 +209,9 @@ describe('UserController', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(201);
 
-    expect(response.body.avatar).toMatch(/uploads\/users\/\d+\/avatar\/.+\.png$/);
+    expect(response.body.avatar).toMatch(
+      /uploads\/users\/\d+\/avatar\/.+\.png$/,
+    );
   });
 
   it('/PUT users/:id', async () => {
@@ -234,14 +240,16 @@ describe('UserController', () => {
 
     const updatedUser = await repository.findOne({ where: { id: user.id } });
 
-    expect(updatedUser).toEqual(expect.objectContaining({
-      id: expect.any(Number),
-      firstName: 'Updated',
-      lastName: 'Updated',
-      email: 'updated@test.com',
-      phoneNumber: '+1234567891',
-      avatar: 'avatar.png',
-    }));
+    expect(updatedUser).toEqual(
+      expect.objectContaining({
+        id: expect.any(Number),
+        firstName: 'Updated',
+        lastName: 'Updated',
+        email: 'updated@test.com',
+        phoneNumber: '+1234567891',
+        avatar: 'avatar.png',
+      }),
+    );
   });
 
   it('/PUT users/:id with avatar file', async () => {
@@ -264,7 +272,9 @@ describe('UserController', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    expect(response.body.avatar).toMatch(/uploads\/users\/\d+\/avatar\/.+\.jpg$/);
+    expect(response.body.avatar).toMatch(
+      /uploads\/users\/\d+\/avatar\/.+\.jpg$/,
+    );
   });
 
   it('/DELETE users/:id', async () => {
@@ -293,7 +303,9 @@ describe('UserController', () => {
     const deletedUser = await repository.findOne({ where: { id: user.id } });
     expect(deletedUser).toBeNull();
 
-    const deletedAuth = await authRepository.findOne({ where: { id: auth.id } });
+    const deletedAuth = await authRepository.findOne({
+      where: { id: auth.id },
+    });
     expect(deletedAuth).toBeNull();
 
     await request(app.getHttpServer())

@@ -1,9 +1,46 @@
-import { defineConfig } from 'vitest/config'
+import { defineConfig } from 'vitest/config';
+
+const shared = {
+  globals: true,
+  setupFiles: ['./src/test/vitest.setup.ts'],
+  pool: 'threads' as const,
+  deps: {
+    optimizer: {
+      ssr: {
+        enabled: true,
+      },
+    },
+  },
+};
 
 export default defineConfig({
   plugins: [],
   test: {
-    globals: true,
-    setupFiles: ['./src/test/vitest.setup.ts'],
+    projects: [
+      {
+        extends: true,
+        test: {
+          ...shared,
+          name: 'unit',
+          setupFiles: [
+            './src/test/vitest.setup.ts',
+            './src/test/vitest.unit.setup.ts',
+          ],
+          include: ['src/**/*.spec.ts'],
+          exclude: ['**/*.controller.spec.ts'],
+          isolate: false,
+        },
+      },
+      {
+        extends: true,
+        test: {
+          ...shared,
+          name: 'e2e',
+          include: ['**/*.controller.spec.ts'],
+          isolate: true,
+          fileParallelism: true,
+        },
+      },
+    ],
   },
-})
+});

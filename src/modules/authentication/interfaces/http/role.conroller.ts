@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
 import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
 import { type CreateRoleDto } from '../../application/dto/create-role.dto';

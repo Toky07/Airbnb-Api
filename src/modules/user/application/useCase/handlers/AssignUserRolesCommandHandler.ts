@@ -7,9 +7,10 @@ import { CommandBus } from '../../../../../shared/useCase/bus/bus';
 import { SendAccountInvitationCommand } from '../../../../authentication/useCase/commands/SendAccountInvitationCommand';
 import type { AssignUserRolesCommand } from '../commands/AssignUserRolesCommand';
 
-export class AssignUserRolesCommandHandler
-  implements ICommandHandler<AssignUserRolesCommand, UserOutput>
-{
+export class AssignUserRolesCommandHandler implements ICommandHandler<
+  AssignUserRolesCommand,
+  UserOutput
+> {
   constructor(
     private readonly userRepository: IUserRepository,
     private readonly authRepository: IAuthRepository,
@@ -30,7 +31,9 @@ export class AssignUserRolesCommandHandler
     if (!auth?.id) {
       auth = await this.authRepository.createPending(user.email);
       if (!auth?.id) {
-        throw new NotFoundException('Impossible de créer le compte de connexion.');
+        throw new NotFoundException(
+          'Impossible de créer le compte de connexion.',
+        );
       }
       await this.userRepository.linkAuthAccount(command.userId, auth.id);
       await CommandBus.execute(

@@ -6,9 +6,10 @@ import type { IRoomTypeRepository } from '../../../domain/repositories/room-type
 import { RoomTypeOutput } from '../../dto/room-type.output';
 import type { CreateRoomTypeCommand } from '../commands/CreateRoomTypeCommand';
 
-export class CreateRoomTypeCommandHandler
-  implements ICommandHandler<CreateRoomTypeCommand, RoomTypeOutput>
-{
+export class CreateRoomTypeCommandHandler implements ICommandHandler<
+  CreateRoomTypeCommand,
+  RoomTypeOutput
+> {
   constructor(private readonly repository: IRoomTypeRepository) {}
 
   async execute(command: CreateRoomTypeCommand): Promise<RoomTypeOutput> {

@@ -3,6 +3,7 @@ export const ACCOUNT_STATUS = {
   ACTIVE: 'active',
 } as const;
 
-export type AccountStatus = (typeof ACCOUNT_STATUS)[keyof typeof ACCOUNT_STATUS];
+export type AccountStatus =
+  (typeof ACCOUNT_STATUS)[keyof typeof ACCOUNT_STATUS];
 
 export const PASSWORD_SETUP_TOKEN_TTL_HOURS = 48;

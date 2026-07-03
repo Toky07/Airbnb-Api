@@ -28,21 +28,31 @@ describe('ImportDataUseCase', () => {
       execute: vi.fn().mockResolvedValue({ created: 0, errors: [] }),
     };
     const importRoles = {
-      execute: vi.fn().mockResolvedValue({ created: 2, errors: [{ entity: 'role', index: 1, message: 'Erreur' }] }),
+      execute: vi.fn().mockResolvedValue({
+        created: 2,
+        errors: [{ entity: 'role', index: 1, message: 'Erreur' }],
+      }),
     };
 
     const useCase = new ImportDataUseCase(
       importBatchContext as never,
-      importUsers as never,
-      importProperties as never,
+      importUsers,
+      importProperties,
       importRooms as never,
-      importPropertyTypes as never,
-      importRoomTypes as never,
+      importPropertyTypes,
+      importRoomTypes,
       importRoles as never,
     );
 
     const result = await useCase.execute({
-      users: [{ firstName: 'Jean', lastName: 'Dupont', email: 'jean@example.com', phoneNumber: '+33612345678' }],
+      users: [
+        {
+          firstName: 'Jean',
+          lastName: 'Dupont',
+          email: 'jean@example.com',
+          phoneNumber: '+33612345678',
+        },
+      ],
       roles: [
         { name: 'Support', slug: 'support', permissionKeys: 'users.read' },
         { name: 'Bad', slug: 'bad', permissionKeys: 'unknown.permission' },

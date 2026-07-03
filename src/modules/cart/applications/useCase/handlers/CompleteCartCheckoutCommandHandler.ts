@@ -11,9 +11,10 @@ import type { ICartRepository } from '../../../domain/repositories/cart.reposito
 import type { CartPresenter } from '../../presenters/cart.presenter';
 import type { ResolveCartService } from '../../services/resolve-cart.service';
 
-export class CompleteCartCheckoutCommandHandler
-  implements ICommandHandler<CompleteCartCheckoutCommand, CartOutput>
-{
+export class CompleteCartCheckoutCommandHandler implements ICommandHandler<
+  CompleteCartCheckoutCommand,
+  CartOutput
+> {
   constructor(
     private readonly cartRepository: ICartRepository,
     private readonly cartUserPort: ICartUserPort,

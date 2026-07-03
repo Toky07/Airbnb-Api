@@ -29,6 +29,7 @@ describe('ReservationController', () => {
   let dataSource: DataSource;
   let token: string;
   let roomId: number;
+  let propertyId: number;
 
   beforeAll(async () => {
     process.env.MAIL_TRANSPORT = 'console';
@@ -38,7 +39,12 @@ describe('ReservationController', () => {
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
-          entities: [...AUTH_TEST_ENTITIES, ...DOMAIN_TEST_ENTITIES, ReservationOrmEntity, PaymentOrmEntity],
+          entities: [
+            ...AUTH_TEST_ENTITIES,
+            ...DOMAIN_TEST_ENTITIES,
+            ReservationOrmEntity,
+            PaymentOrmEntity,
+          ],
           synchronize: true,
         }),
         JwtModule.register({
@@ -59,7 +65,9 @@ describe('ReservationController', () => {
 
     dataSource = moduleRef.get(DataSource);
     app = moduleRef.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+    app.useGlobalPipes(
+      new ValidationPipe({ whitelist: true, transform: true }),
+    );
     await app.init();
 
     token = await registerAndLoginAsSuperAdmin(app, dataSource);
@@ -80,6 +88,8 @@ describe('ReservationController', () => {
       checkOutTime: '11:00',
       ownerId: user!.id,
     });
+
+    propertyId = property.id;
 
     const room = await dataSource.getRepository(RoomEntity).save({
       name: 'Suite',
@@ -218,21 +228,23 @@ describe('ReservationController', () => {
       propertyId: 1,
     });
 
-    const reservation = await dataSource.getRepository(ReservationOrmEntity).save({
-      userId: 1,
-      status: RESERVATION_STATUS.CONFIRMED,
-      payment,
-      items: [
-        {
-          roomId,
-          checkIn: '2026-10-01',
-          checkOut: '2026-10-03',
-          guestCount: 2,
-          price: 200,
-          nights: 2,
-        },
-      ],
-    });
+    const reservation = await dataSource
+      .getRepository(ReservationOrmEntity)
+      .save({
+        userId: 1,
+        status: RESERVATION_STATUS.CONFIRMED,
+        payment,
+        items: [
+          {
+            roomId,
+            checkIn: '2026-10-01',
+            checkOut: '2026-10-03',
+            guestCount: 2,
+            price: 200,
+            nights: 2,
+          },
+        ],
+      });
 
     const response = await request(app.getHttpServer())
       .post(`/reservations/cancel/${reservation.id}`)
@@ -259,24 +271,26 @@ describe('ReservationController', () => {
       transactionId: 'pi_host_booking_test',
       userId: user!.id,
       propertyType: 'reservation',
-      propertyId: 1,
+      propertyId: 0,
     });
 
-    const reservation = await dataSource.getRepository(ReservationOrmEntity).save({
-      userId: user!.id,
-      status: RESERVATION_STATUS.CONFIRMED,
-      payment,
-      items: [
-        {
-          roomId,
-          checkIn: '2026-11-01',
-          checkOut: '2026-11-03',
-          guestCount: 2,
-          price: 200,
-          nights: 2,
-        },
-      ],
-    });
+    const reservation = await dataSource
+      .getRepository(ReservationOrmEntity)
+      .save({
+        userId: user!.id,
+        status: RESERVATION_STATUS.CONFIRMED,
+        payment,
+        items: [
+          {
+            roomId,
+            checkIn: '2026-11-01',
+            checkOut: '2026-11-03',
+            guestCount: 2,
+            price: 200,
+            nights: 2,
+          },
+        ],
+      });
 
     await dataSource.getRepository(PaymentOrmEntity).update(payment.id, {
       propertyId: reservation.id,
@@ -288,11 +302,18 @@ describe('ReservationController', () => {
       .expect(200);
 
     expect(response.body.data.length).toBeGreaterThan(0);
-    expect(response.body.data[0]).toEqual(
+
+    const booking = response.body.data.find(
+      (item: { transactionId: string }) =>
+        item.transactionId === 'pi_host_booking_test',
+    );
+
+    expect(booking).toEqual(
       expect.objectContaining({
         paymentId: payment.id,
         customerName: expect.any(String),
         previewLabel: expect.any(String),
+        propertyId,
       }),
     );
   });

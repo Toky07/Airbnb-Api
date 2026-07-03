@@ -6,9 +6,10 @@ import type { ILocalStorageService } from '../../../services/localStorage.servic
 import { toSaveMediaContext } from '../../../utils/build-upload-path';
 import type { SyncEntityMediasCommand } from '../commands/SyncEntityMediasCommand';
 
-export class SyncEntityMediasCommandHandler
-  implements ICommandHandler<SyncEntityMediasCommand, Media[]>
-{
+export class SyncEntityMediasCommandHandler implements ICommandHandler<
+  SyncEntityMediasCommand,
+  Media[]
+> {
   constructor(
     private readonly repository: IMediaRepository,
     private readonly storage: ILocalStorageService,

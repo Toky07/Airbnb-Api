@@ -23,7 +23,7 @@ export class ReservationMapper {
     }
     entity.userId = reservation.userId;
     entity.status = reservation.status;
-    
+
     entity.items = reservation.items.map((item) => {
       const itemEntity = ReservationItemMapper.toEntity(item);
       if (reservation.id) {

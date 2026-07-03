@@ -1,66 +1,70 @@
-import { RoomEntity } from "../../../rooms/infrastructure/entities/room.entity";
-import { PropertyTypeEntity } from "./property-type.entity";
+import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
+import { PropertyTypeEntity } from './property-type.entity';
 import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    OneToMany,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn,
-} from "typeorm";
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity({ name: 'properties' })
 export class PropertyEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    name: string;
+  @Column()
+  name: string;
 
-    @Column()
-    description: string;
+  @Column()
+  description: string;
 
-    @Column()
-    address: string;
+  @Column()
+  address: string;
 
-    @Column()
-    city: string;
-    
-    @Column()
-    country: string;
+  @Column()
+  city: string;
 
-    @Column()
-    latitude: number;
+  @Column()
+  country: string;
 
-    @Column()
-    longitude: number;
+  @Column()
+  latitude: number;
 
-    @Column()
-    checkInTime: string;
+  @Column()
+  longitude: number;
 
-    @Column()
-    checkOutTime: string;
+  @Column()
+  checkInTime: string;
 
-    @Column()
-    ownerId: number;
+  @Column()
+  checkOutTime: string;
 
-    @Column({ nullable: true })
-    propertyTypeId: number | null;
+  @Column()
+  ownerId: number;
 
-    @ManyToOne(() => PropertyTypeEntity, (propertyType) => propertyType.properties, {
-        nullable: true,
-    })
-    @JoinColumn({ name: 'propertyTypeId' })
-    propertyType?: PropertyTypeEntity;
+  @Column({ nullable: true })
+  propertyTypeId: number | null;
 
-    @OneToMany(() => RoomEntity, (room) => room.property)
-    rooms: RoomEntity[];
+  @ManyToOne(
+    () => PropertyTypeEntity,
+    (propertyType) => propertyType.properties,
+    {
+      nullable: true,
+    },
+  )
+  @JoinColumn({ name: 'propertyTypeId' })
+  propertyType?: PropertyTypeEntity;
 
-    @CreateDateColumn()
-    createdAt: Date;
+  @OneToMany(() => RoomEntity, (room) => room.property)
+  rooms: RoomEntity[];
 
-    @UpdateDateColumn()
-    updatedAt: Date;
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

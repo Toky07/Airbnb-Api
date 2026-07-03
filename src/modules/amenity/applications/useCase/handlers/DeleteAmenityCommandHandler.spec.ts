@@ -24,14 +24,22 @@ describe('DeleteAmenityCommandHandler', () => {
   it('rejects deletion when linked to a property', async () => {
     const repository = {
       findById: async () =>
-        new Amenity('Parking', 'square-parking', AMENITY_SCOPE.PROPERTY, true, 2),
+        new Amenity(
+          'Parking',
+          'square-parking',
+          AMENITY_SCOPE.PROPERTY,
+          true,
+          2,
+        ),
       countPropertyUsages: async () => 1,
       countRoomUsages: async () => 0,
     } as unknown as IAmenityRepository;
 
     const handler = new DeleteAmenityCommandHandler(repository);
 
-    await expect(handler.execute(new DeleteAmenityCommand(2))).rejects.toBeInstanceOf(BadRequestException);
+    await expect(
+      handler.execute(new DeleteAmenityCommand(2)),
+    ).rejects.toBeInstanceOf(BadRequestException);
   });
 
   it('throws when amenity is missing', async () => {
@@ -41,6 +49,8 @@ describe('DeleteAmenityCommandHandler', () => {
 
     const handler = new DeleteAmenityCommandHandler(repository);
 
-    await expect(handler.execute(new DeleteAmenityCommand(99))).rejects.toBeInstanceOf(NotFoundException);
+    await expect(
+      handler.execute(new DeleteAmenityCommand(99)),
+    ).rejects.toBeInstanceOf(NotFoundException);
   });
 });

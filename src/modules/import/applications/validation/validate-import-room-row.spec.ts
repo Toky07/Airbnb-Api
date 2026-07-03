@@ -43,7 +43,9 @@ describe('validateImportRoomRow', () => {
 
 describe('parseImportRoomImageUrls', () => {
   it('parse les URLs séparées par point-virgule', () => {
-    expect(parseImportRoomImageUrls('https://a.jpg; https://b.jpg')).toHaveLength(2);
+    expect(
+      parseImportRoomImageUrls('https://a.jpg; https://b.jpg'),
+    ).toHaveLength(2);
   });
 
   it('retourne une liste vide sans valeur', () => {

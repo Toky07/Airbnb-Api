@@ -5,11 +5,11 @@ import { ReservationOutput } from '../dto/reservation.output';
 
 @Injectable()
 export class EnrichReservationOutputsService {
-  constructor(
-    private readonly roomProductSummary: RoomProductSummaryService,
-  ) {}
+  constructor(private readonly roomProductSummary: RoomProductSummaryService) {}
 
-  async enrichItems(items: ReservationItemOutput[]): Promise<ReservationItemOutput[]> {
+  async enrichItems(
+    items: ReservationItemOutput[],
+  ): Promise<ReservationItemOutput[]> {
     const summaries = await this.roomProductSummary.getByRoomIds(
       items.map((item) => item.roomId),
     );
@@ -29,9 +29,7 @@ export class EnrichReservationOutputsService {
         new ReservationOutput(
           reservation.id,
           reservation.userId,
-          reservation.items.map(
-            (item) => enrichedById.get(item.id) ?? item,
-          ),
+          reservation.items.map((item) => enrichedById.get(item.id) ?? item),
           reservation.status,
           reservation.createdAt,
           reservation.updatedAt,

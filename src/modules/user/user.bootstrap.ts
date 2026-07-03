@@ -52,7 +52,9 @@ export class UserBootstrap {
       ),
       findUserQueryHandler: new FindUserQueryHandler(deps.userRepository),
       listUsersQueryHandler: new ListUsersQueryHandler(deps.userRepository),
-      listUserOptionsQueryHandler: new ListUserOptionsQueryHandler(deps.userRepository),
+      listUserOptionsQueryHandler: new ListUserOptionsQueryHandler(
+        deps.userRepository,
+      ),
     };
   }
 }

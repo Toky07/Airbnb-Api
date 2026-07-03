@@ -1,17 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ImportPropertyTypesUseCase } from './import-property-types.usecase';
 import { createImportBatchContext } from './import-test.helpers';
-
-const mockExecute = vi.fn();
-
-vi.mock('../../../../shared/useCase/bus/bus', () => ({
-  CommandBus: { execute: (...args: unknown[]) => mockExecute(...args) },
-}));
+import { commandBusExecuteMock } from '../../../../test/command-bus.mock';
 
 describe('ImportPropertyTypesUseCase', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockExecute.mockResolvedValueOnce({
+    commandBusExecuteMock.mockResolvedValueOnce({
       id: 1,
       name: 'Villa',
       slug: 'villa',
@@ -37,7 +32,7 @@ describe('ImportPropertyTypesUseCase', () => {
     );
 
     expect(result.created).toBe(1);
-    expect(mockExecute).toHaveBeenCalledTimes(1);
+    expect(commandBusExecuteMock).toHaveBeenCalledTimes(1);
     expect(result.errors).toHaveLength(1);
     expect(result.errors[0]?.entity).toBe('propertyType');
     expect(context.propertyTypeSlugs.has('villa')).toBe(true);

@@ -1,17 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ImportPropertiesUseCase } from './import-properties.usecase';
 import { createImportBatchContext } from './import-test.helpers';
-
-const mockExecute = vi.fn();
-
-vi.mock('../../../../shared/useCase/bus/bus', () => ({
-  CommandBus: { execute: (...args: unknown[]) => mockExecute(...args) },
-}));
+import { commandBusExecuteMock } from '../../../../test/command-bus.mock';
 
 describe('ImportPropertiesUseCase', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockExecute.mockResolvedValue({
+    commandBusExecuteMock.mockResolvedValue({
       id: 10,
       name: 'Hôtel Azur',
     });

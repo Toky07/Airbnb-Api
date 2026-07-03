@@ -30,7 +30,9 @@ describe('ListUsersQueryHandler', () => {
   it('should list users', async () => {
     const handler = new ListUsersQueryHandler(repository);
 
-    const result = await handler.execute(new ListUsersQuery({ page: 1, limit: 10 }));
+    const result = await handler.execute(
+      new ListUsersQuery({ page: 1, limit: 10 }),
+    );
 
     expect(result.data).toHaveLength(1);
     expect(result.data[0]).toBeInstanceOf(UserOutput);

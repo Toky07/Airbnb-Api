@@ -9,12 +9,7 @@ import { Auth } from '../../../../authentication/domain/entities/user.entity';
 import { AssignUserRolesCommandHandler } from './AssignUserRolesCommandHandler';
 import { AssignUserRolesCommand } from '../commands/AssignUserRolesCommand';
 import { SendAccountInvitationCommand } from '../../../../authentication/useCase/commands/SendAccountInvitationCommand';
-
-const mockExecute = vi.fn();
-
-vi.mock('../../../../../shared/useCase/bus/bus', () => ({
-  CommandBus: { execute: (...args: unknown[]) => mockExecute(...args) },
-}));
+import { commandBusExecuteMock } from '../../../../../test/command-bus.mock';
 
 const baseUser = new User(
   new UserNameVO('Jean'),
@@ -54,14 +49,18 @@ const userRepository = {
 const authRepository = {
   findById: vi.fn(),
   findByEmail: vi.fn(),
-  createPending: vi.fn().mockResolvedValue(new Auth(5, new EmailVO('jean@test.com'), null, [], 'pending')),
+  createPending: vi
+    .fn()
+    .mockResolvedValue(
+      new Auth(5, new EmailVO('jean@test.com'), null, [], 'pending'),
+    ),
   assignRoles: vi.fn().mockResolvedValue(true),
 } as unknown as IAuthRepository;
 
 describe('AssignUserRolesCommandHandler', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockExecute.mockResolvedValue(undefined);
+    commandBusExecuteMock.mockResolvedValue(undefined);
   });
 
   it('crée un compte pending, envoie une invitation et assigne les rôles', async () => {
@@ -70,11 +69,14 @@ describe('AssignUserRolesCommandHandler', () => {
       .mockResolvedValueOnce(baseUser)
       .mockResolvedValueOnce(linkedUser);
 
-    const handler = new AssignUserRolesCommandHandler(userRepository, authRepository);
+    const handler = new AssignUserRolesCommandHandler(
+      userRepository,
+      authRepository,
+    );
     const result = await handler.execute(new AssignUserRolesCommand(1, [2]));
 
     expect(authRepository.createPending).toHaveBeenCalledWith('jean@test.com');
-    expect(mockExecute).toHaveBeenCalledWith(
+    expect(commandBusExecuteMock).toHaveBeenCalledWith(
       new SendAccountInvitationCommand({
         userId: 1,
         sourceModule: 'admin-role-assign',
@@ -92,7 +94,10 @@ describe('AssignUserRolesCommandHandler', () => {
       .mockResolvedValueOnce(linkedUser)
       .mockResolvedValueOnce(linkedUser);
 
-    const handler = new AssignUserRolesCommandHandler(userRepository, authRepository);
+    const handler = new AssignUserRolesCommandHandler(
+      userRepository,
+      authRepository,
+    );
 
     await handler.execute(new AssignUserRolesCommand(1, [3]));
 

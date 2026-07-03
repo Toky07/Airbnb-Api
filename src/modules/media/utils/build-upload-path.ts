@@ -30,10 +30,12 @@ export function buildUploadRelativePath(
 ): string {
   switch (context.entityType) {
     case ENTITY_TYPE.PROPERTY:
-      return join(UPLOAD_ROOT, String(context.propertyId), 'property', filename).replace(
-        /\\/g,
-        '/',
-      );
+      return join(
+        UPLOAD_ROOT,
+        String(context.propertyId),
+        'property',
+        filename,
+      ).replace(/\\/g, '/');
     case ENTITY_TYPE.ROOM:
       return join(
         UPLOAD_ROOT,
@@ -43,14 +45,20 @@ export function buildUploadRelativePath(
         filename,
       ).replace(/\\/g, '/');
     case ENTITY_TYPE.USER:
-      return join(UPLOAD_ROOT, 'users', String(context.userId), 'avatar', filename).replace(
-        /\\/g,
-        '/',
-      );
+      return join(
+        UPLOAD_ROOT,
+        'users',
+        String(context.userId),
+        'avatar',
+        filename,
+      ).replace(/\\/g, '/');
   }
 }
 
-export function toDiskPath(relativePath: string, uploadRoot = UPLOAD_ROOT): string {
+export function toDiskPath(
+  relativePath: string,
+  uploadRoot = UPLOAD_ROOT,
+): string {
   const normalized = relativePath.replace(/\\/g, '/');
 
   if (uploadRoot === UPLOAD_ROOT) {
@@ -58,7 +66,11 @@ export function toDiskPath(relativePath: string, uploadRoot = UPLOAD_ROOT): stri
   }
 
   if (normalized.startsWith(`${UPLOAD_ROOT}/`)) {
-    return join(process.cwd(), uploadRoot, normalized.slice(UPLOAD_ROOT.length + 1));
+    return join(
+      process.cwd(),
+      uploadRoot,
+      normalized.slice(UPLOAD_ROOT.length + 1),
+    );
   }
 
   return join(process.cwd(), normalized);
