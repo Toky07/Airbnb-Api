@@ -14,6 +14,7 @@ import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
 import { RESERVATION_STATUS } from '../../domain/constants/reservation-status.constant';
 import {
   AUTH_TEST_ENTITIES,
+  DEFAULT_REGISTER,
   DOMAIN_TEST_ENTITIES,
   registerAndLoginAsSuperAdmin,
 } from '../../../../test/controller-test.helpers';
@@ -21,6 +22,7 @@ import { ReservationOrmEntity } from '../../infrastructure/entities/reservation.
 import { PaymentOrmEntity } from '../../../payment/infrastructure/entities/payment.orm-entity';
 import { PAYMENT_GATEWAY } from '../../../payment/domain/ports/payment-gateway.port';
 import { createPaymentGatewayMock } from '../../../payment/applications/useCase/payment-test.helpers';
+import { UserEntity } from '../../../user/infrastructure/entities/user.entity';
 
 describe('ReservationController', () => {
   let app: INestApplication;
@@ -62,6 +64,10 @@ describe('ReservationController', () => {
 
     token = await registerAndLoginAsSuperAdmin(app, dataSource);
 
+    const user = await dataSource.getRepository(UserEntity).findOneBy({
+      email: DEFAULT_REGISTER.email,
+    });
+
     const property = await dataSource.getRepository(PropertyEntity).save({
       name: 'Hotel Test',
       description: 'Description',
@@ -72,7 +78,7 @@ describe('ReservationController', () => {
       longitude: 0,
       checkInTime: '15:00',
       checkOutTime: '11:00',
-      ownerId: 1,
+      ownerId: user!.id,
     });
 
     const room = await dataSource.getRepository(RoomEntity).save({
@@ -86,7 +92,7 @@ describe('ReservationController', () => {
       quantity: 1,
       size: 30,
       status: 'available',
-      propertyId: property.id,
+      property: { id: property.id },
     });
 
     roomId = room.id;
@@ -236,6 +242,57 @@ describe('ReservationController', () => {
     expect(response.body).toEqual(
       expect.objectContaining({
         status: RESERVATION_STATUS.CANCELLED,
+      }),
+    );
+  });
+
+  it('GET /reservations/bookings/host liste les commandes host', async () => {
+    const user = await dataSource.getRepository(UserEntity).findOneBy({
+      email: DEFAULT_REGISTER.email,
+    });
+
+    const payment = await dataSource.getRepository(PaymentOrmEntity).save({
+      amount: 20000,
+      currency: 'eur',
+      status: 'succeeded',
+      provider: 'stripe',
+      transactionId: 'pi_host_booking_test',
+      userId: user!.id,
+      propertyType: 'reservation',
+      propertyId: 1,
+    });
+
+    const reservation = await dataSource.getRepository(ReservationOrmEntity).save({
+      userId: user!.id,
+      status: RESERVATION_STATUS.CONFIRMED,
+      payment,
+      items: [
+        {
+          roomId,
+          checkIn: '2026-11-01',
+          checkOut: '2026-11-03',
+          guestCount: 2,
+          price: 200,
+          nights: 2,
+        },
+      ],
+    });
+
+    await dataSource.getRepository(PaymentOrmEntity).update(payment.id, {
+      propertyId: reservation.id,
+    });
+
+    const response = await request(app.getHttpServer())
+      .get('/reservations/bookings/host')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    expect(response.body.data.length).toBeGreaterThan(0);
+    expect(response.body.data[0]).toEqual(
+      expect.objectContaining({
+        paymentId: payment.id,
+        customerName: expect.any(String),
+        previewLabel: expect.any(String),
       }),
     );
   });

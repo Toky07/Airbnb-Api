@@ -298,11 +298,16 @@ export class ReservationRepository implements IReservationRepository {
   }
 
   async findByPaymentId(paymentId: number): Promise<Reservation | null> {
-    const entity = await this.repository.findOne({
-      where: { payment: { id: paymentId } },
-      relations: ['items', 'payment'],
-    });
-    
+    if (!Number.isFinite(paymentId) || paymentId <= 0) {
+      return null;
+    }
+
+    const entity = await this.repository
+      .createQueryBuilder('reservation')
+      .leftJoinAndSelect('reservation.items', 'items')
+      .where('reservation.paymentId = :paymentId', { paymentId })
+      .getOne();
+
     return entity ? ReservationMapper.toDomain(entity) : null;
   }
 

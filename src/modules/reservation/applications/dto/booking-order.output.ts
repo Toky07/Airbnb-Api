@@ -18,21 +18,25 @@ export class BookingOrderListItemOutput {
     public readonly transactionId: string,
     public readonly startDate: string | null,
     public readonly endDate: string | null,
+    public readonly propertyId: number | null = null,
+    public readonly propertyName: string | null = null,
   ) {}
 
   static fromParts(
     payment: Payment,
     items: ReservationItemOutput[],
     user: User | null,
+    scope?: { propertyId?: number | null },
   ): BookingOrderListItemOutput {
     const itemCount = items.length;
     const previewLabel = buildPreviewLabel(items);
     const firstItem = items[0];
+    const scopedAmount = items.reduce((total, item) => total + item.price, 0);
 
     return new BookingOrderListItemOutput(
       payment.id!,
       payment.createdAt!,
-      payment.amount / 100,
+      scopedAmount,
       payment.currency,
       payment.status,
       itemCount,
@@ -42,6 +46,8 @@ export class BookingOrderListItemOutput {
       payment.transactionId ?? '',
       firstItem?.startDate ?? null,
       firstItem?.endDate ?? null,
+      scope?.propertyId ?? firstItem?.propertyId ?? null,
+      firstItem?.propertyName ?? null,
     );
   }
 }
@@ -65,10 +71,12 @@ export class BookingOrderDetailOutput {
     items: ReservationItemOutput[],
     user: User | null,
   ): BookingOrderDetailOutput {
+    const scopedAmount = items.reduce((total, item) => total + item.price, 0);
+
     return new BookingOrderDetailOutput(
       payment.id!,
       payment.createdAt!,
-      payment.amount / 100,
+      scopedAmount,
       payment.currency,
       payment.status,
       payment.transactionId ?? '',

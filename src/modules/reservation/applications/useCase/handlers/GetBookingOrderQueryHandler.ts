@@ -6,10 +6,10 @@ import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-hand
 import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
 import type { IPaymentRepository } from '../../../../payment/domain/repositories/payment.repository';
 import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
-import type { IReservationRepository } from '../../../domain/repositories/reservation.repository';
 import { BookingOrderDetailOutput } from '../../dto/booking-order.output';
 import type { ReservationItemOutput } from '../../dto/reservation-item.output';
 import type { ResolvePaymentReservationsService } from '../../services/resolve-payment-reservations.service';
+import { filterItemsByPropertyIds } from '../../services/scope-booking-order-items.service';
 import type { GetBookingOrderQuery } from '../queries/GetBookingOrderQuery';
 
 export class GetBookingOrderQueryHandler
@@ -18,7 +18,6 @@ export class GetBookingOrderQueryHandler
   constructor(
     private readonly paymentRepository: IPaymentRepository,
     private readonly userRepository: IUserRepository,
-    private readonly reservationRepository: IReservationRepository,
     private readonly propertyRepository: IPropertyRepository,
     private readonly resolvePaymentReservations: ResolvePaymentReservationsService,
   ) {}
@@ -33,16 +32,32 @@ export class GetBookingOrderQueryHandler
       throw new NotFoundException('Réservation introuvable.');
     }
 
-    const items =
-      await this.resolvePaymentReservations.resolveForPayment(payment);
+    const allItems = await this.resolvePaymentReservations.resolveForPayment(payment);
 
     if (!query.access.canReadAll) {
-      await this.assertHostAccess(query.access, items);
+      await this.assertHostAccess(query.access, allItems);
     }
+
+    const hostPropertyIds = query.access.canReadAll
+      ? []
+      : await this.loadHostPropertyIds(query.access.authId);
+    const items = filterItemsByPropertyIds(allItems, hostPropertyIds);
 
     const customer = await this.userRepository.findById(payment.userId);
 
     return BookingOrderDetailOutput.fromParts(payment, items, customer);
+  }
+
+  private async loadHostPropertyIds(authId: number): Promise<number[]> {
+    const user = await this.userRepository.findByAuthId(authId);
+    if (!user?.id) {
+      return [];
+    }
+
+    const properties = await this.propertyRepository.findAllByOwnerId(user.id);
+    return properties
+      .map((property) => property.id)
+      .filter((id): id is number => typeof id === 'number' && id > 0);
   }
 
   private async assertHostAccess(
@@ -53,27 +68,16 @@ export class GetBookingOrderQueryHandler
       throw new ForbiddenException('Accès refusé.');
     }
 
-    const user = await this.userRepository.findByAuthId(access.authId);
-    if (!user?.id) {
-      throw new ForbiddenException('Accès refusé.');
-    }
-
-    const properties = await this.propertyRepository.findAllByOwnerId(user.id);
-    const propertyIds = properties
-      .map((property) => property.id)
-      .filter((id): id is number => typeof id === 'number' && id > 0);
-
+    const propertyIds = await this.loadHostPropertyIds(access.authId);
     if (propertyIds.length === 0) {
       throw new ForbiddenException('Accès refusé.');
     }
 
-    const allowedReservationIds = new Set(
-      await this.reservationRepository.findIdsByPropertyIds(propertyIds),
+    const allowedPropertyIds = new Set(propertyIds);
+    const hasAllowedItem = items.some(
+      (item) => item.propertyId != null && allowedPropertyIds.has(item.propertyId),
     );
 
-    const hasAllowedItem = items.some((item) =>
-      allowedReservationIds.has(item.reservationId),
-    );
     if (!hasAllowedItem) {
       throw new ForbiddenException('Accès refusé.');
     }

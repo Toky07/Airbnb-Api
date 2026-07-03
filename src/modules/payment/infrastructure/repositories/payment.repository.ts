@@ -6,8 +6,10 @@ import {
   type PaginatedResult,
   type PaginationParams,
 } from '../../../../shared/pagination/pagination.types';
+import { PAYMENT_STATUS } from '../../domain/constants/payment-status.constant';
 import { Payment } from '../../domain/entities/payment.entity';
 import type { IPaymentRepository } from '../../domain/repositories/payment.repository';
+import { PAYMENT_TYPE } from '../../domain/types/payment.type';
 import { PaymentOrmEntity } from '../entities/payment.orm-entity';
 import { PaymentMapper } from '../mappers/payment.mapper';
 
@@ -92,14 +94,20 @@ export class PaymentRepository implements IPaymentRepository {
       .createQueryBuilder('payment')
       .where(
         `(
-          payment.reservationId IN (:...reservationIds)
-          OR EXISTS (
-            SELECT 1 FROM json_each(payment.reservationIds) AS reservationRef
-            WHERE CAST(reservationRef.value AS INTEGER) IN (:...reservationIds)
+          (payment.propertyType = :propertyType AND payment.propertyId IN (:...reservationIds))
+          OR payment.id IN (
+            SELECT reservation.paymentId
+            FROM reservations reservation
+            WHERE reservation.id IN (:...reservationIds)
+              AND reservation.paymentId IS NOT NULL
           )
         )`,
-        { reservationIds: uniqueIds },
+        {
+          reservationIds: uniqueIds,
+          propertyType: PAYMENT_TYPE.RESERVATION,
+        },
       )
+      .andWhere('payment.status = :status', { status: PAYMENT_STATUS.SUCCEEDED })
       .orderBy('payment.createdAt', 'DESC');
 
     if (params.search) {

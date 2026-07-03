@@ -2,11 +2,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ReservationOrmEntity } from '../../../reservation/infrastructure/entities/reservation.orm-entity';
 
 @Entity({ name: 'payments' })
 export class PaymentOrmEntity {
@@ -45,9 +43,6 @@ export class PaymentOrmEntity {
 
   @Column({ type: 'datetime', nullable: true })
   invoiceNotificationsSentAt: Date | null;
-
-  @OneToOne(() => ReservationOrmEntity, (reservation) => reservation.payment)
-  reservation: ReservationOrmEntity;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -15,6 +15,7 @@ export class ReservationItemOutput {
     public readonly nights: number,
     public readonly roomName: string | null = null,
     public readonly roomSlug: string | null = null,
+    public readonly propertyId: number | null = null,
     public readonly propertyName: string | null = null,
     public readonly propertyCity: string | null = null,
     public readonly imageUrl: string | null = null,
@@ -24,9 +25,10 @@ export class ReservationItemOutput {
 
   static fromDomain(
     item: ReservationItem,
-    product?: {
+      product?: {
       roomName?: string | null;
       roomSlug?: string | null;
+      propertyId?: number | null;
       propertyName?: string | null;
       propertyCity?: string | null;
       imageUrl?: string | null;
@@ -45,6 +47,7 @@ export class ReservationItemOutput {
       item.nights,
       product?.roomName ?? null,
       product?.roomSlug ?? null,
+      product?.propertyId ?? null,
       product?.propertyName ?? null,
       product?.propertyCity ?? null,
       product?.imageUrl ?? null,
@@ -70,6 +73,7 @@ export class ReservationItemOutput {
       output.nights,
       summary?.roomName ?? output.roomName,
       summary?.roomSlug ?? output.roomSlug,
+      summary?.propertyId ?? output.propertyId,
       summary?.propertyName ?? output.propertyName,
       summary?.propertyCity ?? output.propertyCity,
       summary?.imageUrl ?? output.imageUrl,

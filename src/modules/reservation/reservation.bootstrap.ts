@@ -85,7 +85,6 @@ export class ReservationBootstrap {
       listBookingOrdersQueryHandler,
       listHostBookingOrdersQueryHandler: new ListHostBookingOrdersQueryHandler(
         deps.paymentRepository,
-        deps.userRepository,
         deps.propertyRepository,
         deps.reservationRepository,
         listBookingOrdersQueryHandler,
@@ -93,7 +92,6 @@ export class ReservationBootstrap {
       getBookingOrderQueryHandler: new GetBookingOrderQueryHandler(
         deps.paymentRepository,
         deps.userRepository,
-        deps.reservationRepository,
         deps.propertyRepository,
         deps.resolvePaymentReservations,
       ),

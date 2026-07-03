@@ -11,6 +11,7 @@ import {
 export type RoomProductSummary = {
   roomName: string;
   roomSlug: string;
+  propertyId: number | null;
   propertyName: string;
   propertyCity: string | null;
   imageUrl: string | null;
@@ -36,6 +37,7 @@ export class RoomProductSummaryService {
     return {
       roomName: room.name,
       roomSlug: room.slug,
+      propertyId: room.property?.id ?? null,
       propertyName: room.property?.name ?? 'Établissement',
       propertyCity: room.property?.city ?? null,
       imageUrl: medias[0]?.path ?? null,

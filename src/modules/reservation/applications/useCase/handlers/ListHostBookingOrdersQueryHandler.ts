@@ -1,9 +1,7 @@
-import { UnauthorizedException } from '@nestjs/common';
 import type { PaginatedResult } from '../../../../../shared/pagination/pagination.types';
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
 import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
 import type { IPaymentRepository } from '../../../../payment/domain/repositories/payment.repository';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
 import type { IReservationRepository } from '../../../domain/repositories/reservation.repository';
 import { BookingOrderListItemOutput } from '../../dto/booking-order.output';
 import type { ListHostBookingOrdersQuery } from '../queries/ListHostBookingOrdersQuery';
@@ -14,7 +12,6 @@ export class ListHostBookingOrdersQueryHandler
 {
   constructor(
     private readonly paymentRepository: IPaymentRepository,
-    private readonly userRepository: IUserRepository,
     private readonly propertyRepository: IPropertyRepository,
     private readonly reservationRepository: IReservationRepository,
     private readonly listBookingOrdersQueryHandler: ListBookingOrdersQueryHandler,
@@ -23,12 +20,7 @@ export class ListHostBookingOrdersQueryHandler
   async execute(
     query: ListHostBookingOrdersQuery,
   ): Promise<PaginatedResult<BookingOrderListItemOutput>> {
-    const user = await this.userRepository.findByAuthId(query.authId);
-    if (!user?.id) {
-      throw new UnauthorizedException('Utilisateur introuvable.');
-    }
-
-    const properties = await this.propertyRepository.findAllByOwnerId(user.id);
+    const properties = await this.propertyRepository.findAllByOwnerId(query.authId);
     const propertyIds = properties
       .map((property) => property.id)
       .filter((id): id is number => typeof id === 'number' && id > 0);
@@ -57,7 +49,9 @@ export class ListHostBookingOrdersQueryHandler
       query.params,
     );
 
-    return this.listBookingOrdersQueryHandler.buildPage(result);
+    return this.listBookingOrdersQueryHandler.buildPage(result, {
+      propertyIds: scopedPropertyIds,
+    });
   }
 
   private emptyPage(

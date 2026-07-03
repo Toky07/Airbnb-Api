@@ -18,7 +18,7 @@ export class ResolvePaymentReservationsService {
   ) {}
 
   async resolveForPayment(payment: Payment): Promise<ReservationItemOutput[]> {
-    const reservationIds = resolvePaymentReservationIds(payment);
+    const reservationIds = await this.resolveReservationIdsForPayment(payment);
     if (reservationIds.length === 0) {
       return [];
     }
@@ -34,8 +34,25 @@ export class ResolvePaymentReservationsService {
   async resolveForPayments(
     payments: Payment[],
   ): Promise<Map<number, ReservationItemOutput[]>> {
+    const reservationIdsByPaymentId = new Map<number, number[]>();
+
+    await Promise.all(
+      payments.map(async (payment) => {
+        if (!payment.id) {
+          return;
+        }
+
+        reservationIdsByPaymentId.set(
+          payment.id,
+          await this.resolveReservationIdsForPayment(payment),
+        );
+      }),
+    );
+
     const reservationIds = [
-      ...new Set(payments.flatMap((payment) => resolvePaymentReservationIds(payment))),
+      ...new Set(
+        [...reservationIdsByPaymentId.values()].flatMap((ids) => ids),
+      ),
     ];
 
     if (reservationIds.length === 0) {
@@ -55,9 +72,9 @@ export class ResolvePaymentReservationsService {
     const grouped = new Map<number, ReservationItemOutput[]>();
 
     for (const payment of payments) {
-      const items = resolvePaymentReservationIds(payment).flatMap(
+      const items = (payment.id ? reservationIdsByPaymentId.get(payment.id) : [])?.flatMap(
         (reservationId) => itemsByReservationId.get(reservationId) ?? [],
-      );
+      ) ?? [];
 
       if (payment.id) {
         grouped.set(payment.id, items);
@@ -65,5 +82,15 @@ export class ResolvePaymentReservationsService {
     }
 
     return grouped;
+  }
+
+  private async resolveReservationIdsForPayment(payment: Payment): Promise<number[]> {
+    const reservationIds = resolvePaymentReservationIds(payment);
+    if (reservationIds.length > 0 || !payment.id) {
+      return reservationIds;
+    }
+
+    const reservation = await this.reservationRepository.findByPaymentId(payment.id);
+    return reservation?.id ? [reservation.id] : [];
   }
 }

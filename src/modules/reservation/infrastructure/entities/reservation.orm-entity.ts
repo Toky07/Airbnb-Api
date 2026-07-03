@@ -28,9 +28,7 @@ export class ReservationOrmEntity {
   @Column({ enum: RESERVATION_STATUS, default: RESERVATION_STATUS.PENDING })
   status: string;
 
-  @OneToOne(() => PaymentOrmEntity, (payment) => payment.reservation, {
-    cascade: true,
-  })
+  @OneToOne(() => PaymentOrmEntity, { cascade: true })
   @JoinColumn({ name: 'paymentId' })
   payment: PaymentOrmEntity;
 
