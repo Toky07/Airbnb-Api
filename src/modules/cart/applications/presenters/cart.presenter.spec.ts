@@ -11,7 +11,7 @@ describe('CartPresenter', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    presenter = new CartPresenter(productSummaryPort as never);
+    presenter = new CartPresenter(productSummaryPort);
   });
 
   it('présente un panier avec ses articles', async () => {

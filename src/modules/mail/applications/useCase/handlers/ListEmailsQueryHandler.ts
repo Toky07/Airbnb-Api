@@ -4,9 +4,10 @@ import type { IEmailRepository } from '../../../domain/repositories/email.reposi
 import { EmailOutput } from '../../dto/email.output';
 import type { ListEmailsQuery } from '../queries/ListEmailsQuery';
 
-export class ListEmailsQueryHandler
-  implements IQueryHandler<ListEmailsQuery, PaginatedResult<EmailOutput>>
-{
+export class ListEmailsQueryHandler implements IQueryHandler<
+  ListEmailsQuery,
+  PaginatedResult<EmailOutput>
+> {
   constructor(private readonly repository: IEmailRepository) {}
 
   async execute(query: ListEmailsQuery): Promise<PaginatedResult<EmailOutput>> {

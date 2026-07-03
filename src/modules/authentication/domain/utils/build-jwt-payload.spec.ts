@@ -6,20 +6,15 @@ import { buildJwtPayload, hasPermission } from './build-jwt-payload';
 
 describe('buildJwtPayload', () => {
   it('marks superadmin and grants all permission checks', () => {
-    const auth = new Auth(
-      1,
-      new EmailVO('admin@test.com'),
-      'hash',
-      [
-        new RoleEntity(
-          new UserNameVO('Super administrateur'),
-          'superadmin',
-          1,
-          null,
-          ['users.read'],
-        ),
-      ],
-    );
+    const auth = new Auth(1, new EmailVO('admin@test.com'), 'hash', [
+      new RoleEntity(
+        new UserNameVO('Super administrateur'),
+        'superadmin',
+        1,
+        null,
+        ['users.read'],
+      ),
+    ]);
 
     const payload = buildJwtPayload(auth);
     expect(payload.isSuperAdmin).toBe(true);

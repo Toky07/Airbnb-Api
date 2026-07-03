@@ -19,7 +19,10 @@ describe('MapStripeStatusService', () => {
 
   it('mappe payment_intent.payment_failed vers failed', () => {
     expect(
-      service.fromWebhookEventType('payment_intent.payment_failed', 'requires_payment_method'),
+      service.fromWebhookEventType(
+        'payment_intent.payment_failed',
+        'requires_payment_method',
+      ),
     ).toBe(PAYMENT_STATUS.FAILED);
   });
 

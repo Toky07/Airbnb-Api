@@ -40,7 +40,8 @@ export async function deliverEmail(
       ),
     );
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Email send failed';
+    const message =
+      error instanceof Error ? error.message : 'Email send failed';
     return repository.update(
       new Email(
         email.to,

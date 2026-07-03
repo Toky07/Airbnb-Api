@@ -6,9 +6,10 @@ import type { IPropertyAmenityRepository } from '../../../domain/repositories/pr
 import { AmenityOutput } from '../../dto/amenity.output';
 import type { ListPropertyAmenitiesQuery } from '../queries/ListPropertyAmenitiesQuery';
 
-export class ListPropertyAmenitiesQueryHandler
-  implements IQueryHandler<ListPropertyAmenitiesQuery, AmenityOutput[]>
-{
+export class ListPropertyAmenitiesQueryHandler implements IQueryHandler<
+  ListPropertyAmenitiesQuery,
+  AmenityOutput[]
+> {
   constructor(
     private readonly propertyRepository: IPropertyRepository,
     private readonly propertyAmenityRepository: IPropertyAmenityRepository,
@@ -22,7 +23,9 @@ export class ListPropertyAmenitiesQueryHandler
     }
 
     const amenityIds =
-      await this.propertyAmenityRepository.findAmenityIdsByPropertyId(query.propertyId);
+      await this.propertyAmenityRepository.findAmenityIdsByPropertyId(
+        query.propertyId,
+      );
     const amenities = await this.amenityRepository.findByIds(amenityIds);
     return amenities.map(AmenityOutput.fromDomain);
   }

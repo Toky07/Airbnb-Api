@@ -1,5 +1,3 @@
-import { Room } from '../../../rooms/domain/entities/room.entity';
-import { CreatePropertyDto } from '../../applications/dto/createProperty.dto';
 import type { CategorySummary } from '../../../../shared/types/category-summary';
 import { Property } from '../../domain/entities/property.entity';
 import { RoomMapper } from '../../../rooms/infrastructure/mappers/room.mapper';
@@ -35,13 +33,8 @@ export class PropertyMapper {
       createdAt: property.createdAt,
       updatedAt: property.updatedAt,
       id: property.id,
-      rooms: property.rooms?.map((r: RoomEntity) => RoomMapper.toDomain(r)) || [],
-    } as CreatePropertyDto & {
-      id?: number;
-      createdAt?: Date;
-      updatedAt?: Date;
-      rooms?: Room[];
-      propertyType?: CategorySummary | null;
+      rooms:
+        property.rooms?.map((r: RoomEntity) => RoomMapper.toDomain(r)) || [],
     });
   }
 

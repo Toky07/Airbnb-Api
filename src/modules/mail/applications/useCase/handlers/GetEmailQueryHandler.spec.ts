@@ -44,6 +44,8 @@ describe('GetEmailQueryHandler', () => {
 
     const handler = new GetEmailQueryHandler(repository);
 
-    await expect(handler.execute(new GetEmailQuery(99))).rejects.toBeInstanceOf(NotFoundException);
+    await expect(handler.execute(new GetEmailQuery(99))).rejects.toBeInstanceOf(
+      NotFoundException,
+    );
   });
 });

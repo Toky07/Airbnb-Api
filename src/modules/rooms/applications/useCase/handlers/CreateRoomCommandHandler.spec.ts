@@ -1,4 +1,3 @@
-import { vi } from 'vitest';
 import { Room } from '../../../domain/entities/room.entity';
 import { IRoomRepository } from '../../../domain/repositories/room.repository';
 import { RoomOutput } from '../../dto/room.output';
@@ -9,10 +8,6 @@ import {
   mockGenerateRoomSlug,
   mockRoomMediaPresenter,
 } from '../test-helpers/room-usecase.mocks';
-
-vi.mock('../../../../../shared/useCase/bus/bus', () => ({
-  CommandBus: { execute: vi.fn(async () => []) },
-}));
 
 const property = new Property({
   name: 'Room 1',

@@ -1,4 +1,7 @@
-import { buildUploadRelativePath, toSaveMediaContext } from './build-upload-path';
+import {
+  buildUploadRelativePath,
+  toSaveMediaContext,
+} from './build-upload-path';
 import { ENTITY_TYPE } from '../constant';
 
 describe('buildUploadRelativePath', () => {

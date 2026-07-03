@@ -5,9 +5,10 @@ import { RoleEntity } from '../../domain/entities/role.entity';
 import { RoleOutput } from '../../application/dto/role.output';
 import type { ListRolesQuery } from '../queries/ListRolesQuery';
 
-export class ListRolesQueryHandler
-  implements IQueryHandler<ListRolesQuery, PaginatedResult<RoleOutput>>
-{
+export class ListRolesQueryHandler implements IQueryHandler<
+  ListRolesQuery,
+  PaginatedResult<RoleOutput>
+> {
   constructor(private readonly repository: IRoleRepository) {}
 
   async execute(query: ListRolesQuery): Promise<PaginatedResult<RoleOutput>> {

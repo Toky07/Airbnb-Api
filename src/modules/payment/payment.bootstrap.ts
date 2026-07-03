@@ -17,13 +17,17 @@ export class PaymentBootstrap {
     const payloadValidator = new StripeWebhookPayloadValidator();
 
     return {
-      createPaymentCommandHandler: new CreatePaymentCommandHandler(repository, paymentGateway),
-      confirmStripePaymentCommandHandler: new ConfirmStripePaymentCommandHandler(
+      createPaymentCommandHandler: new CreatePaymentCommandHandler(
         repository,
-        mapStripeStatus,
-        webhookVerifier,
-        payloadValidator,
+        paymentGateway,
       ),
+      confirmStripePaymentCommandHandler:
+        new ConfirmStripePaymentCommandHandler(
+          repository,
+          mapStripeStatus,
+          webhookVerifier,
+          payloadValidator,
+        ),
       verifyPaymentCommandHandler: new VerifyPaymentCommandHandler(
         repository,
         paymentGateway,

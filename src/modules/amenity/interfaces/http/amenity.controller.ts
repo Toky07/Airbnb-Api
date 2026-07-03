@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
 import { RequireSuperAdmin } from '../../../authentication/interfaces/decorators/require-superadmin.decorator';
 import type {
@@ -25,13 +34,19 @@ export class AmenityController {
   @Get()
   @RequireSuperAdmin()
   list(@Query() query: Record<string, unknown>): Promise<AmenityOutput[]> {
-    return QueryBus.execute(new ListAmenitiesQuery(parseAmenityScope(query.scope)));
+    return QueryBus.execute(
+      new ListAmenitiesQuery(parseAmenityScope(query.scope)),
+    );
   }
 
   @Get('options')
   @RequirePermissions('amenities.read')
-  listOptions(@Query() query: Record<string, unknown>): Promise<AmenityOutput[]> {
-    return QueryBus.execute(new ListAmenityOptionsQuery(parseAmenityScope(query.scope)));
+  listOptions(
+    @Query() query: Record<string, unknown>,
+  ): Promise<AmenityOutput[]> {
+    return QueryBus.execute(
+      new ListAmenityOptionsQuery(parseAmenityScope(query.scope)),
+    );
   }
 
   @Get('properties/:propertyId')
@@ -65,7 +80,9 @@ export class AmenityController {
     @Param('roomId') roomId: number,
     @Body() body: SyncAmenitiesDto,
   ): Promise<AmenityOutput[]> {
-    return CommandBus.execute(new SyncRoomAmenitiesCommand(Number(roomId), body));
+    return CommandBus.execute(
+      new SyncRoomAmenitiesCommand(Number(roomId), body),
+    );
   }
 
   @Post()

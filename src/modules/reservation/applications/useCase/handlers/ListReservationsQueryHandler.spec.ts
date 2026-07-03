@@ -10,7 +10,10 @@ describe('ListReservationsQueryHandler', () => {
   it('retourne une liste paginée de réservations', async () => {
     const repository = createReservationRepositoryMock({
       findPaginated: vi.fn().mockResolvedValue({
-        data: [createSampleReservation({ id: 1 }), createSampleReservation({ id: 2 })],
+        data: [
+          createSampleReservation({ id: 1 }),
+          createSampleReservation({ id: 2 }),
+        ],
         meta: {
           page: 1,
           limit: 10,
@@ -27,7 +30,9 @@ describe('ListReservationsQueryHandler', () => {
       repository,
       enrichReservationOutputs as never,
     );
-    const result = await handler.execute(new ListReservationsQuery({ page: 1, limit: 10 }));
+    const result = await handler.execute(
+      new ListReservationsQuery({ page: 1, limit: 10 }),
+    );
 
     expect(result.data).toHaveLength(2);
     expect(result.meta.total).toBe(2);

@@ -12,9 +12,10 @@ import { validateUserFields } from '../../validation/validate-user-fields';
 import type { SaveUserAvatarService } from '../../services/save-user-avatar.service';
 import type { CreateUserCommand } from '../commands/CreateUserCommand';
 
-export class CreateUserCommandHandler
-  implements ICommandHandler<CreateUserCommand, UserOutput>
-{
+export class CreateUserCommandHandler implements ICommandHandler<
+  CreateUserCommand,
+  UserOutput
+> {
   constructor(
     private readonly repository: IUserRepository,
     private readonly saveUserAvatar: SaveUserAvatarService,
@@ -57,6 +58,8 @@ export class CreateUserCommandHandler
       }),
     );
 
-    return UserOutput.fromDomain(await this.repository.findById(saved.id!) ?? saved);
+    return UserOutput.fromDomain(
+      (await this.repository.findById(saved.id!)) ?? saved,
+    );
   }
 }

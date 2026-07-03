@@ -22,24 +22,37 @@ export class AmenityBootstrap {
     propertyAmenityRepository: IPropertyAmenityRepository;
     roomAmenityRepository: IRoomAmenityRepository;
   }) {
-    const resolveAmenitiesService = new ResolveAmenitiesService(deps.amenityRepository);
+    const resolveAmenitiesService = new ResolveAmenitiesService(
+      deps.amenityRepository,
+    );
 
     return {
-      createAmenityCommandHandler: new CreateAmenityCommandHandler(deps.amenityRepository),
-      updateAmenityCommandHandler: new UpdateAmenityCommandHandler(deps.amenityRepository),
-      deleteAmenityCommandHandler: new DeleteAmenityCommandHandler(deps.amenityRepository),
-      syncPropertyAmenitiesCommandHandler: new SyncPropertyAmenitiesCommandHandler(
-        deps.propertyRepository,
-        deps.propertyAmenityRepository,
-        resolveAmenitiesService,
+      createAmenityCommandHandler: new CreateAmenityCommandHandler(
+        deps.amenityRepository,
       ),
+      updateAmenityCommandHandler: new UpdateAmenityCommandHandler(
+        deps.amenityRepository,
+      ),
+      deleteAmenityCommandHandler: new DeleteAmenityCommandHandler(
+        deps.amenityRepository,
+      ),
+      syncPropertyAmenitiesCommandHandler:
+        new SyncPropertyAmenitiesCommandHandler(
+          deps.propertyRepository,
+          deps.propertyAmenityRepository,
+          resolveAmenitiesService,
+        ),
       syncRoomAmenitiesCommandHandler: new SyncRoomAmenitiesCommandHandler(
         deps.roomRepository,
         deps.roomAmenityRepository,
         resolveAmenitiesService,
       ),
-      listAmenitiesQueryHandler: new ListAmenitiesQueryHandler(deps.amenityRepository),
-      listAmenityOptionsQueryHandler: new ListAmenityOptionsQueryHandler(deps.amenityRepository),
+      listAmenitiesQueryHandler: new ListAmenitiesQueryHandler(
+        deps.amenityRepository,
+      ),
+      listAmenityOptionsQueryHandler: new ListAmenityOptionsQueryHandler(
+        deps.amenityRepository,
+      ),
       listPropertyAmenitiesQueryHandler: new ListPropertyAmenitiesQueryHandler(
         deps.propertyRepository,
         deps.propertyAmenityRepository,

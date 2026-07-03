@@ -20,11 +20,13 @@ describe('CompleteCartCheckoutCommandHandler', () => {
     vi.clearAllMocks();
     EventBus.getInstance()['handlers'] = new Map();
     cartUserPort.findByAuthId.mockResolvedValue({ id: 1 });
-    resolveCartService.resolve.mockResolvedValue(createSampleCart({ items: [] }));
+    resolveCartService.resolve.mockResolvedValue(
+      createSampleCart({ items: [] }),
+    );
     cartPresenter.toOutput.mockResolvedValue({ id: 5, items: [] });
     handler = new CompleteCartCheckoutCommandHandler(
       cartRepository as never,
-      cartUserPort as never,
+      cartUserPort,
       resolveCartService as never,
       cartPresenter as never,
     );

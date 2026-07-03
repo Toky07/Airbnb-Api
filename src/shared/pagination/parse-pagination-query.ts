@@ -1,3 +1,4 @@
+import { toScalarString } from '../http/to-scalar-string';
 import {
   DEFAULT_PAGE_SIZE,
   PAGE_SIZE_OPTIONS,
@@ -8,9 +9,15 @@ import {
 export function parsePaginationQuery(
   query: Record<string, unknown>,
 ): PaginationParams {
-  const page = Math.max(1, Number.parseInt(String(query.page ?? '1'), 10) || 1);
+  const page = Math.max(
+    1,
+    Number.parseInt(toScalarString(query.page, '1'), 10) || 1,
+  );
 
-  const rawLimit = Number.parseInt(String(query.limit ?? DEFAULT_PAGE_SIZE), 10);
+  const rawLimit = Number.parseInt(
+    toScalarString(query.limit, String(DEFAULT_PAGE_SIZE)),
+    10,
+  );
   const limit = PAGE_SIZE_OPTIONS.includes(rawLimit as PageSizeOption)
     ? (rawLimit as PageSizeOption)
     : DEFAULT_PAGE_SIZE;
@@ -21,7 +28,7 @@ export function parsePaginationQuery(
   const propertyIdRaw = query.propertyId;
   const propertyId =
     propertyIdRaw !== undefined && propertyIdRaw !== ''
-      ? Number.parseInt(String(propertyIdRaw), 10)
+      ? Number.parseInt(toScalarString(propertyIdRaw), 10)
       : undefined;
 
   return {

@@ -24,7 +24,8 @@ export class ResolvePaymentReservationsService {
       return [];
     }
 
-    const reservations = await this.reservationRepository.findByIds(reservationIds);
+    const reservations =
+      await this.reservationRepository.findByIds(reservationIds);
     const items = reservations.flatMap((reservation) =>
       reservation.items.map((item) => ReservationItemOutput.fromDomain(item)),
     );
@@ -40,9 +41,12 @@ export class ResolvePaymentReservationsService {
       return [];
     }
 
-    const reservations = await this.reservationRepository.findByIds(reservationIds);
+    const reservations =
+      await this.reservationRepository.findByIds(reservationIds);
     const enrichedReservations = await this.enrichReservationOutputs.enrich(
-      reservations.map((reservation) => ReservationOutput.fromDomain(reservation)),
+      reservations.map((reservation) =>
+        ReservationOutput.fromDomain(reservation),
+      ),
     );
 
     return enrichedReservations.flatMap((reservation) =>
@@ -74,18 +78,19 @@ export class ResolvePaymentReservationsService {
     );
 
     const reservationIds = [
-      ...new Set(
-        [...reservationIdsByPaymentId.values()].flatMap((ids) => ids),
-      ),
+      ...new Set([...reservationIdsByPaymentId.values()].flatMap((ids) => ids)),
     ];
 
     if (reservationIds.length === 0) {
       return new Map();
     }
 
-    const reservations = await this.reservationRepository.findByIds(reservationIds);
+    const reservations =
+      await this.reservationRepository.findByIds(reservationIds);
     const enrichedReservations = await this.enrichReservationOutputs.enrich(
-      reservations.map((reservation) => ReservationOutput.fromDomain(reservation)),
+      reservations.map((reservation) =>
+        ReservationOutput.fromDomain(reservation),
+      ),
     );
 
     const itemsByReservationId = new Map<number, ReservationItemOutput[]>();
@@ -96,9 +101,10 @@ export class ResolvePaymentReservationsService {
     const grouped = new Map<number, ReservationItemOutput[]>();
 
     for (const payment of payments) {
-      const items = (payment.id ? reservationIdsByPaymentId.get(payment.id) : [])?.flatMap(
-        (reservationId) => itemsByReservationId.get(reservationId) ?? [],
-      ) ?? [];
+      const items =
+        (payment.id ? reservationIdsByPaymentId.get(payment.id) : [])?.flatMap(
+          (reservationId) => itemsByReservationId.get(reservationId) ?? [],
+        ) ?? [];
 
       if (payment.id) {
         grouped.set(payment.id, items);
@@ -108,13 +114,17 @@ export class ResolvePaymentReservationsService {
     return grouped;
   }
 
-  private async resolveReservationIdsForPayment(payment: Payment): Promise<number[]> {
+  private async resolveReservationIdsForPayment(
+    payment: Payment,
+  ): Promise<number[]> {
     const reservationIds = resolvePaymentReservationIds(payment);
     if (reservationIds.length > 0 || !payment.id) {
       return reservationIds;
     }
 
-    const reservation = await this.reservationRepository.findByPaymentId(payment.id);
+    const reservation = await this.reservationRepository.findByPaymentId(
+      payment.id,
+    );
     return reservation?.id ? [reservation.id] : [];
   }
 }

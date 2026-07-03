@@ -62,7 +62,9 @@ export class UserRepository implements IUserRepository {
     return enriched.map((user) => UserMapper.toDomain(user));
   }
 
-  async findPaginated(params: PaginationParams): Promise<PaginatedResult<User>> {
+  async findPaginated(
+    params: PaginationParams,
+  ): Promise<PaginatedResult<User>> {
     const qb = this.repository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.auth', 'auth')
@@ -140,7 +142,10 @@ export class UserRepository implements IUserRepository {
     return UserMapper.toDomain(enriched);
   }
 
-  async updateStatus(userId: number, status: 'pending' | 'active'): Promise<void> {
+  async updateStatus(
+    userId: number,
+    status: 'pending' | 'active',
+  ): Promise<void> {
     const result = await this.repository.update(Number(userId), { status });
     if (!result.affected) {
       throw new NotFoundException('User not found');

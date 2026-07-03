@@ -4,7 +4,9 @@ import { ROLE_SLUG_PATTERN } from './import-validation.constants';
 import type { ImportRowValidationResult } from './import-row-validation.types';
 import { parseImportRolePermissionKeys } from './parse-import-role-permission-keys';
 
-export function validateImportRoleRow(row: ImportRoleRowDto): ImportRowValidationResult {
+export function validateImportRoleRow(
+  row: ImportRoleRowDto,
+): ImportRowValidationResult {
   if (!row.name?.trim() || row.name.trim().length < 2) {
     return { ok: false, field: 'name', message: 'Nom du rôle requis.' };
   }

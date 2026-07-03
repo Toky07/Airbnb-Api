@@ -5,9 +5,10 @@ import { PropertyOutput } from '../../dto/property.outup';
 import type { PropertyMediaPresenter } from '../../presenters/property-media.presenter';
 import type { ListPropertiesQuery } from '../queries/ListPropertiesQuery';
 
-export class ListPropertiesQueryHandler
-  implements IQueryHandler<ListPropertiesQuery, PaginatedResult<PropertyOutput>>
-{
+export class ListPropertiesQueryHandler implements IQueryHandler<
+  ListPropertiesQuery,
+  PaginatedResult<PropertyOutput>
+> {
   constructor(
     private readonly repository: IPropertyRepository,
     private readonly presenter: PropertyMediaPresenter,

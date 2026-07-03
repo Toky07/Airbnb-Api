@@ -3,9 +3,10 @@ import type { IAmenityRepository } from '../../../domain/repositories/amenity.re
 import { AmenityOutput } from '../../dto/amenity.output';
 import type { ListAmenityOptionsQuery } from '../queries/ListAmenityOptionsQuery';
 
-export class ListAmenityOptionsQueryHandler
-  implements IQueryHandler<ListAmenityOptionsQuery, AmenityOutput[]>
-{
+export class ListAmenityOptionsQueryHandler implements IQueryHandler<
+  ListAmenityOptionsQuery,
+  AmenityOutput[]
+> {
   constructor(private readonly repository: IAmenityRepository) {}
 
   async execute(query: ListAmenityOptionsQuery): Promise<AmenityOutput[]> {

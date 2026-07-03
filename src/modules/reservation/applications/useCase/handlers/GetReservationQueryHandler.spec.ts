@@ -62,7 +62,9 @@ describe('GetReservationQueryHandler', () => {
       createReservationRepositoryMock({
         findById: vi.fn().mockResolvedValue(reservation),
       }),
-      { findByAuthId: vi.fn().mockResolvedValue(user) } as unknown as IUserRepository,
+      {
+        findByAuthId: vi.fn().mockResolvedValue(user),
+      } as unknown as IUserRepository,
       { findById: vi.fn() } as unknown as IRoomRepository,
       { findByOwnerId: vi.fn() } as unknown as IPropertyRepository,
       createEnrichReservationOutputsMock() as never,
@@ -94,7 +96,9 @@ describe('GetReservationQueryHandler', () => {
       createReservationRepositoryMock({
         findById: vi.fn().mockResolvedValue(reservation),
       }),
-      { findByAuthId: vi.fn().mockResolvedValue(user) } as unknown as IUserRepository,
+      {
+        findByAuthId: vi.fn().mockResolvedValue(user),
+      } as unknown as IUserRepository,
       { findById: vi.fn() } as unknown as IRoomRepository,
       { findByOwnerId: vi.fn() } as unknown as IPropertyRepository,
       createEnrichReservationOutputsMock() as never,
@@ -115,7 +119,9 @@ describe('GetReservationQueryHandler', () => {
     const reservation = createSampleReservation({
       id: 7,
       userId: 5,
-      items: [createSampleReservationItem({ id: 1, reservationId: 7, roomId: 10 })],
+      items: [
+        createSampleReservationItem({ id: 1, reservationId: 7, roomId: 10 }),
+      ],
     });
     const host = new User(
       new UserNameVO('Host'),
@@ -157,8 +163,12 @@ describe('GetReservationQueryHandler', () => {
       createReservationRepositoryMock({
         findById: vi.fn().mockResolvedValue(reservation),
       }),
-      { findByAuthId: vi.fn().mockResolvedValue(host) } as unknown as IUserRepository,
-      { findById: vi.fn().mockResolvedValue(room) } as unknown as IRoomRepository,
+      {
+        findByAuthId: vi.fn().mockResolvedValue(host),
+      } as unknown as IUserRepository,
+      {
+        findById: vi.fn().mockResolvedValue(room),
+      } as unknown as IRoomRepository,
       {
         findAllByOwnerId: vi.fn().mockResolvedValue([property]),
       } as unknown as IPropertyRepository,

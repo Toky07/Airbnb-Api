@@ -1,19 +1,23 @@
-import { Inject, Injectable, Logger } from "@nestjs/common";
-import { type IReservationRepository, RESERVATION_REPOSITORY } from "../../domain/repositories/reservation.repository";
-import { Interval } from "@nestjs/schedule";
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import {
+  type IReservationRepository,
+  RESERVATION_REPOSITORY,
+} from '../../domain/repositories/reservation.repository';
+import { Interval } from '@nestjs/schedule';
 
 @Injectable()
 export class ClearExpiredReservationService {
-    private readonly logger = new Logger(ClearExpiredReservationService.name);
+  private readonly logger = new Logger(ClearExpiredReservationService.name);
 
-    constructor(
-        @Inject(RESERVATION_REPOSITORY) private readonly reservationRepository: IReservationRepository,
-    ) {}
+  constructor(
+    @Inject(RESERVATION_REPOSITORY)
+    private readonly reservationRepository: IReservationRepository,
+  ) {}
 
-    @Interval(1000 * 60 * 20)
-    async execute(): Promise<void> {
-        await this.reservationRepository.clearExpiredReservations();
+  @Interval(1000 * 60 * 20)
+  async execute(): Promise<void> {
+    await this.reservationRepository.clearExpiredReservations();
 
-        this.logger.log('Cleared expired reservations');
-    }
+    this.logger.log('Cleared expired reservations');
+  }
 }

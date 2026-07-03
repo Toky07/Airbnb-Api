@@ -13,18 +13,20 @@ export class StripePaymentGateway implements IPaymentGateway {
   async createPaymentIntent(
     params: CreatePaymentIntentParams,
   ): Promise<PaymentIntentSnapshot> {
-    const paymentIntent = await this.stripeClientProvider.stripe.paymentIntents.create({
-      amount: params.amount,
-      currency: params.currency,
-      automatic_payment_methods: { enabled: true },
-      metadata: params.metadata,
-    });
+    const paymentIntent =
+      await this.stripeClientProvider.stripe.paymentIntents.create({
+        amount: params.amount,
+        currency: params.currency,
+        automatic_payment_methods: { enabled: true },
+        metadata: params.metadata,
+      });
 
     return this.toSnapshot(paymentIntent);
   }
 
   async retrievePaymentIntent(id: string): Promise<PaymentIntentSnapshot> {
-    const paymentIntent = await this.stripeClientProvider.stripe.paymentIntents.retrieve(id);
+    const paymentIntent =
+      await this.stripeClientProvider.stripe.paymentIntents.retrieve(id);
     return this.toSnapshot(paymentIntent);
   }
 

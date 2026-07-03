@@ -107,7 +107,10 @@ export async function activateAuthAccountForTests(
     status: ACCOUNT_STATUS.ACTIVE,
   });
 
-  await userRepo.update({ email: normalizedEmail }, { status: ACCOUNT_STATUS.ACTIVE });
+  await userRepo.update(
+    { email: normalizedEmail },
+    { status: ACCOUNT_STATUS.ACTIVE },
+  );
 }
 
 export async function registerAndLoginAsSuperAdmin(
@@ -127,7 +130,11 @@ export async function registerAndLoginAsSuperAdmin(
     })
     .expect(201);
 
-  await activateAuthAccountForTests(dataSource, payload.email, payload.password);
+  await activateAuthAccountForTests(
+    dataSource,
+    payload.email,
+    payload.password,
+  );
   await assignSuperAdminRole(dataSource, payload.email);
 
   const login = await request(app.getHttpServer())

@@ -10,7 +10,10 @@ import type { EmailAttachment } from '../../domain/entities/email-attachment.ent
 
 @Injectable()
 export class EmailAttachmentStorageService {
-  async saveMany(emailId: number, files: UploadFile[] = []): Promise<EmailAttachment[]> {
+  async saveMany(
+    emailId: number,
+    files: UploadFile[] = [],
+  ): Promise<EmailAttachment[]> {
     if (!files.length) {
       return [];
     }
@@ -20,10 +23,12 @@ export class EmailAttachmentStorageService {
     for (const file of files) {
       const safeName = file.originalname.replace(/[^\w.\- ]+/g, '_');
       const storedName = `${randomUUID()}-${safeName}`;
-      const relativePath = join(UPLOAD_ROOT, 'emails', String(emailId), storedName).replace(
-        /\\/g,
-        '/',
-      );
+      const relativePath = join(
+        UPLOAD_ROOT,
+        'emails',
+        String(emailId),
+        storedName,
+      ).replace(/\\/g, '/');
       const absolutePath = toDiskPath(relativePath, resolveUploadRoot());
 
       await mkdir(dirname(absolutePath), { recursive: true });

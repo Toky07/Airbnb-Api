@@ -9,9 +9,10 @@ import { parseRecipientList } from '../../dto/send-email.dto';
 import { deliverEmail } from '../../services/deliver-email';
 import type { SendEmailCommand } from '../commands/SendEmailCommand';
 
-export class SendEmailCommandHandler
-  implements ICommandHandler<SendEmailCommand, EmailOutput>
-{
+export class SendEmailCommandHandler implements ICommandHandler<
+  SendEmailCommand,
+  EmailOutput
+> {
   constructor(
     private readonly repository: IEmailRepository,
     private readonly transport: IMailTransport,

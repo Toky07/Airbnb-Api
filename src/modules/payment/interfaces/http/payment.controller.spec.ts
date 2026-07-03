@@ -62,7 +62,9 @@ describe('PaymentController', () => {
 
     dataSource = moduleRef.get(DataSource);
     app = moduleRef.createNestApplication({ rawBody: true });
-    app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+    app.useGlobalPipes(
+      new ValidationPipe({ whitelist: true, transform: true }),
+    );
     await app.init();
 
     const property = await dataSource.getRepository(PropertyEntity).save({

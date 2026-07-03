@@ -1,9 +1,4 @@
-import {
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryColumn,
-} from 'typeorm';
+import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
 import { AmenityOrmEntity } from './amenity.orm-entity';
 

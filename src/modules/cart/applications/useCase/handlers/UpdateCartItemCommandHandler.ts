@@ -1,7 +1,4 @@
-import {
-  BadRequestException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import type { UpdateCartItemCommand } from '../commands/UpdateCartItemCommand';
 import type { CartOutput } from '../../dto/cart.output';
@@ -13,9 +10,10 @@ import type { UpdateCartItemDto } from '../../dto/add-cart-item.dto';
 import type { CartPresenter } from '../../presenters/cart.presenter';
 import type { ResolveCartService } from '../../services/resolve-cart.service';
 
-export class UpdateCartItemCommandHandler
-  implements ICommandHandler<UpdateCartItemCommand, CartOutput>
-{
+export class UpdateCartItemCommandHandler implements ICommandHandler<
+  UpdateCartItemCommand,
+  CartOutput
+> {
   constructor(
     private readonly resolveCartService: ResolveCartService,
     private readonly cartRepository: ICartRepository,
@@ -25,7 +23,9 @@ export class UpdateCartItemCommandHandler
 
   async execute(command: UpdateCartItemCommand): Promise<CartOutput> {
     const cart = await this.resolveCartService.resolve(command.context);
-    const item = cart.items.find((entry) => entry.id === Number(command.itemId));
+    const item = cart.items.find(
+      (entry) => entry.id === Number(command.itemId),
+    );
 
     if (!item?.id || !cart.id) {
       throw new NotFoundException('Article introuvable.');

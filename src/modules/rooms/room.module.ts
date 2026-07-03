@@ -39,7 +39,11 @@ import { ListRoomTypeOptionsQuery } from './applications/useCase/queries/ListRoo
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([RoomEntity, RoomTypeEntity, ReservationItemOrmEntity]),
+    TypeOrmModule.forFeature([
+      RoomEntity,
+      RoomTypeEntity,
+      ReservationItemOrmEntity,
+    ]),
     MediaModule,
     forwardRef(() => AmenityModule),
   ],
@@ -95,13 +99,25 @@ export class RoomsModule implements OnModuleInit {
     CommandBus.register(CreateRoomCommand, bootstrap.createRoomCommandHandler);
     CommandBus.register(UpdateRoomCommand, bootstrap.updateRoomCommandHandler);
     CommandBus.register(DeleteRoomCommand, bootstrap.deleteRoomCommandHandler);
-    CommandBus.register(CreateRoomTypeCommand, bootstrap.createRoomTypeCommandHandler);
-    CommandBus.register(UpdateRoomTypeCommand, bootstrap.updateRoomTypeCommandHandler);
-    CommandBus.register(DeleteRoomTypeCommand, bootstrap.deleteRoomTypeCommandHandler);
+    CommandBus.register(
+      CreateRoomTypeCommand,
+      bootstrap.createRoomTypeCommandHandler,
+    );
+    CommandBus.register(
+      UpdateRoomTypeCommand,
+      bootstrap.updateRoomTypeCommandHandler,
+    );
+    CommandBus.register(
+      DeleteRoomTypeCommand,
+      bootstrap.deleteRoomTypeCommandHandler,
+    );
 
     QueryBus.register(FindRoomQuery, bootstrap.findRoomQueryHandler);
     QueryBus.register(ListRoomsQuery, bootstrap.listRoomsQueryHandler);
     QueryBus.register(ListRoomTypesQuery, bootstrap.listRoomTypesQueryHandler);
-    QueryBus.register(ListRoomTypeOptionsQuery, bootstrap.listRoomTypeOptionsQueryHandler);
+    QueryBus.register(
+      ListRoomTypeOptionsQuery,
+      bootstrap.listRoomTypeOptionsQueryHandler,
+    );
   }
 }

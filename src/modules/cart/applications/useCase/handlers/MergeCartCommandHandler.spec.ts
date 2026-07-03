@@ -20,7 +20,7 @@ describe('MergeCartCommandHandler', () => {
     cartPresenter.toOutput.mockResolvedValue({ id: 5 });
     handler = new MergeCartCommandHandler(
       cartRepository as never,
-      cartUserPort as never,
+      cartUserPort,
       cartPresenter as never,
     );
   });

@@ -107,7 +107,9 @@ export class PaymentRepository implements IPaymentRepository {
           propertyType: PAYMENT_TYPE.RESERVATION,
         },
       )
-      .andWhere('payment.status = :status', { status: PAYMENT_STATUS.SUCCEEDED })
+      .andWhere('payment.status = :status', {
+        status: PAYMENT_STATUS.SUCCEEDED,
+      })
       .orderBy('payment.createdAt', 'DESC');
 
     if (params.search) {

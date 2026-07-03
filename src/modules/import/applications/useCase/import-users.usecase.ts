@@ -21,7 +21,7 @@ export class ImportUsersUseCase {
     const result = emptyImportEntityResult();
 
     for (let index = 0; index < rows.length; index++) {
-      const row = rows[index]!;
+      const row = rows[index];
       const validation = validateImportUserRow(row, index);
       if (!validation.ok) {
         result.errors.push({
@@ -66,7 +66,8 @@ export class ImportUsersUseCase {
         result.errors.push({
           entity: 'user',
           index,
-          message: cause instanceof Error ? cause.message : 'Création impossible.',
+          message:
+            cause instanceof Error ? cause.message : 'Création impossible.',
         });
       }
     }

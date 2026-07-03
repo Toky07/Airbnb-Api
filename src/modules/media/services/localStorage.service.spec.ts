@@ -12,9 +12,10 @@ describe('LocalStorageService', () => {
   const diskRoot = resolveUploadRoot();
 
   afterEach(async () => {
-    await rm(join(process.cwd(), diskRoot), { recursive: true, force: true }).catch(
-      () => undefined,
-    );
+    await rm(join(process.cwd(), diskRoot), {
+      recursive: true,
+      force: true,
+    }).catch(() => undefined);
   });
 
   it('should save a property image under uploads/{propertyId}/property', async () => {

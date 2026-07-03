@@ -41,10 +41,18 @@ export class AuthBootstrap {
         deps.authRepository,
       ),
       loginCommandHandler: new LoginCommandHandler(deps.tokenGenerator),
-      assignRoleCommandHandler: new AssignRoleCommandHandler(deps.authRepository),
-      createRoleCommandHandler: new CreateRoleCommandHandler(deps.roleRepository),
-      updateRoleCommandHandler: new UpdateRoleCommandHandler(deps.roleRepository),
-      deleteRoleCommandHandler: new DeleteRoleCommandHandler(deps.roleRepository),
+      assignRoleCommandHandler: new AssignRoleCommandHandler(
+        deps.authRepository,
+      ),
+      createRoleCommandHandler: new CreateRoleCommandHandler(
+        deps.roleRepository,
+      ),
+      updateRoleCommandHandler: new UpdateRoleCommandHandler(
+        deps.roleRepository,
+      ),
+      deleteRoleCommandHandler: new DeleteRoleCommandHandler(
+        deps.roleRepository,
+      ),
       setRolePermissionsCommandHandler: new SetRolePermissionsCommandHandler(
         deps.roleRepository,
       ),
@@ -56,25 +64,28 @@ export class AuthBootstrap {
       ),
       listRolesQueryHandler: new ListRolesQueryHandler(deps.roleRepository),
       listPermissionsQueryHandler: new ListPermissionsQueryHandler(),
-      sendAccountInvitationCommandHandler: new SendAccountInvitationCommandHandler(
-        deps.userRepository,
-        deps.authRepository,
-        deps.tokenRepository,
-        deps.mailService,
-        tokenService,
-        linkBuilder,
-      ),
-      setPasswordWithTokenCommandHandler: new SetPasswordWithTokenCommandHandler(
-        deps.authRepository,
-        deps.tokenRepository,
-        deps.userRepository,
-        tokenService,
-      ),
-      validatePasswordSetupTokenQueryHandler: new ValidatePasswordSetupTokenQueryHandler(
-        deps.tokenRepository,
-        deps.userRepository,
-        tokenService,
-      ),
+      sendAccountInvitationCommandHandler:
+        new SendAccountInvitationCommandHandler(
+          deps.userRepository,
+          deps.authRepository,
+          deps.tokenRepository,
+          deps.mailService,
+          tokenService,
+          linkBuilder,
+        ),
+      setPasswordWithTokenCommandHandler:
+        new SetPasswordWithTokenCommandHandler(
+          deps.authRepository,
+          deps.tokenRepository,
+          deps.userRepository,
+          tokenService,
+        ),
+      validatePasswordSetupTokenQueryHandler:
+        new ValidatePasswordSetupTokenQueryHandler(
+          deps.tokenRepository,
+          deps.userRepository,
+          tokenService,
+        ),
     };
   }
 }

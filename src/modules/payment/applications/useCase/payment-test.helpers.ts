@@ -7,14 +7,16 @@ import type { IPaymentRepository } from '../../domain/repositories/payment.repos
 import type { IWebhookVerifier } from '../../domain/ports/webhook-verifier.port';
 import { PAYMENT_TYPE } from '../../domain/types/payment.type';
 
-export function createSamplePayment(overrides: Partial<{
-  id: number;
-  transactionId: string;
-  userId: number;
-  status: (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS];
-  propertyId: number;
-  cartId: number | null;
-}> = {}): Payment {
+export function createSamplePayment(
+  overrides: Partial<{
+    id: number;
+    transactionId: string;
+    userId: number;
+    status: (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS];
+    propertyId: number;
+    cartId: number | null;
+  }> = {},
+): Payment {
   return Payment.create({
     amount: 20000,
     currency: 'eur',
@@ -64,7 +66,7 @@ export function createPaymentGatewayMock(
     }),
     retrievePaymentIntent: vi.fn(),
     ...overrides,
-  } as unknown as IPaymentGateway;
+  };
 }
 
 export function createWebhookVerifierMock(

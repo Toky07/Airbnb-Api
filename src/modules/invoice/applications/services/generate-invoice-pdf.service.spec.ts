@@ -17,7 +17,7 @@ describe('GenerateInvoicePdfService', () => {
       createSampleInvoiceData({
         totalCents: 52000,
         items: [
-          createSampleInvoiceData().items[0]!,
+          createSampleInvoiceData().items[0],
           {
             label: 'Chambre Standard',
             subtitle: 'Hôtel Riviera · Nice',

@@ -1,14 +1,21 @@
+import {
+  toOptionalScalarString,
+  toScalarString,
+} from '../../../../shared/http/to-scalar-string';
 import type { UpdateMyProfileDto } from '../../application/dto/update-my-profile.dto';
 
-export function parseMyProfileBody(body: Record<string, unknown>): UpdateMyProfileDto {
+export function parseMyProfileBody(
+  body: Record<string, unknown>,
+): UpdateMyProfileDto {
   const dto: UpdateMyProfileDto = {
-    firstName: String(body.firstName ?? ''),
-    lastName: String(body.lastName ?? ''),
-    phoneNumber: String(body.phoneNumber ?? ''),
+    firstName: toScalarString(body.firstName),
+    lastName: toScalarString(body.lastName),
+    phoneNumber: toScalarString(body.phoneNumber),
   };
 
-  if (body.avatar !== undefined && body.avatar !== null && body.avatar !== '') {
-    dto.avatar = String(body.avatar);
+  const avatar = toOptionalScalarString(body.avatar);
+  if (avatar !== undefined) {
+    dto.avatar = avatar;
   }
 
   return dto;

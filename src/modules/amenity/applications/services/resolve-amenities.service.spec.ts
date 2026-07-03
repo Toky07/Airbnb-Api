@@ -14,7 +14,10 @@ describe('ResolveAmenitiesService', () => {
     } as unknown as IAmenityRepository;
 
     const service = new ResolveAmenitiesService(repository);
-    const result = await service.resolveActiveAmenities([1, 2], AMENITY_SCOPE.ROOM);
+    const result = await service.resolveActiveAmenities(
+      [1, 2],
+      AMENITY_SCOPE.ROOM,
+    );
 
     expect(result).toHaveLength(2);
   });
@@ -22,7 +25,13 @@ describe('ResolveAmenitiesService', () => {
   it('rejects amenities from another scope', async () => {
     const repository = {
       findByIds: async () => [
-        new Amenity('Parking', 'square-parking', AMENITY_SCOPE.PROPERTY, true, 1),
+        new Amenity(
+          'Parking',
+          'square-parking',
+          AMENITY_SCOPE.PROPERTY,
+          true,
+          1,
+        ),
       ],
     } as unknown as IAmenityRepository;
 
@@ -35,7 +44,9 @@ describe('ResolveAmenitiesService', () => {
 
   it('rejects unknown amenity ids', async () => {
     const repository = {
-      findByIds: async () => [new Amenity('WiFi', 'wifi', AMENITY_SCOPE.ROOM, true, 1)],
+      findByIds: async () => [
+        new Amenity('WiFi', 'wifi', AMENITY_SCOPE.ROOM, true, 1),
+      ],
     } as unknown as IAmenityRepository;
 
     const service = new ResolveAmenitiesService(repository);

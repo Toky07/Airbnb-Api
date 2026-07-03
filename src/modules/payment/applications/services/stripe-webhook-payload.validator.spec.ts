@@ -5,7 +5,9 @@ describe('StripeWebhookPayloadValidator', () => {
   const validator = new StripeWebhookPayloadValidator();
 
   it('accepts a valid payload and signature', () => {
-    expect(() => validator.validate(Buffer.from('body'), 'sig_test')).not.toThrow();
+    expect(() =>
+      validator.validate(Buffer.from('body'), 'sig_test'),
+    ).not.toThrow();
   });
 
   it('rejects an empty payload', () => {

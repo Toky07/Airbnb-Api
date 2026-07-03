@@ -65,7 +65,9 @@ export function createReservationRepositoryMock(
         items: reservation.items,
       }),
     ),
-    updateItem: vi.fn().mockImplementation(async (item: ReservationItem) => item),
+    updateItem: vi
+      .fn()
+      .mockImplementation(async (item: ReservationItem) => item),
     findById: vi.fn(),
     findItemById: vi.fn(),
     findItemsByIds: vi.fn(),

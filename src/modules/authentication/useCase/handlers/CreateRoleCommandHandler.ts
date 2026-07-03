@@ -7,9 +7,10 @@ import { RoleOutput } from '../../application/dto/role.output';
 import { UserNameVO } from '../../../user/domain/valueObject/username.vo';
 import type { CreateRoleCommand } from '../commands/CreateRoleCommand';
 
-export class CreateRoleCommandHandler
-  implements ICommandHandler<CreateRoleCommand, RoleOutput>
-{
+export class CreateRoleCommandHandler implements ICommandHandler<
+  CreateRoleCommand,
+  RoleOutput
+> {
   constructor(private readonly repository: IRoleRepository) {}
 
   async execute(command: CreateRoleCommand): Promise<RoleOutput> {

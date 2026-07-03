@@ -12,9 +12,10 @@ import type { IReservationRepository } from '../../../domain/repositories/reserv
 import { ReservationOutput } from '../../dto/reservation.output';
 import type { CancelReservationCommand } from '../commands/CancelReservationCommand';
 
-export class CancelReservationCommandHandler
-  implements ICommandHandler<CancelReservationCommand, ReservationOutput>
-{
+export class CancelReservationCommandHandler implements ICommandHandler<
+  CancelReservationCommand,
+  ReservationOutput
+> {
   constructor(
     private readonly reservationRepository: IReservationRepository,
     private readonly userRepository: IUserRepository,
@@ -32,7 +33,9 @@ export class CancelReservationCommandHandler
       throw new NotFoundException('Séjour introuvable.');
     }
 
-    const payment = await this.paymentRepository.findById(reservation.paymentId ?? 0);
+    const payment = await this.paymentRepository.findById(
+      reservation.paymentId ?? 0,
+    );
 
     if (!payment) {
       throw new NotFoundException('Paiement introuvable.');
@@ -43,7 +46,9 @@ export class CancelReservationCommandHandler
     }
 
     if (!command.access.canCancelAll) {
-      const user = await this.userRepository.findByAuthId(command.access.authId);
+      const user = await this.userRepository.findByAuthId(
+        command.access.authId,
+      );
       const isOwner = user?.id === reservation.userId;
 
       if (!isOwner && !command.access.canCancelHost) {

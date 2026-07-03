@@ -14,7 +14,10 @@ import { PaymentModule } from '../../../payment/payment.module';
 import { CartModule } from '../../cart.module';
 import { PropertyEntity } from '../../../properties/infrastructure/entities/property-entity.entity';
 import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
-import { CART_SESSION_HEADER, CART_ITEM_TYPE } from '../../domain/constants/cart-item-type.constant';
+import {
+  CART_SESSION_HEADER,
+  CART_ITEM_TYPE,
+} from '../../domain/constants/cart-item-type.constant';
 import { PAYMENT_GATEWAY } from '../../../payment/domain/ports/payment-gateway.port';
 import { PAYMENT_STATUS } from '../../../payment/domain/constants/payment-status.constant';
 import { PaymentOrmEntity } from '../../../payment/infrastructure/entities/payment.orm-entity';
@@ -49,10 +52,12 @@ describe('CartController', () => {
           status: 'requires_payment_method',
         };
       }),
-      retrievePaymentIntent: vi.fn().mockImplementation(async (transactionId: string) => ({
-        id: transactionId,
-        status: 'succeeded',
-      })),
+      retrievePaymentIntent: vi
+        .fn()
+        .mockImplementation(async (transactionId: string) => ({
+          id: transactionId,
+          status: 'succeeded',
+        })),
     });
 
     const moduleRef = await Test.createTestingModule({
@@ -83,7 +88,9 @@ describe('CartController', () => {
 
     dataSource = moduleRef.get(DataSource);
     app = moduleRef.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+    app.useGlobalPipes(
+      new ValidationPipe({ whitelist: true, transform: true }),
+    );
     await app.init();
 
     token = await registerAndLoginAsSuperAdmin(app, dataSource);
@@ -236,10 +243,12 @@ describe('CartController', () => {
     });
     expect(payment?.cartId).toBeTruthy();
 
-    const reservation = await dataSource.getRepository(ReservationOrmEntity).findOne({
-      where: { id: payment!.propertyId },
-      relations: ['items'],
-    });
+    const reservation = await dataSource
+      .getRepository(ReservationOrmEntity)
+      .findOne({
+        where: { id: payment!.propertyId },
+        relations: ['items'],
+      });
     expect(reservation?.status).toBe(RESERVATION_STATUS.PENDING);
     expect(reservation?.items).toHaveLength(1);
   });

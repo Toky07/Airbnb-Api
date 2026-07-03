@@ -12,7 +12,7 @@ describe('BuildCartItemService', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    service = new BuildCartItemService(cartItemCatalog as never);
+    service = new BuildCartItemService(cartItemCatalog);
     cartItemCatalog.buildReservationItem.mockResolvedValue({
       label: 'Suite · Hôtel',
       unitPrice: 120,

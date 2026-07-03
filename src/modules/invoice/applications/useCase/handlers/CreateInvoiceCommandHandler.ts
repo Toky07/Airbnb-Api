@@ -8,9 +8,10 @@ import type { GenerateInvoicePdfService } from '../../services/generate-invoice-
 import type { InvoiceStorageService } from '../../../infrastructure/storage/invoice-storage.service';
 import type { CreateInvoiceCommand } from '../commands/CreateInvoiceCommand';
 
-export class CreateInvoiceCommandHandler
-  implements ICommandHandler<CreateInvoiceCommand, void>
-{
+export class CreateInvoiceCommandHandler implements ICommandHandler<
+  CreateInvoiceCommand,
+  void
+> {
   private readonly logger = new Logger(CreateInvoiceCommandHandler.name);
 
   constructor(

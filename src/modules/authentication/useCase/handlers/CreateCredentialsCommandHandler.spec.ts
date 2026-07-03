@@ -6,9 +6,9 @@ import { CreateCredentialsCommand } from '../commands/CreateCredentialsCommand';
 
 const authRepository = {
   create: vi.fn().mockResolvedValue(true),
-  findByEmail: vi.fn().mockResolvedValue(
-    new Auth(1, new EmailVO('test@test.com'), 'hash'),
-  ),
+  findByEmail: vi
+    .fn()
+    .mockResolvedValue(new Auth(1, new EmailVO('test@test.com'), 'hash')),
   assignRoles: vi.fn().mockResolvedValue(true),
 } as unknown as IAuthRepository;
 

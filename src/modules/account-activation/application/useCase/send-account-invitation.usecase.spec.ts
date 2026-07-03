@@ -44,7 +44,7 @@ describe('SendAccountInvitationUseCase', () => {
       tokenRepository as never,
       mailService as never,
       tokenService as never,
-      linkBuilder as never,
+      linkBuilder,
     );
   });
 

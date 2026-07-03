@@ -15,20 +15,28 @@ export class AddCartItemDto {
   @IsIn([CART_ITEM_TYPE.RESERVATION, CART_ITEM_TYPE.SERVICE])
   itemType: (typeof CART_ITEM_TYPE)[keyof typeof CART_ITEM_TYPE];
 
-  @ValidateIf((dto: AddCartItemDto) => dto.itemType === CART_ITEM_TYPE.RESERVATION)
+  @ValidateIf(
+    (dto: AddCartItemDto) => dto.itemType === CART_ITEM_TYPE.RESERVATION,
+  )
   @IsInt()
   @Min(1)
   roomId?: number;
 
-  @ValidateIf((dto: AddCartItemDto) => dto.itemType === CART_ITEM_TYPE.RESERVATION)
+  @ValidateIf(
+    (dto: AddCartItemDto) => dto.itemType === CART_ITEM_TYPE.RESERVATION,
+  )
   @IsDateString()
   startDate?: string;
 
-  @ValidateIf((dto: AddCartItemDto) => dto.itemType === CART_ITEM_TYPE.RESERVATION)
+  @ValidateIf(
+    (dto: AddCartItemDto) => dto.itemType === CART_ITEM_TYPE.RESERVATION,
+  )
   @IsDateString()
   endDate?: string;
 
-  @ValidateIf((dto: AddCartItemDto) => dto.itemType === CART_ITEM_TYPE.RESERVATION)
+  @ValidateIf(
+    (dto: AddCartItemDto) => dto.itemType === CART_ITEM_TYPE.RESERVATION,
+  )
   @IsInt()
   @Min(1)
   guestCount?: number;

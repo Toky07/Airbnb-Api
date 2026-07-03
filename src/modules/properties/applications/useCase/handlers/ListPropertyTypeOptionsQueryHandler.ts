@@ -3,12 +3,15 @@ import type { IPropertyTypeRepository } from '../../../domain/repositories/prope
 import { PropertyTypeOutput } from '../../dto/property-type.output';
 import type { ListPropertyTypeOptionsQuery } from '../queries/ListPropertyTypeOptionsQuery';
 
-export class ListPropertyTypeOptionsQueryHandler
-  implements IQueryHandler<ListPropertyTypeOptionsQuery, PropertyTypeOutput[]>
-{
+export class ListPropertyTypeOptionsQueryHandler implements IQueryHandler<
+  ListPropertyTypeOptionsQuery,
+  PropertyTypeOutput[]
+> {
   constructor(private readonly repository: IPropertyTypeRepository) {}
 
-  async execute(_query: ListPropertyTypeOptionsQuery): Promise<PropertyTypeOutput[]> {
+  async execute(
+    _query: ListPropertyTypeOptionsQuery,
+  ): Promise<PropertyTypeOutput[]> {
     const types = await this.repository.findActive();
     return types.map(PropertyTypeOutput.fromDomain);
   }

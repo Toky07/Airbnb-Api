@@ -5,8 +5,14 @@ import { UserModule } from '../user/user.module';
 import { BuildCartItemService } from './applications/services/build-cart-item.service';
 import { ResolveCartService } from './applications/services/resolve-cart.service';
 import { CartPresenter } from './applications/presenters/cart.presenter';
-import { CART_REPOSITORY, type ICartRepository } from './domain/repositories/cart.repository';
-import { CART_USER_PORT, type ICartUserPort } from './domain/ports/cart-user.port';
+import {
+  CART_REPOSITORY,
+  type ICartRepository,
+} from './domain/repositories/cart.repository';
+import {
+  CART_USER_PORT,
+  type ICartUserPort,
+} from './domain/ports/cart-user.port';
 import {
   CART_ITEM_CATALOG_PORT,
   type ICartItemCatalogPort,
@@ -71,11 +77,26 @@ export class CartModule implements OnModuleInit {
     });
 
     QueryBus.register(GetCartQuery, bootstrap.getCartQueryHandler);
-    CommandBus.register(AddCartItemCommand, bootstrap.addCartItemCommandHandler);
-    CommandBus.register(UpdateCartItemCommand, bootstrap.updateCartItemCommandHandler);
-    CommandBus.register(RemoveCartItemCommand, bootstrap.removeCartItemCommandHandler);
+    CommandBus.register(
+      AddCartItemCommand,
+      bootstrap.addCartItemCommandHandler,
+    );
+    CommandBus.register(
+      UpdateCartItemCommand,
+      bootstrap.updateCartItemCommandHandler,
+    );
+    CommandBus.register(
+      RemoveCartItemCommand,
+      bootstrap.removeCartItemCommandHandler,
+    );
     CommandBus.register(MergeCartCommand, bootstrap.mergeCartCommandHandler);
-    CommandBus.register(CheckoutCartCommand, bootstrap.checkoutCartCommandHandler);
-    CommandBus.register(CompleteCartCheckoutCommand, bootstrap.completeCartCheckoutCommandHandler);
+    CommandBus.register(
+      CheckoutCartCommand,
+      bootstrap.checkoutCartCommandHandler,
+    );
+    CommandBus.register(
+      CompleteCartCheckoutCommand,
+      bootstrap.completeCartCheckoutCommandHandler,
+    );
   }
 }

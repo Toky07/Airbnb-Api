@@ -128,12 +128,14 @@ describe('AmenityController', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    expect(response.body.some((item: { name: string }) => item.name === 'Ascenseur')).toBe(
-      true,
-    );
-    expect(response.body.every((item: { scope: string }) => item.scope === AMENITY_SCOPE.PROPERTY)).toBe(
-      true,
-    );
+    expect(
+      response.body.some((item: { name: string }) => item.name === 'Ascenseur'),
+    ).toBe(true);
+    expect(
+      response.body.every(
+        (item: { scope: string }) => item.scope === AMENITY_SCOPE.PROPERTY,
+      ),
+    ).toBe(true);
   });
 
   it('PUT /amenities/properties/:propertyId syncs property amenities', async () => {

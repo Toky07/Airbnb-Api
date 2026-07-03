@@ -10,7 +10,8 @@ export class PaymentMapper {
       amount: entity.amount,
       currency: entity.currency,
       status: entity.status as PaymentStatus,
-      provider: entity.provider as (typeof PAYMENT_PROVIDER)[keyof typeof PAYMENT_PROVIDER],
+      provider:
+        entity.provider as (typeof PAYMENT_PROVIDER)[keyof typeof PAYMENT_PROVIDER],
       transactionId: entity.transactionId,
       userId: entity.userId,
       propertyType: entity.propertyType as PaymentType,
@@ -29,7 +30,7 @@ export class PaymentMapper {
     if (payment.id !== undefined) {
       entity.id = payment.id;
     }
-    
+
     entity.amount = payment.amount;
     entity.currency = payment.currency;
     entity.status = payment.status;

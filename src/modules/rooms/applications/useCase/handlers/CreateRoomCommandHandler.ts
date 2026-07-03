@@ -9,9 +9,10 @@ import type { RoomMediaPresenter } from '../../presenters/room-media.presenter';
 import type { GenerateRoomSlugService } from '../../services/generate-room-slug.service';
 import type { CreateRoomCommand } from '../commands/CreateRoomCommand';
 
-export class CreateRoomCommandHandler
-  implements ICommandHandler<CreateRoomCommand, RoomOutput>
-{
+export class CreateRoomCommandHandler implements ICommandHandler<
+  CreateRoomCommand,
+  RoomOutput
+> {
   constructor(
     private readonly repository: IRoomRepository,
     private readonly presenter: RoomMediaPresenter,
@@ -31,7 +32,7 @@ export class CreateRoomCommandHandler
           createdRoom.id!,
           command.images,
           undefined,
-          command.dto.property.id!,
+          command.dto.property.id,
         ),
       );
     }

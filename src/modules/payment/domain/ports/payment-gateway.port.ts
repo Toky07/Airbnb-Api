@@ -23,6 +23,6 @@ export interface IPaymentGateway {
   createPaymentIntent(
     params: CreatePaymentIntentParams,
   ): Promise<PaymentIntentSnapshot>;
-  
+
   retrievePaymentIntent(id: string): Promise<PaymentIntentSnapshot>;
 }

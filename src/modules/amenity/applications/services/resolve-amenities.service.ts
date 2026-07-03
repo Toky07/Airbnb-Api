@@ -20,10 +20,14 @@ export class ResolveAmenitiesService {
     const amenities = await this.amenityRepository.findByIds(uniqueIds);
 
     if (amenities.length !== uniqueIds.length) {
-      throw new BadRequestException('Un ou plusieurs équipements sont introuvables');
+      throw new BadRequestException(
+        'Un ou plusieurs équipements sont introuvables',
+      );
     }
 
-    const wrongScope = amenities.find((amenity) => amenity.scope !== expectedScope);
+    const wrongScope = amenities.find(
+      (amenity) => amenity.scope !== expectedScope,
+    );
     if (wrongScope) {
       throw new BadRequestException(
         `L'équipement "${wrongScope.name}" n'est pas compatible avec ce type d'hébergement`,

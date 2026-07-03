@@ -8,11 +8,11 @@ import { RoomProductSummaryService } from '../../applications/services/room-prod
 
 @Injectable()
 export class CartProductSummaryAdapter implements ICartProductSummaryPort {
-  constructor(
-    private readonly roomProductSummary: RoomProductSummaryService,
-  ) {}
+  constructor(private readonly roomProductSummary: RoomProductSummaryService) {}
 
-  async getByRoomIds(roomIds: number[]): Promise<Map<number, CartProductSummary>> {
+  async getByRoomIds(
+    roomIds: number[],
+  ): Promise<Map<number, CartProductSummary>> {
     const summaries = await this.roomProductSummary.getByRoomIds(roomIds);
     const mapped = new Map<number, CartProductSummary>();
 

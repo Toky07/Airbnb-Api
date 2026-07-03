@@ -39,7 +39,11 @@ export class AuthRbacSeedService implements OnModuleInit {
   }
 
   private async seedSuperAdminRole(): Promise<void> {
-    const role = await this.saveRole(SUPERADMIN_ROLE_SLUG, 'Super administrateur', 'Accès complet à toutes les fonctionnalités');
+    const role = await this.saveRole(
+      SUPERADMIN_ROLE_SLUG,
+      'Super administrateur',
+      'Accès complet à toutes les fonctionnalités',
+    );
 
     const allPermissions = await this.permissionRepository.find({
       where: { key: In(ALL_PERMISSION_KEYS) },
@@ -54,7 +58,11 @@ export class AuthRbacSeedService implements OnModuleInit {
       (definition) => definition.module === 'host',
     ).map((definition) => definition.key);
 
-    const role = await this.saveRole(HOST_ROLE_SLUG, 'Hôte', 'Gestion de son établissement et de ses chambres');
+    const role = await this.saveRole(
+      HOST_ROLE_SLUG,
+      'Hôte',
+      'Gestion de son établissement et de ses chambres',
+    );
 
     const permissions = await this.permissionRepository.find({
       where: { key: In(hostPermissionKeys) },
@@ -64,7 +72,11 @@ export class AuthRbacSeedService implements OnModuleInit {
     await this.roleRepository.save(role);
   }
 
-  private async saveRole(slug: string, name: string, description: string): Promise<Role> {
+  private async saveRole(
+    slug: string,
+    name: string,
+    description: string,
+  ): Promise<Role> {
     let role = await this.roleRepository.findOne({
       where: { slug },
       relations: ['permissions'],

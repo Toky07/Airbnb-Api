@@ -24,33 +24,46 @@ const makePayment = () =>
     propertyId: 1,
   });
 
-function createHandler(overrides: {
-  findByTransactionId?: ReturnType<typeof vi.fn>;
-  update?: ReturnType<typeof vi.fn>;
-  verify?: ReturnType<typeof vi.fn>;
-  fromWebhookEventType?: ReturnType<typeof vi.fn>;
-} = {}) {
+function createHandler(
+  overrides: {
+    findByTransactionId?: ReturnType<typeof vi.fn>;
+    update?: ReturnType<typeof vi.fn>;
+    verify?: ReturnType<typeof vi.fn>;
+    fromWebhookEventType?: ReturnType<typeof vi.fn>;
+  } = {},
+) {
   const payment = makePayment();
 
   const repository = {
-    findByTransactionId: overrides.findByTransactionId ?? vi.fn().mockResolvedValue(payment),
-    update: overrides.update ?? vi.fn().mockImplementation((p: Payment) => Promise.resolve(p)),
+    findByTransactionId:
+      overrides.findByTransactionId ?? vi.fn().mockResolvedValue(payment),
+    update:
+      overrides.update ??
+      vi.fn().mockImplementation((p: Payment) => Promise.resolve(p)),
   } as unknown as IPaymentRepository;
 
   const webhookVerifier = {
-    verify: overrides.verify ?? vi.fn().mockReturnValue({
-      type: 'payment_intent.succeeded',
-      paymentIntentId: 'pi_123',
-      status: 'succeeded',
-      errorMessage: null,
-    }),
+    verify:
+      overrides.verify ??
+      vi.fn().mockReturnValue({
+        type: 'payment_intent.succeeded',
+        paymentIntentId: 'pi_123',
+        status: 'succeeded',
+        errorMessage: null,
+      }),
   } as IWebhookVerifier;
 
   const mapStripeStatus = overrides.fromWebhookEventType
-    ? { fromWebhookEventType: overrides.fromWebhookEventType } as unknown as MapStripeStatusService
+    ? ({
+        fromWebhookEventType: overrides.fromWebhookEventType,
+      } as unknown as MapStripeStatusService)
     : new MapStripeStatusService();
 
-  const handler = new ConfirmStripePaymentCommandHandler(repository, mapStripeStatus, webhookVerifier);
+  const handler = new ConfirmStripePaymentCommandHandler(
+    repository,
+    mapStripeStatus,
+    webhookVerifier,
+  );
 
   return { handler, repository, webhookVerifier, payment };
 }
@@ -64,7 +77,9 @@ describe('ConfirmStripePaymentCommandHandler', () => {
   it('should throw when payload is empty', async () => {
     const { handler } = createHandler();
     await expect(
-      handler.execute(new ConfirmStripePaymentCommand(Buffer.alloc(0), validSignature)),
+      handler.execute(
+        new ConfirmStripePaymentCommand(Buffer.alloc(0), validSignature),
+      ),
     ).rejects.toThrow('Corps de webhook vide.');
   });
 
@@ -77,8 +92,13 @@ describe('ConfirmStripePaymentCommandHandler', () => {
 
   it('should call webhookVerifier.verify with payload and signature', async () => {
     const { handler, webhookVerifier } = createHandler();
-    await handler.execute(new ConfirmStripePaymentCommand(validPayload, validSignature));
-    expect(webhookVerifier.verify).toHaveBeenCalledWith(validPayload, validSignature);
+    await handler.execute(
+      new ConfirmStripePaymentCommand(validPayload, validSignature),
+    );
+    expect(webhookVerifier.verify).toHaveBeenCalledWith(
+      validPayload,
+      validSignature,
+    );
   });
 
   it('should throw when payment is not found', async () => {
@@ -86,19 +106,25 @@ describe('ConfirmStripePaymentCommandHandler', () => {
       findByTransactionId: vi.fn().mockResolvedValue(null),
     });
     await expect(
-      handler.execute(new ConfirmStripePaymentCommand(validPayload, validSignature)),
+      handler.execute(
+        new ConfirmStripePaymentCommand(validPayload, validSignature),
+      ),
     ).rejects.toThrow('Paiement introuvable pour cet événement.');
   });
 
   it('should look up the payment by paymentIntentId', async () => {
     const { handler, repository } = createHandler();
-    await handler.execute(new ConfirmStripePaymentCommand(validPayload, validSignature));
+    await handler.execute(
+      new ConfirmStripePaymentCommand(validPayload, validSignature),
+    );
     expect(repository.findByTransactionId).toHaveBeenCalledWith('pi_123');
   });
 
   it('should update the payment with the mapped status', async () => {
     const { handler, repository } = createHandler();
-    await handler.execute(new ConfirmStripePaymentCommand(validPayload, validSignature));
+    await handler.execute(
+      new ConfirmStripePaymentCommand(validPayload, validSignature),
+    );
     expect(repository.update).toHaveBeenCalledWith(
       expect.objectContaining({ status: PAYMENT_STATUS.SUCCEEDED }),
     );
@@ -106,14 +132,18 @@ describe('ConfirmStripePaymentCommandHandler', () => {
 
   it('should return the updated payment', async () => {
     const { handler } = createHandler();
-    const result = await handler.execute(new ConfirmStripePaymentCommand(validPayload, validSignature));
+    const result = await handler.execute(
+      new ConfirmStripePaymentCommand(validPayload, validSignature),
+    );
     expect(result).toBeInstanceOf(Payment);
     expect(result.status).toBe(PAYMENT_STATUS.SUCCEEDED);
   });
 
   it('should publish PaymentConfirmedEvent when status is SUCCEEDED', async () => {
     const { handler } = createHandler();
-    await handler.execute(new ConfirmStripePaymentCommand(validPayload, validSignature));
+    await handler.execute(
+      new ConfirmStripePaymentCommand(validPayload, validSignature),
+    );
     expect(mockPublish).toHaveBeenCalledOnce();
   });
 
@@ -121,7 +151,9 @@ describe('ConfirmStripePaymentCommandHandler', () => {
     const { handler } = createHandler({
       fromWebhookEventType: vi.fn().mockReturnValue(PAYMENT_STATUS.FAILED),
     });
-    await handler.execute(new ConfirmStripePaymentCommand(validPayload, validSignature));
+    await handler.execute(
+      new ConfirmStripePaymentCommand(validPayload, validSignature),
+    );
     expect(mockPublish).not.toHaveBeenCalled();
   });
 
@@ -129,7 +161,9 @@ describe('ConfirmStripePaymentCommandHandler', () => {
     const { handler } = createHandler({
       fromWebhookEventType: vi.fn().mockReturnValue(PAYMENT_STATUS.CANCELED),
     });
-    await handler.execute(new ConfirmStripePaymentCommand(validPayload, validSignature));
+    await handler.execute(
+      new ConfirmStripePaymentCommand(validPayload, validSignature),
+    );
     expect(mockPublish).not.toHaveBeenCalled();
   });
 });

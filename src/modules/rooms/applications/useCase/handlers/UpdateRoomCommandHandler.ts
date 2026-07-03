@@ -8,9 +8,10 @@ import type { RoomMediaPresenter } from '../../presenters/room-media.presenter';
 import type { GenerateRoomSlugService } from '../../services/generate-room-slug.service';
 import type { UpdateRoomCommand } from '../commands/UpdateRoomCommand';
 
-export class UpdateRoomCommandHandler
-  implements ICommandHandler<UpdateRoomCommand, RoomOutput>
-{
+export class UpdateRoomCommandHandler implements ICommandHandler<
+  UpdateRoomCommand,
+  RoomOutput
+> {
   constructor(
     private readonly repository: IRoomRepository,
     private readonly presenter: RoomMediaPresenter,

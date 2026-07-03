@@ -9,7 +9,11 @@ export function parseAmenityScope(value: unknown): AmenityScope | undefined {
     return undefined;
   }
 
-  const scope = String(value).trim();
+  if (typeof value !== 'string') {
+    throw new BadRequestException('Le scope doit être "property" ou "room".');
+  }
+
+  const scope = value.trim();
 
   if (scope === AMENITY_SCOPE.PROPERTY || scope === AMENITY_SCOPE.ROOM) {
     return scope;

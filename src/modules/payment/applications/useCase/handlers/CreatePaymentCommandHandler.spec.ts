@@ -17,9 +17,11 @@ vi.mock('../../../infrastructure/stripe/stripe.config', () => ({
 
 function createHandler() {
   const repository = {
-    create: vi.fn().mockImplementation(async (p: Payment) =>
-      Payment.create({ ...p, id: 1 }),
-    ),
+    create: vi
+      .fn()
+      .mockImplementation(async (p: Payment) =>
+        Payment.create({ ...p, id: 1 }),
+      ),
   } as unknown as IPaymentRepository;
 
   const gateway = {
@@ -36,7 +38,13 @@ function createHandler() {
 }
 
 const command = new CreatePaymentCommand(
-  10000, 'eur', 'stripe', 1, PAYMENT_TYPE.RESERVATION, 42, 5,
+  10000,
+  'eur',
+  'stripe',
+  1,
+  PAYMENT_TYPE.RESERVATION,
+  42,
+  5,
 );
 
 describe('CreatePaymentCommandHandler', () => {

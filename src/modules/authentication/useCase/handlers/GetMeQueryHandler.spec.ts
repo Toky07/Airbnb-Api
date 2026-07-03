@@ -19,21 +19,23 @@ describe('GetMeQueryHandler', () => {
   );
 
   const authRepository = {
-    findById: vi.fn(async () =>
-      new Auth(1, new EmailVO('host@test.com'), 'hash', [hostRole], 'active'),
+    findById: vi.fn(
+      async () =>
+        new Auth(1, new EmailVO('host@test.com'), 'hash', [hostRole], 'active'),
     ),
   };
 
   const userRepository = {
-    findByAuthId: vi.fn(async () =>
-      new User(
-        new UserNameVO('Jean'),
-        new UserNameVO('Dupont'),
-        new EmailVO('host@test.com'),
-        new PhoneNumberVO('+33601020304'),
-        'uploads/users/5/avatar.jpg',
-        5,
-      ),
+    findByAuthId: vi.fn(
+      async () =>
+        new User(
+          new UserNameVO('Jean'),
+          new UserNameVO('Dupont'),
+          new EmailVO('host@test.com'),
+          new PhoneNumberVO('+33601020304'),
+          'uploads/users/5/avatar.jpg',
+          5,
+        ),
     ),
   };
 

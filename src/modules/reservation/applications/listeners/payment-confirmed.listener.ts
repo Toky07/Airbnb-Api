@@ -28,7 +28,8 @@ export class PaymentConfirmedListener {
 
       await CommandBus.execute(new ConfirmReservationCommand(reservation.id));
 
-      const context = await this.buildReservationInvoicePayload.execute(payment);
+      const context =
+        await this.buildReservationInvoicePayload.execute(payment);
       if (!context) {
         return;
       }

@@ -9,9 +9,10 @@ import type { IAmenityRepository } from '../../../domain/repositories/amenity.re
 import { AmenityOutput } from '../../dto/amenity.output';
 import type { CreateAmenityCommand } from '../commands/CreateAmenityCommand';
 
-export class CreateAmenityCommandHandler
-  implements ICommandHandler<CreateAmenityCommand, AmenityOutput>
-{
+export class CreateAmenityCommandHandler implements ICommandHandler<
+  CreateAmenityCommand,
+  AmenityOutput
+> {
   constructor(private readonly repository: IAmenityRepository) {}
 
   async execute(command: CreateAmenityCommand): Promise<AmenityOutput> {

@@ -24,7 +24,7 @@ export class ImportPropertiesUseCase {
     const result = emptyImportEntityResult();
 
     for (let index = 0; index < rows.length; index++) {
-      const row = rows[index]!;
+      const row = rows[index];
       const validation = validateImportPropertyRow(row);
       if (!validation.ok) {
         result.errors.push({
@@ -36,7 +36,9 @@ export class ImportPropertiesUseCase {
         continue;
       }
 
-      const ownerId = context.emailToUserId.get(row.ownerEmail.trim().toLowerCase());
+      const ownerId = context.emailToUserId.get(
+        row.ownerEmail.trim().toLowerCase(),
+      );
       if (!ownerId) {
         result.errors.push({
           entity: 'property',
@@ -86,7 +88,8 @@ export class ImportPropertiesUseCase {
         result.errors.push({
           entity: 'property',
           index,
-          message: cause instanceof Error ? cause.message : 'Création impossible.',
+          message:
+            cause instanceof Error ? cause.message : 'Création impossible.',
         });
       }
     }

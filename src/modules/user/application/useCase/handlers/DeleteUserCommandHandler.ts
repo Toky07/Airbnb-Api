@@ -4,9 +4,10 @@ import type { IUserRepository } from '../../../domain/repositories/user.reposito
 import type { SaveUserAvatarService } from '../../services/save-user-avatar.service';
 import type { DeleteUserCommand } from '../commands/DeleteUserCommand';
 
-export class DeleteUserCommandHandler
-  implements ICommandHandler<DeleteUserCommand, boolean>
-{
+export class DeleteUserCommandHandler implements ICommandHandler<
+  DeleteUserCommand,
+  boolean
+> {
   constructor(
     private readonly repository: IUserRepository,
     private readonly authRepository: IAuthRepository,

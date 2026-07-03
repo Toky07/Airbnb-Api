@@ -20,11 +20,13 @@ describe('CreateAmenityCommandHandler', () => {
     } as unknown as IAmenityRepository;
 
     const handler = new CreateAmenityCommandHandler(repository);
-    const result = await handler.execute(new CreateAmenityCommand({
-      name: 'WiFi',
-      icon: 'wifi',
-      scope: AMENITY_SCOPE.ROOM,
-    }));
+    const result = await handler.execute(
+      new CreateAmenityCommand({
+        name: 'WiFi',
+        icon: 'wifi',
+        scope: AMENITY_SCOPE.ROOM,
+      }),
+    );
 
     expect(result.name).toBe('WiFi');
     expect(result.scope).toBe(AMENITY_SCOPE.ROOM);
@@ -35,7 +37,13 @@ describe('CreateAmenityCommandHandler', () => {
     const handler = new CreateAmenityCommandHandler(repository);
 
     await expect(
-      handler.execute(new CreateAmenityCommand({ name: '  ', icon: 'wifi', scope: AMENITY_SCOPE.ROOM })),
+      handler.execute(
+        new CreateAmenityCommand({
+          name: '  ',
+          icon: 'wifi',
+          scope: AMENITY_SCOPE.ROOM,
+        }),
+      ),
     ).rejects.toBeInstanceOf(ConflictException);
   });
 
@@ -53,7 +61,13 @@ describe('CreateAmenityCommandHandler', () => {
     const handler = new CreateAmenityCommandHandler(repository);
 
     await expect(
-      handler.execute(new CreateAmenityCommand({ name: 'WiFi', icon: 'wifi', scope: AMENITY_SCOPE.ROOM })),
+      handler.execute(
+        new CreateAmenityCommand({
+          name: 'WiFi',
+          icon: 'wifi',
+          scope: AMENITY_SCOPE.ROOM,
+        }),
+      ),
     ).rejects.toBeInstanceOf(ConflictException);
   });
 });

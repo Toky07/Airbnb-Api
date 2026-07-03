@@ -8,7 +8,16 @@ import {
 
 function item(propertyId: number, roomId: number): ReservationItemOutput {
   return ReservationItemOutput.fromDomain(
-    new ReservationItem(1, roomId, '2026-08-01', '2026-08-03', 2, 100, 2, roomId),
+    new ReservationItem(
+      1,
+      roomId,
+      '2026-08-01',
+      '2026-08-03',
+      2,
+      100,
+      2,
+      roomId,
+    ),
     {
       propertyId,
       roomName: `Room ${roomId}`,
@@ -26,7 +35,11 @@ describe('scope-booking-order-items.service', () => {
   });
 
   it('regroupe les items par établissement', () => {
-    const groups = groupItemsByPropertyId([item(1, 10), item(2, 20), item(1, 11)]);
+    const groups = groupItemsByPropertyId([
+      item(1, 10),
+      item(2, 20),
+      item(1, 11),
+    ]);
 
     expect(groups.get(1)).toHaveLength(2);
     expect(groups.get(2)).toHaveLength(1);

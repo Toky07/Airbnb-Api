@@ -7,9 +7,10 @@ import { AmenityOutput } from '../../dto/amenity.output';
 import type { ResolveAmenitiesService } from '../../services/resolve-amenities.service';
 import type { SyncRoomAmenitiesCommand } from '../commands/SyncRoomAmenitiesCommand';
 
-export class SyncRoomAmenitiesCommandHandler
-  implements ICommandHandler<SyncRoomAmenitiesCommand, AmenityOutput[]>
-{
+export class SyncRoomAmenitiesCommandHandler implements ICommandHandler<
+  SyncRoomAmenitiesCommand,
+  AmenityOutput[]
+> {
   constructor(
     private readonly roomRepository: IRoomRepository,
     private readonly roomAmenityRepository: IRoomAmenityRepository,

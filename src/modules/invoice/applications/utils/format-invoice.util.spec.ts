@@ -11,7 +11,9 @@ describe('format-invoice.util', () => {
   });
 
   it('formate une date longue en français', () => {
-    expect(formatInvoiceDate(new Date('2026-06-10T00:00:00.000Z'))).toContain('2026');
+    expect(formatInvoiceDate(new Date('2026-06-10T00:00:00.000Z'))).toContain(
+      '2026',
+    );
   });
 
   it('génère un numéro de facture stable', () => {

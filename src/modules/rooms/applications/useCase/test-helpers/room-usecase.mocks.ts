@@ -5,7 +5,7 @@ import { GenerateRoomSlugService } from '../../services/generate-room-slug.servi
 
 export const mockRoomMediaPresenter = {
   toOutput: async (room: Room) => RoomOutput.fromDomain(room),
-} as RoomMediaPresenter;
+};
 
 export const mockGenerateRoomSlug = {
   execute: async (name: string) => name.toLowerCase().replace(/\s+/g, '-'),

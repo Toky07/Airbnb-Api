@@ -4,9 +4,10 @@ import type { IUserRepository } from '../../../domain/repositories/user.reposito
 import { UserOutput } from '../../../domain/dtos/user.output';
 import type { ListUsersQuery } from '../queries/ListUsersQuery';
 
-export class ListUsersQueryHandler
-  implements IQueryHandler<ListUsersQuery, PaginatedResult<UserOutput>>
-{
+export class ListUsersQueryHandler implements IQueryHandler<
+  ListUsersQuery,
+  PaginatedResult<UserOutput>
+> {
   constructor(private readonly repository: IUserRepository) {}
 
   async execute(query: ListUsersQuery): Promise<PaginatedResult<UserOutput>> {

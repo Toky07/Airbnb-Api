@@ -1,7 +1,4 @@
-import {
-  BadRequestException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import type { AddCartItemCommand } from '../commands/AddCartItemCommand';
 import type { CartOutput } from '../../dto/cart.output';
@@ -11,9 +8,10 @@ import type { BuildCartItemService } from '../../services/build-cart-item.servic
 import type { CartPresenter } from '../../presenters/cart.presenter';
 import type { ResolveCartService } from '../../services/resolve-cart.service';
 
-export class AddCartItemCommandHandler
-  implements ICommandHandler<AddCartItemCommand, CartOutput>
-{
+export class AddCartItemCommandHandler implements ICommandHandler<
+  AddCartItemCommand,
+  CartOutput
+> {
   constructor(
     private readonly resolveCartService: ResolveCartService,
     private readonly cartRepository: ICartRepository,

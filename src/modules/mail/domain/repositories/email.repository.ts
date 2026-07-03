@@ -1,4 +1,7 @@
-import type { PaginatedResult, PaginationParams } from '../../../../shared/pagination/pagination.types';
+import type {
+  PaginatedResult,
+  PaginationParams,
+} from '../../../../shared/pagination/pagination.types';
 import type { Email } from '../entities/email.entity';
 
 export const EMAIL_REPOSITORY = 'EMAIL_REPOSITORY';

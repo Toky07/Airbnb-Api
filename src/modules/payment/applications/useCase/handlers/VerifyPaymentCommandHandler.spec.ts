@@ -13,12 +13,17 @@ vi.mock('../../../../../shared/domain/event.bus', () => ({
   EventBus: { getInstance: () => ({ publish: mockPublish }) },
 }));
 
-function createHandler(overrides: {
-  findById?: ReturnType<typeof vi.fn>;
-  update?: ReturnType<typeof vi.fn>;
-  retrievePaymentIntent?: ReturnType<typeof vi.fn>;
-} = {}) {
-  const payment = createSamplePayment({ cartId: 5, status: PAYMENT_STATUS.PENDING });
+function createHandler(
+  overrides: {
+    findById?: ReturnType<typeof vi.fn>;
+    update?: ReturnType<typeof vi.fn>;
+    retrievePaymentIntent?: ReturnType<typeof vi.fn>;
+  } = {},
+) {
+  const payment = createSamplePayment({
+    cartId: 5,
+    status: PAYMENT_STATUS.PENDING,
+  });
 
   const repository = createPaymentRepositoryMock({
     findById: overrides.findById ?? vi.fn().mockResolvedValue(payment),
@@ -26,10 +31,12 @@ function createHandler(overrides: {
   });
 
   const gateway = createPaymentGatewayMock({
-    retrievePaymentIntent: overrides.retrievePaymentIntent ?? vi.fn().mockResolvedValue({
-      id: 'pi_test_123',
-      status: 'succeeded',
-    }),
+    retrievePaymentIntent:
+      overrides.retrievePaymentIntent ??
+      vi.fn().mockResolvedValue({
+        id: 'pi_test_123',
+        status: 'succeeded',
+      }),
   });
 
   const handler = new VerifyPaymentCommandHandler(
@@ -56,7 +63,9 @@ describe('VerifyPaymentCommandHandler', () => {
 
   it('should throw when payment has no cartId', async () => {
     const { handler } = createHandler({
-      findById: vi.fn().mockResolvedValue(createSamplePayment({ cartId: null })),
+      findById: vi
+        .fn()
+        .mockResolvedValue(createSamplePayment({ cartId: null })),
     });
 
     await expect(handler.execute(new VerifyPaymentCommand(1))).rejects.toThrow(
@@ -66,9 +75,11 @@ describe('VerifyPaymentCommandHandler', () => {
 
   it('should return cartId when payment is already succeeded', async () => {
     const { handler } = createHandler({
-      findById: vi.fn().mockResolvedValue(
-        createSamplePayment({ cartId: 5, status: PAYMENT_STATUS.SUCCEEDED }),
-      ),
+      findById: vi
+        .fn()
+        .mockResolvedValue(
+          createSamplePayment({ cartId: 5, status: PAYMENT_STATUS.SUCCEEDED }),
+        ),
     });
 
     const result = await handler.execute(new VerifyPaymentCommand(1));
@@ -99,7 +110,7 @@ describe('VerifyPaymentCommandHandler', () => {
     });
 
     await expect(handler.execute(new VerifyPaymentCommand(1))).rejects.toThrow(
-      'Le paiement n\'est pas encore confirmé.',
+      "Le paiement n'est pas encore confirmé.",
     );
   });
 });

@@ -7,9 +7,10 @@ import type { ListMyReservationsQuery } from '../queries/ListMyReservationsQuery
 import type { ListReservationsQueryHandler } from './ListReservationsQueryHandler';
 import { ListReservationsQuery } from '../queries/ListReservationsQuery';
 
-export class ListMyReservationsQueryHandler
-  implements IQueryHandler<ListMyReservationsQuery, PaginatedResult<ReservationOutput>>
-{
+export class ListMyReservationsQueryHandler implements IQueryHandler<
+  ListMyReservationsQuery,
+  PaginatedResult<ReservationOutput>
+> {
   constructor(
     private readonly userRepository: IUserRepository,
     private readonly listReservationsQueryHandler: ListReservationsQueryHandler,

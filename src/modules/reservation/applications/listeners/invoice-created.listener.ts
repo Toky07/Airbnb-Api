@@ -24,7 +24,8 @@ export class InvoiceCreatedListener {
           return;
         }
 
-        const context = await this.buildReservationInvoicePayload.execute(payment);
+        const context =
+          await this.buildReservationInvoicePayload.execute(payment);
         if (!context) {
           return;
         }
@@ -56,7 +57,10 @@ export class InvoiceCreatedListener {
             new EmailSendRequestedEvent(
               group.ownerEmail,
               `Nouvelle réservation confirmée · ${group.items[0]?.propertyName ?? 'Votre établissement'}`,
-              this.buildHostPaymentNotificationEmailBody.execute(context, group),
+              this.buildHostPaymentNotificationEmailBody.execute(
+                context,
+                group,
+              ),
               true,
               RESERVATION_NOTIFICATION_SOURCE.HOST,
             ),

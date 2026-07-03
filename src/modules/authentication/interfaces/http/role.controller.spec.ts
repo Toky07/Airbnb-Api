@@ -13,7 +13,11 @@ import { UserNameVO } from '../../../user/domain/valueObject/username.vo';
 import { RoleEntity } from '../../domain/entities/role.entity';
 import { RoleMapper } from '../../infrastructure/mappers/role.mappers';
 import { PermissionEntity } from '../../infrastructure/entity/permission.entity';
-import { AUTH_TEST_ENTITIES, DOMAIN_TEST_ENTITIES, registerAndLoginAsSuperAdmin } from '../../../../test/controller-test.helpers';
+import {
+  AUTH_TEST_ENTITIES,
+  DOMAIN_TEST_ENTITIES,
+  registerAndLoginAsSuperAdmin,
+} from '../../../../test/controller-test.helpers';
 
 describe('Roles', () => {
   let app: INestApplication;
@@ -102,16 +106,16 @@ describe('Roles', () => {
     const response = await request(app.getHttpServer())
       .put(`/auth/roles/${role.id}`)
       .set('Authorization', `Bearer ${token}`)
-      .send({ name: 'update'})
+      .send({ name: 'update' })
       .expect(200);
 
-      expect(response.body).toStrictEqual({
-        id: expect.any(Number),
-        name: 'update',
-        slug: 'test-role',
-        description: null,
-        permissionKeys: [],
-      });
+    expect(response.body).toStrictEqual({
+      id: expect.any(Number),
+      name: 'update',
+      slug: 'test-role',
+      description: null,
+      permissionKeys: [],
+    });
   });
 
   it(`DELETE auth/roles/:id`, async () => {
@@ -122,8 +126,9 @@ describe('Roles', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    const expectedRole = await dataSource.getRepository(Role).findOne({ where: { id: role.id } });
+    const expectedRole = await dataSource
+      .getRepository(Role)
+      .findOne({ where: { id: role.id } });
     expect(expectedRole).toBeNull();
   });
-
 });

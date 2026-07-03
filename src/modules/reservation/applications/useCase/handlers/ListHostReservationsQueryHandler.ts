@@ -6,9 +6,10 @@ import type { ListHostReservationsQuery } from '../queries/ListHostReservationsQ
 import type { ListReservationsQueryHandler } from './ListReservationsQueryHandler';
 import { ListReservationsQuery } from '../queries/ListReservationsQuery';
 
-export class ListHostReservationsQueryHandler
-  implements IQueryHandler<ListHostReservationsQuery, PaginatedResult<ReservationOutput>>
-{
+export class ListHostReservationsQueryHandler implements IQueryHandler<
+  ListHostReservationsQuery,
+  PaginatedResult<ReservationOutput>
+> {
   constructor(
     private readonly resolveHostPropertyIds: ResolveHostPropertyIdsService,
     private readonly listReservationsQueryHandler: ListReservationsQueryHandler,

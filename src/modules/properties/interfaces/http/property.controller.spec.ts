@@ -89,21 +89,25 @@ describe('PropertyController', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    expect(response.body.data[0]).toEqual(expect.objectContaining({
-      id: expect.any(Number),
-      ...defaultProperty,
-      image: null,
-      propertyTypeId: null,
-      propertyType: null,
-      ownerId: expect.any(Number),
-      createdAt: expect.any(String),
-      updatedAt: expect.any(String),
-    }));
-    expect(response.body.data[0].rooms[0]).toEqual(expect.objectContaining({
-      ...room,
-      id: expect.any(Number),
-      images: [],
-    }));
+    expect(response.body.data[0]).toEqual(
+      expect.objectContaining({
+        id: expect.any(Number),
+        ...defaultProperty,
+        image: null,
+        propertyTypeId: null,
+        propertyType: null,
+        ownerId: expect.any(Number),
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+      }),
+    );
+    expect(response.body.data[0].rooms[0]).toEqual(
+      expect.objectContaining({
+        ...room,
+        id: expect.any(Number),
+        images: [],
+      }),
+    );
   });
 
   it(`/GET properties/:id`, async () => {
@@ -131,7 +135,7 @@ describe('PropertyController', () => {
   it('/POST properties', async () => {
     const response = await request(app.getHttpServer())
       .post('/properties')
-      .send({...defaultProperty})
+      .send({ ...defaultProperty })
       .set('Authorization', `Bearer ${token}`)
       .expect(201);
 
@@ -171,18 +175,17 @@ describe('PropertyController', () => {
   it('/PUT properties/:id', async () => {
     const repository = dataSource.getRepository(PropertyEntity);
     const updatedData = {
-        name: 'Updated Property',
-        description: 'Updated Description',
-        address: 'Updated Address',
-        city: 'Updated City',
-        country: 'Updated Country',
-        latitude: 0,
-        longitude: 0,
-        checkInTime: 'Updated CheckInTime',
-        checkOutTime: 'Updated CheckOutTime',
-        ownerId: 1,
+      name: 'Updated Property',
+      description: 'Updated Description',
+      address: 'Updated Address',
+      city: 'Updated City',
+      country: 'Updated Country',
+      latitude: 0,
+      longitude: 0,
+      checkInTime: 'Updated CheckInTime',
+      checkOutTime: 'Updated CheckOutTime',
+      ownerId: 1,
     };
-
 
     const property = await repository.save({ ...defaultProperty });
 
@@ -192,13 +195,17 @@ describe('PropertyController', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    const updatedProperty = await repository.findOne({ where: { id: property.id } });
+    const updatedProperty = await repository.findOne({
+      where: { id: property.id },
+    });
 
-    expect(updatedProperty).toEqual(expect.objectContaining({
-      id: expect.any(Number),
-      ...updatedData,
-      ownerId: 1,
-    }));
+    expect(updatedProperty).toEqual(
+      expect.objectContaining({
+        id: expect.any(Number),
+        ...updatedData,
+        ownerId: 1,
+      }),
+    );
   });
 
   it('/PUT properties/:id with image', async () => {
@@ -235,7 +242,9 @@ describe('PropertyController', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    const deletedProperty = await repository.findOne({ where: { id: property.id } });
+    const deletedProperty = await repository.findOne({
+      where: { id: property.id },
+    });
     expect(deletedProperty).toBeNull();
   });
 

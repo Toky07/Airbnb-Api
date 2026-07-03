@@ -11,9 +11,9 @@ export function filterItemsByPropertyIds<
   );
 }
 
-export function groupItemsByPropertyId<
-  T extends { propertyId: number | null },
->(items: T[]): Map<number, T[]> {
+export function groupItemsByPropertyId<T extends { propertyId: number | null }>(
+  items: T[],
+): Map<number, T[]> {
   const groups = new Map<number, T[]>();
 
   for (const item of items) {

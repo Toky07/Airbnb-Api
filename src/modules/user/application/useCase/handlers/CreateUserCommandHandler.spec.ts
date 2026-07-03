@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { User } from '../../../domain/entities/user.entity';
 import { CreateUserCommandHandler } from './CreateUserCommandHandler';
 import { CreateUserCommand } from '../commands/CreateUserCommand';
@@ -9,12 +9,7 @@ import { UserNameVO } from '../../../domain/valueObject/username.vo';
 import { EmailVO } from '../../../../../shared/valueObject/email.vo';
 import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
 import type { SaveUserAvatarService } from '../../services/save-user-avatar.service';
-
-const mockExecute = vi.fn();
-
-vi.mock('../../../../../shared/useCase/bus/bus', () => ({
-  CommandBus: { execute: (...args: unknown[]) => mockExecute(...args) },
-}));
+import { commandBusExecuteMock } from '../../../../../test/command-bus.mock';
 
 const createdUser = new User(
   new UserNameVO('John'),
@@ -39,7 +34,7 @@ const saveUserAvatar = {
 describe('CreateUserCommandHandler', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockExecute.mockResolvedValue(undefined);
+    commandBusExecuteMock.mockResolvedValue(undefined);
   });
 
   it('should create user and send invitation', async () => {
@@ -56,8 +51,8 @@ describe('CreateUserCommandHandler', () => {
 
     expect(user).toBeInstanceOf(UserOutput);
     expect(user.email).toBe('test@test.com');
-    expect(mockExecute).toHaveBeenCalledTimes(1);
-    expect(mockExecute.mock.calls[0]?.[0]).toEqual(
+    expect(commandBusExecuteMock).toHaveBeenCalledTimes(1);
+    expect(commandBusExecuteMock.mock.calls[0]?.[0]).toEqual(
       new SendAccountInvitationCommand({
         userId: 1,
         sourceModule: 'admin-user-create',

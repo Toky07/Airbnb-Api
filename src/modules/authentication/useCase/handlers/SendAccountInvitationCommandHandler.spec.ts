@@ -45,7 +45,7 @@ describe('SendAccountInvitationCommandHandler', () => {
       tokenRepository as never,
       mailService as never,
       tokenService as never,
-      linkBuilder as never,
+      linkBuilder,
     );
   });
 
@@ -69,7 +69,10 @@ describe('SendAccountInvitationCommandHandler', () => {
     mailService.sendSimple.mockResolvedValue({});
 
     await handler.execute(
-      new SendAccountInvitationCommand({ userId: 1, sourceModule: 'admin-user-create' }),
+      new SendAccountInvitationCommand({
+        userId: 1,
+        sourceModule: 'admin-user-create',
+      }),
     );
 
     expect(authRepository.createPending).toHaveBeenCalledWith('jean@test.com');

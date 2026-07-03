@@ -4,7 +4,10 @@ import type { IEmailRepository } from '../../../domain/repositories/email.reposi
 import { EmailOutput } from '../../dto/email.output';
 import type { GetEmailQuery } from '../queries/GetEmailQuery';
 
-export class GetEmailQueryHandler implements IQueryHandler<GetEmailQuery, EmailOutput> {
+export class GetEmailQueryHandler implements IQueryHandler<
+  GetEmailQuery,
+  EmailOutput
+> {
   constructor(private readonly repository: IEmailRepository) {}
 
   async execute(query: GetEmailQuery): Promise<EmailOutput> {

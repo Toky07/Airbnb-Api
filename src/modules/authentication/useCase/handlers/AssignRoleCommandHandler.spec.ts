@@ -1,11 +1,11 @@
-import { AssignRoleCommandHandler } from "./AssignRoleCommandHandler";
-import { AssignRoleCommand } from "../commands/AssignRoleCommand";
-import { IAuthRepository } from "../../domain/repositories/auth.repository";
+import { AssignRoleCommandHandler } from './AssignRoleCommandHandler';
+import { AssignRoleCommand } from '../commands/AssignRoleCommand';
+import { IAuthRepository } from '../../domain/repositories/auth.repository';
 
 const repository = {
-    assignRoles: async (userId: number, roleId: number[]): Promise<boolean> => {
-        return true;
-    }
+  assignRoles: async (userId: number, roleId: number[]): Promise<boolean> => {
+    return true;
+  },
 } as IAuthRepository;
 
 describe('AssignRoleCommandHandler', () => {

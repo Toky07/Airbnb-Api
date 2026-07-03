@@ -7,9 +7,10 @@ import type { ResolveHostPropertyIdsService } from '../../services/resolve-host-
 import type { ListHostBookingOrdersQuery } from '../queries/ListHostBookingOrdersQuery';
 import type { ListBookingOrdersQueryHandler } from './ListBookingOrdersQueryHandler';
 
-export class ListHostBookingOrdersQueryHandler
-  implements IQueryHandler<ListHostBookingOrdersQuery, PaginatedResult<BookingOrderListItemOutput>>
-{
+export class ListHostBookingOrdersQueryHandler implements IQueryHandler<
+  ListHostBookingOrdersQuery,
+  PaginatedResult<BookingOrderListItemOutput>
+> {
   constructor(
     private readonly paymentRepository: IPaymentRepository,
     private readonly reservationRepository: IReservationRepository,
@@ -29,9 +30,8 @@ export class ListHostBookingOrdersQueryHandler
       return this.emptyPage(query);
     }
 
-    const reservationIds = await this.reservationRepository.findIdsByPropertyIds(
-      scopedPropertyIds,
-    );
+    const reservationIds =
+      await this.reservationRepository.findIdsByPropertyIds(scopedPropertyIds);
 
     const result = await this.paymentRepository.findPaginatedForReservationIds(
       reservationIds,

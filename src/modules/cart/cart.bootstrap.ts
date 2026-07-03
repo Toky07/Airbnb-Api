@@ -52,12 +52,13 @@ export class CartBootstrap {
         deps.resolveCartService,
         deps.buildCartItemService,
       ),
-      completeCartCheckoutCommandHandler: new CompleteCartCheckoutCommandHandler(
-        deps.cartRepository,
-        deps.cartUserPort,
-        deps.resolveCartService,
-        deps.cartPresenter,
-      ),
+      completeCartCheckoutCommandHandler:
+        new CompleteCartCheckoutCommandHandler(
+          deps.cartRepository,
+          deps.cartUserPort,
+          deps.resolveCartService,
+          deps.cartPresenter,
+        ),
     };
   }
 }

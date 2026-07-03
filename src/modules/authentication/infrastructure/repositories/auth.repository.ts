@@ -36,7 +36,10 @@ export class AuthRepository implements IAuthRepository {
     return this.findById(saved.id);
   }
 
-  async activateWithPassword(authId: number, passwordHash: string): Promise<void> {
+  async activateWithPassword(
+    authId: number,
+    passwordHash: string,
+  ): Promise<void> {
     await this.repository.update(authId, {
       password: passwordHash,
       status: ACCOUNT_STATUS.ACTIVE,

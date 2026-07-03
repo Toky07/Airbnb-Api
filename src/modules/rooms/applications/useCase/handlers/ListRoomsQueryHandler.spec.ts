@@ -51,7 +51,9 @@ describe('ListRoomsQueryHandler', () => {
       mockRoomMediaPresenter,
     );
 
-    const result = await handler.execute(new ListRoomsQuery({ page: 1, limit: 10 }));
+    const result = await handler.execute(
+      new ListRoomsQuery({ page: 1, limit: 10 }),
+    );
 
     expect(result.data).toHaveLength(1);
     expect(result.data[0]).toBeInstanceOf(RoomOutput);

@@ -1,8 +1,5 @@
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import {
-  ENTITY_MEDIA_LIMITS,
-  MEDIA_TYPE,
-} from '../../../constant';
+import { ENTITY_MEDIA_LIMITS, MEDIA_TYPE } from '../../../constant';
 import { Media } from '../../../domain/entities/media.entity';
 import type { IMediaRepository } from '../../../domain/repositories/media.repository';
 import type { ILocalStorageService } from '../../../services/localStorage.service';
@@ -11,9 +8,10 @@ import type { DeleteMediasByEntityCommandHandler } from './DeleteMediasByEntityC
 import type { SaveEntityMediasCommand } from '../commands/SaveEntityMediasCommand';
 import { DeleteMediasByEntityCommand } from '../commands/DeleteMediasByEntityCommand';
 
-export class SaveEntityMediasCommandHandler
-  implements ICommandHandler<SaveEntityMediasCommand, Media[]>
-{
+export class SaveEntityMediasCommandHandler implements ICommandHandler<
+  SaveEntityMediasCommand,
+  Media[]
+> {
   constructor(
     private readonly repository: IMediaRepository,
     private readonly storage: ILocalStorageService,

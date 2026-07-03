@@ -91,18 +91,39 @@ export class AmenityModule implements OnModuleInit {
       roomAmenityRepository: this.roomAmenityRepository,
     });
 
-    CommandBus.register(CreateAmenityCommand, bootstrap.createAmenityCommandHandler);
-    CommandBus.register(UpdateAmenityCommand, bootstrap.updateAmenityCommandHandler);
-    CommandBus.register(DeleteAmenityCommand, bootstrap.deleteAmenityCommandHandler);
+    CommandBus.register(
+      CreateAmenityCommand,
+      bootstrap.createAmenityCommandHandler,
+    );
+    CommandBus.register(
+      UpdateAmenityCommand,
+      bootstrap.updateAmenityCommandHandler,
+    );
+    CommandBus.register(
+      DeleteAmenityCommand,
+      bootstrap.deleteAmenityCommandHandler,
+    );
     CommandBus.register(
       SyncPropertyAmenitiesCommand,
       bootstrap.syncPropertyAmenitiesCommandHandler,
     );
-    CommandBus.register(SyncRoomAmenitiesCommand, bootstrap.syncRoomAmenitiesCommandHandler);
+    CommandBus.register(
+      SyncRoomAmenitiesCommand,
+      bootstrap.syncRoomAmenitiesCommandHandler,
+    );
 
     QueryBus.register(ListAmenitiesQuery, bootstrap.listAmenitiesQueryHandler);
-    QueryBus.register(ListAmenityOptionsQuery, bootstrap.listAmenityOptionsQueryHandler);
-    QueryBus.register(ListPropertyAmenitiesQuery, bootstrap.listPropertyAmenitiesQueryHandler);
-    QueryBus.register(ListRoomAmenitiesQuery, bootstrap.listRoomAmenitiesQueryHandler);
+    QueryBus.register(
+      ListAmenityOptionsQuery,
+      bootstrap.listAmenityOptionsQueryHandler,
+    );
+    QueryBus.register(
+      ListPropertyAmenitiesQuery,
+      bootstrap.listPropertyAmenitiesQueryHandler,
+    );
+    QueryBus.register(
+      ListRoomAmenitiesQuery,
+      bootstrap.listRoomAmenitiesQueryHandler,
+    );
   }
 }

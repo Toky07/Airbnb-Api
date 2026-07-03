@@ -13,9 +13,10 @@ import { SendAccountInvitationCommand } from '../../../../authentication/useCase
 import { ACCOUNT_STATUS } from '../../../../authentication/domain/constants/account-status.constant';
 import type { RegisterHostCommand } from '../commands/RegisterHostCommand';
 
-export class RegisterHostCommandHandler
-  implements ICommandHandler<RegisterHostCommand, boolean>
-{
+export class RegisterHostCommandHandler implements ICommandHandler<
+  RegisterHostCommand,
+  boolean
+> {
   constructor(
     private readonly authRepository: IAuthRepository,
     private readonly roleRepository: IRoleRepository,
@@ -59,7 +60,9 @@ export class RegisterHostCommandHandler
 
     const pendingAuth = await this.authRepository.createPending(email);
     if (!pendingAuth?.id) {
-      throw new BadRequestException('Impossible de créer le compte de connexion.');
+      throw new BadRequestException(
+        'Impossible de créer le compte de connexion.',
+      );
     }
 
     await this.userRepository.linkAuthAccount(createdUser.id, pendingAuth.id);

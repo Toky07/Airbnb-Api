@@ -2,17 +2,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ImportRoomTypesUseCase } from './import-room-types.usecase';
 import { createImportBatchContext } from './import-test.helpers';
 import { CreateRoomTypeCommand } from '../../../rooms/applications/useCase/commands/CreateRoomTypeCommand';
-
-const mockExecute = vi.fn();
-
-vi.mock('../../../../shared/useCase/bus/bus', () => ({
-  CommandBus: { execute: (...args: unknown[]) => mockExecute(...args) },
-}));
+import { commandBusExecuteMock } from '../../../../test/command-bus.mock';
 
 describe('ImportRoomTypesUseCase', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockExecute.mockResolvedValueOnce({
+    commandBusExecuteMock.mockResolvedValueOnce({
       id: 1,
       name: 'Standard',
       slug: 'standard',
@@ -38,8 +33,10 @@ describe('ImportRoomTypesUseCase', () => {
     );
 
     expect(result.created).toBe(1);
-    expect(mockExecute).toHaveBeenCalledTimes(1);
-    expect(mockExecute.mock.calls[0]?.[0]).toBeInstanceOf(CreateRoomTypeCommand);
+    expect(commandBusExecuteMock).toHaveBeenCalledTimes(1);
+    expect(commandBusExecuteMock.mock.calls[0]?.[0]).toBeInstanceOf(
+      CreateRoomTypeCommand,
+    );
     expect(result.errors).toHaveLength(1);
     expect(result.errors[0]?.entity).toBe('roomType');
   });

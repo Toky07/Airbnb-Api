@@ -1,6 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
-import { createPaymentRepositoryMock, createSamplePayment } from '../../../../payment/applications/useCase/payment-test.helpers';
+import {
+  createPaymentRepositoryMock,
+  createSamplePayment,
+} from '../../../../payment/applications/useCase/payment-test.helpers';
 import { UserNameVO } from '../../../../user/domain/valueObject/username.vo';
 import { EmailVO } from '../../../../../shared/valueObject/email.vo';
 import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
@@ -21,8 +24,16 @@ const paymentRepository = createPaymentRepositoryMock({
 
 describe('CancelReservationCommandHandler', () => {
   it('annule une réservation pour son propriétaire', async () => {
-    const item = createSampleReservationItem({ id: 3, reservationId: 1, roomId: 10 });
-    const reservation = createSampleReservation({ id: 1, userId: 5, items: [item] });
+    const item = createSampleReservationItem({
+      id: 3,
+      reservationId: 1,
+      roomId: 10,
+    });
+    const reservation = createSampleReservation({
+      id: 1,
+      userId: 5,
+      items: [item],
+    });
     const repository = createReservationRepositoryMock({
       update: vi.fn().mockImplementation(async (updated) => updated),
       findById: vi.fn().mockResolvedValue(reservation),
@@ -38,7 +49,9 @@ describe('CancelReservationCommandHandler', () => {
 
     const handler = new CancelReservationCommandHandler(
       repository,
-      { findByAuthId: vi.fn().mockResolvedValue(user) } as unknown as IUserRepository,
+      {
+        findByAuthId: vi.fn().mockResolvedValue(user),
+      } as unknown as IUserRepository,
       paymentRepository,
     );
 
@@ -64,7 +77,9 @@ describe('CancelReservationCommandHandler', () => {
       createReservationRepositoryMock({
         findById: vi.fn().mockResolvedValue(reservation),
       }),
-      { findByAuthId: vi.fn().mockResolvedValue(null) } as unknown as IUserRepository,
+      {
+        findByAuthId: vi.fn().mockResolvedValue(null),
+      } as unknown as IUserRepository,
       paymentRepository,
     );
 
@@ -81,7 +96,11 @@ describe('CancelReservationCommandHandler', () => {
 
   it('refuse l’annulation par un autre utilisateur', async () => {
     const item = createSampleReservationItem({ id: 3, reservationId: 1 });
-    const reservation = createSampleReservation({ id: 1, userId: 5, items: [item] });
+    const reservation = createSampleReservation({
+      id: 1,
+      userId: 5,
+      items: [item],
+    });
     const user = new User(
       new UserNameVO('Alice'),
       new UserNameVO('Martin'),
@@ -95,7 +114,9 @@ describe('CancelReservationCommandHandler', () => {
       createReservationRepositoryMock({
         findById: vi.fn().mockResolvedValue(reservation),
       }),
-      { findByAuthId: vi.fn().mockResolvedValue(user) } as unknown as IUserRepository,
+      {
+        findByAuthId: vi.fn().mockResolvedValue(user),
+      } as unknown as IUserRepository,
       paymentRepository,
     );
 

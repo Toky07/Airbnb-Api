@@ -1,4 +1,4 @@
 export interface DomainEvent {
-    eventName: string;
-    occurredOn: Date;
+  eventName: string;
+  occurredOn: Date;
 }

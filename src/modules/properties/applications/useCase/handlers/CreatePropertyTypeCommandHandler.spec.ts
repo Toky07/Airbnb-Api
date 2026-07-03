@@ -18,7 +18,9 @@ describe('CreatePropertyTypeCommandHandler', () => {
     } as unknown as IPropertyTypeRepository;
 
     const handler = new CreatePropertyTypeCommandHandler(repository);
-    const result = await handler.execute(new CreatePropertyTypeCommand({ name: 'Villa' }));
+    const result = await handler.execute(
+      new CreatePropertyTypeCommand({ name: 'Villa' }),
+    );
 
     expect(result.name).toBe('Villa');
     expect(result.slug).toBe('villa');

@@ -21,8 +21,8 @@ describe('DeleteRoleCommandHandler', () => {
   it('should throw if the role is not found', async () => {
     const handler = new DeleteRoleCommandHandler(repository);
     vi.spyOn(repository, 'findById').mockResolvedValue(null);
-    await expect(handler.execute(new DeleteRoleCommand(2))).rejects.toBeInstanceOf(
-      NotFoundException,
-    );
+    await expect(
+      handler.execute(new DeleteRoleCommand(2)),
+    ).rejects.toBeInstanceOf(NotFoundException);
   });
 });

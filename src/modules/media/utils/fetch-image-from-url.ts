@@ -3,7 +3,9 @@ import { bufferToUploadFile } from './buffer-to-upload-file';
 
 const FETCH_TIMEOUT_MS = 12_000;
 
-export async function fetchImageFromUrl(url: string): Promise<UploadFile | null> {
+export async function fetchImageFromUrl(
+  url: string,
+): Promise<UploadFile | null> {
   const trimmed = url.trim();
   if (!trimmed.startsWith('http://') && !trimmed.startsWith('https://')) {
     return null;
@@ -55,7 +57,7 @@ function extensionFromContentType(contentType: string, url: string): string {
 
   const fromUrl = url.match(/\.(jpe?g|png|webp|gif)(\?|$)/i);
   if (fromUrl) {
-    return `.${fromUrl[1]!.toLowerCase().replace('jpeg', 'jpg')}`;
+    return `.${fromUrl[1].toLowerCase().replace('jpeg', 'jpg')}`;
   }
 
   return '.jpg';

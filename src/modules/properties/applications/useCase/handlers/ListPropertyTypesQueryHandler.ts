@@ -3,9 +3,10 @@ import type { IPropertyTypeRepository } from '../../../domain/repositories/prope
 import { PropertyTypeOutput } from '../../dto/property-type.output';
 import type { ListPropertyTypesQuery } from '../queries/ListPropertyTypesQuery';
 
-export class ListPropertyTypesQueryHandler
-  implements IQueryHandler<ListPropertyTypesQuery, PropertyTypeOutput[]>
-{
+export class ListPropertyTypesQueryHandler implements IQueryHandler<
+  ListPropertyTypesQuery,
+  PropertyTypeOutput[]
+> {
   constructor(private readonly repository: IPropertyTypeRepository) {}
 
   async execute(_query: ListPropertyTypesQuery): Promise<PropertyTypeOutput[]> {

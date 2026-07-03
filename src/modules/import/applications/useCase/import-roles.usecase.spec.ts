@@ -3,12 +3,7 @@ import { ImportRolesUseCase } from './import-roles.usecase';
 import { CreateRoleCommand } from '../../../authentication/useCase/commands/CreateRoleCommand';
 import { UpdateRoleCommand } from '../../../authentication/useCase/commands/UpdateRoleCommand';
 import { SetRolePermissionsCommand } from '../../../authentication/useCase/commands/SetRolePermissionsCommand';
-
-const mockExecute = vi.fn();
-
-vi.mock('../../../../shared/useCase/bus/bus', () => ({
-  CommandBus: { execute: (...args: unknown[]) => mockExecute(...args) },
-}));
+import { commandBusExecuteMock } from '../../../../test/command-bus.mock';
 
 describe('ImportRolesUseCase', () => {
   beforeEach(() => {
@@ -16,7 +11,7 @@ describe('ImportRolesUseCase', () => {
   });
 
   it('crée un rôle et assigne ses permissions', async () => {
-    mockExecute
+    commandBusExecuteMock
       .mockResolvedValueOnce({ id: 3, name: 'Support', slug: 'support' })
       .mockResolvedValueOnce({});
 
@@ -33,18 +28,22 @@ describe('ImportRolesUseCase', () => {
     ]);
 
     expect(result.created).toBe(1);
-    expect(mockExecute).toHaveBeenCalledTimes(2);
-    expect(mockExecute.mock.calls[0]?.[0]).toBeInstanceOf(CreateRoleCommand);
-    expect(mockExecute.mock.calls[1]?.[0]).toEqual(
+    expect(commandBusExecuteMock).toHaveBeenCalledTimes(2);
+    expect(commandBusExecuteMock.mock.calls[0]?.[0]).toBeInstanceOf(
+      CreateRoleCommand,
+    );
+    expect(commandBusExecuteMock.mock.calls[1]?.[0]).toEqual(
       new SetRolePermissionsCommand(3, ['users.read', 'users.update']),
     );
   });
 
   it('met à jour un rôle existant', async () => {
-    mockExecute.mockResolvedValue({});
+    commandBusExecuteMock.mockResolvedValue({});
 
     const roleRepository = {
-      findBySlug: vi.fn().mockResolvedValue({ id: 2, slug: 'support', name: 'Support' }),
+      findBySlug: vi
+        .fn()
+        .mockResolvedValue({ id: 2, slug: 'support', name: 'Support' }),
     };
 
     const useCase = new ImportRolesUseCase(roleRepository as never);
@@ -58,9 +57,11 @@ describe('ImportRolesUseCase', () => {
     ]);
 
     expect(result.created).toBe(1);
-    expect(mockExecute).toHaveBeenCalledTimes(2);
-    expect(mockExecute.mock.calls[0]?.[0]).toBeInstanceOf(UpdateRoleCommand);
-    expect(mockExecute.mock.calls[1]?.[0]).toEqual(
+    expect(commandBusExecuteMock).toHaveBeenCalledTimes(2);
+    expect(commandBusExecuteMock.mock.calls[0]?.[0]).toBeInstanceOf(
+      UpdateRoleCommand,
+    );
+    expect(commandBusExecuteMock.mock.calls[1]?.[0]).toEqual(
       new SetRolePermissionsCommand(2, ['users.read']),
     );
   });

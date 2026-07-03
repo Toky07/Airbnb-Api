@@ -12,9 +12,10 @@ export type VerifyPaymentResult = {
   cartId: number | null;
 };
 
-export class VerifyPaymentCommandHandler
-  implements ICommandHandler<VerifyPaymentCommand, VerifyPaymentResult>
-{
+export class VerifyPaymentCommandHandler implements ICommandHandler<
+  VerifyPaymentCommand,
+  VerifyPaymentResult
+> {
   constructor(
     private readonly paymentRepository: IPaymentRepository,
     private readonly paymentGateway: IPaymentGateway,
@@ -34,12 +35,19 @@ export class VerifyPaymentCommandHandler
 
     let current = payment;
 
-    if (current.status !== PAYMENT_STATUS.SUCCEEDED && current.transactionId != null) {
-      const intent = await this.paymentGateway.retrievePaymentIntent(current.transactionId);
-      const status = this.mapStripeStatus.fromPaymentIntentStatus(intent.status);
+    if (
+      current.status !== PAYMENT_STATUS.SUCCEEDED &&
+      current.transactionId != null
+    ) {
+      const intent = await this.paymentGateway.retrievePaymentIntent(
+        current.transactionId,
+      );
+      const status = this.mapStripeStatus.fromPaymentIntentStatus(
+        intent.status,
+      );
 
       if (status !== PAYMENT_STATUS.SUCCEEDED) {
-        throw new Error('Le paiement n\'est pas encore confirmé.');
+        throw new Error("Le paiement n'est pas encore confirmé.");
       }
 
       current = await this.paymentRepository.update(

@@ -3,18 +3,13 @@ import { EventBus } from '../../../../shared/domain/event.bus';
 import { CartCheckoutRequestedEvent } from '../../../cart/domain/events/cart-checkout-requested.event';
 import { CartCheckoutReservationCreatedEvent } from '../../../cart/domain/events/cart-checkout-reservation-created.event';
 import { CartCheckoutListener } from './cart-checkout.listener';
-
-const mockExecute = vi.fn();
-
-vi.mock('../../../../shared/useCase/bus/bus', () => ({
-  CommandBus: { execute: (...args: unknown[]) => mockExecute(...args) },
-}));
+import { commandBusExecuteMock } from '../../../../test/command-bus.mock';
 
 describe('CartCheckoutListener', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     EventBus.getInstance()['handlers'] = new Map();
-    mockExecute.mockResolvedValue({ id: 12 });
+    commandBusExecuteMock.mockResolvedValue({ id: 12 });
   });
 
   it('crée une réservation puis publie cart.checkout.reservation.created', async () => {
@@ -41,7 +36,7 @@ describe('CartCheckoutListener', () => {
       ]),
     );
 
-    expect(mockExecute).toHaveBeenCalled();
+    expect(commandBusExecuteMock).toHaveBeenCalled();
     expect(published[0]?.reservationId).toBe(12);
   });
 });

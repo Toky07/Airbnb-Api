@@ -6,9 +6,10 @@ import * as bcrypt from 'bcrypt';
 import { ACCOUNT_STATUS } from '../../domain/constants/account-status.constant';
 import type { CreateCredentialsCommand } from '../commands/CreateCredentialsCommand';
 
-export class CreateCredentialsCommandHandler
-  implements ICommandHandler<CreateCredentialsCommand, boolean>
-{
+export class CreateCredentialsCommandHandler implements ICommandHandler<
+  CreateCredentialsCommand,
+  boolean
+> {
   constructor(private readonly repository: IAuthRepository) {}
 
   async execute(command: CreateCredentialsCommand): Promise<boolean> {

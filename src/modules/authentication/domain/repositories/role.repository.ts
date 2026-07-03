@@ -1,4 +1,7 @@
-import type { PaginatedResult, PaginationParams } from '../../../../shared/pagination/pagination.types';
+import type {
+  PaginatedResult,
+  PaginationParams,
+} from '../../../../shared/pagination/pagination.types';
 import { RoleEntity } from '../entities/role.entity';
 
 export interface IRoleRepository {

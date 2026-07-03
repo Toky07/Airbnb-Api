@@ -56,7 +56,9 @@ describe('CheckoutCartCommandHandler', () => {
   });
 
   it('refuse un panier vide', async () => {
-    resolveCartService.resolve.mockResolvedValue(createSampleCart({ items: [] }));
+    resolveCartService.resolve.mockResolvedValue(
+      createSampleCart({ items: [] }),
+    );
 
     await expect(
       handler.execute(new CheckoutCartCommand(10, { authId: 10 })),

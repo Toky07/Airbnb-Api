@@ -10,10 +10,15 @@ export type PasswordSetupTokenRecord = {
 };
 
 export interface IPasswordSetupTokenRepository {
-  create(authId: number, tokenHash: string, expiresAt: Date): Promise<PasswordSetupTokenRecord>;
+  create(
+    authId: number,
+    tokenHash: string,
+    expiresAt: Date,
+  ): Promise<PasswordSetupTokenRecord>;
   findValidByHash(tokenHash: string): Promise<PasswordSetupTokenRecord | null>;
   consume(id: number): Promise<void>;
   invalidatePendingForAuth(authId: number): Promise<void>;
 }
 
-export const PASSWORD_SETUP_TOKEN_REPOSITORY = 'PASSWORD_SETUP_TOKEN_REPOSITORY';
+export const PASSWORD_SETUP_TOKEN_REPOSITORY =
+  'PASSWORD_SETUP_TOKEN_REPOSITORY';

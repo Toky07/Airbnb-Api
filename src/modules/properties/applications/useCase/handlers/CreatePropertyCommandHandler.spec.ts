@@ -1,14 +1,9 @@
-import { vi } from 'vitest';
 import { Property } from '../../../domain/entities/property.entity';
 import type { IPropertyRepository } from '../../../domain/repositories/property.repository';
 import { CreatePropertyCommandHandler } from './CreatePropertyCommandHandler';
 import { CreatePropertyCommand } from '../commands/CreatePropertyCommand';
 import { PropertyOutput } from '../../dto/property.outup';
 import { mockPropertyMediaPresenter } from '../test-helpers/property-usecase.mocks';
-
-vi.mock('../../../../../shared/useCase/bus/bus', () => ({
-  CommandBus: { execute: vi.fn(async () => []) },
-}));
 
 const repository = {
   create: async (property: Property): Promise<Property> => ({

@@ -1,7 +1,4 @@
-import {
-  BadRequestException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import type { CheckoutCartCommand } from '../commands/CheckoutCartCommand';
@@ -12,15 +9,18 @@ import { CreatePaymentIntentOutput } from '../../dto/create-payment-intent.outpu
 import type { BuildCartItemService } from '../../services/build-cart-item.service';
 import type { ResolveCartService } from '../../services/resolve-cart.service';
 
-export class CheckoutCartCommandHandler
-  implements ICommandHandler<CheckoutCartCommand, CreatePaymentIntentOutput>
-{
+export class CheckoutCartCommandHandler implements ICommandHandler<
+  CheckoutCartCommand,
+  CreatePaymentIntentOutput
+> {
   constructor(
     private readonly resolveCartService: ResolveCartService,
     private readonly buildCartItemService: BuildCartItemService,
   ) {}
 
-  async execute(command: CheckoutCartCommand): Promise<CreatePaymentIntentOutput> {
+  async execute(
+    command: CheckoutCartCommand,
+  ): Promise<CreatePaymentIntentOutput> {
     const cart = await this.resolveCartService.resolve({
       ...command.context,
       authId: command.authId,
@@ -41,10 +41,11 @@ export class CheckoutCartCommandHandler
 
     const correlationId = randomUUID();
     const amountInCents = Math.round(cart.totalPrice * 100);
-    const waitForCompletion = EventBus.getInstance().waitOnce<CartCheckoutCompletedEvent>(
-      'cart.checkout.completed',
-      (event) => event.correlationId === correlationId,
-    );
+    const waitForCompletion =
+      EventBus.getInstance().waitOnce<CartCheckoutCompletedEvent>(
+        'cart.checkout.completed',
+        (event) => event.correlationId === correlationId,
+      );
 
     await EventBus.getInstance().publish(
       new CartCheckoutRequestedEvent(

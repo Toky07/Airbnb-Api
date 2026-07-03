@@ -8,7 +8,10 @@ import type { IRoleRepository } from '../authentication/domain/repositories/role
 import { LOCAL_STORAGE_SERVICE } from '../media/services/localStorage.service';
 import type { ILocalStorageService } from '../media/services/localStorage.service';
 import { UserController } from './interfaces/http/user.controller';
-import { USER_REPOSITORY, UserRepository } from './infrastructure/repositories/user.repository';
+import {
+  USER_REPOSITORY,
+  UserRepository,
+} from './infrastructure/repositories/user.repository';
 import type { IUserRepository } from './domain/repositories/user.repository';
 import { cartUserProvider } from './infrastructure/adapters/cart-user.adapter';
 import { UserEntity } from './infrastructure/entities/user.entity';
@@ -67,12 +70,24 @@ export class UserModule implements OnModuleInit {
     CommandBus.register(CreateUserCommand, bootstrap.createUserCommandHandler);
     CommandBus.register(UpdateUserCommand, bootstrap.updateUserCommandHandler);
     CommandBus.register(DeleteUserCommand, bootstrap.deleteUserCommandHandler);
-    CommandBus.register(AssignUserRolesCommand, bootstrap.assignUserRolesCommandHandler);
-    CommandBus.register(RegisterHostCommand, bootstrap.registerHostCommandHandler);
-    CommandBus.register(UpdateMyProfileCommand, bootstrap.updateMyProfileCommandHandler);
+    CommandBus.register(
+      AssignUserRolesCommand,
+      bootstrap.assignUserRolesCommandHandler,
+    );
+    CommandBus.register(
+      RegisterHostCommand,
+      bootstrap.registerHostCommandHandler,
+    );
+    CommandBus.register(
+      UpdateMyProfileCommand,
+      bootstrap.updateMyProfileCommandHandler,
+    );
 
     QueryBus.register(FindUserQuery, bootstrap.findUserQueryHandler);
     QueryBus.register(ListUsersQuery, bootstrap.listUsersQueryHandler);
-    QueryBus.register(ListUserOptionsQuery, bootstrap.listUserOptionsQueryHandler);
+    QueryBus.register(
+      ListUserOptionsQuery,
+      bootstrap.listUserOptionsQueryHandler,
+    );
   }
 }

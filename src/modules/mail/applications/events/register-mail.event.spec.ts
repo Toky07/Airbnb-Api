@@ -3,12 +3,7 @@ import { EventBus } from '../../../../shared/domain/event.bus';
 import { EmailSendRequestedEvent } from '../../domain/events/email-send-requested.event';
 import { MailEvent } from '../events/register-mail.event';
 import { SendEmailCommand } from '../useCase/commands/SendEmailCommand';
-
-const mockExecute = vi.fn();
-
-vi.mock('../../../../shared/useCase/bus/bus', () => ({
-  CommandBus: { execute: (...args: unknown[]) => mockExecute(...args) },
-}));
+import { commandBusExecuteMock } from '../../../../test/command-bus.mock';
 
 describe('MailEvent', () => {
   const loadAttachments = {
@@ -18,7 +13,7 @@ describe('MailEvent', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     EventBus.getInstance()['handlers'] = new Map();
-    mockExecute.mockResolvedValue({});
+    commandBusExecuteMock.mockResolvedValue({});
     loadAttachments.execute.mockResolvedValue([
       {
         fieldname: 'attachments',
@@ -32,7 +27,7 @@ describe('MailEvent', () => {
   });
 
   it('envoie un email à partir de email.send.requested', async () => {
-    const mailEvent = new MailEvent(loadAttachments as never);
+    const mailEvent = new MailEvent(loadAttachments);
     await mailEvent.onModuleInit();
 
     await EventBus.getInstance().publish(
@@ -42,13 +37,20 @@ describe('MailEvent', () => {
         '<p>Hello</p>',
         true,
         'invoice-customer',
-        [{ path: 'uploads/invoices/facture.pdf', filename: 'facture.pdf', mimeType: 'application/pdf' }],
+        [
+          {
+            path: 'uploads/invoices/facture.pdf',
+            filename: 'facture.pdf',
+            mimeType: 'application/pdf',
+          },
+        ],
       ),
     );
 
     expect(loadAttachments.execute).toHaveBeenCalled();
-    expect(mockExecute).toHaveBeenCalledTimes(1);
-    const command = mockExecute.mock.calls[0]?.[0] as SendEmailCommand;
+    expect(commandBusExecuteMock).toHaveBeenCalledTimes(1);
+    const command = commandBusExecuteMock.mock
+      .calls[0]?.[0] as SendEmailCommand;
     expect(command).toBeInstanceOf(SendEmailCommand);
     expect(command.options).toEqual(
       expect.objectContaining({

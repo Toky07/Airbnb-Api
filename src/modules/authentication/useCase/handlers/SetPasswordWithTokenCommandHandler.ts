@@ -1,7 +1,4 @@
-import {
-  BadRequestException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import type { ICommandHandler } from '../../../../shared/useCase/bus/command-handler.interface';
 import type { IAuthRepository } from '../../domain/repositories/auth.repository';
@@ -11,9 +8,10 @@ import { PasswordSetupTokenService } from '../../domain/services/password-setup-
 import { ACCOUNT_STATUS } from '../../domain/constants/account-status.constant';
 import type { SetPasswordWithTokenCommand } from '../commands/SetPasswordWithTokenCommand';
 
-export class SetPasswordWithTokenCommandHandler
-  implements ICommandHandler<SetPasswordWithTokenCommand, void>
-{
+export class SetPasswordWithTokenCommandHandler implements ICommandHandler<
+  SetPasswordWithTokenCommand,
+  void
+> {
   constructor(
     private readonly authRepository: IAuthRepository,
     private readonly tokenRepository: IPasswordSetupTokenRepository,

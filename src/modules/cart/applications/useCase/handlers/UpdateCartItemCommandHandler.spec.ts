@@ -30,7 +30,7 @@ describe('UpdateCartItemCommandHandler', () => {
     handler = new UpdateCartItemCommandHandler(
       resolveCartService as never,
       cartRepository as never,
-      cartItemCatalog as never,
+      cartItemCatalog,
       cartPresenter as never,
     );
   });

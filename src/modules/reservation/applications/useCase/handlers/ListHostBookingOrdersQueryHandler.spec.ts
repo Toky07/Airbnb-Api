@@ -31,7 +31,9 @@ describe('ListHostBookingOrdersQueryHandler', () => {
   });
 
   it('filtre les commandes par établissements du host', async () => {
-    await handler.execute(new ListHostBookingOrdersQuery(42, { page: 1, limit: 10 }));
+    await handler.execute(
+      new ListHostBookingOrdersQuery(42, { page: 1, limit: 10 }),
+    );
 
     expect(resolveHostPropertyIds.resolve).toHaveBeenCalledWith(42, undefined);
     expect(listBookingOrdersQueryHandler.buildPage).toHaveBeenCalledWith(
@@ -48,6 +50,8 @@ describe('ListHostBookingOrdersQueryHandler', () => {
     );
 
     expect(result.data).toEqual([]);
-    expect(paymentRepository.findPaginatedForReservationIds).not.toHaveBeenCalled();
+    expect(
+      paymentRepository.findPaginatedForReservationIds,
+    ).not.toHaveBeenCalled();
   });
 });

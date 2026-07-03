@@ -1,7 +1,4 @@
-import {
-  BadRequestException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../shared/useCase/bus/command-handler.interface';
 import type { IAuthRepository } from '../../domain/repositories/auth.repository';
 import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
@@ -12,9 +9,10 @@ import { PasswordSetupTokenService } from '../../domain/services/password-setup-
 import { ACCOUNT_STATUS } from '../../domain/constants/account-status.constant';
 import type { SendAccountInvitationCommand } from '../commands/SendAccountInvitationCommand';
 
-export class SendAccountInvitationCommandHandler
-  implements ICommandHandler<SendAccountInvitationCommand, void>
-{
+export class SendAccountInvitationCommandHandler implements ICommandHandler<
+  SendAccountInvitationCommand,
+  void
+> {
   constructor(
     private readonly userRepository: IUserRepository,
     private readonly authRepository: IAuthRepository,
@@ -43,7 +41,9 @@ export class SendAccountInvitationCommandHandler
     if (!auth?.id) {
       auth = await this.authRepository.createPending(email);
       if (!auth?.id) {
-        throw new BadRequestException('Impossible de créer le compte de connexion.');
+        throw new BadRequestException(
+          'Impossible de créer le compte de connexion.',
+        );
       }
     }
 

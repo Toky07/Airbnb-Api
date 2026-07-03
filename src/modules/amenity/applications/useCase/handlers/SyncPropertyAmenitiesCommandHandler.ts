@@ -7,16 +7,19 @@ import { AmenityOutput } from '../../dto/amenity.output';
 import type { ResolveAmenitiesService } from '../../services/resolve-amenities.service';
 import type { SyncPropertyAmenitiesCommand } from '../commands/SyncPropertyAmenitiesCommand';
 
-export class SyncPropertyAmenitiesCommandHandler
-  implements ICommandHandler<SyncPropertyAmenitiesCommand, AmenityOutput[]>
-{
+export class SyncPropertyAmenitiesCommandHandler implements ICommandHandler<
+  SyncPropertyAmenitiesCommand,
+  AmenityOutput[]
+> {
   constructor(
     private readonly propertyRepository: IPropertyRepository,
     private readonly propertyAmenityRepository: IPropertyAmenityRepository,
     private readonly resolveAmenitiesService: ResolveAmenitiesService,
   ) {}
 
-  async execute(command: SyncPropertyAmenitiesCommand): Promise<AmenityOutput[]> {
+  async execute(
+    command: SyncPropertyAmenitiesCommand,
+  ): Promise<AmenityOutput[]> {
     const property = await this.propertyRepository.findById(command.propertyId);
     if (!property) {
       throw new NotFoundException('Établissement introuvable');

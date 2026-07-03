@@ -53,7 +53,9 @@ export class SendAccountInvitationUseCase {
     if (!auth?.id) {
       auth = await this.authRepository.createPending(email);
       if (!auth?.id) {
-        throw new BadRequestException('Impossible de créer le compte de connexion.');
+        throw new BadRequestException(
+          'Impossible de créer le compte de connexion.',
+        );
       }
     }
 

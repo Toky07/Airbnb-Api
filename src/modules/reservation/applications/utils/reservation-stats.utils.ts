@@ -13,7 +13,9 @@ export function computeOccupancyRate(
   return Math.min(100, Math.round((confirmedNights / maxNights) * 100));
 }
 
-export function buildReservationActivityLabel(item: ReservationItemOutput): string {
+export function buildReservationActivityLabel(
+  item: ReservationItemOutput,
+): string {
   if (item.roomName && item.propertyName) {
     return `${item.roomName} — ${item.propertyName}`;
   }

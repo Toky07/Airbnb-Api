@@ -28,7 +28,8 @@ export class SmtpMailTransport implements IMailTransport {
   }
 
   async send(message: MailTransportMessage): Promise<void> {
-    const from = process.env.SMTP_FROM ?? process.env.SMTP_USER ?? 'noreply@airbnb.local';
+    const from =
+      process.env.SMTP_FROM ?? process.env.SMTP_USER ?? 'noreply@airbnb.local';
 
     await this.transporter.sendMail({
       from,

@@ -10,10 +10,7 @@ import {
   ROOM_REPOSITORY,
   type IRoomRepository,
 } from '../../domain/repositories/room.repository';
-import {
-  BadRequestException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class CartItemCatalogAdapter implements ICartItemCatalogPort {
