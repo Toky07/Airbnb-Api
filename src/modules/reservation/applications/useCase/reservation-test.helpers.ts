@@ -79,7 +79,10 @@ export function createReservationRepositoryMock(
     findIdsByPropertyId: vi.fn(),
     findIdsByPropertyIds: vi.fn(),
     findIdsByFilters: vi.fn(),
+    findByPaymentId: vi.fn(),
     clearExpiredReservations: vi.fn(),
+    update: vi.fn(),
+    setPayment: vi.fn(),
     ...overrides,
   } as unknown as IReservationRepository;
 }

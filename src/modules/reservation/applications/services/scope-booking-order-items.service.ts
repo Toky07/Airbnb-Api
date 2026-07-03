@@ -1,9 +1,6 @@
-import type { ReservationItemOutput } from '../dto/reservation-item.output';
-
-export function filterItemsByPropertyIds(
-  items: ReservationItemOutput[],
-  propertyIds: number[],
-): ReservationItemOutput[] {
+export function filterItemsByPropertyIds<
+  T extends { propertyId: number | null },
+>(items: T[], propertyIds: number[]): T[] {
   if (propertyIds.length === 0) {
     return items;
   }
@@ -14,10 +11,10 @@ export function filterItemsByPropertyIds(
   );
 }
 
-export function groupItemsByPropertyId(
-  items: ReservationItemOutput[],
-): Map<number, ReservationItemOutput[]> {
-  const groups = new Map<number, ReservationItemOutput[]>();
+export function groupItemsByPropertyId<
+  T extends { propertyId: number | null },
+>(items: T[]): Map<number, T[]> {
+  const groups = new Map<number, T[]>();
 
   for (const item of items) {
     if (item.propertyId == null) {

@@ -17,6 +17,9 @@ import type { IPaymentRepository } from '../payment/domain/repositories/payment.
 import { CheckRoomAvailabilityService } from './applications/services/check-room-availability.service';
 import { EnrichReservationOutputsService } from './applications/services/enrich-reservation-outputs.service';
 import { ResolvePaymentReservationsService } from './applications/services/resolve-payment-reservations.service';
+import { ResolveHostPropertyIdsService } from './applications/services/resolve-host-property-ids.service';
+import { ResolveReservationStatsScopeService } from './applications/services/resolve-reservation-stats-scope.service';
+import { CountScopedRoomsService } from './applications/services/count-scoped-rooms.service';
 import { BuildReservationInvoicePayloadService } from './applications/services/build-reservation-invoice-payload.service';
 import { BuildCustomerInvoiceEmailBodyService } from './applications/services/build-customer-invoice-email-body.service';
 import { BuildHostPaymentNotificationEmailBodyService } from './applications/services/build-host-payment-notification-email-body.service';
@@ -62,6 +65,9 @@ import { GetBookingOrderQuery } from './applications/useCase/queries/GetBookingO
     CheckRoomAvailabilityService,
     EnrichReservationOutputsService,
     ResolvePaymentReservationsService,
+    ResolveHostPropertyIdsService,
+    ResolveReservationStatsScopeService,
+    CountScopedRoomsService,
     ClearExpiredReservationService,
     ReservationEvent,
     BuildReservationInvoicePayloadService,
@@ -91,6 +97,9 @@ export class ReservationModule implements OnModuleInit {
     private readonly calculateStayAmount: CalculateStayAmountService,
     private readonly enrichReservationOutputs: EnrichReservationOutputsService,
     private readonly resolvePaymentReservations: ResolvePaymentReservationsService,
+    private readonly resolveHostPropertyIds: ResolveHostPropertyIdsService,
+    private readonly resolveReservationStatsScope: ResolveReservationStatsScopeService,
+    private readonly countScopedRooms: CountScopedRoomsService,
   ) {}
 
   onModuleInit() {
@@ -104,6 +113,9 @@ export class ReservationModule implements OnModuleInit {
       calculateStayAmount: this.calculateStayAmount,
       enrichReservationOutputs: this.enrichReservationOutputs,
       resolvePaymentReservations: this.resolvePaymentReservations,
+      resolveHostPropertyIds: this.resolveHostPropertyIds,
+      resolveReservationStatsScope: this.resolveReservationStatsScope,
+      countScopedRooms: this.countScopedRooms,
     });
 
     CommandBus.register(CreateReservationCommand, bootstrap.createReservationCommandHandler);

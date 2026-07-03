@@ -5,6 +5,7 @@ import {
   type IReservationRepository,
 } from '../../domain/repositories/reservation.repository';
 import { ReservationItemOutput } from '../dto/reservation-item.output';
+import { BookingOrderItemOutput } from '../dto/booking-order-item.output';
 import { resolvePaymentReservationIds } from '../dto/booking-order.output';
 import { EnrichReservationOutputsService } from './enrich-reservation-outputs.service';
 import { ReservationOutput } from '../dto/reservation.output';
@@ -29,6 +30,29 @@ export class ResolvePaymentReservationsService {
     );
 
     return this.enrichReservationOutputs.enrichItems(items);
+  }
+
+  async resolveBookingItemsForPayment(
+    payment: Payment,
+  ): Promise<BookingOrderItemOutput[]> {
+    const reservationIds = await this.resolveReservationIdsForPayment(payment);
+    if (reservationIds.length === 0) {
+      return [];
+    }
+
+    const reservations = await this.reservationRepository.findByIds(reservationIds);
+    const enrichedReservations = await this.enrichReservationOutputs.enrich(
+      reservations.map((reservation) => ReservationOutput.fromDomain(reservation)),
+    );
+
+    return enrichedReservations.flatMap((reservation) =>
+      reservation.items.map((item) =>
+        BookingOrderItemOutput.fromReservationItem(item, {
+          userId: reservation.userId,
+          status: reservation.status,
+        }),
+      ),
+    );
   }
 
   async resolveForPayments(

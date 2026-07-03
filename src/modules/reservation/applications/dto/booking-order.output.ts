@@ -3,6 +3,7 @@ import type { PaymentStatus } from '../../../payment/domain/constants/payment-st
 import type { Payment } from '../../../payment/domain/entities/payment.entity';
 import type { User } from '../../../user/domain/entities/user.entity';
 import { ReservationItemOutput } from './reservation-item.output';
+import { BookingOrderItemOutput } from './booking-order-item.output';
 
 export class BookingOrderListItemOutput {
   constructor(
@@ -63,12 +64,12 @@ export class BookingOrderDetailOutput {
     public readonly customerName: string,
     public readonly customerEmail: string,
     public readonly itemCount: number,
-    public readonly items: ReservationItemOutput[],
+    public readonly items: BookingOrderItemOutput[],
   ) {}
 
   static fromParts(
     payment: Payment,
-    items: ReservationItemOutput[],
+    items: BookingOrderItemOutput[],
     user: User | null,
   ): BookingOrderDetailOutput {
     const scopedAmount = items.reduce((total, item) => total + item.price, 0);

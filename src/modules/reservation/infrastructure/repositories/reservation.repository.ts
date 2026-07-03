@@ -158,13 +158,39 @@ export class ReservationRepository implements IReservationRepository {
     scope: ReservationStatsScope,
     status?: ReservationStatus,
   ): Promise<number> {
-    const tests = await this.repository.count({
-        where: {
-          status
-        }
-      });
-    
-    return tests;
+    if (scope.propertyId === -1) {
+      return 0;
+    }
+
+    const qb = this.repository
+      .createQueryBuilder('reservation')
+      .innerJoin('reservation.items', 'item');
+
+    if (status) {
+      qb.andWhere('reservation.status = :status', { status });
+    }
+
+    if (scope.propertyIds?.length) {
+      qb.innerJoin(
+        RoomEntity,
+        'room',
+        'room.id = item.roomId AND room.propertyId IN (:...propertyIds)',
+        { propertyIds: scope.propertyIds },
+      );
+    } else if (scope.propertyId != null && scope.propertyId > 0) {
+      qb.innerJoin(
+        RoomEntity,
+        'room',
+        'room.id = item.roomId AND room.propertyId = :propertyId',
+        { propertyId: scope.propertyId },
+      );
+    }
+
+    const result = await qb
+      .select('COUNT(DISTINCT reservation.id)', 'count')
+      .getRawOne<{ count: number | string }>();
+
+    return Number(result?.count ?? 0);
   }
 
   async sumConfirmedRevenueForMonth(

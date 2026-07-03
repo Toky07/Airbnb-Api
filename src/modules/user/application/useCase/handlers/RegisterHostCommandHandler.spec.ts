@@ -1,0 +1,67 @@
+import { BadRequestException } from '@nestjs/common';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { RegisterHostCommandHandler } from './RegisterHostCommandHandler';
+import { RegisterHostCommand } from '../commands/RegisterHostCommand';
+import { CommandBus } from '../../../../../shared/useCase/bus/bus';
+
+vi.mock('../../../../../shared/useCase/bus/bus', () => ({
+  CommandBus: { execute: vi.fn() },
+}));
+
+describe('RegisterHostCommandHandler', () => {
+  const authRepository = {
+    findByEmail: vi.fn(),
+    createPending: vi.fn(),
+    assignRoles: vi.fn(),
+  };
+  const roleRepository = { findBySlug: vi.fn() };
+  const userRepository = {
+    create: vi.fn(),
+    linkAuthAccount: vi.fn(),
+  };
+
+  let handler: RegisterHostCommandHandler;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    authRepository.findByEmail.mockResolvedValue(null);
+    authRepository.createPending.mockResolvedValue({ id: 10 });
+    roleRepository.findBySlug.mockResolvedValue({ id: 3 });
+    userRepository.create.mockResolvedValue({ id: 5 });
+    handler = new RegisterHostCommandHandler(
+      authRepository as never,
+      roleRepository as never,
+      userRepository as never,
+    );
+  });
+
+  it('crée un host et envoie l’invitation', async () => {
+    const result = await handler.execute(
+      new RegisterHostCommand({
+        email: 'host@test.com',
+        firstName: 'Jean',
+        lastName: 'Dupont',
+        phoneNumber: '+33601020304',
+      }),
+    );
+
+    expect(result).toBe(true);
+    expect(userRepository.linkAuthAccount).toHaveBeenCalledWith(5, 10);
+    expect(CommandBus.execute).toHaveBeenCalled();
+  });
+
+  it('refuse un email déjà utilisé', async () => {
+    authRepository.findByEmail.mockResolvedValue({ id: 1 });
+
+    await expect(
+      handler.execute(
+        new RegisterHostCommand({
+          email: 'host@test.com',
+          firstName: 'Jean',
+          lastName: 'Dupont',
+          phoneNumber: '+33601020304',
+        }),
+      ),
+    ).rejects.toBeInstanceOf(BadRequestException);
+  });
+});

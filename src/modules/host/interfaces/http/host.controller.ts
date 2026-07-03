@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -17,6 +16,7 @@ import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
+import { parseRequiredPropertyId } from '../../../../shared/http/parse-required-property-id';
 import type { CreatePropertyDto } from '../../../properties/applications/dto/createProperty.dto';
 import { parsePropertyBody } from '../../../properties/interfaces/http/parse-property-body';
 import { parseRoomBody } from '../../../rooms/interfaces/http/parse-room-body';
@@ -49,15 +49,6 @@ import {
   HostSyncPropertyAmenitiesUseCase,
   HostSyncRoomAmenitiesUseCase,
 } from '../../application/useCase/host-amenity.usecase';
-
-function parseRequiredPropertyId(query: Record<string, unknown>): number {
-  const raw = query.propertyId;
-  const propertyId = Number(raw);
-  if (!Number.isFinite(propertyId) || propertyId <= 0) {
-    throw new BadRequestException('propertyId requis');
-  }
-  return propertyId;
-}
 
 @Controller('host')
 export class HostController {

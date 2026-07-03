@@ -5,8 +5,11 @@ import type { IRoomRepository } from '../rooms/domain/repositories/room.reposito
 import type { IUserRepository } from '../user/domain/repositories/user.repository';
 import type { IReservationRepository } from './domain/repositories/reservation.repository';
 import type { CheckRoomAvailabilityService } from './applications/services/check-room-availability.service';
+import type { CountScopedRoomsService } from './applications/services/count-scoped-rooms.service';
 import type { EnrichReservationOutputsService } from './applications/services/enrich-reservation-outputs.service';
+import type { ResolveHostPropertyIdsService } from './applications/services/resolve-host-property-ids.service';
 import type { ResolvePaymentReservationsService } from './applications/services/resolve-payment-reservations.service';
+import type { ResolveReservationStatsScopeService } from './applications/services/resolve-reservation-stats-scope.service';
 import { CreateReservationCommandHandler } from './applications/useCase/handlers/CreateReservationCommandHandler';
 import { ConfirmReservationCommandHandler } from './applications/useCase/handlers/ConfirmReservationCommandHandler';
 import { CancelReservationCommandHandler } from './applications/useCase/handlers/CancelReservationCommandHandler';
@@ -30,6 +33,9 @@ export class ReservationBootstrap {
     calculateStayAmount: CalculateStayAmountService;
     enrichReservationOutputs: EnrichReservationOutputsService;
     resolvePaymentReservations: ResolvePaymentReservationsService;
+    resolveHostPropertyIds: ResolveHostPropertyIdsService;
+    resolveReservationStatsScope: ResolveReservationStatsScopeService;
+    countScopedRooms: CountScopedRoomsService;
   }) {
     const listReservationsQueryHandler = new ListReservationsQueryHandler(
       deps.reservationRepository,
@@ -72,21 +78,20 @@ export class ReservationBootstrap {
         listReservationsQueryHandler,
       ),
       listHostReservationsQueryHandler: new ListHostReservationsQueryHandler(
-        deps.propertyRepository,
+        deps.resolveHostPropertyIds,
         listReservationsQueryHandler,
       ),
       getReservationStatsQueryHandler: new GetReservationStatsQueryHandler(
         deps.reservationRepository,
-        deps.roomRepository,
-        deps.userRepository,
-        deps.propertyRepository,
+        deps.resolveReservationStatsScope,
+        deps.countScopedRooms,
         deps.enrichReservationOutputs,
       ),
       listBookingOrdersQueryHandler,
       listHostBookingOrdersQueryHandler: new ListHostBookingOrdersQueryHandler(
         deps.paymentRepository,
-        deps.propertyRepository,
         deps.reservationRepository,
+        deps.resolveHostPropertyIds,
         listBookingOrdersQueryHandler,
       ),
       getBookingOrderQueryHandler: new GetBookingOrderQueryHandler(

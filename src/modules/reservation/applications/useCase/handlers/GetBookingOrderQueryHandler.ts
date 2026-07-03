@@ -7,7 +7,7 @@ import type { IPropertyRepository } from '../../../../properties/domain/reposito
 import type { IPaymentRepository } from '../../../../payment/domain/repositories/payment.repository';
 import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
 import { BookingOrderDetailOutput } from '../../dto/booking-order.output';
-import type { ReservationItemOutput } from '../../dto/reservation-item.output';
+import type { BookingOrderItemOutput } from '../../dto/booking-order-item.output';
 import type { ResolvePaymentReservationsService } from '../../services/resolve-payment-reservations.service';
 import { filterItemsByPropertyIds } from '../../services/scope-booking-order-items.service';
 import type { GetBookingOrderQuery } from '../queries/GetBookingOrderQuery';
@@ -32,7 +32,9 @@ export class GetBookingOrderQueryHandler
       throw new NotFoundException('Réservation introuvable.');
     }
 
-    const allItems = await this.resolvePaymentReservations.resolveForPayment(payment);
+    const allItems = await this.resolvePaymentReservations.resolveBookingItemsForPayment(
+      payment,
+    );
 
     if (!query.access.canReadAll) {
       await this.assertHostAccess(query.access, allItems);
@@ -62,7 +64,7 @@ export class GetBookingOrderQueryHandler
 
   private async assertHostAccess(
     access: GetBookingOrderQuery['access'],
-    items: ReservationItemOutput[],
+    items: BookingOrderItemOutput[],
   ): Promise<void> {
     if (!access.canReadHost) {
       throw new ForbiddenException('Accès refusé.');
