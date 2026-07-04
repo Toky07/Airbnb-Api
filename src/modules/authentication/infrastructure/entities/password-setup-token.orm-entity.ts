@@ -23,10 +23,10 @@ export class PasswordSetupTokenOrmEntity {
   @Column()
   tokenHash: string;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: 'timestamp' })
   expiresAt: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   consumedAt: Date | null;
 
   @CreateDateColumn()

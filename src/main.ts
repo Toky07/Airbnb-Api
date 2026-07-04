@@ -1,16 +1,17 @@
 import { config } from 'dotenv';
 import { ValidationPipe } from '@nestjs/common';
 import { mkdir } from 'fs/promises';
-
-config();
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import path from 'path';
 import { join } from 'path';
 import { AppModule } from './app.module';
 import { resolveUploadRoot } from './modules/media/utils/resolve-upload-root';
 import { AllExceptionsFilter } from './shared/filters/all-exceptions.filter';
 
 async function bootstrap() {
+  // config({ path: path.join(process.cwd(), '.env') });
+  console.log('process.env: ', process.env);
   const uploadRoot = resolveUploadRoot();
   await mkdir(join(process.cwd(), uploadRoot), { recursive: true });
 
