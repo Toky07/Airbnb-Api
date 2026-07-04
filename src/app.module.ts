@@ -41,7 +41,6 @@ import { HealthController } from './health/health.controller';
   providers: [],
 })
 export class AppModule implements OnModuleInit {
-  
   async onModuleInit() {
     console.log('Data Source has been initialized!');
   }
