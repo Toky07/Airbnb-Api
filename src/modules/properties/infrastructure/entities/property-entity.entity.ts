@@ -11,6 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+// Hotel
 @Entity({ name: 'properties' })
 export class PropertyEntity {
   @PrimaryGeneratedColumn()
