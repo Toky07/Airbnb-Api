@@ -1,8 +1,6 @@
-import { config } from 'dotenv';
+import 'dotenv/config';
 import { ValidationPipe } from '@nestjs/common';
 import { mkdir } from 'fs/promises';
-
-config();
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';

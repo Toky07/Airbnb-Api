@@ -11,6 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+// Hotel
 @Entity({ name: 'properties' })
 export class PropertyEntity {
   @PrimaryGeneratedColumn()
@@ -31,10 +32,10 @@ export class PropertyEntity {
   @Column()
   country: string;
 
-  @Column()
+  @Column({ type: 'float' })
   latitude: number;
 
-  @Column()
+  @Column({ type: 'float' })
   longitude: number;
 
   @Column()

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { config } from 'dotenv';
+import 'dotenv/config';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { NestFactory } from '@nestjs/core';
@@ -13,8 +13,6 @@ import {
   mapUserRows,
 } from './lib/csv-mappers';
 import { ensureAdminUser } from './lib/ensure-admin-user';
-
-config();
 
 const SAMPLE_DATA_DIR = join(__dirname, '..', 'sample-data');
 
