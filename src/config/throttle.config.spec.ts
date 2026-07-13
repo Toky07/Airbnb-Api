@@ -26,8 +26,6 @@ describe('throttle.config', () => {
     vi.stubEnv('THROTTLE_AUTH_LOGIN_TTL_MS', '120000');
 
     expect(getThrottleLimit('THROTTLE_AUTH_LOGIN_LIMIT', 5)).toBe(12);
-    expect(getThrottleTtlMs('THROTTLE_AUTH_LOGIN_TTL_MS', 900_000)).toBe(
-      120_000,
-    );
+    expect(getThrottleTtlMs('THROTTLE_AUTH_LOGIN_TTL_MS', 900_000)).toBe(120_000);
   });
 });

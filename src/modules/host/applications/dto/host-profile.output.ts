@@ -1,4 +1,4 @@
-import { PropertyOutput } from '../../../properties/applications/dto/property.outup';
+import { PropertyOutput } from '../../../properties/applications/dto/property.output';
 
 export class HostProfileOutput {
   constructor(

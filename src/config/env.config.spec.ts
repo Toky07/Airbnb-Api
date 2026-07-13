@@ -93,9 +93,9 @@ describe('validateEnv', () => {
   });
 
   it('provides a dev-only jwt secret outside production', () => {
-    expect(getJwtSecret(createEnv({ NODE_ENV: 'development' }))).toContain(
-      'dev-only',
-    );
+    expect(
+      getJwtSecret(createEnv({ NODE_ENV: 'development' })),
+    ).toContain('dev-only');
   });
 
   it('defaults mail transport to console', () => {

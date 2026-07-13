@@ -4,7 +4,7 @@ import type { IUserRepository } from '../user/domain/repositories/user.repositor
 import type { IPropertyRepository } from '../properties/domain/repositories/property.repository';
 import type { IPasswordSetupTokenRepository } from './domain/repositories/password-setup-token.repository';
 import type { TokenGenerator } from './domain/generator/token.generator';
-import type { EnsurePropertyOwnerHostRoleService } from './application/services/ensure-property-owner-host-role.service';
+import type { EnsurePropertyOwnerHostRoleService } from './applications/services/ensure-property-owner-host-role.service';
 import type { MailService } from '../mail/applications/services/mail.service';
 import { PasswordSetupTokenService } from './domain/services/password-setup-token.service';
 import { PasswordSetupLinkBuilder } from './domain/services/password-setup-link.builder';

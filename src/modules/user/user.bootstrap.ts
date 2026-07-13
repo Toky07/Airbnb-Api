@@ -2,16 +2,16 @@ import type { IAuthRepository } from '../authentication/domain/repositories/auth
 import type { IRoleRepository } from '../authentication/domain/repositories/role.repository';
 import type { ILocalStorageService } from '../media/services/localStorage.service';
 import type { IUserRepository } from './domain/repositories/user.repository';
-import { SaveUserAvatarService } from './application/services/save-user-avatar.service';
-import { CreateUserCommandHandler } from './application/useCase/handlers/CreateUserCommandHandler';
-import { UpdateUserCommandHandler } from './application/useCase/handlers/UpdateUserCommandHandler';
-import { DeleteUserCommandHandler } from './application/useCase/handlers/DeleteUserCommandHandler';
-import { AssignUserRolesCommandHandler } from './application/useCase/handlers/AssignUserRolesCommandHandler';
-import { RegisterHostCommandHandler } from './application/useCase/handlers/RegisterHostCommandHandler';
-import { UpdateMyProfileCommandHandler } from './application/useCase/handlers/UpdateMyProfileCommandHandler';
-import { FindUserQueryHandler } from './application/useCase/handlers/FindUserQueryHandler';
-import { ListUsersQueryHandler } from './application/useCase/handlers/ListUsersQueryHandler';
-import { ListUserOptionsQueryHandler } from './application/useCase/handlers/ListUserOptionsQueryHandler';
+import { SaveUserAvatarService } from './applications/services/save-user-avatar.service';
+import { CreateUserCommandHandler } from './applications/useCase/handlers/CreateUserCommandHandler';
+import { UpdateUserCommandHandler } from './applications/useCase/handlers/UpdateUserCommandHandler';
+import { DeleteUserCommandHandler } from './applications/useCase/handlers/DeleteUserCommandHandler';
+import { AssignUserRolesCommandHandler } from './applications/useCase/handlers/AssignUserRolesCommandHandler';
+import { RegisterHostCommandHandler } from './applications/useCase/handlers/RegisterHostCommandHandler';
+import { UpdateMyProfileCommandHandler } from './applications/useCase/handlers/UpdateMyProfileCommandHandler';
+import { FindUserQueryHandler } from './applications/useCase/handlers/FindUserQueryHandler';
+import { ListUsersQueryHandler } from './applications/useCase/handlers/ListUsersQueryHandler';
+import { ListUserOptionsQueryHandler } from './applications/useCase/handlers/ListUserOptionsQueryHandler';
 
 export class UserBootstrap {
   static create(deps: {

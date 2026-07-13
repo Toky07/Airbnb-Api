@@ -22,10 +22,7 @@ import {
   clearEntitiesForTests,
   DOMAIN_TEST_ENTITIES,
 } from '../../../../test/controller-test.helpers';
-import {
-  getIntegrationTestDatabaseConfig,
-  prepareIntegrationTestDatabase,
-} from '../../../../test/test-database.config';
+import { getIntegrationTestDatabaseConfig, prepareIntegrationTestDatabase } from '../../../../test/test-database.config';
 
 describe('Auth', () => {
   let app: INestApplication;
@@ -96,7 +93,7 @@ describe('Auth', () => {
     await repository.save(
       repository.create({
         email: data.email,
-        password: await bcrypt.hash(data.password, 4),
+        password: await bcrypt.hash(data.password, 10),
         status: 'active',
       }),
     );
@@ -147,7 +144,7 @@ describe('Auth', () => {
     await userRepository.save(
       userRepository.create({
         email: 'staff@test.com',
-        password: await bcrypt.hash('password', 4),
+        password: await bcrypt.hash('password', 10),
         status: 'active',
       }),
     );

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { CreateUserCommand } from '../../../user/application/useCase/commands/CreateUserCommand';
+import { CreateUserCommand } from '../../../user/applications/useCase/commands/CreateUserCommand';
 import { fetchImageFromUrl } from '../../../media/utils/fetch-image-from-url';
 import type { ImportUserRowDto } from '../dto/import-batch.dto';
 import type { ImportEntityResult } from '../dto/import-entity-result.dto';

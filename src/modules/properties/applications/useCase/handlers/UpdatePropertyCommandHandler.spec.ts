@@ -2,7 +2,7 @@ import { Property } from '../../../domain/entities/property.entity';
 import type { IPropertyRepository } from '../../../domain/repositories/property.repository';
 import { UpdatePropertyCommandHandler } from './UpdatePropertyCommandHandler';
 import { UpdatePropertyCommand } from '../commands/UpdatePropertyCommand';
-import { PropertyOutput } from '../../dto/property.outup';
+import { PropertyOutput } from '../../dto/property.output';
 import { mockPropertyMediaPresenter } from '../test-helpers/property-usecase.mocks';
 
 const repository = {

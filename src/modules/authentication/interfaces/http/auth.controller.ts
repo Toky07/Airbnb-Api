@@ -16,7 +16,7 @@ import { parseMyProfileBody } from '../../../user/interfaces/http/parse-my-profi
 import { Public } from '../decorators/public.decorator';
 import { RequirePermissions } from '../decorators/require-permissions.decorator';
 import type { JwtPayload } from '../../domain/types/jwt-payload';
-import type { MeOutput } from '../../application/dto/me.output';
+import type { MeOutput } from '../../applications/dto/me.output';
 import type { UploadFile } from '../../../media/types/upload-file';
 import { UserOutput } from '../../../user/domain/dtos/user.output';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
@@ -29,8 +29,8 @@ import {
   AUTH_REGISTER_THROTTLE,
 } from '../../../../config/throttle.config';
 import { SensitiveRouteThrottle } from '../../../../shared/decorators/sensitive-route-throttle.decorator';
-import { RegisterHostCommand } from '../../../user/application/useCase/commands/RegisterHostCommand';
-import { UpdateMyProfileCommand } from '../../../user/application/useCase/commands/UpdateMyProfileCommand';
+import { RegisterHostCommand } from '../../../user/applications/useCase/commands/RegisterHostCommand';
+import { UpdateMyProfileCommand } from '../../../user/applications/useCase/commands/UpdateMyProfileCommand';
 import { LoginCommand } from '../../useCase/commands/LoginCommand';
 import { AssignRoleCommand } from '../../useCase/commands/AssignRoleCommand';
 import { GetMeQuery } from '../../useCase/queries/GetMeQuery';

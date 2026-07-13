@@ -10,11 +10,11 @@ import {
 } from '@nestjs/common';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
 import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
-import { type CreateRoleDto } from '../../application/dto/create-role.dto';
-import { RoleOutput } from '../../application/dto/role.output';
-import type { UpdateRoleDto } from '../../application/dto/update-role.dto';
-import { PermissionOutput } from '../../application/dto/permission.output';
-import type { SetRolePermissionsDto } from '../../application/dto/set-role-permissions.dto';
+import { type CreateRoleDto } from '../../applications/dto/create-role.dto';
+import { RoleOutput } from '../../applications/dto/role.output';
+import type { UpdateRoleDto } from '../../applications/dto/update-role.dto';
+import { PermissionOutput } from '../../applications/dto/permission.output';
+import type { SetRolePermissionsDto } from '../../applications/dto/set-role-permissions.dto';
 import { RequirePermissions } from '../decorators/require-permissions.decorator';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';

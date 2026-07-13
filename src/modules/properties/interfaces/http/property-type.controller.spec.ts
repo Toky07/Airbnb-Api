@@ -122,9 +122,7 @@ describe('PropertyTypeController', () => {
   });
 
   it('GET /property-types/options rejects unauthenticated requests', async () => {
-    await request(app.getHttpServer())
-      .get('/property-types/options')
-      .expect(401);
+    await request(app.getHttpServer()).get('/property-types/options').expect(401);
   });
 
   it('POST /property-types creates a property type', async () => {

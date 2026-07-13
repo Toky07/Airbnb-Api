@@ -14,10 +14,7 @@ import {
   DOMAIN_TEST_ENTITIES,
   registerAndLoginAsSuperAdmin,
 } from '../../../../test/controller-test.helpers';
-import {
-  getIntegrationTestDatabaseConfig,
-  prepareIntegrationTestDatabase,
-} from '../../../../test/test-database.config';
+import { getIntegrationTestDatabaseConfig, prepareIntegrationTestDatabase } from '../../../../test/test-database.config';
 
 describe('UserController', () => {
   let app: INestApplication;

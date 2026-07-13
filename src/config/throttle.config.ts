@@ -2,7 +2,10 @@ export function isThrottleEnabled(): boolean {
   return process.env.THROTTLE_ENABLED !== 'false';
 }
 
-function readPositiveInt(envKey: string, fallback: number): number {
+function readPositiveInt(
+  envKey: string,
+  fallback: number,
+): number {
   const raw = process.env[envKey]?.trim();
   if (!raw) {
     return fallback;
