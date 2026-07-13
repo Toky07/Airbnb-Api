@@ -19,8 +19,10 @@ import {
   activateAuthAccountForTests,
   assignSuperAdminRole,
   AUTH_TEST_ENTITIES,
+  clearEntitiesForTests,
   DOMAIN_TEST_ENTITIES,
 } from '../../../../test/controller-test.helpers';
+import { getIntegrationTestDatabaseConfig } from '../../../../test/test-database.config';
 
 describe('Auth', () => {
   let app: INestApplication;
@@ -31,12 +33,12 @@ describe('Auth', () => {
 
     const moduleRef = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forRoot({
-          type: 'sqlite',
-          database: ':memory:',
-          entities: [...AUTH_TEST_ENTITIES, ...DOMAIN_TEST_ENTITIES],
-          synchronize: true,
-        }),
+        TypeOrmModule.forRoot(
+          getIntegrationTestDatabaseConfig([
+            ...AUTH_TEST_ENTITIES,
+            ...DOMAIN_TEST_ENTITIES,
+          ]),
+        ),
         JwtModule.register({
           global: true,
           secret: '1234',
@@ -54,8 +56,7 @@ describe('Auth', () => {
   });
 
   beforeEach(async () => {
-    await dataSource.getRepository(AuthEntity).clear();
-    await dataSource.getRepository(UserEntity).clear();
+    await clearEntitiesForTests(dataSource, [AuthEntity, UserEntity]);
   });
 
   it(`/POST auth/register`, async () => {

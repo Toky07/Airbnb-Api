@@ -18,6 +18,7 @@ import {
   DOMAIN_TEST_ENTITIES,
   registerAndLoginAsSuperAdmin,
 } from '../../../../test/controller-test.helpers';
+import { getIntegrationTestDatabaseConfig } from '../../../../test/test-database.config';
 import { ReservationOrmEntity } from '../../infrastructure/entities/reservation.orm-entity';
 import { PaymentOrmEntity } from '../../../payment/infrastructure/entities/payment.orm-entity';
 import { PAYMENT_GATEWAY } from '../../../payment/domain/ports/payment-gateway.port';
@@ -36,17 +37,14 @@ describe('ReservationController', () => {
 
     const moduleRef = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forRoot({
-          type: 'sqlite',
-          database: ':memory:',
-          entities: [
+        TypeOrmModule.forRoot(
+          getIntegrationTestDatabaseConfig([
             ...AUTH_TEST_ENTITIES,
             ...DOMAIN_TEST_ENTITIES,
             ReservationOrmEntity,
             PaymentOrmEntity,
-          ],
-          synchronize: true,
-        }),
+          ]),
+        ),
         JwtModule.register({
           global: true,
           secret: '1234',

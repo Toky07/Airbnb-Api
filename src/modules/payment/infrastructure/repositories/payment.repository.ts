@@ -96,10 +96,10 @@ export class PaymentRepository implements IPaymentRepository {
         `(
           (payment.propertyType = :propertyType AND payment.propertyId IN (:...reservationIds))
           OR payment.id IN (
-            SELECT reservation.paymentId
+            SELECT reservation."paymentId"
             FROM reservations reservation
             WHERE reservation.id IN (:...reservationIds)
-              AND reservation.paymentId IS NOT NULL
+              AND reservation."paymentId" IS NOT NULL
           )
         )`,
         {

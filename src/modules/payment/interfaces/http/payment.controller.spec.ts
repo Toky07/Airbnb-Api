@@ -12,6 +12,7 @@ import {
   AUTH_TEST_ENTITIES,
   DOMAIN_TEST_ENTITIES,
 } from '../../../../test/controller-test.helpers';
+import { getIntegrationTestDatabaseConfig } from '../../../../test/test-database.config';
 import {
   createPaymentGatewayMock,
   createWebhookVerifierMock,
@@ -35,17 +36,14 @@ describe('PaymentController', () => {
 
     const moduleRef = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forRoot({
-          type: 'sqlite',
-          database: ':memory:',
-          entities: [
+        TypeOrmModule.forRoot(
+          getIntegrationTestDatabaseConfig([
             ...AUTH_TEST_ENTITIES,
             ...DOMAIN_TEST_ENTITIES,
             ReservationOrmEntity,
             PaymentOrmEntity,
-          ],
-          synchronize: true,
-        }),
+          ]),
+        ),
         JwtModule.register({
           global: true,
           secret: '1234',

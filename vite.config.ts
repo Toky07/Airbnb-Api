@@ -1,5 +1,7 @@
 import { defineConfig } from 'vitest/config';
 
+const usesPostgres = process.env.DB_TYPE !== 'sqlite';
+
 const shared = {
   globals: true,
   setupFiles: ['./src/test/vitest.setup.ts'],
@@ -36,9 +38,14 @@ export default defineConfig({
         test: {
           ...shared,
           name: 'e2e',
+          setupFiles: [
+            './src/test/vitest.setup.ts',
+            './src/test/vitest.e2e.setup.ts',
+          ],
           include: ['**/*.controller.spec.ts'],
           isolate: true,
-          fileParallelism: true,
+          fileParallelism: !usesPostgres,
+          hookTimeout: usesPostgres ? 30_000 : 10_000,
         },
       },
     ],

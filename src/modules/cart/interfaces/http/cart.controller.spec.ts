@@ -29,6 +29,7 @@ import {
   DOMAIN_TEST_ENTITIES,
   registerAndLoginAsSuperAdmin,
 } from '../../../../test/controller-test.helpers';
+import { getIntegrationTestDatabaseConfig } from '../../../../test/test-database.config';
 
 describe('CartController', () => {
   let app: INestApplication;
@@ -62,12 +63,12 @@ describe('CartController', () => {
 
     const moduleRef = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forRoot({
-          type: 'sqlite',
-          database: ':memory:',
-          entities: [...AUTH_TEST_ENTITIES, ...DOMAIN_TEST_ENTITIES],
-          synchronize: true,
-        }),
+        TypeOrmModule.forRoot(
+          getIntegrationTestDatabaseConfig([
+            ...AUTH_TEST_ENTITIES,
+            ...DOMAIN_TEST_ENTITIES,
+          ]),
+        ),
         JwtModule.register({
           global: true,
           secret: '1234',

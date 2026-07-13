@@ -13,6 +13,7 @@ import {
   DOMAIN_TEST_ENTITIES,
   registerAndLoginAsSuperAdmin,
 } from '../../../../test/controller-test.helpers';
+import { getIntegrationTestDatabaseConfig } from '../../../../test/test-database.config';
 
 describe('ImportController', () => {
   let app: INestApplication;
@@ -22,12 +23,12 @@ describe('ImportController', () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forRoot({
-          type: 'sqlite',
-          database: ':memory:',
-          synchronize: true,
-          entities: [...AUTH_TEST_ENTITIES, ...DOMAIN_TEST_ENTITIES],
-        }),
+        TypeOrmModule.forRoot(
+          getIntegrationTestDatabaseConfig([
+            ...AUTH_TEST_ENTITIES,
+            ...DOMAIN_TEST_ENTITIES,
+          ]),
+        ),
         JwtModule.register({
           global: true,
           secret: '1234',

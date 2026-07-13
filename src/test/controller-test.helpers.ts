@@ -144,3 +144,29 @@ export async function registerAndLoginAsSuperAdmin(
 
   return login.body.token as string;
 }
+
+export async function clearEntitiesForTests(
+  dataSource: DataSource,
+  entities: Parameters<DataSource['getRepository']>[0][],
+): Promise<void> {
+  if (process.env.DB_TYPE === 'sqlite') {
+    for (const entity of entities) {
+      await dataSource.getRepository(entity).clear();
+    }
+    return;
+  }
+
+  const tableNames = [
+    ...new Set(
+      entities.map((entity) => dataSource.getMetadata(entity).tableName),
+    ),
+  ]
+    .map((name) => `"${name}"`)
+    .join(', ');
+
+  if (tableNames.length > 0) {
+    await dataSource.query(
+      `TRUNCATE TABLE ${tableNames} RESTART IDENTITY CASCADE`,
+    );
+  }
+}

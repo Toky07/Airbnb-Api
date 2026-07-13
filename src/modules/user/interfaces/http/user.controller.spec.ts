@@ -10,9 +10,11 @@ import { AuthEntity } from '../../../authentication/infrastructure/entity/auth.e
 import { AuthModule } from '../../../authentication/auth.module';
 import {
   AUTH_TEST_ENTITIES,
+  clearEntitiesForTests,
   DOMAIN_TEST_ENTITIES,
   registerAndLoginAsSuperAdmin,
 } from '../../../../test/controller-test.helpers';
+import { getIntegrationTestDatabaseConfig } from '../../../../test/test-database.config';
 
 describe('UserController', () => {
   let app: INestApplication;
@@ -24,12 +26,12 @@ describe('UserController', () => {
 
     const moduleRef = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forRoot({
-          type: 'sqlite',
-          database: ':memory:',
-          entities: [...AUTH_TEST_ENTITIES, ...DOMAIN_TEST_ENTITIES],
-          synchronize: true,
-        }),
+        TypeOrmModule.forRoot(
+          getIntegrationTestDatabaseConfig([
+            ...AUTH_TEST_ENTITIES,
+            ...DOMAIN_TEST_ENTITIES,
+          ]),
+        ),
         JwtModule.register({
           global: true,
           secret: '1234',
@@ -55,8 +57,7 @@ describe('UserController', () => {
   });
 
   beforeEach(async () => {
-    const repository = dataSource.getRepository(UserEntity);
-    await repository.clear();
+    await clearEntitiesForTests(dataSource, [UserEntity]);
   });
 
   it(`/GET users`, async () => {

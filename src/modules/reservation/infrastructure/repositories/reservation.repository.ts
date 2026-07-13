@@ -338,7 +338,7 @@ export class ReservationRepository implements IReservationRepository {
     const entity = await this.repository
       .createQueryBuilder('reservation')
       .leftJoinAndSelect('reservation.items', 'items')
-      .where('reservation.paymentId = :paymentId', { paymentId })
+      .where('reservation."paymentId" = :paymentId', { paymentId })
       .getOne();
 
     return entity ? ReservationMapper.toDomain(entity) : null;
