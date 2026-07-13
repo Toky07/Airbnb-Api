@@ -12,7 +12,10 @@ import {
   AUTH_TEST_ENTITIES,
   DOMAIN_TEST_ENTITIES,
 } from '../../../../test/controller-test.helpers';
-import { getIntegrationTestDatabaseConfig, prepareIntegrationTestDatabase } from '../../../../test/test-database.config';
+import {
+  getIntegrationTestDatabaseConfig,
+  prepareIntegrationTestDatabase,
+} from '../../../../test/test-database.config';
 import {
   createPaymentGatewayMock,
   createWebhookVerifierMock,
