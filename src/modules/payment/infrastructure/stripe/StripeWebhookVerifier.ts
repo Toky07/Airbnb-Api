@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import type { IWebhookVerifier } from '../../domain/ports/webhook-verifier.port';
 import type { WebhookEventPayload } from '../../domain/ports/payment-gateway.port';
 import { StripeClientProvider } from './StripeClientProvider';
+import { getStripeWebhookSecret } from './stripe.config';
 
 @Injectable()
 export class StripeWebhookVerifier implements IWebhookVerifier {
@@ -9,7 +10,7 @@ export class StripeWebhookVerifier implements IWebhookVerifier {
 
   verify(payload: Buffer, signature: string): WebhookEventPayload {
     const stripe = this.stripeClientProvider.stripe;
-    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET?.trim() ?? '';
+    const webhookSecret = getStripeWebhookSecret();
 
     if (!webhookSecret) {
       throw new Error('STRIPE_WEBHOOK_SECRET is not configured.');

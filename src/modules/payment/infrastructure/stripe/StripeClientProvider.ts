@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import Stripe from 'stripe';
+import { getStripeSecretKey } from './stripe.config';
 
 @Injectable()
 export class StripeClientProvider {
@@ -7,7 +8,7 @@ export class StripeClientProvider {
 
   get stripe(): Stripe.Stripe {
     if (!this._stripe) {
-      const stripeSecretKey = process.env.STRIPE_SECRET_KEY?.trim() ?? '';
+      const stripeSecretKey = getStripeSecretKey();
       this._stripe = new Stripe(stripeSecretKey);
     }
     return this._stripe;

@@ -9,7 +9,7 @@ import { AuthRepository } from './infrastructure/repositories/auth.repository';
 import { TOKEN_GENERATOR } from './domain/generator/token.generator';
 import type { TokenGenerator } from './domain/generator/token.generator';
 import { JwtTokenGenerator } from './infrastructure/generator/jwt-token.generator';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, type JwtSignOptions } from '@nestjs/jwt';
 import { RoleController } from './interfaces/http/role.conroller';
 import { ROLE_REPOSITORY } from './domain/repositories/role.repository';
 import type { IRoleRepository } from './domain/repositories/role.repository';
@@ -51,6 +51,7 @@ import { ListRolesQuery } from './useCase/queries/ListRolesQuery';
 import { ListPermissionsQuery } from './useCase/queries/ListPermissionsQuery';
 import { ValidatePasswordSetupTokenQuery } from './useCase/queries/ValidatePasswordSetupTokenQuery';
 import { RateLimitModule } from '../../shared/rate-limit.module';
+import { getJwtExpiresIn, getJwtSecret } from '../../config/env.config';
 
 @Module({
   imports: [
@@ -62,10 +63,14 @@ import { RateLimitModule } from '../../shared/rate-limit.module';
       PasswordSetupTokenOrmEntity,
       UserEntity,
     ]),
-    JwtModule.register({
+    JwtModule.registerAsync({
       global: true,
-      secret: '1234',
-      signOptions: { expiresIn: '8h' },
+      useFactory: () => ({
+        secret: getJwtSecret(),
+        signOptions: {
+          expiresIn: getJwtExpiresIn() as JwtSignOptions['expiresIn'],
+        },
+      }),
     }),
     forwardRef(() => UserModule),
     PropertiesModule,

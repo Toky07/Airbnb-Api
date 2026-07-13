@@ -3,11 +3,12 @@ import { ConsoleMailTransport } from './console-mail.transport';
 import { ResendMailTransport } from './resend-mail.transport';
 import { SmtpMailTransport } from './smtp-mail.transport';
 import type { IMailTransport } from '../../domain/ports/mail-transport.port';
+import { getMailTransport } from '../../../../config/env.config';
 
 @Injectable()
 export class MailTransportFactory {
   create(): IMailTransport {
-    const mode = (process.env.MAIL_TRANSPORT ?? 'console').toLowerCase();
+    const mode = getMailTransport();
     if (mode === 'resend') {
       return new ResendMailTransport();
     }
