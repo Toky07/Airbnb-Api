@@ -29,7 +29,10 @@ import {
   DOMAIN_TEST_ENTITIES,
   registerAndLoginAsSuperAdmin,
 } from '../../../../test/controller-test.helpers';
-import { getIntegrationTestDatabaseConfig } from '../../../../test/test-database.config';
+import {
+  getIntegrationTestDatabaseConfig,
+  prepareIntegrationTestDatabase,
+} from '../../../../test/test-database.config';
 
 describe('CartController', () => {
   let app: INestApplication;
@@ -60,6 +63,8 @@ describe('CartController', () => {
           status: 'succeeded',
         })),
     });
+
+    await prepareIntegrationTestDatabase();
 
     const moduleRef = await Test.createTestingModule({
       imports: [

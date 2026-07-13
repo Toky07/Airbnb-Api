@@ -1,5 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { TYPEORM_ENTITIES } from './typeorm.entities';
+import { getMigrationsGlob } from './typeorm-options';
 
 export function getDatabaseConfig(): TypeOrmModuleOptions {
   const dbType = process.env.DB_TYPE ?? 'sqlite';
@@ -12,9 +13,11 @@ export function getDatabaseConfig(): TypeOrmModuleOptions {
       username: process.env.DB_USER ?? 'airbnb',
       password: process.env.DB_PASSWORD ?? 'airbnb',
       database: process.env.DB_NAME ?? 'airbnb',
-      synchronize: process.env.DB_SYNCHRONIZE === 'true',
+      synchronize: false,
+      migrationsRun: true,
       autoLoadEntities: true,
       entities: TYPEORM_ENTITIES,
+      migrations: [getMigrationsGlob()],
     };
   }
 

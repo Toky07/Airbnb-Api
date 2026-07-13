@@ -21,7 +21,10 @@ import {
   DOMAIN_TEST_ENTITIES,
   activateAuthAccountForTests,
 } from '../../../../test/controller-test.helpers';
-import { getIntegrationTestDatabaseConfig } from '../../../../test/test-database.config';
+import {
+  getIntegrationTestDatabaseConfig,
+  prepareIntegrationTestDatabase,
+} from '../../../../test/test-database.config';
 
 describe('MailController', () => {
   let app: INestApplication;
@@ -32,6 +35,7 @@ describe('MailController', () => {
   beforeAll(async () => {
     previousMailTransport = process.env.MAIL_TRANSPORT;
     process.env.MAIL_TRANSPORT = 'console';
+    await prepareIntegrationTestDatabase();
 
     const moduleRef = await Test.createTestingModule({
       imports: [

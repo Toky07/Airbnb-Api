@@ -3,6 +3,9 @@ import { UserEntity } from '../modules/user/infrastructure/entities/user.entity'
 import { Role } from '../modules/authentication/infrastructure/entity/role.entity';
 import { PermissionEntity } from '../modules/authentication/infrastructure/entity/permission.entity';
 import { PropertyEntity } from '../modules/properties/infrastructure/entities/property-entity.entity';
+import { PropertyTypeEntity } from '../modules/properties/infrastructure/entities/property-type.entity';
+import { RoomEntity } from '../modules/rooms/infrastructure/entities/room.entity';
+import { RoomTypeEntity } from '../modules/rooms/infrastructure/entities/room-type.entity';
 import { MediaOrmEntity } from '../modules/media/infrastructure/entities/media-orm.entity';
 import { EmailOrmEntity } from '../modules/mail/infrastructure/entities/email.orm-entity';
 import { PasswordSetupTokenOrmEntity } from '../modules/authentication/infrastructure/entities/password-setup-token.orm-entity';
@@ -22,6 +25,9 @@ export const TYPEORM_ENTITIES = [
   Role,
   PermissionEntity,
   PropertyEntity,
+  PropertyTypeEntity,
+  RoomEntity,
+  RoomTypeEntity,
   MediaOrmEntity,
   EmailOrmEntity,
   PasswordSetupTokenOrmEntity,

@@ -12,7 +12,10 @@ import {
   AUTH_TEST_ENTITIES,
   DOMAIN_TEST_ENTITIES,
 } from '../../../../test/controller-test.helpers';
-import { getIntegrationTestDatabaseConfig } from '../../../../test/test-database.config';
+import {
+  getIntegrationTestDatabaseConfig,
+  prepareIntegrationTestDatabase,
+} from '../../../../test/test-database.config';
 import {
   createPaymentGatewayMock,
   createWebhookVerifierMock,
@@ -33,6 +36,7 @@ describe('PaymentController', () => {
   beforeAll(async () => {
     process.env.MAIL_TRANSPORT = 'console';
     process.env.STRIPE_PUBLISHABLE_KEY = 'pk_test_controller';
+    await prepareIntegrationTestDatabase();
 
     const moduleRef = await Test.createTestingModule({
       imports: [
