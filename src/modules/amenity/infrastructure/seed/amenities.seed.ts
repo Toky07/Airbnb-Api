@@ -61,6 +61,19 @@ export class AmenitiesSeedService implements OnModuleInit {
     amenities: ReadonlyArray<{ name: string; icon: string }>,
     scope: typeof AMENITY_SCOPE.PROPERTY | typeof AMENITY_SCOPE.ROOM,
   ): Promise<void> {
+    const existingCount = await this.repository.count({ where: { scope } });
+    if (existingCount === 0) {
+      await this.repository.insert(
+        amenities.map((amenity) => ({
+          name: amenity.name,
+          icon: amenity.icon,
+          scope,
+          isActive: true,
+        })),
+      );
+      return;
+    }
+
     for (const amenity of amenities) {
       const existing = await this.repository.findOne({
         where: { name: amenity.name, scope },

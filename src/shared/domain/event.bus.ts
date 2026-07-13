@@ -59,4 +59,9 @@ export class EventBus {
       this.subscribe(eventName, handler);
     });
   }
+
+  /** Clears all handlers — used between e2e files when the module graph is shared. */
+  clear(): void {
+    this.handlers.clear();
+  }
 }

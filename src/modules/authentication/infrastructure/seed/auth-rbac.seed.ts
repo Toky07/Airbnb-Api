@@ -26,15 +26,26 @@ export class AuthRbacSeedService implements OnModuleInit {
   }
 
   private async seedPermissions(): Promise<void> {
-    for (const definition of PERMISSION_DEFINITIONS) {
-      const existing = await this.permissionRepository.findOne({
-        where: { key: definition.key },
-      });
-      if (!existing) {
-        await this.permissionRepository.save(
-          this.permissionRepository.create(definition),
-        );
-      }
+    const existingCount = await this.permissionRepository.count();
+    if (existingCount === 0) {
+      await this.permissionRepository.insert(PERMISSION_DEFINITIONS);
+      return;
+    }
+
+    const existingKeys = new Set(
+      (
+        await this.permissionRepository.find({
+          select: { key: true },
+        })
+      ).map((permission) => permission.key),
+    );
+
+    const missing = PERMISSION_DEFINITIONS.filter(
+      (definition) => !existingKeys.has(definition.key),
+    );
+
+    if (missing.length > 0) {
+      await this.permissionRepository.insert(missing);
     }
   }
 

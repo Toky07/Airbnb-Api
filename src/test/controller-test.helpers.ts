@@ -103,7 +103,8 @@ export async function activateAuthAccountForTests(
   }
 
   await authRepo.update(auth.id, {
-    password: await bcrypt.hash(password, 10),
+    // Cost 4 is enough for tests and much faster than production rounds.
+    password: await bcrypt.hash(password, 4),
     status: ACCOUNT_STATUS.ACTIVE,
   });
 
