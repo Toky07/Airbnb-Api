@@ -16,6 +16,7 @@ import { AmenityModule } from './modules/amenity/amenity.module';
 import { getDatabaseConfig } from './config/database.config';
 import { getCacheConfig } from './config/cache.config';
 import { HealthController } from './health/health.controller';
+import { RateLimitModule } from './shared/rate-limit.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { HealthController } from './health/health.controller';
       isGlobal: true,
       useFactory: getCacheConfig,
     }),
+    RateLimitModule,
     UserModule,
     AuthModule,
     PropertiesModule,

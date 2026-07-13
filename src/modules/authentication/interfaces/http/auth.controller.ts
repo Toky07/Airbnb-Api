@@ -23,6 +23,12 @@ import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
 import { SetPasswordWithTokenCommand } from '../../useCase/commands/SetPasswordWithTokenCommand';
 import { ValidatePasswordSetupTokenQuery } from '../../useCase/queries/ValidatePasswordSetupTokenQuery';
+import {
+  AUTH_LOGIN_THROTTLE,
+  AUTH_PASSWORD_SETUP_THROTTLE,
+  AUTH_REGISTER_THROTTLE,
+} from '../../../../config/throttle.config';
+import { SensitiveRouteThrottle } from '../../../../shared/decorators/sensitive-route-throttle.decorator';
 import { RegisterHostCommand } from '../../../user/application/useCase/commands/RegisterHostCommand';
 import { UpdateMyProfileCommand } from '../../../user/application/useCase/commands/UpdateMyProfileCommand';
 import { LoginCommand } from '../../useCase/commands/LoginCommand';
@@ -32,6 +38,7 @@ import { GetMeQuery } from '../../useCase/queries/GetMeQuery';
 @Controller('auth')
 export class AuthController {
   @Public()
+  @SensitiveRouteThrottle(AUTH_REGISTER_THROTTLE)
   @Post('register')
   async create(
     @Body()
@@ -49,6 +56,7 @@ export class AuthController {
   }
 
   @Public()
+  @SensitiveRouteThrottle(AUTH_LOGIN_THROTTLE)
   @Post('login')
   @HttpCode(200)
   async login(
@@ -61,12 +69,14 @@ export class AuthController {
   }
 
   @Public()
+  @SensitiveRouteThrottle(AUTH_PASSWORD_SETUP_THROTTLE)
   @Get('password-setup/validate')
   async validatePasswordSetup(@Query('token') token: string) {
     return QueryBus.execute(new ValidatePasswordSetupTokenQuery(token));
   }
 
   @Public()
+  @SensitiveRouteThrottle(AUTH_PASSWORD_SETUP_THROTTLE)
   @Post('password-setup')
   @HttpCode(200)
   async setPassword(

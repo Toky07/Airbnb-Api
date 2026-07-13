@@ -6,3 +6,4 @@ import { randomUUID } from 'crypto';
 const testUploadRoot = join(tmpdir(), `airbnb-api-uploads-${randomUUID()}`);
 mkdirSync(testUploadRoot, { recursive: true });
 process.env.UPLOAD_ROOT = testUploadRoot;
+process.env.THROTTLE_ENABLED = process.env.THROTTLE_ENABLED ?? 'false';
