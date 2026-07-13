@@ -20,7 +20,7 @@
     "migration:generate": "TS_NODE_PROJECT=tsconfig.typeorm.json typeorm-ts-node-commonjs migration:generate src/database/migrations/MigrationName -d src/config/typeorm-cli.config.ts",
     "migration:run": "TS_NODE_PROJECT=tsconfig.typeorm.json typeorm-ts-node-commonjs migration:run -d src/config/typeorm-cli.config.ts",
     "migration:revert": "TS_NODE_PROJECT=tsconfig.typeorm.json typeorm-ts-node-commonjs migration:revert -d src/config/typeorm-cli.config.ts",
-    "test:cov": "jest --coverage",
+    "test:cov": "vitest run --coverage --project unit",
     "import:sample-data": "ts-node -r tsconfig-paths/register --project tsconfig.json scripts/import-sample-data.ts"
   },
   "dependencies": {
@@ -66,6 +66,7 @@
     "@types/pdfkit": "^0.17.6",
     "@types/stripe": "^8.0.416",
     "@types/supertest": "^6.0.2",
+    "@vitest/coverage-v8": "^4.1.6",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.2",

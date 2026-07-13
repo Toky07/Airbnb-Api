@@ -18,6 +18,19 @@ const shared = {
 export default defineConfig({
   plugins: [],
   test: {
+    coverage: {
+      provider: 'v8',
+      reportsDirectory: './coverage',
+      reporter: ['text', 'html', 'lcov'],
+      include: ['src/**/*.ts'],
+      exclude: [
+        'src/**/*.spec.ts',
+        'src/**/*.controller.spec.ts',
+        'src/**/main.ts',
+        'src/database/migrations/**',
+        'src/config/typeorm-cli.config.ts',
+      ],
+    },
     projects: [
       {
         extends: true,
