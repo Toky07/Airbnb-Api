@@ -1,4 +1,5 @@
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
+import { getStripeCurrency } from '../../../../config/env.config';
 import { CreatePaymentCommand } from '../../../payment/applications/useCase/commands/CreatePaymentCommand';
 import type { CreatePaymentResult } from '../../../payment/applications/useCase/handlers/CreatePaymentCommandHandler';
 import type { CartCheckoutReservationCreatedEvent } from '../../domain/events/cart-checkout-reservation-created.event';
@@ -13,7 +14,7 @@ export class CartCheckoutPaymentListener {
         const result = await CommandBus.execute<CreatePaymentResult>(
           new CreatePaymentCommand(
             event.amountInCents,
-            process.env.STRIPE_CURRENCY?.trim().toLowerCase() || 'eur',
+            getStripeCurrency(),
             'stripe',
             event.authId,
             'reservation',

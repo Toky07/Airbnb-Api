@@ -4,6 +4,7 @@ import type {
   IMailTransport,
   MailTransportMessage,
 } from '../../domain/ports/mail-transport.port';
+import { getResendApiKey, getResendFrom } from '../../../../config/env.config';
 
 @Injectable()
 export class ResendMailTransport implements IMailTransport {
@@ -12,15 +13,12 @@ export class ResendMailTransport implements IMailTransport {
   private readonly logger = new Logger(ResendMailTransport.name);
 
   constructor() {
-    const apiKey = process.env.RESEND_API_KEY;
+    const apiKey = getResendApiKey();
     if (!apiKey) {
       throw new Error('RESEND_API_KEY is required when MAIL_TRANSPORT=resend');
     }
 
-    this.from =
-      process.env.RESEND_FROM ??
-      process.env.SMTP_FROM ??
-      'onboarding@resend.dev';
+    this.from = getResendFrom();
     this.resend = new Resend(apiKey);
   }
 

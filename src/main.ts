@@ -7,11 +7,14 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { AppModule } from './app.module';
 import { getCorsConfig } from './config/cors.config';
+import { validateEnv } from './config/env.config';
 import { getHelmetOptions, isHelmetEnabled } from './config/helmet.config';
 import { resolveUploadRoot } from './modules/media/utils/resolve-upload-root';
 import { AllExceptionsFilter } from './shared/filters/all-exceptions.filter';
 
 async function bootstrap() {
+  validateEnv();
+
   const uploadRoot = resolveUploadRoot();
   await mkdir(join(process.cwd(), uploadRoot), { recursive: true });
 
@@ -28,7 +31,7 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
-      forbidNonWhitelisted: false,
+      forbidNonWhitelisted: true,
       transform: true,
     }),
   );
