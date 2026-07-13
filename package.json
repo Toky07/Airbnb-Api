@@ -17,6 +17,9 @@
     "test": "vitest run --project unit",
     "test:watch": "vitest --project unit",
     "test:e2e": "DB_TYPE=postgres DB_HOST=localhost DB_PORT=5432 DB_USER=airbnb DB_PASSWORD=airbnb DB_NAME=airbnb_test vitest run --project e2e",
+    "migration:generate": "TS_NODE_PROJECT=tsconfig.typeorm.json typeorm-ts-node-commonjs migration:generate src/database/migrations/MigrationName -d src/config/typeorm-cli.config.ts",
+    "migration:run": "TS_NODE_PROJECT=tsconfig.typeorm.json typeorm-ts-node-commonjs migration:run -d src/config/typeorm-cli.config.ts",
+    "migration:revert": "TS_NODE_PROJECT=tsconfig.typeorm.json typeorm-ts-node-commonjs migration:revert -d src/config/typeorm-cli.config.ts",
     "test:cov": "jest --coverage",
     "import:sample-data": "ts-node -r tsconfig-paths/register --project tsconfig.json scripts/import-sample-data.ts"
   },

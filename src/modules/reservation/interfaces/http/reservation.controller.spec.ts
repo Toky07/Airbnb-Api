@@ -18,7 +18,10 @@ import {
   DOMAIN_TEST_ENTITIES,
   registerAndLoginAsSuperAdmin,
 } from '../../../../test/controller-test.helpers';
-import { getIntegrationTestDatabaseConfig } from '../../../../test/test-database.config';
+import {
+  getIntegrationTestDatabaseConfig,
+  prepareIntegrationTestDatabase,
+} from '../../../../test/test-database.config';
 import { ReservationOrmEntity } from '../../infrastructure/entities/reservation.orm-entity';
 import { PaymentOrmEntity } from '../../../payment/infrastructure/entities/payment.orm-entity';
 import { PAYMENT_GATEWAY } from '../../../payment/domain/ports/payment-gateway.port';
@@ -34,6 +37,7 @@ describe('ReservationController', () => {
 
   beforeAll(async () => {
     process.env.MAIL_TRANSPORT = 'console';
+    await prepareIntegrationTestDatabase();
 
     const moduleRef = await Test.createTestingModule({
       imports: [

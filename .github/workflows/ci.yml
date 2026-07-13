@@ -38,7 +38,6 @@ jobs:
       DB_USER: airbnb
       DB_PASSWORD: airbnb
       DB_NAME: airbnb_test
-      DB_SYNCHRONIZE: 'true'
 
     steps:
       - name: Checkout

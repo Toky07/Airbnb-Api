@@ -18,7 +18,10 @@ import {
   DOMAIN_TEST_ENTITIES,
   registerAndLoginAsSuperAdmin,
 } from '../../../../test/controller-test.helpers';
-import { getIntegrationTestDatabaseConfig } from '../../../../test/test-database.config';
+import {
+  getIntegrationTestDatabaseConfig,
+  prepareIntegrationTestDatabase,
+} from '../../../../test/test-database.config';
 
 describe('AmenityController', () => {
   let app: INestApplication;
@@ -53,6 +56,8 @@ describe('AmenityController', () => {
   } as const;
 
   beforeAll(async () => {
+    await prepareIntegrationTestDatabase();
+
     const moduleRef = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot(

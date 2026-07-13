@@ -6,6 +6,7 @@ case "${ENVIRONMENT:-prod}" in
     exec npm run start:dev
     ;;
   prod|production)
+    npm run migration:run
     exec node dist/src/main.js
     ;;
   *)
