@@ -50,9 +50,11 @@ import { GetMeQuery } from './useCase/queries/GetMeQuery';
 import { ListRolesQuery } from './useCase/queries/ListRolesQuery';
 import { ListPermissionsQuery } from './useCase/queries/ListPermissionsQuery';
 import { ValidatePasswordSetupTokenQuery } from './useCase/queries/ValidatePasswordSetupTokenQuery';
+import { RateLimitModule } from '../../shared/rate-limit.module';
 
 @Module({
   imports: [
+    RateLimitModule,
     TypeOrmModule.forFeature([
       AuthEntity,
       Role,
