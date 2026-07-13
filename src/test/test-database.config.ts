@@ -1,10 +1,9 @@
 import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import type { EntitySchema, MixedList } from 'typeorm';
 
-type EntityClass = Function | EntitySchema;
+type Entities = TypeOrmModuleOptions['entities'];
 
 export function getIntegrationTestDatabaseConfig(
-  entities: MixedList<EntityClass>,
+  entities: Entities,
 ): TypeOrmModuleOptions {
   if (process.env.DB_TYPE === 'sqlite') {
     return {
