@@ -145,6 +145,43 @@ export async function registerAndLoginAsSuperAdmin(
   return login.body.token as string;
 }
 
+export async function registerAndLoginAsHost(
+  app: INestApplication,
+  dataSource: DataSource,
+  payload: RegisterPayload = {
+    email: 'host@test.com',
+    password: '123456',
+    firstName: 'Host',
+    lastName: 'Test',
+    phoneNumber: '+33601020304',
+  },
+): Promise<string> {
+  process.env.MAIL_TRANSPORT = process.env.MAIL_TRANSPORT ?? 'console';
+
+  await request(app.getHttpServer())
+    .post('/auth/register')
+    .send({
+      email: payload.email,
+      firstName: payload.firstName,
+      lastName: payload.lastName,
+      phoneNumber: payload.phoneNumber,
+    })
+    .expect(201);
+
+  await activateAuthAccountForTests(
+    dataSource,
+    payload.email,
+    payload.password,
+  );
+
+  const login = await request(app.getHttpServer())
+    .post('/auth/login')
+    .send({ email: payload.email, password: payload.password })
+    .expect(200);
+
+  return login.body.token as string;
+}
+
 export async function clearEntitiesForTests(
   dataSource: DataSource,
   entities: Parameters<DataSource['getRepository']>[0][],
