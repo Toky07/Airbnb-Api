@@ -6,80 +6,99 @@ import {
   validateEnv,
 } from './env.config';
 
+function createEnv(
+  overrides: Record<string, string | undefined> = {},
+): NodeJS.ProcessEnv {
+  return { ...overrides };
+}
+
 describe('validateEnv', () => {
   afterEach(() => {
     vi.unstubAllEnvs();
   });
 
   it('skips validation when SKIP_ENV_VALIDATION=true', () => {
-    vi.stubEnv('SKIP_ENV_VALIDATION', 'true');
-    vi.stubEnv('NODE_ENV', 'production');
-
-    expect(() => validateEnv(process.env)).not.toThrow();
+    expect(() =>
+      validateEnv(
+        createEnv({
+          SKIP_ENV_VALIDATION: 'true',
+          NODE_ENV: 'production',
+        }),
+      ),
+    ).not.toThrow();
   });
 
   it('accepts a valid production configuration', () => {
-    vi.stubEnv('SKIP_ENV_VALIDATION', 'false');
-    vi.stubEnv('NODE_ENV', 'production');
-    vi.stubEnv('DB_TYPE', 'postgres');
-    vi.stubEnv('DB_HOST', 'postgres');
-    vi.stubEnv('DB_USER', 'airbnb_prod');
-    vi.stubEnv('DB_PASSWORD', 'super-secure-db-password');
-    vi.stubEnv('DB_NAME', 'airbnb');
-    vi.stubEnv('JWT_SECRET', 'a'.repeat(32));
-    vi.stubEnv('MAIL_TRANSPORT', 'resend');
-    vi.stubEnv('RESEND_API_KEY', 're_live_example');
-    vi.stubEnv('STRIPE_SECRET_KEY', 'sk_live_example');
-    vi.stubEnv('STRIPE_WEBHOOK_SECRET', 'whsec_example');
-    vi.stubEnv('STRIPE_PUBLISHABLE_KEY', 'pk_live_example');
-
-    expect(() => validateEnv(process.env)).not.toThrow();
+    expect(() =>
+      validateEnv(
+        createEnv({
+          SKIP_ENV_VALIDATION: 'false',
+          NODE_ENV: 'production',
+          DB_TYPE: 'postgres',
+          DB_HOST: 'postgres',
+          DB_USER: 'airbnb_prod',
+          DB_PASSWORD: 'super-secure-db-password',
+          DB_NAME: 'airbnb',
+          JWT_SECRET: 'a'.repeat(32),
+          MAIL_TRANSPORT: 'resend',
+          RESEND_API_KEY: 're_live_example',
+          STRIPE_SECRET_KEY: 'sk_live_example',
+          STRIPE_WEBHOOK_SECRET: 'whsec_example',
+          STRIPE_PUBLISHABLE_KEY: 'pk_live_example',
+        }),
+      ),
+    ).not.toThrow();
   });
 
   it('rejects missing database secrets in production', () => {
-    vi.stubEnv('SKIP_ENV_VALIDATION', 'false');
-    vi.stubEnv('NODE_ENV', 'production');
-    vi.stubEnv('DB_TYPE', 'postgres');
-    vi.stubEnv('DB_PASSWORD', 'airbnb');
-
     try {
-      validateEnv(process.env);
+      validateEnv(
+        createEnv({
+          SKIP_ENV_VALIDATION: 'false',
+          NODE_ENV: 'production',
+          DB_TYPE: 'postgres',
+          DB_PASSWORD: 'airbnb',
+        }),
+      );
       expect.unreachable('validateEnv should have thrown');
     } catch (error) {
       expect(error).toBeInstanceOf(EnvValidationError);
-      const issues = (error as EnvValidationError).issues.join(' ');
-      expect(issues).toContain('DB_HOST is required');
-      expect(issues).toContain(
-        'DB_PASSWORD must not use the default Docker value',
+      expect((error as EnvValidationError).issues).toEqual(
+        expect.arrayContaining([
+          'DB_HOST is required',
+          'DB_USER is required',
+          'DB_NAME is required',
+          'DB_PASSWORD must not use the default Docker value in production',
+        ]),
       );
     }
   });
 
   it('requires resend api key when mail transport is resend', () => {
-    vi.stubEnv('SKIP_ENV_VALIDATION', 'false');
-    vi.stubEnv('NODE_ENV', 'development');
-    vi.stubEnv('MAIL_TRANSPORT', 'resend');
-
     try {
-      validateEnv(process.env);
+      validateEnv(
+        createEnv({
+          SKIP_ENV_VALIDATION: 'false',
+          NODE_ENV: 'development',
+          MAIL_TRANSPORT: 'resend',
+        }),
+      );
       expect.unreachable('validateEnv should have thrown');
     } catch (error) {
       expect(error).toBeInstanceOf(EnvValidationError);
-      expect((error as EnvValidationError).issues).toContain(
+      expect((error as EnvValidationError).issues).toEqual([
         'RESEND_API_KEY is required',
-      );
+      ]);
     }
   });
 
   it('provides a dev-only jwt secret outside production', () => {
-    vi.stubEnv('NODE_ENV', 'development');
-    delete process.env.JWT_SECRET;
-
-    expect(getJwtSecret(process.env)).toContain('dev-only');
+    expect(getJwtSecret(createEnv({ NODE_ENV: 'development' }))).toContain(
+      'dev-only',
+    );
   });
 
   it('defaults mail transport to console', () => {
-    delete process.env.MAIL_TRANSPORT;
-    expect(getMailTransport(process.env)).toBe('console');
+    expect(getMailTransport(createEnv())).toBe('console');
   });
 });
