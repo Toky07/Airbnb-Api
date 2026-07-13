@@ -12,34 +12,33 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  database:
-    name: Database
+  quality:
+    name: Lint, test & build
     runs-on: ubuntu-latest
+
     services:
       postgres:
-        image: postgres:16
+        image: postgres:16-alpine
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: airbnb
+          POSTGRES_PASSWORD: airbnb
           POSTGRES_DB: airbnb_test
         ports:
           - 5432:5432
         options: >-
-          --health-cmd="pg_isready -U postgres -d airbnb_test"
-          --health-interval=10s
+          --health-cmd="pg_isready -U airbnb -d airbnb_test"
+          --health-interval=5s
           --health-timeout=5s
-          --health-retries=5
-  env:
-    DB_TYPE: postgres
-    DB_HOST: localhost
-    DB_PORT: 5432
-    DB_USERNAME: postgres
-    DB_PASSWORD: postgres
-    DB_DATABASE: airbnb_test
+          --health-retries=10
 
-  quality:
-    name: Lint, test & build
-    runs-on: ubuntu-latest
+    env:
+      DB_TYPE: postgres
+      DB_HOST: localhost
+      DB_PORT: 5432
+      DB_USER: airbnb
+      DB_PASSWORD: airbnb
+      DB_NAME: airbnb_test
+      DB_SYNCHRONIZE: 'true'
 
     steps:
       - name: Checkout
