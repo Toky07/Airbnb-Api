@@ -1,10 +1,30 @@
 import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { execSync } from 'node:child_process';
-import { join } from 'node:path';
 import { DataSource } from 'typeorm';
+import { InitialSchema1783920447445 } from '../database/migrations/1783920447445-InitialSchema';
 import { TYPEORM_ENTITIES } from '../config/typeorm.entities';
+import { EventBus } from '../shared/domain/event.bus';
 
 type Entities = TypeOrmModuleOptions['entities'];
+
+const E2E_DB_STATE_KEY = '__airbnb_e2e_db_state__';
+
+type E2eDbState = {
+  initPromise: Promise<void> | null;
+};
+
+function getE2eDbState(): E2eDbState {
+  const globalState = globalThis as typeof globalThis & {
+    [E2E_DB_STATE_KEY]?: E2eDbState;
+  };
+
+  if (!globalState[E2E_DB_STATE_KEY]) {
+    globalState[E2E_DB_STATE_KEY] = {
+      initPromise: null,
+    };
+  }
+
+  return globalState[E2E_DB_STATE_KEY];
+}
 
 function getPostgresConnectionOptions(database?: string) {
   return {
@@ -17,50 +37,78 @@ function getPostgresConnectionOptions(database?: string) {
   };
 }
 
-function runMigrationsViaCli(): void {
-  const apiRoot = join(__dirname, '..', '..');
+async function createAdminDataSource(): Promise<DataSource> {
+  const dataSource = new DataSource({
+    ...getPostgresConnectionOptions(),
+    entities: TYPEORM_ENTITIES,
+    migrations: [InitialSchema1783920447445],
+    synchronize: false,
+  });
+  await dataSource.initialize();
+  return dataSource;
+}
 
-  execSync(
-    'npx typeorm-ts-node-commonjs migration:run -d src/config/typeorm-cli.config.ts',
-    {
-      cwd: apiRoot,
-      env: {
-        ...process.env,
-        TS_NODE_PROJECT: 'tsconfig.typeorm.json',
-        DB_TYPE: 'postgres',
-        DB_HOST: process.env.DB_HOST ?? 'localhost',
-        DB_PORT: process.env.DB_PORT ?? '5432',
-        DB_USER: process.env.DB_USER ?? 'airbnb',
-        DB_PASSWORD: process.env.DB_PASSWORD ?? 'airbnb',
-        DB_NAME: process.env.DB_NAME ?? 'airbnb_test',
-      },
-      stdio: 'pipe',
-    },
+async function resetSchemaAndMigrate(dataSource: DataSource): Promise<void> {
+  await dataSource.query('DROP SCHEMA public CASCADE');
+  await dataSource.query('CREATE SCHEMA public');
+  await dataSource.query('GRANT ALL ON SCHEMA public TO public');
+  await dataSource.runMigrations();
+}
+
+async function truncateAllTables(dataSource: DataSource): Promise<void> {
+  const tables: Array<{ tablename: string }> = await dataSource.query(`
+    SELECT tablename
+    FROM pg_tables
+    WHERE schemaname = 'public'
+      AND tablename <> 'migrations'
+  `);
+
+  if (tables.length === 0) {
+    return;
+  }
+
+  const tableNames = tables.map((table) => `"${table.tablename}"`).join(', ');
+  await dataSource.query(
+    `TRUNCATE TABLE ${tableNames} RESTART IDENTITY CASCADE`,
   );
 }
 
+/**
+ * Prepares the Postgres integration database.
+ * - First call in the worker: drop schema + run migrations in-process (once).
+ * - Later calls: truncate tables only (keeps schema).
+ */
 export async function prepareIntegrationTestDatabase(): Promise<void> {
+  // Prevent duplicate EventBus listeners when Vitest reuses the module graph.
+  EventBus.getInstance().clear();
+
   if (process.env.DB_TYPE === 'sqlite') {
     return;
   }
 
-  const dataSource = new DataSource({
-    ...getPostgresConnectionOptions(),
-    entities: TYPEORM_ENTITIES,
-    synchronize: false,
-  });
+  const state = getE2eDbState();
 
-  await dataSource.initialize();
+  if (!state.initPromise) {
+    state.initPromise = (async () => {
+      const dataSource = await createAdminDataSource();
+      try {
+        await resetSchemaAndMigrate(dataSource);
+      } finally {
+        await dataSource.destroy();
+      }
+    })();
+    await state.initPromise;
+    return;
+  }
 
+  await state.initPromise;
+
+  const dataSource = await createAdminDataSource();
   try {
-    await dataSource.query('DROP SCHEMA public CASCADE');
-    await dataSource.query('CREATE SCHEMA public');
-    await dataSource.query('GRANT ALL ON SCHEMA public TO public');
+    await truncateAllTables(dataSource);
   } finally {
     await dataSource.destroy();
   }
-
-  runMigrationsViaCli();
 }
 
 export function getIntegrationTestDatabaseConfig(

@@ -96,7 +96,7 @@ describe('Auth', () => {
     await repository.save(
       repository.create({
         email: data.email,
-        password: await bcrypt.hash(data.password, 10),
+        password: await bcrypt.hash(data.password, 4),
         status: 'active',
       }),
     );
@@ -147,7 +147,7 @@ describe('Auth', () => {
     await userRepository.save(
       userRepository.create({
         email: 'staff@test.com',
-        password: await bcrypt.hash('password', 10),
+        password: await bcrypt.hash('password', 4),
         status: 'active',
       }),
     );
