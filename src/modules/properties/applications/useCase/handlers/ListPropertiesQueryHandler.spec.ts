@@ -2,7 +2,7 @@ import { Property } from '../../../domain/entities/property.entity';
 import type { IPropertyRepository } from '../../../domain/repositories/property.repository';
 import { ListPropertiesQueryHandler } from './ListPropertiesQueryHandler';
 import { ListPropertiesQuery } from '../queries/ListPropertiesQuery';
-import { PropertyOutput } from '../../dto/property.outup';
+import { PropertyOutput } from '../../dto/property.output';
 import { buildPaginationMeta } from '../../../../../shared/pagination/pagination.types';
 import { mockPropertyMediaPresenter } from '../test-helpers/property-usecase.mocks';
 

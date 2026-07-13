@@ -18,19 +18,19 @@ import type {
   CreateUserDto,
   UpdateUserDto,
 } from '../../domain/dtos/createUser.dto';
-import type { AssignUserRolesDto } from '../../application/dto/assign-user-roles.dto';
+import type { AssignUserRolesDto } from '../../applications/dto/assign-user-roles.dto';
 import { parseUserBody } from './parse-user-body';
 import type { UploadFile } from '../../../media/types/upload-file';
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { CreateUserCommand } from '../../application/useCase/commands/CreateUserCommand';
-import { UpdateUserCommand } from '../../application/useCase/commands/UpdateUserCommand';
-import { DeleteUserCommand } from '../../application/useCase/commands/DeleteUserCommand';
-import { AssignUserRolesCommand } from '../../application/useCase/commands/AssignUserRolesCommand';
-import { FindUserQuery } from '../../application/useCase/queries/FindUserQuery';
-import { ListUsersQuery } from '../../application/useCase/queries/ListUsersQuery';
-import { ListUserOptionsQuery } from '../../application/useCase/queries/ListUserOptionsQuery';
+import { CreateUserCommand } from '../../applications/useCase/commands/CreateUserCommand';
+import { UpdateUserCommand } from '../../applications/useCase/commands/UpdateUserCommand';
+import { DeleteUserCommand } from '../../applications/useCase/commands/DeleteUserCommand';
+import { AssignUserRolesCommand } from '../../applications/useCase/commands/AssignUserRolesCommand';
+import { FindUserQuery } from '../../applications/useCase/queries/FindUserQuery';
+import { ListUsersQuery } from '../../applications/useCase/queries/ListUsersQuery';
+import { ListUserOptionsQuery } from '../../applications/useCase/queries/ListUserOptionsQuery';
 
 @Controller('users')
 export class UserController {

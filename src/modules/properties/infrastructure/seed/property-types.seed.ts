@@ -22,6 +22,19 @@ export class PropertyTypesSeedService implements OnModuleInit {
   ) {}
 
   async onModuleInit(): Promise<void> {
+    const existingCount = await this.repository.count();
+    if (existingCount === 0) {
+      await this.repository.insert(
+        DEFAULT_PROPERTY_TYPES.map((name, index) => ({
+          name,
+          slug: slugify(name),
+          sortOrder: index,
+          isActive: true,
+        })),
+      );
+      return;
+    }
+
     for (const [index, name] of DEFAULT_PROPERTY_TYPES.entries()) {
       const slug = slugify(name);
       const existing = await this.repository.findOne({ where: { slug } });

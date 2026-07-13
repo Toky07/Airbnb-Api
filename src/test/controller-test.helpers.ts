@@ -103,7 +103,8 @@ export async function activateAuthAccountForTests(
   }
 
   await authRepo.update(auth.id, {
-    password: await bcrypt.hash(password, 10),
+    // Cost 4 is enough for tests and much faster than production rounds.
+    password: await bcrypt.hash(password, 4),
     status: ACCOUNT_STATUS.ACTIVE,
   });
 
@@ -136,6 +137,43 @@ export async function registerAndLoginAsSuperAdmin(
     payload.password,
   );
   await assignSuperAdminRole(dataSource, payload.email);
+
+  const login = await request(app.getHttpServer())
+    .post('/auth/login')
+    .send({ email: payload.email, password: payload.password })
+    .expect(200);
+
+  return login.body.token as string;
+}
+
+export async function registerAndLoginAsHost(
+  app: INestApplication,
+  dataSource: DataSource,
+  payload: RegisterPayload = {
+    email: 'host@test.com',
+    password: '123456',
+    firstName: 'Host',
+    lastName: 'Test',
+    phoneNumber: '+33601020304',
+  },
+): Promise<string> {
+  process.env.MAIL_TRANSPORT = process.env.MAIL_TRANSPORT ?? 'console';
+
+  await request(app.getHttpServer())
+    .post('/auth/register')
+    .send({
+      email: payload.email,
+      firstName: payload.firstName,
+      lastName: payload.lastName,
+      phoneNumber: payload.phoneNumber,
+    })
+    .expect(201);
+
+  await activateAuthAccountForTests(
+    dataSource,
+    payload.email,
+    payload.password,
+  );
 
   const login = await request(app.getHttpServer())
     .post('/auth/login')

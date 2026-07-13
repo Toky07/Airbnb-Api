@@ -29,26 +29,26 @@ import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
 import { ListRoomTypeOptionsQuery } from '../../../rooms/applications/useCase/queries/ListRoomTypeOptionsQuery';
 import { AMENITY_SCOPE } from '../../../amenity/domain/constants/amenity-scope.constant';
 import type { SyncAmenitiesDto } from '../../../amenity/applications/dto/create-amenity.dto';
-import { GetHostProfileUseCase } from '../../application/useCase/get-host-profile.usecase';
+import { GetHostProfileUseCase } from '../../applications/useCase/get-host-profile.usecase';
 import {
   CreateHostPropertyUseCase,
   GetHostPropertyUseCase,
   ListHostPropertiesUseCase,
   UpdateHostPropertyUseCase,
-} from '../../application/useCase/host-property.usecase';
+} from '../../applications/useCase/host-property.usecase';
 import {
   CreateHostRoomUseCase,
   DeleteHostRoomUseCase,
   ListHostRoomsUseCase,
   UpdateHostRoomUseCase,
-} from '../../application/useCase/host-rooms.usecase';
+} from '../../applications/useCase/host-rooms.usecase';
 import {
   HostGetPropertyAmenitiesUseCase,
   HostGetRoomAmenitiesUseCase,
   HostListAmenityOptionsUseCase,
   HostSyncPropertyAmenitiesUseCase,
   HostSyncRoomAmenitiesUseCase,
-} from '../../application/useCase/host-amenity.usecase';
+} from '../../applications/useCase/host-amenity.usecase';
 
 @Controller('host')
 export class HostController {

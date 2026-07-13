@@ -1,5 +1,5 @@
 import { Property } from '../../../domain/entities/property.entity';
-import { PropertyOutput } from '../../dto/property.outup';
+import { PropertyOutput } from '../../dto/property.output';
 import { PropertyMediaPresenter } from '../../presenters/property-media.presenter';
 
 export const mockPropertyMediaPresenter = {

@@ -18,6 +18,19 @@ const shared = {
 export default defineConfig({
   plugins: [],
   test: {
+    coverage: {
+      provider: 'v8',
+      reportsDirectory: './coverage',
+      reporter: ['text', 'html', 'lcov'],
+      include: ['src/**/*.ts'],
+      exclude: [
+        'src/**/*.spec.ts',
+        'src/**/*.controller.spec.ts',
+        'src/**/main.ts',
+        'src/database/migrations/**',
+        'src/config/typeorm-cli.config.ts',
+      ],
+    },
     projects: [
       {
         extends: true,
@@ -43,7 +56,9 @@ export default defineConfig({
             './src/test/vitest.e2e.setup.ts',
           ],
           include: ['**/*.controller.spec.ts'],
-          isolate: true,
+          // Share the module graph across files: Postgres suite is sequential
+          // anyway, and re-transforming Nest modules for every file dominated runtime.
+          isolate: false,
           fileParallelism: !usesPostgres,
           hookTimeout: usesPostgres ? 30_000 : 10_000,
         },

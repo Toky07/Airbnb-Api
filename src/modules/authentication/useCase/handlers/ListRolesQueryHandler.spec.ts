@@ -1,5 +1,5 @@
 import { UserNameVO } from '../../../user/domain/valueObject/username.vo';
-import { RoleOutput } from '../../application/dto/role.output';
+import { RoleOutput } from '../../applications/dto/role.output';
 import { RoleEntity } from '../../domain/entities/role.entity';
 import type { IRoleRepository } from '../../domain/repositories/role.repository';
 import { ListRolesQueryHandler } from './ListRolesQueryHandler';

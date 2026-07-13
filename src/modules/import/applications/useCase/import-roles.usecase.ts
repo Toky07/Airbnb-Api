@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { CreateRoleCommand } from '../../../authentication/useCase/commands/CreateRoleCommand';
-import { RoleOutput } from '../../../authentication/application/dto/role.output';
+import { RoleOutput } from '../../../authentication/applications/dto/role.output';
 import { UpdateRoleCommand } from '../../../authentication/useCase/commands/UpdateRoleCommand';
 import { SetRolePermissionsCommand } from '../../../authentication/useCase/commands/SetRolePermissionsCommand';
 import { ROLE_REPOSITORY } from '../../../authentication/domain/repositories/role.repository';

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
 import type { CreatePropertyDto } from '../../../properties/applications/dto/createProperty.dto';
 import { PropertyMediaPresenter } from '../../../properties/applications/presenters/property-media.presenter';
-import { PropertyOutput } from '../../../properties/applications/dto/property.outup';
+import { PropertyOutput } from '../../../properties/applications/dto/property.output';
 import type { UploadFile } from '../../../media/types/upload-file';
 import { ResolveHostUserService } from '../services/resolve-host-user.service';
 import { ResolveHostPropertyService } from '../services/resolve-host-property.service';

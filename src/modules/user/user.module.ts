@@ -20,15 +20,15 @@ import { MediaModule } from '../media/media.module';
 import { UserBootstrap } from './user.bootstrap';
 import { CommandBus } from '../../shared/useCase/bus/bus';
 import { QueryBus } from '../../shared/useCase/bus/query-bus';
-import { CreateUserCommand } from './application/useCase/commands/CreateUserCommand';
-import { UpdateUserCommand } from './application/useCase/commands/UpdateUserCommand';
-import { DeleteUserCommand } from './application/useCase/commands/DeleteUserCommand';
-import { AssignUserRolesCommand } from './application/useCase/commands/AssignUserRolesCommand';
-import { RegisterHostCommand } from './application/useCase/commands/RegisterHostCommand';
-import { UpdateMyProfileCommand } from './application/useCase/commands/UpdateMyProfileCommand';
-import { FindUserQuery } from './application/useCase/queries/FindUserQuery';
-import { ListUsersQuery } from './application/useCase/queries/ListUsersQuery';
-import { ListUserOptionsQuery } from './application/useCase/queries/ListUserOptionsQuery';
+import { CreateUserCommand } from './applications/useCase/commands/CreateUserCommand';
+import { UpdateUserCommand } from './applications/useCase/commands/UpdateUserCommand';
+import { DeleteUserCommand } from './applications/useCase/commands/DeleteUserCommand';
+import { AssignUserRolesCommand } from './applications/useCase/commands/AssignUserRolesCommand';
+import { RegisterHostCommand } from './applications/useCase/commands/RegisterHostCommand';
+import { UpdateMyProfileCommand } from './applications/useCase/commands/UpdateMyProfileCommand';
+import { FindUserQuery } from './applications/useCase/queries/FindUserQuery';
+import { ListUsersQuery } from './applications/useCase/queries/ListUsersQuery';
+import { ListUserOptionsQuery } from './applications/useCase/queries/ListUserOptionsQuery';
 
 @Module({
   imports: [

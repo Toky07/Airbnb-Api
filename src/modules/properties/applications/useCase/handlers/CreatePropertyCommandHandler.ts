@@ -2,7 +2,7 @@ import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-
 import { CommandBus } from '../../../../../shared/useCase/bus/bus';
 import type { IPropertyRepository } from '../../../domain/repositories/property.repository';
 import { Property } from '../../../domain/entities/property.entity';
-import { PropertyOutput } from '../../dto/property.outup';
+import { PropertyOutput } from '../../dto/property.output';
 import { ENTITY_TYPE } from '../../../../media/constant';
 import { SaveEntityMediasCommand } from '../../../../media/applications/useCase/commands/SaveEntityMediasCommand';
 import type { PropertyMediaPresenter } from '../../presenters/property-media.presenter';

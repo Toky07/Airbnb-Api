@@ -2,7 +2,7 @@ import {
   toOptionalScalarString,
   toScalarString,
 } from '../../../../shared/http/to-scalar-string';
-import type { UpdateMyProfileDto } from '../../application/dto/update-my-profile.dto';
+import type { UpdateMyProfileDto } from '../../applications/dto/update-my-profile.dto';
 
 export function parseMyProfileBody(
   body: Record<string, unknown>,

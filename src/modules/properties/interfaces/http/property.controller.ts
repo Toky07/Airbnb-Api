@@ -13,7 +13,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
 import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
-import { PropertyOutput } from '../../applications/dto/property.outup';
+import { PropertyOutput } from '../../applications/dto/property.output';
 import type { CreatePropertyDto } from '../../applications/dto/createProperty.dto';
 import { parsePropertyBody } from './parse-property-body';
 import type { UploadFile } from '../../../media/types/upload-file';

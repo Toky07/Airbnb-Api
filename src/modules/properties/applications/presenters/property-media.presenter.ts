@@ -6,7 +6,7 @@ import { Media } from '../../../media/domain/entities/media.entity';
 import { RoomOutput } from '../../../rooms/applications/dto/room.output';
 import { Room } from '../../../rooms/domain/entities/room.entity';
 import { Property } from '../../domain/entities/property.entity';
-import { PropertyOutput } from '../dto/property.outup';
+import { PropertyOutput } from '../dto/property.output';
 
 @Injectable()
 export class PropertyMediaPresenter {

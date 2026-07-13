@@ -1,7 +1,7 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../shared/useCase/bus/command-handler.interface';
 import type { IRoleRepository } from '../../domain/repositories/role.repository';
-import { RoleOutput } from '../../application/dto/role.output';
+import { RoleOutput } from '../../applications/dto/role.output';
 import { UserNameVO } from '../../../user/domain/valueObject/username.vo';
 import { SUPERADMIN_ROLE_SLUG } from '../../domain/constants/permissions.constant';
 import type { UpdateRoleCommand } from '../commands/UpdateRoleCommand';
