@@ -24,7 +24,7 @@ export function getDatabaseConfig(): TypeOrmModuleOptions {
   return {
     type: 'sqlite',
     database: process.env.DB_SQLITE_PATH ?? 'database.sqlite',
-    synchronize: true,
+    synchronize: false,
     autoLoadEntities: true,
     entities: TYPEORM_ENTITIES,
   };
