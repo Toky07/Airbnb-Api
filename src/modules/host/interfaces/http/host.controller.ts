@@ -25,66 +25,44 @@ import type { CreateRoomDto } from '../../../rooms/applications/dto/createRoom.d
 import { ENTITY_MEDIA_LIMITS, ENTITY_TYPE } from '../../../media/constant';
 import type { UploadFile } from '../../../media/types/upload-file';
 import { ListPropertyTypeOptionsQuery } from '../../../properties/applications/useCase/queries/ListPropertyTypeOptionsQuery';
+import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
 import { ListRoomTypeOptionsQuery } from '../../../rooms/applications/useCase/queries/ListRoomTypeOptionsQuery';
 import { AMENITY_SCOPE } from '../../../amenity/domain/constants/amenity-scope.constant';
 import type { SyncAmenitiesDto } from '../../../amenity/applications/dto/create-amenity.dto';
-import { GetHostProfileUseCase } from '../../applications/useCase/get-host-profile.usecase';
-import {
-  CreateHostPropertyUseCase,
-  GetHostPropertyUseCase,
-  ListHostPropertiesUseCase,
-  UpdateHostPropertyUseCase,
-} from '../../applications/useCase/host-property.usecase';
-import {
-  CreateHostRoomUseCase,
-  DeleteHostRoomUseCase,
-  ListHostRoomsUseCase,
-  UpdateHostRoomUseCase,
-} from '../../applications/useCase/host-rooms.usecase';
-import {
-  HostGetPropertyAmenitiesUseCase,
-  HostGetRoomAmenitiesUseCase,
-  HostListAmenityOptionsUseCase,
-  HostSyncPropertyAmenitiesUseCase,
-  HostSyncRoomAmenitiesUseCase,
-} from '../../applications/useCase/host-amenity.usecase';
+import { GetHostProfileQuery } from '../../applications/useCase/queries/GetHostProfileQuery';
+import { ListHostPropertiesQuery } from '../../applications/useCase/queries/ListHostPropertiesQuery';
+import { GetHostPropertyQuery } from '../../applications/useCase/queries/GetHostPropertyQuery';
+import { CreateHostPropertyCommand } from '../../applications/useCase/commands/CreateHostPropertyCommand';
+import { UpdateHostPropertyCommand } from '../../applications/useCase/commands/UpdateHostPropertyCommand';
+import { ListHostRoomsQuery } from '../../applications/useCase/queries/ListHostRoomsQuery';
+import { CreateHostRoomCommand } from '../../applications/useCase/commands/CreateHostRoomCommand';
+import { UpdateHostRoomCommand } from '../../applications/useCase/commands/UpdateHostRoomCommand';
+import { DeleteHostRoomCommand } from '../../applications/useCase/commands/DeleteHostRoomCommand';
+import { ListHostAmenityOptionsQuery } from '../../applications/useCase/queries/ListHostAmenityOptionsQuery';
+import { GetHostPropertyAmenitiesQuery } from '../../applications/useCase/queries/GetHostPropertyAmenitiesQuery';
+import { SyncHostPropertyAmenitiesCommand } from '../../applications/useCase/commands/SyncHostPropertyAmenitiesCommand';
+import { GetHostRoomAmenitiesQuery } from '../../applications/useCase/queries/GetHostRoomAmenitiesQuery';
+import { SyncHostRoomAmenitiesCommand } from '../../applications/useCase/commands/SyncHostRoomAmenitiesCommand';
 
 @Controller('host')
 export class HostController {
-  constructor(
-    private readonly getHostProfileUseCase: GetHostProfileUseCase,
-    private readonly listHostPropertiesUseCase: ListHostPropertiesUseCase,
-    private readonly getHostPropertyUseCase: GetHostPropertyUseCase,
-    private readonly createHostPropertyUseCase: CreateHostPropertyUseCase,
-    private readonly updateHostPropertyUseCase: UpdateHostPropertyUseCase,
-    private readonly listHostRoomsUseCase: ListHostRoomsUseCase,
-    private readonly createHostRoomUseCase: CreateHostRoomUseCase,
-    private readonly updateHostRoomUseCase: UpdateHostRoomUseCase,
-    private readonly deleteHostRoomUseCase: DeleteHostRoomUseCase,
-    private readonly hostListAmenityOptionsUseCase: HostListAmenityOptionsUseCase,
-    private readonly hostGetPropertyAmenitiesUseCase: HostGetPropertyAmenitiesUseCase,
-    private readonly hostSyncPropertyAmenitiesUseCase: HostSyncPropertyAmenitiesUseCase,
-    private readonly hostGetRoomAmenitiesUseCase: HostGetRoomAmenitiesUseCase,
-    private readonly hostSyncRoomAmenitiesUseCase: HostSyncRoomAmenitiesUseCase,
-  ) {}
-
   @Get('profile')
   @RequirePermissions('host.dashboard.read')
   profile(@Req() request: { user: JwtPayload }) {
-    return this.getHostProfileUseCase.execute(request.user);
+    return QueryBus.execute(new GetHostProfileQuery(request.user));
   }
 
   @Get('properties')
   @RequirePermissions('host.property.read')
   properties(@Req() request: { user: JwtPayload }) {
-    return this.listHostPropertiesUseCase.execute(request.user);
+    return QueryBus.execute(new ListHostPropertiesQuery(request.user));
   }
 
   @Get('properties/:id')
   @RequirePermissions('host.property.read')
   property(@Req() request: { user: JwtPayload }, @Param('id') id: number) {
-    return this.getHostPropertyUseCase.execute(request.user, Number(id));
+    return QueryBus.execute(new GetHostPropertyQuery(request.user, Number(id)));
   }
 
   @Post('properties')
@@ -100,7 +78,9 @@ export class HostController {
         ? (body as CreatePropertyDto)
         : parsePropertyBody(body);
     const { ownerId: _ownerId, ...fields } = dto;
-    return this.createHostPropertyUseCase.execute(request.user, fields, image);
+    return CommandBus.execute(
+      new CreateHostPropertyCommand(request.user, fields, image),
+    );
   }
 
   @Put('properties/:id')
@@ -117,11 +97,8 @@ export class HostController {
         ? (body as CreatePropertyDto)
         : parsePropertyBody(body);
     const { ownerId: _ownerId, ...fields } = dto;
-    return this.updateHostPropertyUseCase.execute(
-      request.user,
-      Number(id),
-      fields,
-      image,
+    return CommandBus.execute(
+      new UpdateHostPropertyCommand(request.user, Number(id), fields, image),
     );
   }
 
@@ -132,10 +109,12 @@ export class HostController {
     @Query() query: Record<string, unknown>,
   ) {
     const propertyId = parseRequiredPropertyId(query);
-    return this.listHostRoomsUseCase.execute(
-      request.user,
-      propertyId,
-      parsePaginationQuery(query),
+    return QueryBus.execute(
+      new ListHostRoomsQuery(
+        request.user,
+        propertyId,
+        parsePaginationQuery(query),
+      ),
     );
   }
 
@@ -156,11 +135,8 @@ export class HostController {
         ? (body as CreateRoomDto)
         : parseRoomBody(body);
     const { property: _property, ...fields } = parsed;
-    return this.createHostRoomUseCase.execute(
-      request.user,
-      propertyId,
-      fields,
-      images,
+    return CommandBus.execute(
+      new CreateHostRoomCommand(request.user, propertyId, fields, images),
     );
   }
 
@@ -184,13 +160,15 @@ export class HostController {
         : parseRoomBody(rawBody);
     const { property: _property, ...fields } = parsed;
     const keptImages = parseKeptImages(rawBody);
-    return this.updateHostRoomUseCase.execute(
-      request.user,
-      propertyId,
-      Number(id),
-      fields,
-      images,
-      keptImages,
+    return CommandBus.execute(
+      new UpdateHostRoomCommand(
+        request.user,
+        propertyId,
+        Number(id),
+        fields,
+        images,
+        keptImages,
+      ),
     );
   }
 
@@ -202,10 +180,8 @@ export class HostController {
     @Query() query: Record<string, unknown>,
   ) {
     const propertyId = parseRequiredPropertyId(query);
-    return this.deleteHostRoomUseCase.execute(
-      request.user,
-      propertyId,
-      Number(id),
+    return CommandBus.execute(
+      new DeleteHostRoomCommand(request.user, propertyId, Number(id)),
     );
   }
 
@@ -224,13 +200,17 @@ export class HostController {
   @Get('amenities/property/options')
   @RequirePermissions('host.property.read')
   propertyAmenityOptions() {
-    return this.hostListAmenityOptionsUseCase.execute(AMENITY_SCOPE.PROPERTY);
+    return QueryBus.execute(
+      new ListHostAmenityOptionsQuery(AMENITY_SCOPE.PROPERTY),
+    );
   }
 
   @Get('amenities/room/options')
   @RequirePermissions('host.rooms.read')
   roomAmenityOptions() {
-    return this.hostListAmenityOptionsUseCase.execute(AMENITY_SCOPE.ROOM);
+    return QueryBus.execute(
+      new ListHostAmenityOptionsQuery(AMENITY_SCOPE.ROOM),
+    );
   }
 
   @Get('properties/:id/amenities')
@@ -239,9 +219,8 @@ export class HostController {
     @Req() request: { user: JwtPayload },
     @Param('id') id: number,
   ) {
-    return this.hostGetPropertyAmenitiesUseCase.execute(
-      request.user,
-      Number(id),
+    return QueryBus.execute(
+      new GetHostPropertyAmenitiesQuery(request.user, Number(id)),
     );
   }
 
@@ -252,10 +231,8 @@ export class HostController {
     @Param('id') id: number,
     @Body() body: SyncAmenitiesDto,
   ) {
-    return this.hostSyncPropertyAmenitiesUseCase.execute(
-      request.user,
-      Number(id),
-      body,
+    return CommandBus.execute(
+      new SyncHostPropertyAmenitiesCommand(request.user, Number(id), body),
     );
   }
 
@@ -267,10 +244,8 @@ export class HostController {
     @Query() query: Record<string, unknown>,
   ) {
     const propertyId = parseRequiredPropertyId(query);
-    return this.hostGetRoomAmenitiesUseCase.execute(
-      request.user,
-      propertyId,
-      Number(id),
+    return QueryBus.execute(
+      new GetHostRoomAmenitiesQuery(request.user, propertyId, Number(id)),
     );
   }
 
@@ -283,11 +258,13 @@ export class HostController {
     @Body() body: SyncAmenitiesDto,
   ) {
     const propertyId = parseRequiredPropertyId(query);
-    return this.hostSyncRoomAmenitiesUseCase.execute(
-      request.user,
-      propertyId,
-      Number(id),
-      body,
+    return CommandBus.execute(
+      new SyncHostRoomAmenitiesCommand(
+        request.user,
+        propertyId,
+        Number(id),
+        body,
+      ),
     );
   }
 }

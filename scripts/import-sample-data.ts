@@ -4,7 +4,9 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../src/app.module';
-import { ImportDataUseCase } from '../src/modules/import/applications/useCase/import-data.usecase';
+import { CommandBus } from '../src/shared/useCase/bus/bus';
+import { ImportDataCommand } from '../src/modules/import/applications/useCase/commands/ImportDataCommand';
+import type { ImportBatchResult } from '../src/modules/import/applications/dto/import-batch.dto';
 import { DataSource } from 'typeorm';
 import { parseCsv } from './lib/parse-csv';
 import {
@@ -22,7 +24,7 @@ function readCsvFile(fileName: string): Record<string, string>[] {
   return parseCsv(content);
 }
 
-function printImportSummary(result: Awaited<ReturnType<ImportDataUseCase['execute']>>): void {
+function printImportSummary(result: ImportBatchResult): void {
   const { created, errors } = result;
 
   console.log('\nRésumé de l’import :');
@@ -71,12 +73,13 @@ async function bootstrap(): Promise<void> {
     console.log(`     ${rooms.length} chambre(s) à importer.`);
 
     console.log('\nImport en cours (téléchargement des images inclus)...');
-    const importDataUseCase = app.get(ImportDataUseCase);
-    const result = await importDataUseCase.execute({
-      users,
-      properties,
-      rooms,
-    });
+    const result = await CommandBus.execute(
+      new ImportDataCommand({
+        users,
+        properties,
+        rooms,
+      }),
+    );
 
     printImportSummary(result);
 
@@ -91,7 +94,7 @@ async function bootstrap(): Promise<void> {
 }
 
 function errorsPreventSuccess(
-  errors: Awaited<ReturnType<ImportDataUseCase['execute']>>['errors'],
+  errors: ImportBatchResult['errors'],
 ): boolean {
   return errors.some((error) => !error.message.includes('existe déjà'));
 }
