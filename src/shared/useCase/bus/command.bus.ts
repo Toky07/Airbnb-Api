@@ -10,7 +10,7 @@ export class CommandBus {
     this.handlers.set(commandClass.name, handler);
   }
 
-  async execute<T = void>(command: object): Promise<T> {
+  async execute<T = unknown>(command: object): Promise<T> {
     const handler = this.handlers.get(command.constructor.name);
     if (!handler) {
       throw new Error(

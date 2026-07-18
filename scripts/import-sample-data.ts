@@ -73,7 +73,7 @@ async function bootstrap(): Promise<void> {
     console.log(`     ${rooms.length} chambre(s) à importer.`);
 
     console.log('\nImport en cours (téléchargement des images inclus)...');
-    const result = await CommandBus.execute(
+    const result = await CommandBus.execute<ImportBatchResult>(
       new ImportDataCommand({
         users,
         properties,
