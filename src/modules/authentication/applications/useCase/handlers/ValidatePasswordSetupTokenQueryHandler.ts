@@ -1,8 +1,8 @@
-import type { IQueryHandler } from '../../../../shared/useCase/bus/query-handler.interface';
-import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
-import type { IPasswordSetupTokenRepository } from '../../domain/repositories/password-setup-token.repository';
-import type { PasswordSetupValidationOutput } from '../../applications/dto/password-setup.output';
-import { PasswordSetupTokenService } from '../../domain/services/password-setup-token.service';
+import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
+import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import type { IPasswordSetupTokenRepository } from '../../../domain/repositories/password-setup-token.repository';
+import type { PasswordSetupValidationOutput } from '../../dto/password-setup.output';
+import { PasswordSetupTokenService } from '../../../domain/services/password-setup-token.service';
 import type { ValidatePasswordSetupTokenQuery } from '../queries/ValidatePasswordSetupTokenQuery';
 
 export class ValidatePasswordSetupTokenQueryHandler implements IQueryHandler<

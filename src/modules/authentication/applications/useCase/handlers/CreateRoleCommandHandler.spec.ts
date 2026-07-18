@@ -1,6 +1,6 @@
-import { UserNameVO } from '../../../user/domain/valueObject/username.vo';
-import { RoleEntity } from '../../domain/entities/role.entity';
-import type { IRoleRepository } from '../../domain/repositories/role.repository';
+import { UserNameVO } from '../../../../user/domain/valueObject/username.vo';
+import { RoleEntity } from '../../../domain/entities/role.entity';
+import type { IRoleRepository } from '../../../domain/repositories/role.repository';
 import { CreateRoleCommandHandler } from './CreateRoleCommandHandler';
 import { CreateRoleCommand } from '../commands/CreateRoleCommand';
 

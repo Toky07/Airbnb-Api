@@ -1,10 +1,10 @@
-import { UserNameVO } from '../../../user/domain/valueObject/username.vo';
-import { RoleOutput } from '../../applications/dto/role.output';
-import { RoleEntity } from '../../domain/entities/role.entity';
-import type { IRoleRepository } from '../../domain/repositories/role.repository';
+import { UserNameVO } from '../../../../user/domain/valueObject/username.vo';
+import { RoleOutput } from '../../dto/role.output';
+import { RoleEntity } from '../../../domain/entities/role.entity';
+import type { IRoleRepository } from '../../../domain/repositories/role.repository';
 import { ListRolesQueryHandler } from './ListRolesQueryHandler';
 import { ListRolesQuery } from '../queries/ListRolesQuery';
-import { buildPaginationMeta } from '../../../../shared/pagination/pagination.types';
+import { buildPaginationMeta } from '../../../../../shared/pagination/pagination.types';
 
 const repository = {
   findPaginated: async () => ({

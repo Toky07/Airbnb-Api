@@ -1,7 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
-import { UserNameVO } from '../../../user/domain/valueObject/username.vo';
-import { RoleEntity } from '../../domain/entities/role.entity';
-import type { IRoleRepository } from '../../domain/repositories/role.repository';
+import { UserNameVO } from '../../../../user/domain/valueObject/username.vo';
+import { RoleEntity } from '../../../domain/entities/role.entity';
+import type { IRoleRepository } from '../../../domain/repositories/role.repository';
 import { UpdateRoleCommandHandler } from './UpdateRoleCommandHandler';
 import { UpdateRoleCommand } from '../commands/UpdateRoleCommand';
 

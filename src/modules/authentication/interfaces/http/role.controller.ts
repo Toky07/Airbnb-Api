@@ -18,12 +18,12 @@ import type { SetRolePermissionsDto } from '../../applications/dto/set-role-perm
 import { RequirePermissions } from '../decorators/require-permissions.decorator';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { CreateRoleCommand } from '../../useCase/commands/CreateRoleCommand';
-import { UpdateRoleCommand } from '../../useCase/commands/UpdateRoleCommand';
-import { DeleteRoleCommand } from '../../useCase/commands/DeleteRoleCommand';
-import { SetRolePermissionsCommand } from '../../useCase/commands/SetRolePermissionsCommand';
-import { ListRolesQuery } from '../../useCase/queries/ListRolesQuery';
-import { ListPermissionsQuery } from '../../useCase/queries/ListPermissionsQuery';
+import { CreateRoleCommand } from '../../applications/useCase/commands/CreateRoleCommand';
+import { UpdateRoleCommand } from '../../applications/useCase/commands/UpdateRoleCommand';
+import { DeleteRoleCommand } from '../../applications/useCase/commands/DeleteRoleCommand';
+import { SetRolePermissionsCommand } from '../../applications/useCase/commands/SetRolePermissionsCommand';
+import { ListRolesQuery } from '../../applications/useCase/queries/ListRolesQuery';
+import { ListPermissionsQuery } from '../../applications/useCase/queries/ListPermissionsQuery';
 
 @Controller('auth')
 export class RoleController {

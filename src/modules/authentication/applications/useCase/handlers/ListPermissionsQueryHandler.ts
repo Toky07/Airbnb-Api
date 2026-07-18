@@ -1,6 +1,6 @@
-import type { IQueryHandler } from '../../../../shared/useCase/bus/query-handler.interface';
-import { PERMISSION_DEFINITIONS } from '../../domain/constants/permissions.constant';
-import { PermissionOutput } from '../../applications/dto/permission.output';
+import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
+import { PERMISSION_DEFINITIONS } from '../../../domain/constants/permissions.constant';
+import { PermissionOutput } from '../../dto/permission.output';
 import type { ListPermissionsQuery } from '../queries/ListPermissionsQuery';
 
 export class ListPermissionsQueryHandler implements IQueryHandler<

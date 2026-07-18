@@ -1,13 +1,13 @@
 import { describe, expect, it, vi } from 'vitest';
 import { GetMeQueryHandler } from './GetMeQueryHandler';
 import { GetMeQuery } from '../queries/GetMeQuery';
-import { Auth } from '../../domain/entities/user.entity';
-import { EmailVO } from '../../../../shared/valueObject/email.vo';
-import { RoleEntity } from '../../domain/entities/role.entity';
-import { UserNameVO } from '../../../user/domain/valueObject/username.vo';
-import { User } from '../../../user/domain/entities/user.entity';
-import { PhoneNumberVO } from '../../../../shared/valueObject/phone.vo';
-import { HOST_ROLE_SLUG } from '../../domain/constants/permissions.constant';
+import { Auth } from '../../../domain/entities/user.entity';
+import { EmailVO } from '../../../../../shared/valueObject/email.vo';
+import { RoleEntity } from '../../../domain/entities/role.entity';
+import { UserNameVO } from '../../../../user/domain/valueObject/username.vo';
+import { User } from '../../../../user/domain/entities/user.entity';
+import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
+import { HOST_ROLE_SLUG } from '../../../domain/constants/permissions.constant';
 
 describe('GetMeQueryHandler', () => {
   const hostRole = new RoleEntity(

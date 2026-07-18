@@ -1,10 +1,10 @@
 import { ConflictException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../shared/useCase/bus/command-handler.interface';
-import { slugify } from '../../../../shared/utils/slug.util';
-import { RoleEntity } from '../../domain/entities/role.entity';
-import type { IRoleRepository } from '../../domain/repositories/role.repository';
-import { RoleOutput } from '../../applications/dto/role.output';
-import { UserNameVO } from '../../../user/domain/valueObject/username.vo';
+import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
+import { slugify } from '../../../../../shared/utils/slug.util';
+import { RoleEntity } from '../../../domain/entities/role.entity';
+import type { IRoleRepository } from '../../../domain/repositories/role.repository';
+import { RoleOutput } from '../../dto/role.output';
+import { UserNameVO } from '../../../../user/domain/valueObject/username.vo';
 import type { CreateRoleCommand } from '../commands/CreateRoleCommand';
 
 export class CreateRoleCommandHandler implements ICommandHandler<

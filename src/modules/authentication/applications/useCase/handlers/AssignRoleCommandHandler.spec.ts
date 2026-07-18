@@ -1,6 +1,6 @@
 import { AssignRoleCommandHandler } from './AssignRoleCommandHandler';
 import { AssignRoleCommand } from '../commands/AssignRoleCommand';
-import { IAuthRepository } from '../../domain/repositories/auth.repository';
+import { IAuthRepository } from '../../../domain/repositories/auth.repository';
 
 const repository = {
   assignRoles: async (userId: number, roleId: number[]): Promise<boolean> => {

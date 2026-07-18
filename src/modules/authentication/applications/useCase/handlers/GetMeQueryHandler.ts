@@ -1,15 +1,15 @@
 import { UnauthorizedException } from '@nestjs/common';
-import type { IQueryHandler } from '../../../../shared/useCase/bus/query-handler.interface';
-import type { IAuthRepository } from '../../domain/repositories/auth.repository';
-import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
-import type { IPropertyRepository } from '../../../properties/domain/repositories/property.repository';
-import { HOST_ROLE_SLUG } from '../../domain/constants/permissions.constant';
-import { MeOutput } from '../../applications/dto/me.output';
-import { HostAccessOutput } from '../../applications/dto/host-access.output';
-import { UserProfileOutput } from '../../applications/dto/user-profile.output';
-import { buildJwtPayload } from '../../domain/utils/build-jwt-payload';
-import type { Property } from '../../../properties/domain/entities/property.entity';
-import type { EnsurePropertyOwnerHostRoleService } from '../../applications/services/ensure-property-owner-host-role.service';
+import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
+import type { IAuthRepository } from '../../../domain/repositories/auth.repository';
+import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
+import { HOST_ROLE_SLUG } from '../../../domain/constants/permissions.constant';
+import { MeOutput } from '../../dto/me.output';
+import { HostAccessOutput } from '../../dto/host-access.output';
+import { UserProfileOutput } from '../../dto/user-profile.output';
+import { buildJwtPayload } from '../../../domain/utils/build-jwt-payload';
+import type { Property } from '../../../../properties/domain/entities/property.entity';
+import type { EnsurePropertyOwnerHostRoleService } from '../../services/ensure-property-owner-host-role.service';
 import type { GetMeQuery } from '../queries/GetMeQuery';
 
 export class GetMeQueryHandler implements IQueryHandler<GetMeQuery, MeOutput> {

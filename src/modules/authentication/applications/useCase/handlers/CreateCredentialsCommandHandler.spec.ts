@@ -1,6 +1,6 @@
-import { EmailVO } from '../../../../shared/valueObject/email.vo';
-import { Auth } from '../../domain/entities/user.entity';
-import type { IAuthRepository } from '../../domain/repositories/auth.repository';
+import { EmailVO } from '../../../../../shared/valueObject/email.vo';
+import { Auth } from '../../../domain/entities/user.entity';
+import type { IAuthRepository } from '../../../domain/repositories/auth.repository';
 import { CreateCredentialsCommandHandler } from './CreateCredentialsCommandHandler';
 import { CreateCredentialsCommand } from '../commands/CreateCredentialsCommand';
 

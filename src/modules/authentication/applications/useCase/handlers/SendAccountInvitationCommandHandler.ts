@@ -1,12 +1,12 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../shared/useCase/bus/command-handler.interface';
-import type { IAuthRepository } from '../../domain/repositories/auth.repository';
-import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
-import type { IPasswordSetupTokenRepository } from '../../domain/repositories/password-setup-token.repository';
-import type { MailService } from '../../../mail/applications/services/mail.service';
-import { PasswordSetupLinkBuilder } from '../../domain/services/password-setup-link.builder';
-import { PasswordSetupTokenService } from '../../domain/services/password-setup-token.service';
-import { ACCOUNT_STATUS } from '../../domain/constants/account-status.constant';
+import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
+import type { IAuthRepository } from '../../../domain/repositories/auth.repository';
+import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import type { IPasswordSetupTokenRepository } from '../../../domain/repositories/password-setup-token.repository';
+import type { MailService } from '../../../../mail/applications/services/mail.service';
+import { PasswordSetupLinkBuilder } from '../../../domain/services/password-setup-link.builder';
+import { PasswordSetupTokenService } from '../../../domain/services/password-setup-token.service';
+import { ACCOUNT_STATUS } from '../../../domain/constants/account-status.constant';
 import type { SendAccountInvitationCommand } from '../commands/SendAccountInvitationCommand';
 
 export class SendAccountInvitationCommandHandler implements ICommandHandler<

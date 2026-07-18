@@ -1,4 +1,4 @@
-import { TokenGenerator } from '../../domain/generator/token.generator';
+import { TokenGenerator } from '../../../domain/generator/token.generator';
 import { LoginCommandHandler } from './LoginCommandHandler';
 import { LoginCommand } from '../commands/LoginCommand';
 

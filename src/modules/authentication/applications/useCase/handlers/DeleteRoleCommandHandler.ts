@@ -1,7 +1,7 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../shared/useCase/bus/command-handler.interface';
-import type { IRoleRepository } from '../../domain/repositories/role.repository';
-import { SUPERADMIN_ROLE_SLUG } from '../../domain/constants/permissions.constant';
+import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
+import type { IRoleRepository } from '../../../domain/repositories/role.repository';
+import { SUPERADMIN_ROLE_SLUG } from '../../../domain/constants/permissions.constant';
 import type { DeleteRoleCommand } from '../commands/DeleteRoleCommand';
 
 export class DeleteRoleCommandHandler implements ICommandHandler<
