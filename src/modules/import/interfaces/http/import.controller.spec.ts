@@ -72,4 +72,49 @@ describe('ImportController', () => {
     });
     expect(response.body.errors).toEqual([]);
   });
+
+  it('POST /import crée un établissement pour un propriétaire importé', async () => {
+    const ownerEmail = 'owner-import@test.com';
+
+    const usersResponse = await request(app.getHttpServer())
+      .post('/import')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        users: [
+          {
+            firstName: 'Owner',
+            lastName: 'Import',
+            email: ownerEmail,
+            phoneNumber: '+33601010199',
+          },
+        ],
+      })
+      .expect(201);
+
+    expect(usersResponse.body.created.users).toBe(1);
+
+    const propertiesResponse = await request(app.getHttpServer())
+      .post('/import')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        properties: [
+          {
+            name: 'Hôtel Import Test',
+            description: 'Description assez longue pour valider l’import.',
+            address: '1 rue Test',
+            city: 'Nice',
+            country: 'France',
+            latitude: 43.7,
+            longitude: 7.2,
+            checkInTime: '15:00',
+            checkOutTime: '11:00',
+            ownerEmail,
+          },
+        ],
+      })
+      .expect(201);
+
+    expect(propertiesResponse.body.created.properties).toBe(1);
+    expect(propertiesResponse.body.errors).toEqual([]);
+  });
 });

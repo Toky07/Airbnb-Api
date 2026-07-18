@@ -1,21 +1,11 @@
 import { Inject, Module, OnModuleInit } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from '../authentication/auth.module';
-import { Role } from '../authentication/infrastructure/entity/role.entity';
-import { PermissionEntity } from '../authentication/infrastructure/entity/permission.entity';
 import { ROLE_REPOSITORY } from '../authentication/domain/repositories/role.repository';
 import type { IRoleRepository } from '../authentication/domain/repositories/role.repository';
-import { PropertyEntity } from '../properties/infrastructure/entities/property-entity.entity';
-import { PropertyTypeEntity } from '../properties/infrastructure/entities/property-type.entity';
+import { PropertiesModule } from '../properties/properties.module';
 import { PROPERTY_REPOSITORY } from '../properties/infrastructure/repositories/property.repository';
-import { PropertyRepository } from '../properties/infrastructure/repositories/property.repository';
 import type { IPropertyRepository } from '../properties/domain/repositories/property.repository';
-import { PROPERTY_TYPE_REPOSITORY } from '../properties/domain/repositories/property-type.repository';
-import { PropertyTypeRepository } from '../properties/infrastructure/repositories/property-type.repository';
-import { PropertyMediaPresenter } from '../properties/applications/presenters/property-media.presenter';
-import { RoomTypeEntity } from '../rooms/infrastructure/entities/room-type.entity';
-import { ROOM_TYPE_REPOSITORY } from '../rooms/domain/repositories/room-type.repository';
-import { RoomTypeRepository } from '../rooms/infrastructure/repositories/room-type.repository';
+import { RoomsModule } from '../rooms/room.module';
 import { UserModule } from '../user/user.module';
 import { MediaModule } from '../media/media.module';
 import { CommandBus } from '../../shared/useCase/bus/bus';
@@ -29,25 +19,11 @@ import { ImportDataCommand } from './applications/useCase/commands/ImportDataCom
     AuthModule,
     MediaModule,
     UserModule,
-    TypeOrmModule.forFeature([
-      Role,
-      PermissionEntity,
-      PropertyEntity,
-      PropertyTypeEntity,
-      RoomTypeEntity,
-    ]),
+    PropertiesModule,
+    RoomsModule,
   ],
   controllers: [ImportController],
-  providers: [
-    ImportBatchContextService,
-    PropertyMediaPresenter,
-    PropertyRepository,
-    { provide: PROPERTY_REPOSITORY, useClass: PropertyRepository },
-    PropertyTypeRepository,
-    { provide: PROPERTY_TYPE_REPOSITORY, useClass: PropertyTypeRepository },
-    RoomTypeRepository,
-    { provide: ROOM_TYPE_REPOSITORY, useClass: RoomTypeRepository },
-  ],
+  providers: [ImportBatchContextService],
 })
 export class ImportModule implements OnModuleInit {
   constructor(

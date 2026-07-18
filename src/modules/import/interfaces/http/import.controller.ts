@@ -1,5 +1,8 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import type { ImportBatchDto } from '../../applications/dto/import-batch.dto';
+import type {
+  ImportBatchDto,
+  ImportBatchResult,
+} from '../../applications/dto/import-batch.dto';
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
 import { IMPORT_THROTTLE } from '../../../../config/throttle.config';
 import { SensitiveRouteThrottle } from '../../../../shared/decorators/sensitive-route-throttle.decorator';
@@ -11,7 +14,7 @@ export class ImportController {
   @Post()
   @SensitiveRouteThrottle(IMPORT_THROTTLE)
   @RequirePermissions('import.execute')
-  async import(@Body() body: ImportBatchDto) {
-    return CommandBus.execute(new ImportDataCommand(body));
+  async import(@Body() body: ImportBatchDto): Promise<ImportBatchResult> {
+    return CommandBus.execute<ImportBatchResult>(new ImportDataCommand(body));
   }
 }
