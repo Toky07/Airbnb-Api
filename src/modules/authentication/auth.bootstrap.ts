@@ -8,19 +8,19 @@ import type { EnsurePropertyOwnerHostRoleService } from './applications/services
 import type { MailService } from '../mail/applications/services/mail.service';
 import { PasswordSetupTokenService } from './domain/services/password-setup-token.service';
 import { PasswordSetupLinkBuilder } from './domain/services/password-setup-link.builder';
-import { CreateCredentialsCommandHandler } from './useCase/handlers/CreateCredentialsCommandHandler';
-import { LoginCommandHandler } from './useCase/handlers/LoginCommandHandler';
-import { AssignRoleCommandHandler } from './useCase/handlers/AssignRoleCommandHandler';
-import { CreateRoleCommandHandler } from './useCase/handlers/CreateRoleCommandHandler';
-import { UpdateRoleCommandHandler } from './useCase/handlers/UpdateRoleCommandHandler';
-import { DeleteRoleCommandHandler } from './useCase/handlers/DeleteRoleCommandHandler';
-import { SetRolePermissionsCommandHandler } from './useCase/handlers/SetRolePermissionsCommandHandler';
-import { GetMeQueryHandler } from './useCase/handlers/GetMeQueryHandler';
-import { ListRolesQueryHandler } from './useCase/handlers/ListRolesQueryHandler';
-import { ListPermissionsQueryHandler } from './useCase/handlers/ListPermissionsQueryHandler';
-import { SendAccountInvitationCommandHandler } from './useCase/handlers/SendAccountInvitationCommandHandler';
-import { SetPasswordWithTokenCommandHandler } from './useCase/handlers/SetPasswordWithTokenCommandHandler';
-import { ValidatePasswordSetupTokenQueryHandler } from './useCase/handlers/ValidatePasswordSetupTokenQueryHandler';
+import { CreateCredentialsCommandHandler } from './applications/useCase/handlers/CreateCredentialsCommandHandler';
+import { LoginCommandHandler } from './applications/useCase/handlers/LoginCommandHandler';
+import { AssignRoleCommandHandler } from './applications/useCase/handlers/AssignRoleCommandHandler';
+import { CreateRoleCommandHandler } from './applications/useCase/handlers/CreateRoleCommandHandler';
+import { UpdateRoleCommandHandler } from './applications/useCase/handlers/UpdateRoleCommandHandler';
+import { DeleteRoleCommandHandler } from './applications/useCase/handlers/DeleteRoleCommandHandler';
+import { SetRolePermissionsCommandHandler } from './applications/useCase/handlers/SetRolePermissionsCommandHandler';
+import { GetMeQueryHandler } from './applications/useCase/handlers/GetMeQueryHandler';
+import { ListRolesQueryHandler } from './applications/useCase/handlers/ListRolesQueryHandler';
+import { ListPermissionsQueryHandler } from './applications/useCase/handlers/ListPermissionsQueryHandler';
+import { SendAccountInvitationCommandHandler } from './applications/useCase/handlers/SendAccountInvitationCommandHandler';
+import { SetPasswordWithTokenCommandHandler } from './applications/useCase/handlers/SetPasswordWithTokenCommandHandler';
+import { ValidatePasswordSetupTokenQueryHandler } from './applications/useCase/handlers/ValidatePasswordSetupTokenQueryHandler';
 
 export class AuthBootstrap {
   static create(deps: {

@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { CreateRoleCommand } from '../../../authentication/useCase/commands/CreateRoleCommand';
+import { CreateRoleCommand } from '../../../authentication/applications/useCase/commands/CreateRoleCommand';
 import { RoleOutput } from '../../../authentication/applications/dto/role.output';
-import { UpdateRoleCommand } from '../../../authentication/useCase/commands/UpdateRoleCommand';
-import { SetRolePermissionsCommand } from '../../../authentication/useCase/commands/SetRolePermissionsCommand';
+import { UpdateRoleCommand } from '../../../authentication/applications/useCase/commands/UpdateRoleCommand';
+import { SetRolePermissionsCommand } from '../../../authentication/applications/useCase/commands/SetRolePermissionsCommand';
 import { ROLE_REPOSITORY } from '../../../authentication/domain/repositories/role.repository';
 import type { IRoleRepository } from '../../../authentication/domain/repositories/role.repository';
 import { SUPERADMIN_ROLE_SLUG } from '../../../authentication/domain/constants/permissions.constant';

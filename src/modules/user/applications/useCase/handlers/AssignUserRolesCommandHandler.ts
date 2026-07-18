@@ -4,7 +4,7 @@ import type { IAuthRepository } from '../../../../authentication/domain/reposito
 import type { IUserRepository } from '../../../domain/repositories/user.repository';
 import { UserOutput } from '../../../domain/dtos/user.output';
 import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { SendAccountInvitationCommand } from '../../../../authentication/useCase/commands/SendAccountInvitationCommand';
+import { SendAccountInvitationCommand } from '../../../../authentication/applications/useCase/commands/SendAccountInvitationCommand';
 import type { AssignUserRolesCommand } from '../commands/AssignUserRolesCommand';
 
 export class AssignUserRolesCommandHandler implements ICommandHandler<

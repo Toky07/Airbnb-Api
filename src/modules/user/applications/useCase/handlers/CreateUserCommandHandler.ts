@@ -6,7 +6,7 @@ import { EmailVO } from '../../../../../shared/valueObject/email.vo';
 import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
 import { UserOutput } from '../../../domain/dtos/user.output';
 import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { SendAccountInvitationCommand } from '../../../../authentication/useCase/commands/SendAccountInvitationCommand';
+import { SendAccountInvitationCommand } from '../../../../authentication/applications/useCase/commands/SendAccountInvitationCommand';
 import { ACCOUNT_STATUS } from '../../../../authentication/domain/constants/account-status.constant';
 import { validateUserFields } from '../../validation/validate-user-fields';
 import type { SaveUserAvatarService } from '../../services/save-user-avatar.service';

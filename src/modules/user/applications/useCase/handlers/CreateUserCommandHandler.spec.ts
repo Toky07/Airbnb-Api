@@ -2,7 +2,7 @@ import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { User } from '../../../domain/entities/user.entity';
 import { CreateUserCommandHandler } from './CreateUserCommandHandler';
 import { CreateUserCommand } from '../commands/CreateUserCommand';
-import { SendAccountInvitationCommand } from '../../../../authentication/useCase/commands/SendAccountInvitationCommand';
+import { SendAccountInvitationCommand } from '../../../../authentication/applications/useCase/commands/SendAccountInvitationCommand';
 import type { IUserRepository } from '../../../domain/repositories/user.repository';
 import { UserOutput } from '../../../domain/dtos/user.output';
 import { UserNameVO } from '../../../domain/valueObject/username.vo';

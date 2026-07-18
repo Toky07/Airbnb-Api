@@ -21,8 +21,8 @@ import type { UploadFile } from '../../../media/types/upload-file';
 import { UserOutput } from '../../../user/domain/dtos/user.output';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { SetPasswordWithTokenCommand } from '../../useCase/commands/SetPasswordWithTokenCommand';
-import { ValidatePasswordSetupTokenQuery } from '../../useCase/queries/ValidatePasswordSetupTokenQuery';
+import { SetPasswordWithTokenCommand } from '../../applications/useCase/commands/SetPasswordWithTokenCommand';
+import { ValidatePasswordSetupTokenQuery } from '../../applications/useCase/queries/ValidatePasswordSetupTokenQuery';
 import {
   AUTH_LOGIN_THROTTLE,
   AUTH_PASSWORD_SETUP_THROTTLE,
@@ -31,9 +31,9 @@ import {
 import { SensitiveRouteThrottle } from '../../../../shared/decorators/sensitive-route-throttle.decorator';
 import { RegisterHostCommand } from '../../../user/applications/useCase/commands/RegisterHostCommand';
 import { UpdateMyProfileCommand } from '../../../user/applications/useCase/commands/UpdateMyProfileCommand';
-import { LoginCommand } from '../../useCase/commands/LoginCommand';
-import { AssignRoleCommand } from '../../useCase/commands/AssignRoleCommand';
-import { GetMeQuery } from '../../useCase/queries/GetMeQuery';
+import { LoginCommand } from '../../applications/useCase/commands/LoginCommand';
+import { AssignRoleCommand } from '../../applications/useCase/commands/AssignRoleCommand';
+import { GetMeQuery } from '../../applications/useCase/queries/GetMeQuery';
 
 @Controller('auth')
 export class AuthController {

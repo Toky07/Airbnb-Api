@@ -8,7 +8,7 @@ import type { IAuthRepository } from '../../../../authentication/domain/reposito
 import { Auth } from '../../../../authentication/domain/entities/user.entity';
 import { AssignUserRolesCommandHandler } from './AssignUserRolesCommandHandler';
 import { AssignUserRolesCommand } from '../commands/AssignUserRolesCommand';
-import { SendAccountInvitationCommand } from '../../../../authentication/useCase/commands/SendAccountInvitationCommand';
+import { SendAccountInvitationCommand } from '../../../../authentication/applications/useCase/commands/SendAccountInvitationCommand';
 import { commandBusExecuteMock } from '../../../../../test/command-bus.mock';
 
 const baseUser = new User(

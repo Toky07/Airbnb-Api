@@ -9,7 +9,7 @@ import { User } from '../../../domain/entities/user.entity';
 import { UserNameVO } from '../../../domain/valueObject/username.vo';
 import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
 import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { SendAccountInvitationCommand } from '../../../../authentication/useCase/commands/SendAccountInvitationCommand';
+import { SendAccountInvitationCommand } from '../../../../authentication/applications/useCase/commands/SendAccountInvitationCommand';
 import { ACCOUNT_STATUS } from '../../../../authentication/domain/constants/account-status.constant';
 import type { RegisterHostCommand } from '../commands/RegisterHostCommand';
 
