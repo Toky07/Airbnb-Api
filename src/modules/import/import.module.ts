@@ -15,13 +15,7 @@ import { ImportBootstrap } from './import.bootstrap';
 import { ImportDataCommand } from './applications/useCase/commands/ImportDataCommand';
 
 @Module({
-  imports: [
-    AuthModule,
-    MediaModule,
-    UserModule,
-    PropertiesModule,
-    RoomsModule,
-  ],
+  imports: [AuthModule, MediaModule, UserModule, PropertiesModule, RoomsModule],
   controllers: [ImportController],
   providers: [ImportBatchContextService],
 })
