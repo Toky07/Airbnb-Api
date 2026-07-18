@@ -1,5 +1,5 @@
-import { PERMISSION_DEFINITIONS } from '../../domain/constants/permissions.constant';
-import { PermissionOutput } from '../../applications/dto/permission.output';
+import { PERMISSION_DEFINITIONS } from '../../../domain/constants/permissions.constant';
+import { PermissionOutput } from '../../dto/permission.output';
 import { ListPermissionsQueryHandler } from './ListPermissionsQueryHandler';
 import { ListPermissionsQuery } from '../queries/ListPermissionsQuery';
 

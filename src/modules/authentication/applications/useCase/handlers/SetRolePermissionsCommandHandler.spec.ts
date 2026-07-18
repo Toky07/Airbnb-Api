@@ -1,8 +1,8 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import { UserNameVO } from '../../../user/domain/valueObject/username.vo';
-import { RoleEntity } from '../../domain/entities/role.entity';
-import { SUPERADMIN_ROLE_SLUG } from '../../domain/constants/permissions.constant';
-import type { IRoleRepository } from '../../domain/repositories/role.repository';
+import { UserNameVO } from '../../../../user/domain/valueObject/username.vo';
+import { RoleEntity } from '../../../domain/entities/role.entity';
+import { SUPERADMIN_ROLE_SLUG } from '../../../domain/constants/permissions.constant';
+import type { IRoleRepository } from '../../../domain/repositories/role.repository';
 import { SetRolePermissionsCommandHandler } from './SetRolePermissionsCommandHandler';
 import { SetRolePermissionsCommand } from '../commands/SetRolePermissionsCommand';
 
