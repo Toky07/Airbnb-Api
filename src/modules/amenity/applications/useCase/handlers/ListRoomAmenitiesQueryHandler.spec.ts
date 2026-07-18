@@ -1,0 +1,68 @@
+import { NotFoundException } from '@nestjs/common';
+import { Property } from '../../../../properties/domain/entities/property.entity';
+import { Room } from '../../../../rooms/domain/entities/room.entity';
+import { Amenity } from '../../../domain/entities/amenity.entity';
+import { AMENITY_SCOPE } from '../../../domain/constants/amenity-scope.constant';
+import { ListRoomAmenitiesQueryHandler } from './ListRoomAmenitiesQueryHandler';
+import { ListRoomAmenitiesQuery } from '../queries/ListRoomAmenitiesQuery';
+
+const property = new Property({
+  name: 'Hôtel Test',
+  description: 'Desc',
+  address: '1 rue Test',
+  city: 'Paris',
+  country: 'FR',
+  latitude: 0,
+  longitude: 0,
+  checkInTime: '15:00',
+  checkOutTime: '11:00',
+  ownerId: 1,
+  id: 1,
+});
+
+const room = new Room({
+  name: 'Suite',
+  slug: 'suite',
+  description: 'Desc',
+  pricePerNight: 120,
+  maxGuests: 2,
+  bedrooms: 1,
+  bathrooms: 1,
+  beds: 1,
+  quantity: 1,
+  size: 30,
+  status: 'available',
+  property,
+  id: 5,
+});
+
+describe('ListRoomAmenitiesQueryHandler', () => {
+  it('lists amenities linked to a room', async () => {
+    const handler = new ListRoomAmenitiesQueryHandler(
+      { findById: async () => room } as never,
+      { findAmenityIdsByRoomId: async () => [2] } as never,
+      {
+        findByIds: async () => [
+          new Amenity('WiFi', 'wifi', AMENITY_SCOPE.ROOM, true, 2),
+        ],
+      } as never,
+    );
+
+    const result = await handler.execute(new ListRoomAmenitiesQuery(5));
+
+    expect(result).toHaveLength(1);
+    expect(result[0]?.name).toBe('WiFi');
+  });
+
+  it('throws when room is not found', async () => {
+    const handler = new ListRoomAmenitiesQueryHandler(
+      { findById: async () => null } as never,
+      {} as never,
+      {} as never,
+    );
+
+    await expect(
+      handler.execute(new ListRoomAmenitiesQuery(99)),
+    ).rejects.toBeInstanceOf(NotFoundException);
+  });
+});
