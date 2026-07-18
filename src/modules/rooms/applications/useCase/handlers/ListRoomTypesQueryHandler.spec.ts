@@ -9,7 +9,15 @@ describe('ListRoomTypesQueryHandler', () => {
   it('lists all room types', async () => {
     const repository = {
       findAll: async () => [
-        new RoomType('Standard', 'standard', 0, true, 1, new Date(), new Date()),
+        new RoomType(
+          'Standard',
+          'standard',
+          0,
+          true,
+          1,
+          new Date(),
+          new Date(),
+        ),
       ],
     };
 

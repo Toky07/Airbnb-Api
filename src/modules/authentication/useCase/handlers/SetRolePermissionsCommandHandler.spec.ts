@@ -7,13 +7,9 @@ import { SetRolePermissionsCommandHandler } from './SetRolePermissionsCommandHan
 import { SetRolePermissionsCommand } from '../commands/SetRolePermissionsCommand';
 
 describe('SetRolePermissionsCommandHandler', () => {
-  const hostRole = new RoleEntity(
-    new UserNameVO('Hôte'),
-    'host',
-    2,
-    null,
-    ['host.dashboard.read'],
-  );
+  const hostRole = new RoleEntity(new UserNameVO('Hôte'), 'host', 2, null, [
+    'host.dashboard.read',
+  ]);
 
   const repository = {
     findById: async () => hostRole,
@@ -24,7 +20,10 @@ describe('SetRolePermissionsCommandHandler', () => {
   it('should update role permissions', async () => {
     const handler = new SetRolePermissionsCommandHandler(repository);
     const result = await handler.execute(
-      new SetRolePermissionsCommand(2, ['host.property.read', 'host.rooms.read']),
+      new SetRolePermissionsCommand(2, [
+        'host.property.read',
+        'host.rooms.read',
+      ]),
     );
 
     expect(result.permissionKeys).toEqual([
@@ -37,7 +36,7 @@ describe('SetRolePermissionsCommandHandler', () => {
     const handler = new SetRolePermissionsCommandHandler({
       ...repository,
       findById: async () => null,
-    } as unknown as IRoleRepository);
+    });
 
     await expect(
       handler.execute(new SetRolePermissionsCommand(99, ['users.read'])),
@@ -49,7 +48,7 @@ describe('SetRolePermissionsCommandHandler', () => {
       ...repository,
       findById: async () =>
         new RoleEntity(new UserNameVO('Super'), SUPERADMIN_ROLE_SLUG, 1),
-    } as unknown as IRoleRepository);
+    });
 
     await expect(
       handler.execute(new SetRolePermissionsCommand(1, ['users.read'])),

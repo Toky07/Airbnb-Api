@@ -10,7 +10,9 @@ describe('ListPropertyTypeOptionsQueryHandler', () => {
       ],
     };
 
-    const handler = new ListPropertyTypeOptionsQueryHandler(repository as never);
+    const handler = new ListPropertyTypeOptionsQueryHandler(
+      repository as never,
+    );
     const result = await handler.execute(new ListPropertyTypeOptionsQuery());
 
     expect(result).toHaveLength(1);
