@@ -20,6 +20,7 @@ export class CartCheckoutPaymentListener {
             'reservation',
             event.reservationId,
             event.cartId,
+            event.pricingBreakdown,
           ),
         );
 

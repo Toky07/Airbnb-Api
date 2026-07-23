@@ -1,6 +1,7 @@
 import { readFile } from 'fs/promises';
-import { join } from 'path';
 import { Injectable } from '@nestjs/common';
+import { toDiskPath } from '../../../media/utils/build-upload-path';
+import { resolveUploadRoot } from '../../../media/utils/resolve-upload-root';
 import type { UploadFile } from '../../../media/types/upload-file';
 import type { EmailSendAttachmentPayload } from '../../domain/events/email-send-requested.event';
 
@@ -12,7 +13,7 @@ export class LoadEmailAttachmentsFromPathsService {
     const files: UploadFile[] = [];
 
     for (const attachment of attachments) {
-      const absolutePath = join(process.cwd(), attachment.path);
+      const absolutePath = toDiskPath(attachment.path, resolveUploadRoot());
       const buffer = await readFile(absolutePath);
 
       files.push({

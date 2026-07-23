@@ -11,6 +11,7 @@ import { RemoveCartItemCommandHandler } from './applications/useCase/handlers/Re
 import { MergeCartCommandHandler } from './applications/useCase/handlers/MergeCartCommandHandler';
 import { CheckoutCartCommandHandler } from './applications/useCase/handlers/CheckoutCartCommandHandler';
 import { CompleteCartCheckoutCommandHandler } from './applications/useCase/handlers/CompleteCartCheckoutCommandHandler';
+import type { BuildCartPricingBreakdownService } from './applications/services/build-cart-pricing-breakdown.service';
 
 export class CartBootstrap {
   static create(deps: {
@@ -19,6 +20,7 @@ export class CartBootstrap {
     cartItemCatalog: ICartItemCatalogPort;
     resolveCartService: ResolveCartService;
     buildCartItemService: BuildCartItemService;
+    buildCartPricingBreakdown: BuildCartPricingBreakdownService;
     cartPresenter: CartPresenter;
   }) {
     return {
@@ -51,6 +53,7 @@ export class CartBootstrap {
       checkoutCartCommandHandler: new CheckoutCartCommandHandler(
         deps.resolveCartService,
         deps.buildCartItemService,
+        deps.buildCartPricingBreakdown,
       ),
       completeCartCheckoutCommandHandler:
         new CompleteCartCheckoutCommandHandler(

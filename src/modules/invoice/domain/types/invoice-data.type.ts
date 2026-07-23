@@ -22,6 +22,21 @@ export type InvoiceReference = {
   value: string;
 };
 
+export type InvoiceIssuer = {
+  name: string;
+  address: string;
+  siret: string;
+  vatNumber: string;
+};
+
+export type InvoiceTotals = {
+  subtotalCents: number;
+  vatCents: number;
+  touristTaxCents: number;
+  serviceFeeCents: number;
+  totalCents: number;
+};
+
 export type InvoiceData = {
   invoiceNumber: string;
   paidAt: Date;
@@ -30,4 +45,6 @@ export type InvoiceData = {
   recipient: InvoiceRecipient;
   references: InvoiceReference[];
   items: InvoiceLineItem[];
+  issuer: InvoiceIssuer;
+  totals: InvoiceTotals;
 };

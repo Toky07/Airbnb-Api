@@ -56,12 +56,14 @@ import { ListHostBookingOrdersQuery } from './applications/useCase/queries/ListH
 import { GetBookingOrderQuery } from './applications/useCase/queries/GetBookingOrderQuery';
 import { GetCancellationPreviewQuery } from './applications/useCase/queries/GetCancellationPreviewQuery';
 import { MarkReservationNoShowCommand } from './applications/useCase/commands/MarkReservationNoShowCommand';
+import { InvoiceModule } from '../invoice/invoice.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([ReservationOrmEntity, ReservationItemOrmEntity]),
     ScheduleModule.forRoot(),
     forwardRef(() => PaymentModule),
+    InvoiceModule,
     RoomsModule,
     UserModule,
     PropertiesModule,

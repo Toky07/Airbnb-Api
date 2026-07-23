@@ -9,4 +9,6 @@ export interface IInvoiceRepository {
     paymentType: InvoicePaymentType,
     paymentId: number,
   ): Promise<Invoice | null>;
+  findById(id: number): Promise<Invoice | null>;
+  findByUserId(userId: number): Promise<Invoice[]>;
 }

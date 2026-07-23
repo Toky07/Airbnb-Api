@@ -47,6 +47,9 @@ export class PropertyEntity {
   @Column({ default: 'moderate' })
   cancellationPolicy: string;
 
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  touristTaxPerGuestNight: number;
+
   @Column()
   ownerId: number;
 

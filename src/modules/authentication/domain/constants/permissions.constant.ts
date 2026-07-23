@@ -104,6 +104,11 @@ export const PERMISSION_DEFINITIONS: PermissionDefinition[] = [
     label: 'Voir les réservations de son établissement',
     module: 'host',
   },
+  {
+    key: 'invoices.read',
+    label: 'Consulter les factures',
+    module: 'invoices',
+  },
 ];
 
 export const ALL_PERMISSION_KEYS = PERMISSION_DEFINITIONS.map((p) => p.key);

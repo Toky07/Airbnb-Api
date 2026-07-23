@@ -19,6 +19,8 @@ import { ListRoomTypeOptionsQueryHandler } from './applications/useCase/handlers
 import { CreateRoomBlockedDateCommandHandler } from './applications/useCase/handlers/CreateRoomBlockedDateCommandHandler';
 import { DeleteRoomBlockedDateCommandHandler } from './applications/useCase/handlers/DeleteRoomBlockedDateCommandHandler';
 import { ListRoomBlockedDatesQueryHandler } from './applications/useCase/handlers/ListRoomBlockedDatesQueryHandler';
+import { GetRoomPricingPreviewQueryHandler } from './applications/useCase/handlers/GetRoomPricingPreviewQueryHandler';
+import type { ComputePricingBreakdownService } from '../../shared/pricing/compute-pricing-breakdown.service';
 
 export class RoomsBootstrap {
   static create(deps: {
@@ -28,6 +30,7 @@ export class RoomsBootstrap {
     roomMediaPresenter: RoomMediaPresenter;
     generateRoomSlug: GenerateRoomSlugService;
     reservationItemRepo: Repository<ReservationItemOrmEntity>;
+    computePricingBreakdown: ComputePricingBreakdownService;
   }) {
     const roomDetailResolver = new RoomDetailResolver(
       deps.roomMediaPresenter,
@@ -81,6 +84,10 @@ export class RoomsBootstrap {
         new DeleteRoomBlockedDateCommandHandler(deps.roomBlockedDateRepository),
       listRoomBlockedDatesQueryHandler: new ListRoomBlockedDatesQueryHandler(
         deps.roomBlockedDateRepository,
+      ),
+      getRoomPricingPreviewQueryHandler: new GetRoomPricingPreviewQueryHandler(
+        deps.roomRepository,
+        deps.computePricingBreakdown,
       ),
     };
   }

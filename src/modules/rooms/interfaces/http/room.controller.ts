@@ -28,6 +28,7 @@ import { UpdateRoomCommand } from '../../applications/useCase/commands/UpdateRoo
 import { DeleteRoomCommand } from '../../applications/useCase/commands/DeleteRoomCommand';
 import { FindRoomQuery } from '../../applications/useCase/queries/FindRoomQuery';
 import { ListRoomsQuery } from '../../applications/useCase/queries/ListRoomsQuery';
+import { GetRoomPricingPreviewQuery } from '../../applications/useCase/queries/GetRoomPricingPreviewQuery';
 
 @Controller('rooms')
 export class RoomController {
@@ -37,6 +38,24 @@ export class RoomController {
     @Query() query: Record<string, unknown>,
   ): Promise<PaginatedResult<RoomOutput>> {
     return QueryBus.execute(new ListRoomsQuery(parsePaginationQuery(query)));
+  }
+
+  @Public()
+  @Get('by-slug/:slug/pricing-preview')
+  async pricingPreviewBySlug(
+    @Param('slug') slug: string,
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
+    @Query('guestCount') guestCount: string,
+  ) {
+    return QueryBus.execute(
+      new GetRoomPricingPreviewQuery(
+        startDate,
+        endDate,
+        Number.parseInt(guestCount, 10),
+        slug,
+      ),
+    );
   }
 
   @Public()

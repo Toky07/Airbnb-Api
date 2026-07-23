@@ -3,8 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RoomsModule } from '../rooms/room.module';
 import { UserModule } from '../user/user.module';
 import { BuildCartItemService } from './applications/services/build-cart-item.service';
+import { BuildCartPricingBreakdownService } from './applications/services/build-cart-pricing-breakdown.service';
 import { ResolveCartService } from './applications/services/resolve-cart.service';
 import { CartPresenter } from './applications/presenters/cart.presenter';
+import { CalculateStayAmountService } from '../../shared/pricing/calculate-stay-amount.service';
+import { ComputePricingBreakdownService } from '../../shared/pricing/compute-pricing-breakdown.service';
 import {
   CART_REPOSITORY,
   type ICartRepository,
@@ -48,6 +51,9 @@ import { CompleteCartCheckoutCommand } from './applications/useCase/commands/Com
     },
     ResolveCartService,
     BuildCartItemService,
+    BuildCartPricingBreakdownService,
+    CalculateStayAmountService,
+    ComputePricingBreakdownService,
     CartPresenter,
     CartPaymentEvent,
   ],
@@ -63,6 +69,7 @@ export class CartModule implements OnModuleInit {
     private readonly cartItemCatalog: ICartItemCatalogPort,
     private readonly resolveCartService: ResolveCartService,
     private readonly buildCartItemService: BuildCartItemService,
+    private readonly buildCartPricingBreakdown: BuildCartPricingBreakdownService,
     private readonly cartPresenter: CartPresenter,
   ) {}
 
@@ -73,6 +80,7 @@ export class CartModule implements OnModuleInit {
       cartItemCatalog: this.cartItemCatalog,
       resolveCartService: this.resolveCartService,
       buildCartItemService: this.buildCartItemService,
+      buildCartPricingBreakdown: this.buildCartPricingBreakdown,
       cartPresenter: this.cartPresenter,
     });
 

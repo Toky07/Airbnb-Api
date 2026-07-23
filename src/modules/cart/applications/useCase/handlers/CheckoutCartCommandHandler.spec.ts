@@ -5,6 +5,7 @@ import { CartCheckoutCompletedEvent } from '../../../domain/events/cart-checkout
 import { CheckoutCartCommandHandler } from './CheckoutCartCommandHandler';
 import { CheckoutCartCommand } from '../commands/CheckoutCartCommand';
 import { createSampleCart } from '../../cart-test.helpers';
+import { samplePricingBreakdown } from './checkout-test.helpers';
 
 describe('CheckoutCartCommandHandler', () => {
   const resolveCartService = { resolve: vi.fn() };
@@ -12,9 +13,10 @@ describe('CheckoutCartCommandHandler', () => {
   let handler: CheckoutCartCommandHandler;
 
   beforeEach(() => {
-    vi.clearAllMocks();
     EventBus.getInstance()['handlers'] = new Map();
+    resolveCartService.resolve.mockReset();
     resolveCartService.resolve.mockResolvedValue(createSampleCart());
+    buildCartItemService.buildCheckoutItems.mockReset();
     buildCartItemService.buildCheckoutItems.mockReturnValue([
       {
         itemType: 'reservation',
@@ -27,6 +29,9 @@ describe('CheckoutCartCommandHandler', () => {
     handler = new CheckoutCartCommandHandler(
       resolveCartService as never,
       buildCartItemService as never,
+      {
+        buildFromCart: vi.fn().mockResolvedValue(samplePricingBreakdown),
+      } as never,
     );
   });
 

@@ -3,6 +3,8 @@ import type { PaymentStatus } from '../constants/payment-status.constant';
 import { PaymentType } from '../types/payment.type';
 import { PAYMENT_STATUS } from '../constants/payment-status.constant';
 
+import type { PricingBreakdown } from '../../../../shared/pricing/pricing-breakdown.types';
+
 export type CreatePaymentParams = {
   amount: number;
   currency: string;
@@ -16,6 +18,7 @@ export type CreatePaymentParams = {
   errorMessage?: string | null;
   refundedAmount?: number;
   refundTransactionId?: string | null;
+  pricingBreakdown?: PricingBreakdown | null;
   id?: number;
   createdAt?: Date;
   updatedAt?: Date;
@@ -40,6 +43,7 @@ export class Payment {
     public readonly errorMessage: string | null = null,
     public readonly refundedAmount: number = 0,
     public readonly refundTransactionId: string | null = null,
+    public readonly pricingBreakdown: PricingBreakdown | null = null,
   ) {}
 
   confirm(): void {
@@ -68,6 +72,7 @@ export class Payment {
       params.errorMessage,
       params.refundedAmount ?? 0,
       params.refundTransactionId ?? null,
+      params.pricingBreakdown ?? null,
     );
   }
 }

@@ -24,6 +24,8 @@ import { RoomAmenityOrmEntity } from '../modules/amenity/infrastructure/entities
 import { PaymentOrmEntity } from '../modules/payment/infrastructure/entities/payment.orm-entity';
 import { CartOrmEntity } from '../modules/cart/infrastructure/entities/cart.orm-entity';
 import { CartItemOrmEntity } from '../modules/cart/infrastructure/entities/cart-item.orm-entity';
+import { InvoiceOrmEntity } from '../modules/invoice/infrastructure/entities/invoice.orm-entity';
+import { InvoiceSequenceOrmEntity } from '../modules/invoice/infrastructure/entities/invoice-sequence.orm-entity';
 
 export type RegisterPayload = {
   email: string;
@@ -65,6 +67,8 @@ export const DOMAIN_TEST_ENTITIES = [
   AmenityOrmEntity,
   PropertyAmenityOrmEntity,
   RoomAmenityOrmEntity,
+  InvoiceOrmEntity,
+  InvoiceSequenceOrmEntity,
 ] as const;
 
 export async function assignSuperAdminRole(

@@ -30,4 +30,17 @@ export class InvoiceRepository implements IInvoiceRepository {
     });
     return entity ? InvoiceMapper.toDomain(entity) : null;
   }
+
+  async findById(id: number): Promise<Invoice | null> {
+    const entity = await this.repository.findOne({ where: { id } });
+    return entity ? InvoiceMapper.toDomain(entity) : null;
+  }
+
+  async findByUserId(userId: number): Promise<Invoice[]> {
+    const entities = await this.repository.find({
+      where: { userId },
+      order: { createdAt: 'DESC' },
+    });
+    return entities.map((entity) => InvoiceMapper.toDomain(entity));
+  }
 }

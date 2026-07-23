@@ -3,6 +3,22 @@ import type { PaymentStatus } from '../../domain/constants/payment-status.consta
 import { Payment } from '../../domain/entities/payment.entity';
 import { PaymentOrmEntity } from '../entities/payment.orm-entity';
 import { PaymentType } from '../../domain/types/payment.type';
+import type { PricingBreakdown } from '../../../../shared/pricing/pricing-breakdown.types';
+
+function parsePricingBreakdown(
+  value: Record<string, unknown> | null | undefined,
+): PricingBreakdown | null {
+  if (!value || typeof value !== 'object') {
+    return null;
+  }
+
+  const totalCents = Number(value.totalCents);
+  if (!Number.isFinite(totalCents)) {
+    return null;
+  }
+
+  return value as PricingBreakdown;
+}
 
 export class PaymentMapper {
   static toDomain(entity: PaymentOrmEntity): Payment {
@@ -24,6 +40,7 @@ export class PaymentMapper {
       invoiceNotificationsSentAt: entity.invoiceNotificationsSentAt ?? null,
       refundedAmount: entity.refundedAmount ?? 0,
       refundTransactionId: entity.refundTransactionId ?? null,
+      pricingBreakdown: parsePricingBreakdown(entity.pricingBreakdown),
     });
   }
 
@@ -46,6 +63,10 @@ export class PaymentMapper {
     entity.invoiceNotificationsSentAt = payment.invoiceNotificationsSentAt;
     entity.refundedAmount = payment.refundedAmount;
     entity.refundTransactionId = payment.refundTransactionId;
+    entity.pricingBreakdown = payment.pricingBreakdown as Record<
+      string,
+      unknown
+    > | null;
     return entity;
   }
 }

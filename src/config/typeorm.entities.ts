@@ -19,6 +19,7 @@ import { AmenityOrmEntity } from '../modules/amenity/infrastructure/entities/ame
 import { PropertyAmenityOrmEntity } from '../modules/amenity/infrastructure/entities/property-amenity.orm-entity';
 import { RoomAmenityOrmEntity } from '../modules/amenity/infrastructure/entities/room-amenity.orm-entity';
 import { InvoiceOrmEntity } from '../modules/invoice/infrastructure/entities/invoice.orm-entity';
+import { InvoiceSequenceOrmEntity } from '../modules/invoice/infrastructure/entities/invoice-sequence.orm-entity';
 
 export const TYPEORM_ENTITIES = [
   AuthEntity,
@@ -42,4 +43,5 @@ export const TYPEORM_ENTITIES = [
   PropertyAmenityOrmEntity,
   RoomAmenityOrmEntity,
   InvoiceOrmEntity,
+  InvoiceSequenceOrmEntity,
 ];

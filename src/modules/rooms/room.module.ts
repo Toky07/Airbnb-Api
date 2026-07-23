@@ -19,6 +19,7 @@ import { RoomTypeController } from './interfaces/http/room-type.controller';
 import { RoomTypesSeedService } from './infrastructure/seed/room-types.seed';
 import { RoomSlugsSeedService } from './infrastructure/seed/room-slugs.seed';
 import { CalculateStayAmountService } from '../../shared/pricing/calculate-stay-amount.service';
+import { ComputePricingBreakdownService } from '../../shared/pricing/compute-pricing-breakdown.service';
 import { MediaModule } from '../media/media.module';
 import { RoomMediaPresenter } from './applications/presenters/room-media.presenter';
 import { RoomProductSummaryService } from './applications/services/room-product-summary.service';
@@ -43,6 +44,7 @@ import { ListRoomsQuery } from './applications/useCase/queries/ListRoomsQuery';
 import { ListRoomTypesQuery } from './applications/useCase/queries/ListRoomTypesQuery';
 import { ListRoomTypeOptionsQuery } from './applications/useCase/queries/ListRoomTypeOptionsQuery';
 import { ListRoomBlockedDatesQuery } from './applications/useCase/queries/ListRoomBlockedDatesQuery';
+import { GetRoomPricingPreviewQuery } from './applications/useCase/queries/GetRoomPricingPreviewQuery';
 
 @Module({
   imports: [
@@ -63,6 +65,7 @@ import { ListRoomBlockedDatesQuery } from './applications/useCase/queries/ListRo
     RoomProductSummaryService,
     GenerateRoomSlugService,
     CalculateStayAmountService,
+    ComputePricingBreakdownService,
     cartItemCatalogProvider,
     cartProductSummaryProvider,
     {
@@ -98,6 +101,7 @@ export class RoomsModule implements OnModuleInit {
     private readonly roomBlockedDateRepository: IRoomBlockedDateRepository,
     private readonly roomMediaPresenter: RoomMediaPresenter,
     private readonly generateRoomSlug: GenerateRoomSlugService,
+    private readonly computePricingBreakdown: ComputePricingBreakdownService,
     @InjectRepository(ReservationItemOrmEntity)
     private readonly reservationItemRepo: Repository<ReservationItemOrmEntity>,
   ) {}
@@ -110,6 +114,7 @@ export class RoomsModule implements OnModuleInit {
       roomMediaPresenter: this.roomMediaPresenter,
       generateRoomSlug: this.generateRoomSlug,
       reservationItemRepo: this.reservationItemRepo,
+      computePricingBreakdown: this.computePricingBreakdown,
     });
 
     CommandBus.register(CreateRoomCommand, bootstrap.createRoomCommandHandler);
@@ -146,6 +151,10 @@ export class RoomsModule implements OnModuleInit {
     QueryBus.register(
       ListRoomBlockedDatesQuery,
       bootstrap.listRoomBlockedDatesQueryHandler,
+    );
+    QueryBus.register(
+      GetRoomPricingPreviewQuery,
+      bootstrap.getRoomPricingPreviewQueryHandler,
     );
   }
 }

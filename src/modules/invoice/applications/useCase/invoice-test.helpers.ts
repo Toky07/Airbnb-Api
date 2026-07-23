@@ -9,7 +9,7 @@ export function createSampleInvoiceData(
     invoiceNumber: 'FACT-2026-000042',
     paidAt: new Date('2026-06-10T14:30:00.000Z'),
     currency: 'eur',
-    totalCents: 32000,
+    totalCents: 32_000,
     recipient: {
       name: 'Jean Dupont',
       email: 'jean@test.com',
@@ -24,8 +24,8 @@ export function createSampleInvoiceData(
         label: 'Suite Deluxe',
         subtitle: 'Hôtel Riviera · Nice',
         quantity: 3,
-        unitPriceCents: 10667,
-        totalPriceCents: 32000,
+        unitPriceCents: 10_667,
+        totalPriceCents: 32_000,
         columns: {
           dates: '01 juil. → 04 juil. 2026',
           guests: 2,
@@ -33,6 +33,19 @@ export function createSampleInvoiceData(
         },
       },
     ],
+    issuer: {
+      name: 'StayBook SAS',
+      address: '10 rue de Paris, 75001 Paris',
+      siret: '12345678901234',
+      vatNumber: 'FR12345678901',
+    },
+    totals: {
+      subtotalCents: 29_090,
+      vatCents: 2_910,
+      touristTaxCents: 0,
+      serviceFeeCents: 0,
+      totalCents: 32_000,
+    },
     ...overrides,
   };
 }

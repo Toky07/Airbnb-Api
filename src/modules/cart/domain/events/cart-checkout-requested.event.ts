@@ -1,5 +1,7 @@
 import { DomainEvent } from '../../../../shared/domain/domain.event';
 
+import type { PricingBreakdown } from '../../../../shared/pricing/pricing-breakdown.types';
+
 export type CartCheckoutItemPayload = {
   itemType: string;
   roomId: number;
@@ -18,5 +20,6 @@ export class CartCheckoutRequestedEvent implements DomainEvent {
     public readonly cartId: number,
     public readonly amountInCents: number,
     public readonly items: CartCheckoutItemPayload[],
+    public readonly pricingBreakdown: PricingBreakdown,
   ) {}
 }
