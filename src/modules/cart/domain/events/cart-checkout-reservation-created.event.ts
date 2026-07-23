@@ -10,5 +10,6 @@ export class CartCheckoutReservationCreatedEvent implements DomainEvent {
     public readonly cartId: number,
     public readonly reservationId: number,
     public readonly amountInCents: number,
+    public readonly holdUntil: string | null = null,
   ) {}
 }

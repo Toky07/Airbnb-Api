@@ -5,5 +5,6 @@ export class CreatePaymentIntentOutput {
     public readonly amount: number,
     public readonly currency: string,
     public readonly publishableKey: string,
+    public readonly holdUntil: string | null = null,
   ) {}
 }

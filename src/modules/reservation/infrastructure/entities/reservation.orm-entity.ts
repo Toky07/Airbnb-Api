@@ -32,6 +32,9 @@ export class ReservationOrmEntity {
   @JoinColumn({ name: 'paymentId' })
   payment: PaymentOrmEntity;
 
+  @Column({ type: 'timestamp', nullable: true })
+  holdUntil: Date | null;
+
   @CreateDateColumn()
   createdAt: Date;
 

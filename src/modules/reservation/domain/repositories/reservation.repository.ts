@@ -34,8 +34,9 @@ export interface IReservationRepository {
     roomId: number,
     checkIn: string,
     checkOut: string,
-    excludeItemId?: number,
+    excludeReservationId?: number,
   ): Promise<ReservationItem[]>;
+  createWithHold(reservation: Reservation): Promise<Reservation>;
   findRoomIdsUnavailable(checkIn: string, checkOut: string): Promise<number[]>;
   countByScope(
     scope: ReservationStatsScope,

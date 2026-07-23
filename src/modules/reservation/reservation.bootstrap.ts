@@ -53,12 +53,12 @@ export class ReservationBootstrap {
         deps.reservationRepository,
         deps.roomRepository,
         deps.userRepository,
-        deps.checkRoomAvailability,
         deps.calculateStayAmount,
         deps.enrichReservationOutputs,
       ),
       confirmReservationCommandHandler: new ConfirmReservationCommandHandler(
         deps.reservationRepository,
+        deps.checkRoomAvailability,
       ),
       cancelReservationCommandHandler: new CancelReservationCommandHandler(
         deps.reservationRepository,

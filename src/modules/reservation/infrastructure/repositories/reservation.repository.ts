@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, LessThan, Repository } from 'typeorm';
 import {
@@ -18,6 +18,7 @@ import { ReservationOrmEntity } from '../entities/reservation.orm-entity';
 import { ReservationItemMapper } from '../mappers/reservation-item.mapper';
 import { ReservationMapper } from '../mappers/reservation.mapper';
 import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
+import { RoomBlockedDateOrmEntity } from '../../../rooms/infrastructure/entities/room-blocked-date.orm-entity';
 import type { ReservationStatus } from '../../domain/constants/reservation-status.constant';
 
 @Injectable()
@@ -141,7 +142,7 @@ export class ReservationRepository implements IReservationRepository {
     roomId: number,
     checkIn: string,
     checkOut: string,
-    excludeItemId?: number,
+    excludeReservationId?: number,
   ): Promise<ReservationItem[]> {
     const qb = this.itemRepository
       .createQueryBuilder('item')
@@ -153,12 +154,80 @@ export class ReservationRepository implements IReservationRepository {
         statuses: BLOCKING_RESERVATION_STATUSES,
       });
 
-    if (excludeItemId) {
-      qb.andWhere('item.id != :excludeItemId', { excludeItemId });
+    if (excludeReservationId) {
+      qb.andWhere('reservation.id != :excludeReservationId', {
+        excludeReservationId,
+      });
     }
 
     const entities = await qb.getMany();
     return entities.map((entity) => ReservationItemMapper.toDomain(entity));
+  }
+
+  async createWithHold(reservation: Reservation): Promise<Reservation> {
+    return this.repository.manager.transaction(async (manager) => {
+      const roomIds = [
+        ...new Set(
+          reservation.items
+            .map((item) => item.roomId)
+            .filter((id) => Number.isFinite(id) && id > 0),
+        ),
+      ].sort((a, b) => a - b);
+
+      if (roomIds.length > 0) {
+        await manager
+          .getRepository(RoomEntity)
+          .createQueryBuilder('room')
+          .setLock('pessimistic_write')
+          .where('room.id IN (:...roomIds)', { roomIds })
+          .orderBy('room.id', 'ASC')
+          .getMany();
+      }
+
+      for (const item of reservation.items) {
+        const overlapping = await manager
+          .getRepository(ReservationItemOrmEntity)
+          .createQueryBuilder('item')
+          .innerJoin('item.reservation', 'reservation')
+          .where('item.roomId = :roomId', { roomId: item.roomId })
+          .andWhere('item.checkIn < :checkOut', { checkOut: item.checkOut })
+          .andWhere('item.checkOut > :checkIn', { checkIn: item.checkIn })
+          .andWhere('reservation.status IN (:...statuses)', {
+            statuses: BLOCKING_RESERVATION_STATUSES,
+          })
+          .getCount();
+
+        if (overlapping > 0) {
+          throw new BadRequestException(
+            'Cette chambre n’est pas disponible pour les dates sélectionnées.',
+          );
+        }
+
+        const blocked = await manager
+          .getRepository(RoomBlockedDateOrmEntity)
+          .createQueryBuilder('blocked')
+          .where('blocked.roomId = :roomId', { roomId: item.roomId })
+          .andWhere('blocked.startDate < :endDate', { endDate: item.checkOut })
+          .andWhere('blocked.endDate > :startDate', {
+            startDate: item.checkIn,
+          })
+          .getCount();
+
+        if (blocked > 0) {
+          throw new BadRequestException(
+            'Cette chambre n’est pas disponible pour les dates sélectionnées.',
+          );
+        }
+      }
+
+      const entity = ReservationMapper.toEntity(reservation);
+      const saved = await manager.save(ReservationOrmEntity, entity);
+      const loaded = await manager.findOne(ReservationOrmEntity, {
+        where: { id: saved.id },
+        relations: ['items'],
+      });
+      return ReservationMapper.toDomain(loaded!);
+    });
   }
 
   async findRoomIdsUnavailable(
@@ -344,11 +413,9 @@ export class ReservationRepository implements IReservationRepository {
   }
 
   async clearExpiredReservations(): Promise<void> {
-    const threshold = new Date(Date.now() - 1000 * 60 * 20);
-
     await this.repository.delete({
       status: RESERVATION_STATUS.PENDING,
-      createdAt: LessThan(threshold),
+      holdUntil: LessThan(new Date()),
     });
   }
 

@@ -27,6 +27,7 @@ import { createPaymentGatewayMock } from '../../../payment/applications/useCase/
 import {
   AUTH_TEST_ENTITIES,
   DOMAIN_TEST_ENTITIES,
+  registerAndLoginAsHost,
   registerAndLoginAsSuperAdmin,
 } from '../../../../test/controller-test.helpers';
 import {
@@ -241,6 +242,7 @@ describe('CartController', () => {
         amount: 20000,
         currency: 'eur',
         publishableKey: 'pk_test_cart',
+        holdUntil: expect.any(String),
       }),
     );
 
@@ -256,7 +258,59 @@ describe('CartController', () => {
         relations: ['items'],
       });
     expect(reservation?.status).toBe(RESERVATION_STATUS.PENDING);
+    expect(reservation?.holdUntil).toBeTruthy();
     expect(reservation?.items).toHaveLength(1);
+  });
+
+  it('POST /cart/checkout refuse un second hold qui chevauche les mêmes dates', async () => {
+    await clearAuthenticatedCart();
+
+    await request(app.getHttpServer())
+      .post('/cart/items')
+      .set('Authorization', `Bearer ${token}`)
+      .set(CART_SESSION_HEADER, sessionId)
+      .send({
+        itemType: CART_ITEM_TYPE.RESERVATION,
+        roomId,
+        startDate: '2026-11-10',
+        endDate: '2026-11-12',
+        guestCount: 2,
+      })
+      .expect(201);
+
+    await request(app.getHttpServer())
+      .post('/cart/checkout')
+      .set('Authorization', `Bearer ${token}`)
+      .set(CART_SESSION_HEADER, sessionId)
+      .expect(201);
+
+    const secondToken = await registerAndLoginAsHost(app, dataSource, {
+      email: `cart-overlap-${Date.now()}@test.com`,
+      password: '123456',
+      firstName: 'Other',
+      lastName: 'Guest',
+      phoneNumber: '+33601020999',
+    });
+    const secondSession = `cart-session-overlap-${Date.now()}`;
+
+    await request(app.getHttpServer())
+      .post('/cart/items')
+      .set('Authorization', `Bearer ${secondToken}`)
+      .set(CART_SESSION_HEADER, secondSession)
+      .send({
+        itemType: CART_ITEM_TYPE.RESERVATION,
+        roomId,
+        startDate: '2026-11-10',
+        endDate: '2026-11-12',
+        guestCount: 2,
+      })
+      .expect(201);
+
+    await request(app.getHttpServer())
+      .post('/cart/checkout')
+      .set('Authorization', `Bearer ${secondToken}`)
+      .set(CART_SESSION_HEADER, secondSession)
+      .expect(400);
   });
 
   it('POST /cart/checkout/complete vide le panier après vérification du paiement', async () => {

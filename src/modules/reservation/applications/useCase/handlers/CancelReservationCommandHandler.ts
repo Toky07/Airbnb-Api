@@ -63,6 +63,9 @@ export class CancelReservationCommandHandler implements ICommandHandler<
         RESERVATION_STATUS.CANCELLED,
         payment.id,
         reservation.id,
+        reservation.createdAt,
+        reservation.updatedAt,
+        null,
       ),
     );
 
