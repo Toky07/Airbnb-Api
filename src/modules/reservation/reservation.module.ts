@@ -57,6 +57,8 @@ import { GetBookingOrderQuery } from './applications/useCase/queries/GetBookingO
 import { GetCancellationPreviewQuery } from './applications/useCase/queries/GetCancellationPreviewQuery';
 import { MarkReservationNoShowCommand } from './applications/useCase/commands/MarkReservationNoShowCommand';
 import { InvoiceModule } from '../invoice/invoice.module';
+import { INVOICE_REPOSITORY } from '../invoice/domain/repositories/invoice.repository';
+import type { IInvoiceRepository } from '../invoice/domain/repositories/invoice.repository';
 
 @Module({
   imports: [
@@ -122,6 +124,8 @@ export class ReservationModule implements OnModuleInit {
     private readonly assertReservationAccess: AssertReservationAccessService,
     private readonly resolveCancellationPolicy: ResolveReservationCancellationPolicyService,
     private readonly computeCancellationRefund: ComputeCancellationRefundService,
+    @Inject(INVOICE_REPOSITORY)
+    private readonly invoiceRepository: IInvoiceRepository,
   ) {}
 
   onModuleInit() {
@@ -142,6 +146,7 @@ export class ReservationModule implements OnModuleInit {
       assertReservationAccess: this.assertReservationAccess,
       resolveCancellationPolicy: this.resolveCancellationPolicy,
       computeCancellationRefund: this.computeCancellationRefund,
+      invoiceRepository: this.invoiceRepository,
     });
 
     CommandBus.register(

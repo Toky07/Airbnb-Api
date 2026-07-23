@@ -14,6 +14,7 @@ import type { ResolveHostPropertyIdsService } from './applications/services/reso
 import type { ResolvePaymentReservationsService } from './applications/services/resolve-payment-reservations.service';
 import type { ResolveReservationCancellationPolicyService } from './applications/services/resolve-reservation-cancellation-policy.service';
 import type { ResolveReservationStatsScopeService } from './applications/services/resolve-reservation-stats-scope.service';
+import type { IInvoiceRepository } from '../invoice/domain/repositories/invoice.repository';
 import { CancelReservationCommandHandler } from './applications/useCase/handlers/CancelReservationCommandHandler';
 import { ConfirmReservationCommandHandler } from './applications/useCase/handlers/ConfirmReservationCommandHandler';
 import { CreateReservationCommandHandler } from './applications/useCase/handlers/CreateReservationCommandHandler';
@@ -46,6 +47,7 @@ export class ReservationBootstrap {
     assertReservationAccess: AssertReservationAccessService;
     resolveCancellationPolicy: ResolveReservationCancellationPolicyService;
     computeCancellationRefund: ComputeCancellationRefundService;
+    invoiceRepository: IInvoiceRepository;
   }) {
     const listReservationsQueryHandler = new ListReservationsQueryHandler(
       deps.reservationRepository,
@@ -131,6 +133,7 @@ export class ReservationBootstrap {
         deps.userRepository,
         deps.propertyRepository,
         deps.resolvePaymentReservations,
+        deps.invoiceRepository,
       ),
     };
   }

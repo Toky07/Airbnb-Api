@@ -80,12 +80,15 @@ export class BookingOrderDetailOutput {
     public readonly customerEmail: string,
     public readonly itemCount: number,
     public readonly items: BookingOrderItemOutput[],
+    public readonly invoiceId: number | null = null,
+    public readonly invoiceNumber: string | null = null,
   ) {}
 
   static fromParts(
     payment: Payment,
     items: BookingOrderItemOutput[],
     user: User | null,
+    invoice: { id: number; invoiceNumber: string } | null = null,
   ): BookingOrderDetailOutput {
     const scopedAmount = items.reduce((total, item) => total + item.price, 0);
 
@@ -100,6 +103,8 @@ export class BookingOrderDetailOutput {
       user?.email ?? '—',
       items.length,
       items,
+      invoice?.id ?? null,
+      invoice?.invoiceNumber ?? null,
     );
   }
 }

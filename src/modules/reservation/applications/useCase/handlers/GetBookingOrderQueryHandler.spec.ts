@@ -9,6 +9,7 @@ describe('GetBookingOrderQueryHandler', () => {
   const userRepository = { findById: vi.fn(), findByAuthId: vi.fn() };
   const propertyRepository = { findAllByOwnerId: vi.fn() };
   const resolvePaymentReservations = { resolveBookingItemsForPayment: vi.fn() };
+  const invoiceRepository = { findByPayment: vi.fn() };
 
   let handler: GetBookingOrderQueryHandler;
 
@@ -55,11 +56,13 @@ describe('GetBookingOrderQueryHandler', () => {
     resolvePaymentReservations.resolveBookingItemsForPayment.mockResolvedValue([
       bookingItem,
     ]);
+    invoiceRepository.findByPayment.mockResolvedValue(null);
     handler = new GetBookingOrderQueryHandler(
       paymentRepository as never,
       userRepository as never,
       propertyRepository as never,
       resolvePaymentReservations as never,
+      invoiceRepository as never,
     );
   });
 
@@ -77,5 +80,26 @@ describe('GetBookingOrderQueryHandler', () => {
     expect(result.items[0].userId).toBe(3);
     expect(result.items[0].roomName).toBe('Chambre A');
     expect(result.itemCount).toBe(1);
+    expect(result.invoiceId).toBeNull();
+    expect(result.invoiceNumber).toBeNull();
+  });
+
+  it('inclut la facture associée au paiement quand elle existe', async () => {
+    invoiceRepository.findByPayment.mockResolvedValue({
+      id: 42,
+      invoiceNumber: 'FACT-2026-000001',
+    });
+
+    const result = await handler.execute(
+      new GetBookingOrderQuery(7, {
+        canReadAll: true,
+        canReadHost: false,
+        authId: 0,
+      }),
+    );
+
+    expect(invoiceRepository.findByPayment).toHaveBeenCalledWith('reservation', 7);
+    expect(result.invoiceId).toBe(42);
+    expect(result.invoiceNumber).toBe('FACT-2026-000001');
   });
 });
