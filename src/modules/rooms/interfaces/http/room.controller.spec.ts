@@ -138,7 +138,9 @@ describe('RoomController', () => {
       .query({ checkIn: '2026-12-03', checkOut: '2026-12-06', limit: 25 })
       .expect(200);
 
-    const ids = (response.body.data as Array<{ id: number }>).map((room) => room.id);
+    const ids = (response.body.data as Array<{ id: number }>).map(
+      (room) => room.id,
+    );
     expect(ids).toContain(availableRoom.id);
     expect(ids).not.toContain(blockedRoom.id);
   });

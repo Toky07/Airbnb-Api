@@ -30,6 +30,18 @@ export class StripePaymentGateway implements IPaymentGateway {
     return this.toSnapshot(paymentIntent);
   }
 
+  async createRefund(
+    paymentIntentId: string,
+    amount: number,
+  ): Promise<{ id: string }> {
+    const refund = await this.stripeClientProvider.stripe.refunds.create({
+      payment_intent: paymentIntentId,
+      amount,
+    });
+
+    return { id: refund.id };
+  }
+
   private toSnapshot(paymentIntent: {
     id: string;
     client_secret: string | null;

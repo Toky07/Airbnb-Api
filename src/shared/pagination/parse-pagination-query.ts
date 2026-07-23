@@ -37,9 +37,7 @@ export function parsePaginationQuery(
   const checkIn = datePattern.test(checkInRaw) ? checkInRaw : undefined;
   const checkOut = datePattern.test(checkOutRaw) ? checkOutRaw : undefined;
   const hasValidDateRange =
-    checkIn !== undefined &&
-    checkOut !== undefined &&
-    checkOut > checkIn;
+    checkIn !== undefined && checkOut !== undefined && checkOut > checkIn;
 
   return {
     page,

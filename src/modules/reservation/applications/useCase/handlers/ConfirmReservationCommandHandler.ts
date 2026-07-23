@@ -35,10 +35,7 @@ export class ConfirmReservationCommandHandler implements ICommandHandler<
       return ReservationOutput.fromDomain(reservation);
     }
 
-    if (
-      reservation.holdUntil &&
-      reservation.holdUntil.getTime() < Date.now()
-    ) {
+    if (reservation.holdUntil && reservation.holdUntil.getTime() < Date.now()) {
       await this.cancelReservation(reservation);
       throw new BadRequestException(
         'Le délai de réservation a expiré. Veuillez recommencer le paiement.',

@@ -22,6 +22,8 @@ export class PaymentMapper {
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
       invoiceNotificationsSentAt: entity.invoiceNotificationsSentAt ?? null,
+      refundedAmount: entity.refundedAmount ?? 0,
+      refundTransactionId: entity.refundTransactionId ?? null,
     });
   }
 
@@ -42,6 +44,8 @@ export class PaymentMapper {
     entity.propertyId = payment.propertyId;
     entity.errorMessage = payment.errorMessage;
     entity.invoiceNotificationsSentAt = payment.invoiceNotificationsSentAt;
+    entity.refundedAmount = payment.refundedAmount;
+    entity.refundTransactionId = payment.refundTransactionId;
     return entity;
   }
 }

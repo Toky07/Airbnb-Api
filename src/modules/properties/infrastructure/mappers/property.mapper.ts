@@ -1,4 +1,8 @@
 import type { CategorySummary } from '../../../../shared/types/category-summary';
+import {
+  DEFAULT_CANCELLATION_POLICY,
+  parseCancellationPolicy,
+} from '../../../reservation/domain/constants/cancellation-policy.constant';
 import { Property } from '../../domain/entities/property.entity';
 import { RoomMapper } from '../../../rooms/infrastructure/mappers/room.mapper';
 import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
@@ -27,6 +31,9 @@ export class PropertyMapper {
       longitude: property.longitude,
       checkInTime: property.checkInTime,
       checkOutTime: property.checkOutTime,
+      cancellationPolicy:
+        parseCancellationPolicy(property.cancellationPolicy) ??
+        DEFAULT_CANCELLATION_POLICY,
       ownerId: property.ownerId,
       propertyTypeId: property.propertyTypeId,
       propertyType: mapPropertyType(property),
@@ -50,6 +57,7 @@ export class PropertyMapper {
       longitude: property.longitude,
       checkInTime: property.checkInTime,
       checkOutTime: property.checkOutTime,
+      cancellationPolicy: property.cancellationPolicy,
       ownerId: property.ownerId,
       propertyTypeId: property.propertyTypeId,
       createdAt: property.createdAt,

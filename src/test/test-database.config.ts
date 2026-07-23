@@ -3,6 +3,8 @@ import { DataSource } from 'typeorm';
 import { InitialSchema1783920447445 } from '../database/migrations/1783920447445-InitialSchema';
 import { AddRoomBlockedDates1783920447446 } from '../database/migrations/1783920447446-AddRoomBlockedDates';
 import { AddReservationHoldUntil1783920447447 } from '../database/migrations/1783920447447-AddReservationHoldUntil';
+import { AddPropertyCancellationPolicy1783920447448 } from '../database/migrations/1783920447448-AddPropertyCancellationPolicy';
+import { AddPaymentRefundFields1783920447449 } from '../database/migrations/1783920447449-AddPaymentRefundFields';
 import { TYPEORM_ENTITIES } from '../config/typeorm.entities';
 import { EventBus } from '../shared/domain/event.bus';
 
@@ -47,6 +49,8 @@ async function createAdminDataSource(): Promise<DataSource> {
       InitialSchema1783920447445,
       AddRoomBlockedDates1783920447446,
       AddReservationHoldUntil1783920447447,
+      AddPropertyCancellationPolicy1783920447448,
+      AddPaymentRefundFields1783920447449,
     ],
     synchronize: false,
   });

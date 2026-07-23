@@ -278,7 +278,7 @@ describe('ReservationController', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    expect(response.body).toEqual(
+    expect(response.body.reservation).toEqual(
       expect.objectContaining({
         status: RESERVATION_STATUS.CANCELLED,
       }),
@@ -338,23 +338,21 @@ describe('ReservationController', () => {
   });
 
   it('clearExpiredReservations supprime les pending expirés et conserve les holds valides', async () => {
-    const expired = await dataSource
-      .getRepository(ReservationOrmEntity)
-      .save({
-        userId: 1,
-        status: RESERVATION_STATUS.PENDING,
-        holdUntil: new Date(Date.now() - 60_000),
-        items: [
-          {
-            roomId,
-            checkIn: '2027-03-01',
-            checkOut: '2027-03-03',
-            guestCount: 2,
-            price: 200,
-            nights: 2,
-          },
-        ],
-      });
+    const expired = await dataSource.getRepository(ReservationOrmEntity).save({
+      userId: 1,
+      status: RESERVATION_STATUS.PENDING,
+      holdUntil: new Date(Date.now() - 60_000),
+      items: [
+        {
+          roomId,
+          checkIn: '2027-03-01',
+          checkOut: '2027-03-03',
+          guestCount: 2,
+          price: 200,
+          nights: 2,
+        },
+      ],
+    });
 
     const active = await dataSource.getRepository(ReservationOrmEntity).save({
       userId: 1,
@@ -374,8 +372,8 @@ describe('ReservationController', () => {
 
     await reservationRepository.clearExpiredReservations();
 
-    expect(await reservationRepository.findById(expired.id!)).toBeNull();
-    expect(await reservationRepository.findById(active.id!)).not.toBeNull();
+    expect(await reservationRepository.findById(expired.id)).toBeNull();
+    expect(await reservationRepository.findById(active.id)).not.toBeNull();
   });
 
   it('GET /reservations/bookings/host liste les commandes host', async () => {
@@ -434,6 +432,57 @@ describe('ReservationController', () => {
         customerName: expect.any(String),
         previewLabel: expect.any(String),
         propertyId,
+        reservationId: reservation.id,
+        reservationStatus: RESERVATION_STATUS.CONFIRMED,
+      }),
+    );
+  });
+
+  it('GET /reservations/:id/cancellation-preview estime le remboursement', async () => {
+    const payment = await dataSource.getRepository(PaymentOrmEntity).save({
+      amount: 20000,
+      currency: 'eur',
+      status: 'succeeded',
+      provider: 'stripe',
+      transactionId: 'pi_preview_test',
+      userId: 1,
+      propertyType: 'reservation',
+      propertyId: 1,
+    });
+
+    const reservation = await dataSource
+      .getRepository(ReservationOrmEntity)
+      .save({
+        userId: 1,
+        status: RESERVATION_STATUS.CONFIRMED,
+        payment,
+        items: [
+          {
+            roomId,
+            checkIn: '2026-10-01',
+            checkOut: '2026-10-03',
+            guestCount: 2,
+            price: 200,
+            nights: 2,
+          },
+        ],
+      });
+
+    await dataSource.getRepository(PaymentOrmEntity).update(payment.id, {
+      propertyId: reservation.id,
+    });
+
+    const response = await request(app.getHttpServer())
+      .get(`/reservations/${reservation.id}/cancellation-preview`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        reservationId: reservation.id,
+        refundPercent: expect.any(Number),
+        policyLabel: expect.any(String),
+        cancellationPolicy: 'moderate',
       }),
     );
   });

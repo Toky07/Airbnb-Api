@@ -56,14 +56,16 @@ function createBlockedRepo(
     findOverlapping: vi.fn().mockResolvedValue([]),
     findRoomIdsUnavailable: vi.fn().mockResolvedValue([]),
     ...overrides,
-  } as IRoomBlockedDateRepository;
+  };
 }
 
 describe('RoomBlockedDate handlers', () => {
   it('crée une période bloquée', async () => {
     const handler = new CreateRoomBlockedDateCommandHandler(
       createBlockedRepo(),
-      { findById: vi.fn().mockResolvedValue(sampleRoom) } as unknown as IRoomRepository,
+      {
+        findById: vi.fn().mockResolvedValue(sampleRoom),
+      } as unknown as IRoomRepository,
     );
 
     const result = await handler.execute(
@@ -82,7 +84,9 @@ describe('RoomBlockedDate handlers', () => {
   it('rejette une plage invalide', async () => {
     const handler = new CreateRoomBlockedDateCommandHandler(
       createBlockedRepo(),
-      { findById: vi.fn().mockResolvedValue(sampleRoom) } as unknown as IRoomRepository,
+      {
+        findById: vi.fn().mockResolvedValue(sampleRoom),
+      } as unknown as IRoomRepository,
     );
 
     await expect(
@@ -98,17 +102,19 @@ describe('RoomBlockedDate handlers', () => {
   it('liste les périodes d’une chambre', async () => {
     const handler = new ListRoomBlockedDatesQueryHandler(
       createBlockedRepo({
-        findByRoomId: vi.fn().mockResolvedValue([
-          new RoomBlockedDate(
-            10,
-            '2026-08-01',
-            '2026-08-05',
-            null,
-            1,
-            new Date(),
-            new Date(),
-          ),
-        ]),
+        findByRoomId: vi
+          .fn()
+          .mockResolvedValue([
+            new RoomBlockedDate(
+              10,
+              '2026-08-01',
+              '2026-08-05',
+              null,
+              1,
+              new Date(),
+              new Date(),
+            ),
+          ]),
       }),
     );
 
@@ -121,9 +127,11 @@ describe('RoomBlockedDate handlers', () => {
     const deleteFn = vi.fn();
     const handler = new DeleteRoomBlockedDateCommandHandler(
       createBlockedRepo({
-        findById: vi.fn().mockResolvedValue(
-          new RoomBlockedDate(10, '2026-08-01', '2026-08-05', null, 3),
-        ),
+        findById: vi
+          .fn()
+          .mockResolvedValue(
+            new RoomBlockedDate(10, '2026-08-01', '2026-08-05', null, 3),
+          ),
         delete: deleteFn,
       }),
     );
@@ -137,9 +145,11 @@ describe('RoomBlockedDate handlers', () => {
   it('refuse de supprimer une période d’une autre chambre', async () => {
     const handler = new DeleteRoomBlockedDateCommandHandler(
       createBlockedRepo({
-        findById: vi.fn().mockResolvedValue(
-          new RoomBlockedDate(99, '2026-08-01', '2026-08-05', null, 3),
-        ),
+        findById: vi
+          .fn()
+          .mockResolvedValue(
+            new RoomBlockedDate(99, '2026-08-01', '2026-08-05', null, 3),
+          ),
       }),
     );
 

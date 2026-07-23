@@ -44,6 +44,12 @@ export class PaymentOrmEntity {
   @Column({ type: 'timestamp', nullable: true })
   invoiceNotificationsSentAt: Date | null;
 
+  @Column({ type: 'integer', default: 0 })
+  refundedAmount: number;
+
+  @Column({ type: 'varchar', nullable: true })
+  refundTransactionId: string | null;
+
   @CreateDateColumn()
   createdAt: Date;
 

@@ -31,6 +31,8 @@ export class UpdatePropertyCommandHandler implements ICommandHandler<
     property.longitude = command.dto.longitude;
     property.checkInTime = command.dto.checkInTime;
     property.checkOutTime = command.dto.checkOutTime;
+    property.cancellationPolicy =
+      command.dto.cancellationPolicy ?? property.cancellationPolicy;
     property.ownerId = command.dto.ownerId;
     property.propertyTypeId = command.dto.propertyTypeId ?? null;
     property.propertyType = null;

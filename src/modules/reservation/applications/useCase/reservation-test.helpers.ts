@@ -70,14 +70,17 @@ export function createReservationRepositoryMock(
         holdUntil: reservation.holdUntil ?? null,
       }),
     ),
-    createWithHold: vi.fn().mockImplementation(async (reservation: Reservation) =>
-      createSampleReservation({
-        id: 1,
-        userId: reservation.userId,
-        items: reservation.items,
-        holdUntil: reservation.holdUntil ?? new Date('2026-06-01T10:20:00.000Z'),
-      }),
-    ),
+    createWithHold: vi
+      .fn()
+      .mockImplementation(async (reservation: Reservation) =>
+        createSampleReservation({
+          id: 1,
+          userId: reservation.userId,
+          items: reservation.items,
+          holdUntil:
+            reservation.holdUntil ?? new Date('2026-06-01T10:20:00.000Z'),
+        }),
+      ),
     updateItem: vi
       .fn()
       .mockImplementation(async (item: ReservationItem) => item),

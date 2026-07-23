@@ -24,6 +24,13 @@ import { BuildReservationInvoicePayloadService } from './applications/services/b
 import { BuildCustomerInvoiceEmailBodyService } from './applications/services/build-customer-invoice-email-body.service';
 import { BuildHostPaymentNotificationEmailBodyService } from './applications/services/build-host-payment-notification-email-body.service';
 import { ClearExpiredReservationService } from './applications/services/clear-expired-reservation.service';
+import { ComputeCancellationRefundService } from './applications/services/compute-cancellation-refund.service';
+import { AssertReservationAccessService } from './applications/services/assert-reservation-access.service';
+import { ResolveReservationCancellationPolicyService } from './applications/services/resolve-reservation-cancellation-policy.service';
+import {
+  PAYMENT_GATEWAY,
+  type IPaymentGateway,
+} from '../payment/domain/ports/payment-gateway.port';
 import {
   RESERVATION_REPOSITORY,
   type IReservationRepository,
@@ -47,6 +54,8 @@ import { GetReservationStatsQuery } from './applications/useCase/queries/GetRese
 import { ListBookingOrdersQuery } from './applications/useCase/queries/ListBookingOrdersQuery';
 import { ListHostBookingOrdersQuery } from './applications/useCase/queries/ListHostBookingOrdersQuery';
 import { GetBookingOrderQuery } from './applications/useCase/queries/GetBookingOrderQuery';
+import { GetCancellationPreviewQuery } from './applications/useCase/queries/GetCancellationPreviewQuery';
+import { MarkReservationNoShowCommand } from './applications/useCase/commands/MarkReservationNoShowCommand';
 
 @Module({
   imports: [
@@ -72,6 +81,9 @@ import { GetBookingOrderQuery } from './applications/useCase/queries/GetBookingO
     ResolveReservationStatsScopeService,
     CountScopedRoomsService,
     ClearExpiredReservationService,
+    ComputeCancellationRefundService,
+    AssertReservationAccessService,
+    ResolveReservationCancellationPolicyService,
     ReservationEvent,
     BuildReservationInvoicePayloadService,
     BuildCustomerInvoiceEmailBodyService,
@@ -96,6 +108,8 @@ export class ReservationModule implements OnModuleInit {
     private readonly propertyRepository: IPropertyRepository,
     @Inject(PAYMENT_REPOSITORY)
     private readonly paymentRepository: IPaymentRepository,
+    @Inject(PAYMENT_GATEWAY)
+    private readonly paymentGateway: IPaymentGateway,
     private readonly checkRoomAvailability: CheckRoomAvailabilityService,
     private readonly calculateStayAmount: CalculateStayAmountService,
     private readonly enrichReservationOutputs: EnrichReservationOutputsService,
@@ -103,6 +117,9 @@ export class ReservationModule implements OnModuleInit {
     private readonly resolveHostPropertyIds: ResolveHostPropertyIdsService,
     private readonly resolveReservationStatsScope: ResolveReservationStatsScopeService,
     private readonly countScopedRooms: CountScopedRoomsService,
+    private readonly assertReservationAccess: AssertReservationAccessService,
+    private readonly resolveCancellationPolicy: ResolveReservationCancellationPolicyService,
+    private readonly computeCancellationRefund: ComputeCancellationRefundService,
   ) {}
 
   onModuleInit() {
@@ -112,6 +129,7 @@ export class ReservationModule implements OnModuleInit {
       userRepository: this.userRepository,
       propertyRepository: this.propertyRepository,
       paymentRepository: this.paymentRepository,
+      paymentGateway: this.paymentGateway,
       checkRoomAvailability: this.checkRoomAvailability,
       calculateStayAmount: this.calculateStayAmount,
       enrichReservationOutputs: this.enrichReservationOutputs,
@@ -119,6 +137,9 @@ export class ReservationModule implements OnModuleInit {
       resolveHostPropertyIds: this.resolveHostPropertyIds,
       resolveReservationStatsScope: this.resolveReservationStatsScope,
       countScopedRooms: this.countScopedRooms,
+      assertReservationAccess: this.assertReservationAccess,
+      resolveCancellationPolicy: this.resolveCancellationPolicy,
+      computeCancellationRefund: this.computeCancellationRefund,
     });
 
     CommandBus.register(
@@ -133,7 +154,15 @@ export class ReservationModule implements OnModuleInit {
       CancelReservationCommand,
       bootstrap.cancelReservationCommandHandler,
     );
+    CommandBus.register(
+      MarkReservationNoShowCommand,
+      bootstrap.markReservationNoShowCommandHandler,
+    );
 
+    QueryBus.register(
+      GetCancellationPreviewQuery,
+      bootstrap.getCancellationPreviewQueryHandler,
+    );
     QueryBus.register(
       GetReservationQuery,
       bootstrap.getReservationQueryHandler,

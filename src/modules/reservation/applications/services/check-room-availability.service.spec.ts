@@ -18,7 +18,7 @@ function createBlockedDateRepositoryMock(
     findOverlapping: vi.fn().mockResolvedValue([]),
     findRoomIdsUnavailable: vi.fn().mockResolvedValue([]),
     ...overrides,
-  } as IRoomBlockedDateRepository;
+  };
 }
 
 describe('CheckRoomAvailabilityService', () => {

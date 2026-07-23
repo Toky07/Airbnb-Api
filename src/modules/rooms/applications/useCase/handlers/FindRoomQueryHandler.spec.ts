@@ -114,7 +114,9 @@ describe('FindRoomQueryHandler', () => {
         return [];
       },
     );
-    (mockBlockedDateRepo.findByRoomId as ReturnType<typeof vi.fn>).mockResolvedValue([
+    (
+      mockBlockedDateRepo.findByRoomId as ReturnType<typeof vi.fn>
+    ).mockResolvedValue([
       {
         id: 1,
         roomId: 1,

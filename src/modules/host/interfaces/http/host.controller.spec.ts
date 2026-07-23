@@ -388,7 +388,9 @@ describe('HostController', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    expect(after.body.find((item: { id: number }) => item.id === blockedDateId)).toBeUndefined();
+    expect(
+      after.body.find((item: { id: number }) => item.id === blockedDateId),
+    ).toBeUndefined();
   });
 
   it('POST /host/properties with image uploads property media', async () => {

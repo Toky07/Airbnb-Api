@@ -12,6 +12,10 @@ export type PaymentIntentSnapshot = {
   status: string;
 };
 
+export type RefundSnapshot = {
+  id: string;
+};
+
 export type WebhookEventPayload = {
   type: string;
   paymentIntentId: string;
@@ -25,4 +29,9 @@ export interface IPaymentGateway {
   ): Promise<PaymentIntentSnapshot>;
 
   retrievePaymentIntent(id: string): Promise<PaymentIntentSnapshot>;
+
+  createRefund(
+    paymentIntentId: string,
+    amount: number,
+  ): Promise<RefundSnapshot>;
 }

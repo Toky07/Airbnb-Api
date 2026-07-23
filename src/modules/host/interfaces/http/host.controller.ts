@@ -48,6 +48,8 @@ import { ListHostRoomBlockedDatesQuery } from '../../applications/useCase/querie
 import { CreateHostRoomBlockedDateCommand } from '../../applications/useCase/commands/CreateHostRoomBlockedDateCommand';
 import { DeleteHostRoomBlockedDateCommand } from '../../applications/useCase/commands/DeleteHostRoomBlockedDateCommand';
 import type { CreateRoomBlockedDateDto } from '../../../rooms/applications/dto/create-room-blocked-date.dto';
+import { CancelReservationCommand } from '../../../reservation/applications/useCase/commands/CancelReservationCommand';
+import { MarkReservationNoShowCommand } from '../../../reservation/applications/useCase/commands/MarkReservationNoShowCommand';
 
 @Controller('host')
 export class HostController {
@@ -320,6 +322,32 @@ export class HostController {
         Number(id),
         Number(blockedDateId),
       ),
+    );
+  }
+
+  @Post('reservations/:id/cancel')
+  @RequirePermissions('host.reservations.read')
+  cancelReservation(
+    @Req() request: { user: JwtPayload },
+    @Param('id') id: number,
+  ) {
+    return CommandBus.execute(
+      new CancelReservationCommand(Number(id), {
+        authId: request.user.sub,
+        canCancelAll: false,
+        canCancelHost: true,
+      }),
+    );
+  }
+
+  @Post('reservations/:id/no-show')
+  @RequirePermissions('host.reservations.read')
+  markReservationNoShow(
+    @Req() request: { user: JwtPayload },
+    @Param('id') id: number,
+  ) {
+    return CommandBus.execute(
+      new MarkReservationNoShowCommand(Number(id), request.user.sub),
     );
   }
 }

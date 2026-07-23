@@ -61,7 +61,7 @@ export class ResolvePaymentReservationsService {
 
   async resolveForPayments(
     payments: Payment[],
-  ): Promise<Map<number, ReservationItemOutput[]>> {
+  ): Promise<Map<number, BookingOrderItemOutput[]>> {
     const reservationIdsByPaymentId = new Map<number, number[]>();
 
     await Promise.all(
@@ -93,12 +93,20 @@ export class ResolvePaymentReservationsService {
       ),
     );
 
-    const itemsByReservationId = new Map<number, ReservationItemOutput[]>();
+    const itemsByReservationId = new Map<number, BookingOrderItemOutput[]>();
     for (const reservation of enrichedReservations) {
-      itemsByReservationId.set(reservation.id, reservation.items);
+      itemsByReservationId.set(
+        reservation.id,
+        reservation.items.map((item) =>
+          BookingOrderItemOutput.fromReservationItem(item, {
+            userId: reservation.userId,
+            status: reservation.status,
+          }),
+        ),
+      );
     }
 
-    const grouped = new Map<number, ReservationItemOutput[]>();
+    const grouped = new Map<number, BookingOrderItemOutput[]>();
 
     for (const payment of payments) {
       const items =

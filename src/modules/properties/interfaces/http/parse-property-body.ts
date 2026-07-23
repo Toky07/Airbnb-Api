@@ -1,8 +1,14 @@
+import {
+  DEFAULT_CANCELLATION_POLICY,
+  parseCancellationPolicy,
+} from '../../../reservation/domain/constants/cancellation-policy.constant';
 import type { CreatePropertyDto } from '../../applications/dto/createProperty.dto';
 
 export function parsePropertyBody(
   body: Record<string, unknown>,
 ): CreatePropertyDto {
+  const cancellationPolicy = parseCancellationPolicy(body.cancellationPolicy);
+
   return {
     name: String(body.name),
     description: String(body.description),
@@ -13,6 +19,7 @@ export function parsePropertyBody(
     longitude: Number(body.longitude),
     checkInTime: String(body.checkInTime),
     checkOutTime: String(body.checkOutTime),
+    cancellationPolicy: cancellationPolicy ?? DEFAULT_CANCELLATION_POLICY,
     ownerId: Number(body.ownerId),
     propertyTypeId:
       body.propertyTypeId === undefined || body.propertyTypeId === ''

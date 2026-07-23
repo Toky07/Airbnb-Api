@@ -1,15 +1,24 @@
 import { describe, expect, it, vi } from 'vitest';
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import {
+  createPaymentGatewayMock,
   createPaymentRepositoryMock,
   createSamplePayment,
 } from '../../../../payment/applications/useCase/payment-test.helpers';
+import { PAYMENT_STATUS } from '../../../../payment/domain/constants/payment-status.constant';
+import { Property } from '../../../../properties/domain/entities/property.entity';
+import { CANCELLATION_POLICY } from '../../../domain/constants/cancellation-policy.constant';
 import { UserNameVO } from '../../../../user/domain/valueObject/username.vo';
 import { EmailVO } from '../../../../../shared/valueObject/email.vo';
 import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
 import { User } from '../../../../user/domain/entities/user.entity';
 import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
+import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
+import { Room } from '../../../../rooms/domain/entities/room.entity';
 import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
+import { ComputeCancellationRefundService } from '../../services/compute-cancellation-refund.service';
+import { ResolveReservationCancellationPolicyService } from '../../services/resolve-reservation-cancellation-policy.service';
 import { CancelReservationCommandHandler } from './CancelReservationCommandHandler';
 import { CancelReservationCommand } from '../commands/CancelReservationCommand';
 import {
@@ -18,21 +27,116 @@ import {
   createSampleReservationItem,
 } from '../reservation-test.helpers';
 
-const paymentRepository = createPaymentRepositoryMock({
-  findById: vi.fn().mockResolvedValue(createSamplePayment({ id: 1 })),
-});
+function createHandler(overrides: {
+  reservationRepository?: ReturnType<typeof createReservationRepositoryMock>;
+  userRepository?: Partial<IUserRepository>;
+  paymentRepository?: ReturnType<typeof createPaymentRepositoryMock>;
+  roomRepository?: Partial<IRoomRepository>;
+  propertyRepository?: Partial<IPropertyRepository>;
+}) {
+  const paymentGateway = createPaymentGatewayMock();
+  const computeCancellationRefund = new ComputeCancellationRefundService();
+  const roomRepository = (overrides.roomRepository ?? {
+    findById: vi.fn().mockResolvedValue(
+      new Room({
+        id: 10,
+        name: 'Suite',
+        slug: 'suite',
+        description: 'Desc',
+        pricePerNight: 100,
+        maxGuests: 2,
+        bedrooms: 1,
+        bathrooms: 1,
+        beds: 1,
+        quantity: 1,
+        size: 30,
+        status: 'available',
+        property: new Property({
+          id: 3,
+          name: 'Hotel',
+          description: 'Desc',
+          address: '1 rue',
+          city: 'Paris',
+          country: 'France',
+          latitude: 0,
+          longitude: 0,
+          checkInTime: '15:00',
+          checkOutTime: '11:00',
+          ownerId: 1,
+          cancellationPolicy: CANCELLATION_POLICY.MODERATE,
+        }),
+      }),
+    ),
+  }) as IRoomRepository;
+  const propertyRepository = (overrides.propertyRepository ?? {
+    findById: vi.fn().mockResolvedValue(
+      new Property({
+        id: 3,
+        name: 'Hotel',
+        description: 'Desc',
+        address: '1 rue',
+        city: 'Paris',
+        country: 'France',
+        latitude: 0,
+        longitude: 0,
+        checkInTime: '15:00',
+        checkOutTime: '11:00',
+        ownerId: 1,
+        cancellationPolicy: CANCELLATION_POLICY.MODERATE,
+      }),
+    ),
+    findAllByOwnerId: vi.fn().mockResolvedValue([]),
+  }) as IPropertyRepository;
+  const resolveCancellationPolicy =
+    new ResolveReservationCancellationPolicyService(
+      roomRepository,
+      propertyRepository,
+    );
+
+  return {
+    handler: new CancelReservationCommandHandler(
+      overrides.reservationRepository ?? createReservationRepositoryMock(),
+      (overrides.userRepository ?? {
+        findByAuthId: vi.fn(),
+      }) as IUserRepository,
+      overrides.paymentRepository ??
+        createPaymentRepositoryMock({
+          findById: vi.fn().mockResolvedValue(
+            createSamplePayment({
+              id: 1,
+              status: PAYMENT_STATUS.SUCCEEDED,
+              amount: 20_000,
+            }),
+          ),
+          update: vi.fn().mockImplementation(async (payment) => payment),
+        }),
+      roomRepository,
+      propertyRepository,
+      resolveCancellationPolicy,
+      computeCancellationRefund,
+      paymentGateway,
+      {
+        enrich: vi.fn().mockImplementation(async (outputs) => outputs),
+      } as never,
+    ),
+    paymentGateway,
+  };
+}
 
 describe('CancelReservationCommandHandler', () => {
-  it('annule une réservation pour son propriétaire', async () => {
+  it('annule une réservation pour son propriétaire avec remboursement', async () => {
     const item = createSampleReservationItem({
       id: 3,
       reservationId: 1,
       roomId: 10,
+      checkIn: '2099-09-01',
+      checkOut: '2099-09-03',
     });
     const reservation = createSampleReservation({
       id: 1,
       userId: 5,
       items: [item],
+      paymentId: 1,
     });
     const repository = createReservationRepositoryMock({
       update: vi.fn().mockImplementation(async (updated) => updated),
@@ -47,13 +151,10 @@ describe('CancelReservationCommandHandler', () => {
       5,
     );
 
-    const handler = new CancelReservationCommandHandler(
-      repository,
-      {
-        findByAuthId: vi.fn().mockResolvedValue(user),
-      } as unknown as IUserRepository,
-      paymentRepository,
-    );
+    const { handler, paymentGateway } = createHandler({
+      reservationRepository: repository,
+      userRepository: { findByAuthId: vi.fn().mockResolvedValue(user) },
+    });
 
     const result = await handler.execute(
       new CancelReservationCommand(1, {
@@ -63,7 +164,9 @@ describe('CancelReservationCommandHandler', () => {
       }),
     );
 
-    expect(result.status).toBe(RESERVATION_STATUS.CANCELLED);
+    expect(result.reservation.status).toBe(RESERVATION_STATUS.CANCELLED);
+    expect(result.refundAmount).toBe(20_000);
+    expect(paymentGateway.createRefund).toHaveBeenCalled();
   });
 
   it('rejette si la réservation est déjà annulée', async () => {
@@ -71,17 +174,14 @@ describe('CancelReservationCommandHandler', () => {
       id: 1,
       userId: 5,
       status: RESERVATION_STATUS.CANCELLED,
+      paymentId: 1,
     });
 
-    const handler = new CancelReservationCommandHandler(
-      createReservationRepositoryMock({
+    const { handler } = createHandler({
+      reservationRepository: createReservationRepositoryMock({
         findById: vi.fn().mockResolvedValue(reservation),
       }),
-      {
-        findByAuthId: vi.fn().mockResolvedValue(null),
-      } as unknown as IUserRepository,
-      paymentRepository,
-    );
+    });
 
     await expect(
       handler.execute(
@@ -95,11 +195,16 @@ describe('CancelReservationCommandHandler', () => {
   });
 
   it('refuse l’annulation par un autre utilisateur', async () => {
-    const item = createSampleReservationItem({ id: 3, reservationId: 1 });
+    const item = createSampleReservationItem({
+      id: 3,
+      reservationId: 1,
+      roomId: 10,
+    });
     const reservation = createSampleReservation({
       id: 1,
       userId: 5,
       items: [item],
+      paymentId: 1,
     });
     const user = new User(
       new UserNameVO('Alice'),
@@ -110,15 +215,12 @@ describe('CancelReservationCommandHandler', () => {
       6,
     );
 
-    const handler = new CancelReservationCommandHandler(
-      createReservationRepositoryMock({
+    const { handler } = createHandler({
+      reservationRepository: createReservationRepositoryMock({
         findById: vi.fn().mockResolvedValue(reservation),
       }),
-      {
-        findByAuthId: vi.fn().mockResolvedValue(user),
-      } as unknown as IUserRepository,
-      paymentRepository,
-    );
+      userRepository: { findByAuthId: vi.fn().mockResolvedValue(user) },
+    });
 
     await expect(
       handler.execute(
