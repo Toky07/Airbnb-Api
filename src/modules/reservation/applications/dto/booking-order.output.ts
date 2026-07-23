@@ -2,8 +2,17 @@ import { PAYMENT_TYPE } from '../../../payment/domain/types/payment.type';
 import type { PaymentStatus } from '../../../payment/domain/constants/payment-status.constant';
 import type { Payment } from '../../../payment/domain/entities/payment.entity';
 import type { User } from '../../../user/domain/entities/user.entity';
-import { ReservationItemOutput } from './reservation-item.output';
+import type { ReservationStatus } from '../../domain/constants/reservation-status.constant';
 import { BookingOrderItemOutput } from './booking-order-item.output';
+import type { ReservationItemOutput } from './reservation-item.output';
+
+type BookingListItemSource = ReservationItemOutput | BookingOrderItemOutput;
+
+function getItemStatus(
+  item: BookingListItemSource | undefined,
+): ReservationStatus | null {
+  return item && 'status' in item ? item.status : null;
+}
 
 export class BookingOrderListItemOutput {
   constructor(
@@ -21,11 +30,14 @@ export class BookingOrderListItemOutput {
     public readonly endDate: string | null,
     public readonly propertyId: number | null = null,
     public readonly propertyName: string | null = null,
+    public readonly reservationId: number | null = null,
+    public readonly reservationStatus: ReservationStatus | null = null,
+    public readonly checkIn: string | null = null,
   ) {}
 
   static fromParts(
     payment: Payment,
-    items: ReservationItemOutput[],
+    items: BookingListItemSource[],
     user: User | null,
     scope?: { propertyId?: number | null },
   ): BookingOrderListItemOutput {
@@ -49,6 +61,9 @@ export class BookingOrderListItemOutput {
       firstItem?.endDate ?? null,
       scope?.propertyId ?? firstItem?.propertyId ?? null,
       firstItem?.propertyName ?? null,
+      firstItem?.reservationId ?? null,
+      getItemStatus(firstItem),
+      firstItem?.checkIn ?? null,
     );
   }
 }
@@ -102,7 +117,7 @@ export function resolvePaymentReservationIds(payment: Payment): number[] {
   return [];
 }
 
-function buildPreviewLabel(items: ReservationItemOutput[]): string {
+function buildPreviewLabel(items: BookingListItemSource[]): string {
   if (items.length === 0) {
     return 'Aucun séjour';
   }

@@ -25,6 +25,7 @@ import { ListHostReservationsQuery } from '../../applications/useCase/queries/Li
 import { GetReservationStatsQuery } from '../../applications/useCase/queries/GetReservationStatsQuery';
 import { ListBookingOrdersQuery } from '../../applications/useCase/queries/ListBookingOrdersQuery';
 import { GetBookingOrderQuery } from '../../applications/useCase/queries/GetBookingOrderQuery';
+import { GetCancellationPreviewQuery } from '../../applications/useCase/queries/GetCancellationPreviewQuery';
 import { ListReservationsQuery } from '../../applications/useCase/queries/ListReservationsQuery';
 
 @Controller('reservations')
@@ -122,6 +123,38 @@ export class ReservationController {
   list(@Query() query: Record<string, unknown>) {
     return QueryBus.execute(
       new ListReservationsQuery(parseReservationQuery(query)),
+    );
+  }
+
+  @Post('me/:id/cancel')
+  @HttpCode(HttpStatus.OK)
+  cancelMine(@Req() request: { user?: JwtPayload }, @Param('id') id: string) {
+    const user = request.user!;
+    const parsedId = Number.parseInt(id, 10);
+
+    return CommandBus.execute(
+      new CancelReservationCommand(parsedId, {
+        authId: user.sub,
+        canCancelAll: false,
+        canCancelHost: false,
+      }),
+    );
+  }
+
+  @Get(':id/cancellation-preview')
+  cancellationPreview(
+    @Req() request: { user?: JwtPayload },
+    @Param('id') id: string,
+  ) {
+    const user = request.user!;
+    const parsedId = Number.parseInt(id, 10);
+
+    return QueryBus.execute(
+      new GetCancellationPreviewQuery(parsedId, {
+        authId: user.sub,
+        canReadAll: hasPermission(user, ['reservations.read']),
+        canReadHost: hasPermission(user, ['host.reservations.read']),
+      }),
     );
   }
 

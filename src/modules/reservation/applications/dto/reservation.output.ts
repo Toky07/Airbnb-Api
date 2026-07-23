@@ -10,6 +10,7 @@ export class ReservationOutput {
     public readonly status: ReservationStatus,
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
+    public readonly holdUntil: Date | null = null,
   ) {}
 
   get nights(): number {
@@ -24,6 +25,7 @@ export class ReservationOutput {
       reservation.status,
       reservation.createdAt!,
       reservation.updatedAt!,
+      reservation.holdUntil ?? null,
     );
   }
 }

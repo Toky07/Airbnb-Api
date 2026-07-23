@@ -1,3 +1,5 @@
+import type { CancellationPolicy } from '../../../reservation/domain/constants/cancellation-policy.constant';
+
 export type CreatePropertyDto = {
   name: string;
   description: string;
@@ -8,6 +10,7 @@ export type CreatePropertyDto = {
   longitude: number;
   checkInTime: string;
   checkOutTime: string;
+  cancellationPolicy?: CancellationPolicy;
   ownerId: number;
   propertyTypeId?: number | null;
   createdAt?: Date;

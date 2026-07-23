@@ -1,9 +1,12 @@
+import { NotFoundException } from '@nestjs/common';
 import type { Repository } from 'typeorm';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
 import { ListPropertyAmenitiesQuery } from '../../../amenity/applications/useCase/queries/ListPropertyAmenitiesQuery';
 import { ListRoomAmenitiesQuery } from '../../../amenity/applications/useCase/queries/ListRoomAmenitiesQuery';
 import type { IRoomRepository } from '../../domain/repositories/room.repository';
+import type { IRoomBlockedDateRepository } from '../../domain/repositories/room-blocked-date.repository';
 import type { ReservationItemOrmEntity } from '../../../reservation/infrastructure/entities/reservation-item.orm-entity';
+import { BLOCKING_RESERVATION_STATUSES } from '../../../reservation/domain/constants/reservation-status.constant';
 import type { UnavailableDateRange } from '../dto/room.output';
 import type { RoomMediaPresenter } from '../presenters/room-media.presenter';
 
@@ -11,11 +14,12 @@ export class RoomDetailResolver {
   constructor(
     private readonly presenter: RoomMediaPresenter,
     private readonly reservationItemRepo: Repository<ReservationItemOrmEntity>,
+    private readonly blockedDateRepository: IRoomBlockedDateRepository,
   ) {}
 
   async resolve(room: Awaited<ReturnType<IRoomRepository['findById']>>) {
     if (!room) {
-      throw new Error('Room not found');
+      throw new NotFoundException('Room not found');
     }
 
     const propertyId = room.property?.id;
@@ -44,17 +48,35 @@ export class RoomDetailResolver {
     today.setHours(0, 0, 0, 0);
     const todayStr = this.formatDate(today);
 
-    const reservations = await this.reservationItemRepo
-      .createQueryBuilder('item')
-      .select(['item.checkIn', 'item.checkOut'])
-      .where('item.roomId = :roomId', { roomId })
-      .andWhere('item.checkOut > :today', { today: todayStr })
-      .getMany();
+    const [reservations, blockedDates] = await Promise.all([
+      this.reservationItemRepo
+        .createQueryBuilder('item')
+        .innerJoin('item.reservation', 'reservation')
+        .select(['item.checkIn', 'item.checkOut'])
+        .where('item.roomId = :roomId', { roomId })
+        .andWhere('item.checkOut > :today', { today: todayStr })
+        .andWhere('reservation.status IN (:...statuses)', {
+          statuses: BLOCKING_RESERVATION_STATUSES,
+        })
+        .getMany(),
+      this.blockedDateRepository.findByRoomId(roomId),
+    ]);
 
-    return reservations.map((item) => ({
-      startDate: item.checkIn,
-      endDate: item.checkOut,
-    }));
+    const fromReservations: UnavailableDateRange[] = reservations.map(
+      (item) => ({
+        startDate: item.checkIn,
+        endDate: item.checkOut,
+      }),
+    );
+
+    const fromBlocked: UnavailableDateRange[] = blockedDates
+      .filter((blocked) => blocked.endDate > todayStr)
+      .map((blocked) => ({
+        startDate: blocked.startDate,
+        endDate: blocked.endDate,
+      }));
+
+    return [...fromReservations, ...fromBlocked];
   }
 
   private formatDate(date: Date): string {

@@ -2,6 +2,7 @@ import type { Repository } from 'typeorm';
 import type { ReservationItemOrmEntity } from '../reservation/infrastructure/entities/reservation-item.orm-entity';
 import type { IRoomRepository } from './domain/repositories/room.repository';
 import type { IRoomTypeRepository } from './domain/repositories/room-type.repository';
+import type { IRoomBlockedDateRepository } from './domain/repositories/room-blocked-date.repository';
 import { RoomDetailResolver } from './applications/services/room-detail.resolver';
 import type { RoomMediaPresenter } from './applications/presenters/room-media.presenter';
 import type { GenerateRoomSlugService } from './applications/services/generate-room-slug.service';
@@ -15,11 +16,15 @@ import { UpdateRoomTypeCommandHandler } from './applications/useCase/handlers/Up
 import { DeleteRoomTypeCommandHandler } from './applications/useCase/handlers/DeleteRoomTypeCommandHandler';
 import { ListRoomTypesQueryHandler } from './applications/useCase/handlers/ListRoomTypesQueryHandler';
 import { ListRoomTypeOptionsQueryHandler } from './applications/useCase/handlers/ListRoomTypeOptionsQueryHandler';
+import { CreateRoomBlockedDateCommandHandler } from './applications/useCase/handlers/CreateRoomBlockedDateCommandHandler';
+import { DeleteRoomBlockedDateCommandHandler } from './applications/useCase/handlers/DeleteRoomBlockedDateCommandHandler';
+import { ListRoomBlockedDatesQueryHandler } from './applications/useCase/handlers/ListRoomBlockedDatesQueryHandler';
 
 export class RoomsBootstrap {
   static create(deps: {
     roomRepository: IRoomRepository;
     roomTypeRepository: IRoomTypeRepository;
+    roomBlockedDateRepository: IRoomBlockedDateRepository;
     roomMediaPresenter: RoomMediaPresenter;
     generateRoomSlug: GenerateRoomSlugService;
     reservationItemRepo: Repository<ReservationItemOrmEntity>;
@@ -27,6 +32,7 @@ export class RoomsBootstrap {
     const roomDetailResolver = new RoomDetailResolver(
       deps.roomMediaPresenter,
       deps.reservationItemRepo,
+      deps.roomBlockedDateRepository,
     );
 
     return {
@@ -65,6 +71,16 @@ export class RoomsBootstrap {
       ),
       listRoomTypeOptionsQueryHandler: new ListRoomTypeOptionsQueryHandler(
         deps.roomTypeRepository,
+      ),
+      createRoomBlockedDateCommandHandler:
+        new CreateRoomBlockedDateCommandHandler(
+          deps.roomBlockedDateRepository,
+          deps.roomRepository,
+        ),
+      deleteRoomBlockedDateCommandHandler:
+        new DeleteRoomBlockedDateCommandHandler(deps.roomBlockedDateRepository),
+      listRoomBlockedDatesQueryHandler: new ListRoomBlockedDatesQueryHandler(
+        deps.roomBlockedDateRepository,
       ),
     };
   }

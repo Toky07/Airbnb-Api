@@ -8,12 +8,12 @@ import type { CalculateStayAmountService } from '../../../../../shared/pricing/c
 import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
 import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
 import type { Room } from '../../../../rooms/domain/entities/room.entity';
+import { computeReservationHoldUntil } from '../../../domain/constants/reservation-hold.constant';
 import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
 import { ReservationItem } from '../../../domain/entities/reservation-item.entity';
 import { Reservation } from '../../../domain/entities/reservation.entity';
 import type { IReservationRepository } from '../../../domain/repositories/reservation.repository';
 import { ReservationOutput } from '../../dto/reservation.output';
-import type { CheckRoomAvailabilityService } from '../../services/check-room-availability.service';
 import type { EnrichReservationOutputsService } from '../../services/enrich-reservation-outputs.service';
 import type { CreateReservationCommand } from '../commands/CreateReservationCommand';
 
@@ -25,7 +25,6 @@ export class CreateReservationCommandHandler implements ICommandHandler<
     private readonly reservationRepository: IReservationRepository,
     private readonly roomRepository: IRoomRepository,
     private readonly userRepository: IUserRepository,
-    private readonly checkRoomAvailability: CheckRoomAvailabilityService,
     private readonly calculateStayAmount: CalculateStayAmountService,
     private readonly enrichReservationOutputs: EnrichReservationOutputsService,
   ) {}
@@ -48,12 +47,7 @@ export class CreateReservationCommandHandler implements ICommandHandler<
         throw new NotFoundException('Chambre introuvable.');
       }
 
-      await this.ensureRoomAvailable(
-        room,
-        input.guestCount,
-        input.startDate,
-        input.endDate,
-      );
+      this.ensureRoomBasics(room, input.guestCount);
 
       const stayAmount = this.calculateStayAmount.execute({
         checkIn: input.startDate,
@@ -74,8 +68,18 @@ export class CreateReservationCommandHandler implements ICommandHandler<
       );
     }
 
-    const reservation = await this.reservationRepository.create(
-      new Reservation(user.id, items, RESERVATION_STATUS.PENDING),
+    const holdUntil = computeReservationHoldUntil();
+    const reservation = await this.reservationRepository.createWithHold(
+      new Reservation(
+        user.id,
+        items,
+        RESERVATION_STATUS.PENDING,
+        null,
+        undefined,
+        undefined,
+        undefined,
+        holdUntil,
+      ),
     );
 
     const [enriched] = await this.enrichReservationOutputs.enrich([
@@ -85,12 +89,7 @@ export class CreateReservationCommandHandler implements ICommandHandler<
     return enriched ?? ReservationOutput.fromDomain(reservation);
   }
 
-  private async ensureRoomAvailable(
-    room: Room,
-    guestCount: number,
-    startDate: string,
-    endDate: string,
-  ): Promise<void> {
+  private ensureRoomBasics(room: Room, guestCount: number): void {
     if (room.status !== 'available') {
       throw new BadRequestException('Cette chambre n’est pas disponible.');
     }
@@ -100,11 +99,5 @@ export class CreateReservationCommandHandler implements ICommandHandler<
         `Cette chambre accepte au maximum ${room.maxGuests} voyageurs.`,
       );
     }
-
-    await this.checkRoomAvailability.ensureAvailable(
-      room.id!,
-      startDate,
-      endDate,
-    );
   }
 }

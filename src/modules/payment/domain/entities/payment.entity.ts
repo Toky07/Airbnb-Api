@@ -14,6 +14,8 @@ export type CreatePaymentParams = {
   cartId?: number | null;
   transactionId?: string | null;
   errorMessage?: string | null;
+  refundedAmount?: number;
+  refundTransactionId?: string | null;
   id?: number;
   createdAt?: Date;
   updatedAt?: Date;
@@ -36,6 +38,8 @@ export class Payment {
     public readonly updatedAt?: Date,
     public readonly invoiceNotificationsSentAt: Date | null = null,
     public readonly errorMessage: string | null = null,
+    public readonly refundedAmount: number = 0,
+    public readonly refundTransactionId: string | null = null,
   ) {}
 
   confirm(): void {
@@ -62,6 +66,8 @@ export class Payment {
       params.updatedAt,
       params.invoiceNotificationsSentAt,
       params.errorMessage,
+      params.refundedAmount ?? 0,
+      params.refundTransactionId ?? null,
     );
   }
 }

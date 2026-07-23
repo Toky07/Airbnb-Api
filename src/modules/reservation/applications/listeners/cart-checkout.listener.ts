@@ -3,13 +3,14 @@ import { CartCheckoutReservationCreatedEvent } from '../../../cart/domain/events
 import { EventBus } from '../../../../shared/domain/event.bus';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { CreateReservationCommand } from '../useCase/commands/CreateReservationCommand';
+import type { ReservationOutput } from '../dto/reservation.output';
 
 export class CartCheckoutListener {
   async listen(): Promise<void> {
     EventBus.getInstance().subscribe(
       'cart.checkout.requested',
       async (event: CartCheckoutRequestedEvent) => {
-        const reservation = await CommandBus.execute<{ id?: number }>(
+        const reservation = await CommandBus.execute<ReservationOutput>(
           new CreateReservationCommand(
             event.authId,
             event.items.map((item) => ({
@@ -25,6 +26,13 @@ export class CartCheckoutListener {
           throw new Error('Reservation not created');
         }
 
+        const holdUntil =
+          reservation.holdUntil instanceof Date
+            ? reservation.holdUntil.toISOString()
+            : reservation.holdUntil
+              ? String(reservation.holdUntil)
+              : null;
+
         await EventBus.getInstance().publish(
           new CartCheckoutReservationCreatedEvent(
             event.correlationId,
@@ -32,6 +40,7 @@ export class CartCheckoutListener {
             event.cartId,
             reservation.id,
             event.amountInCents,
+            holdUntil,
           ),
         );
       },

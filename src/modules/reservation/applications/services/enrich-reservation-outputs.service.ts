@@ -33,6 +33,7 @@ export class EnrichReservationOutputsService {
           reservation.status,
           reservation.createdAt,
           reservation.updatedAt,
+          reservation.holdUntil,
         ),
     );
   }

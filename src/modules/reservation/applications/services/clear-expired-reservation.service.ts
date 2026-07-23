@@ -14,7 +14,7 @@ export class ClearExpiredReservationService {
     private readonly reservationRepository: IReservationRepository,
   ) {}
 
-  @Interval(1000 * 60 * 20)
+  @Interval(1000 * 60)
   async execute(): Promise<void> {
     await this.reservationRepository.clearExpiredReservations();
 

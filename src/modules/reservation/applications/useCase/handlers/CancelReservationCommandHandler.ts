@@ -4,40 +4,53 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import { PAYMENT_STATUS } from '../../../../payment/domain/constants/payment-status.constant';
+import { Payment } from '../../../../payment/domain/entities/payment.entity';
 import type { IPaymentRepository } from '../../../../payment/domain/repositories/payment.repository';
+import type { IPaymentGateway } from '../../../../payment/domain/ports/payment-gateway.port';
+import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
+import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
+import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
 import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
 import { Reservation } from '../../../domain/entities/reservation.entity';
 import type { IReservationRepository } from '../../../domain/repositories/reservation.repository';
+import { CancelReservationOutput } from '../../dto/cancel-reservation.output';
 import { ReservationOutput } from '../../dto/reservation.output';
+import type { ComputeCancellationRefundService } from '../../services/compute-cancellation-refund.service';
+import type { EnrichReservationOutputsService } from '../../services/enrich-reservation-outputs.service';
+import type { ResolveReservationCancellationPolicyService } from '../../services/resolve-reservation-cancellation-policy.service';
 import type { CancelReservationCommand } from '../commands/CancelReservationCommand';
 
 export class CancelReservationCommandHandler implements ICommandHandler<
   CancelReservationCommand,
-  ReservationOutput
+  CancelReservationOutput
 > {
   constructor(
     private readonly reservationRepository: IReservationRepository,
     private readonly userRepository: IUserRepository,
     private readonly paymentRepository: IPaymentRepository,
+    private readonly roomRepository: IRoomRepository,
+    private readonly propertyRepository: IPropertyRepository,
+    private readonly resolveCancellationPolicy: ResolveReservationCancellationPolicyService,
+    private readonly computeCancellationRefund: ComputeCancellationRefundService,
+    private readonly paymentGateway: IPaymentGateway,
+    private readonly enrichReservationOutputs: EnrichReservationOutputsService,
   ) {}
 
-  async execute(command: CancelReservationCommand): Promise<ReservationOutput> {
+  async execute(
+    command: CancelReservationCommand,
+  ): Promise<CancelReservationOutput> {
     const reservation = await this.reservationRepository.findById(command.id);
 
-    if (!reservation) {
+    if (!reservation?.id) {
       throw new NotFoundException('Réservation introuvable.');
     }
 
-    if (!reservation?.id) {
-      throw new NotFoundException('Séjour introuvable.');
-    }
+    const payment = reservation.paymentId
+      ? await this.paymentRepository.findById(reservation.paymentId)
+      : null;
 
-    const payment = await this.paymentRepository.findById(
-      reservation.paymentId ?? 0,
-    );
-
-    if (!payment) {
+    if (!payment?.id) {
       throw new NotFoundException('Paiement introuvable.');
     }
 
@@ -45,15 +58,43 @@ export class CancelReservationCommandHandler implements ICommandHandler<
       throw new BadRequestException('Ce séjour est déjà annulé.');
     }
 
-    if (!command.access.canCancelAll) {
-      const user = await this.userRepository.findByAuthId(
-        command.access.authId,
-      );
-      const isOwner = user?.id === reservation.userId;
+    if (reservation.status === RESERVATION_STATUS.NO_SHOW) {
+      throw new BadRequestException('Ce séjour est déjà marqué no-show.');
+    }
 
-      if (!isOwner && !command.access.canCancelHost) {
-        throw new ForbiddenException('Accès refusé.');
-      }
+    await this.assertAccess(reservation, command);
+
+    const checkIn = reservation.items[0]?.checkIn;
+    if (!checkIn) {
+      throw new BadRequestException('Séjour invalide.');
+    }
+
+    const policy = await this.resolveCancellationPolicy.resolve(reservation);
+    const paymentAmount =
+      payment.status === PAYMENT_STATUS.SUCCEEDED ? payment.amount : 0;
+    const refund = this.computeCancellationRefund.compute({
+      paymentAmount,
+      checkIn,
+      policy,
+    });
+
+    let updatedPayment = payment;
+    if (
+      refund.refundAmount > 0 &&
+      payment.status === PAYMENT_STATUS.SUCCEEDED &&
+      payment.transactionId
+    ) {
+      const stripeRefund = await this.paymentGateway.createRefund(
+        payment.transactionId,
+        refund.refundAmount,
+      );
+      updatedPayment = await this.paymentRepository.update(
+        Payment.create({
+          ...payment,
+          refundedAmount: payment.refundedAmount + refund.refundAmount,
+          refundTransactionId: stripeRefund.id,
+        }),
+      );
     }
 
     const updated = await this.reservationRepository.update(
@@ -61,11 +102,59 @@ export class CancelReservationCommandHandler implements ICommandHandler<
         reservation.userId,
         reservation.items,
         RESERVATION_STATUS.CANCELLED,
-        payment.id,
+        updatedPayment.id,
         reservation.id,
+        reservation.createdAt,
+        reservation.updatedAt,
+        null,
       ),
     );
 
-    return ReservationOutput.fromDomain(updated);
+    const [reservationOutput] = await this.enrichReservationOutputs.enrich([
+      ReservationOutput.fromDomain(updated),
+    ]);
+
+    return new CancelReservationOutput(
+      reservationOutput ?? ReservationOutput.fromDomain(updated),
+      refund.refundAmount,
+      refund.refundPercent,
+      refund.policyLabel,
+    );
+  }
+
+  private async assertAccess(
+    reservation: Reservation,
+    command: CancelReservationCommand,
+  ): Promise<void> {
+    if (command.access.canCancelAll) {
+      return;
+    }
+
+    const user = await this.userRepository.findByAuthId(command.access.authId);
+    const isOwner = user?.id === reservation.userId;
+
+    if (isOwner) {
+      return;
+    }
+
+    if (command.access.canCancelHost && user?.id) {
+      const properties = await this.propertyRepository.findAllByOwnerId(
+        user.id,
+      );
+      const propertyIds = new Set(
+        properties
+          .map((property) => property.id)
+          .filter((id): id is number => typeof id === 'number' && id > 0),
+      );
+
+      for (const item of reservation.items) {
+        const room = await this.roomRepository.findById(item.roomId);
+        if (room?.property?.id && propertyIds.has(room.property.id)) {
+          return;
+        }
+      }
+    }
+
+    throw new ForbiddenException('Accès refusé.');
   }
 }

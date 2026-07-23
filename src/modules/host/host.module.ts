@@ -24,6 +24,9 @@ import { ListHostRoomsQuery } from './applications/useCase/queries/ListHostRooms
 import { ListHostAmenityOptionsQuery } from './applications/useCase/queries/ListHostAmenityOptionsQuery';
 import { GetHostPropertyAmenitiesQuery } from './applications/useCase/queries/GetHostPropertyAmenitiesQuery';
 import { GetHostRoomAmenitiesQuery } from './applications/useCase/queries/GetHostRoomAmenitiesQuery';
+import { CreateHostRoomBlockedDateCommand } from './applications/useCase/commands/CreateHostRoomBlockedDateCommand';
+import { DeleteHostRoomBlockedDateCommand } from './applications/useCase/commands/DeleteHostRoomBlockedDateCommand';
+import { ListHostRoomBlockedDatesQuery } from './applications/useCase/queries/ListHostRoomBlockedDatesQuery';
 
 @Module({
   imports: [UserModule, PropertiesModule, RoomsModule, AmenityModule],
@@ -72,6 +75,14 @@ export class HostModule implements OnModuleInit {
       SyncHostRoomAmenitiesCommand,
       bootstrap.syncHostRoomAmenitiesCommandHandler,
     );
+    CommandBus.register(
+      CreateHostRoomBlockedDateCommand,
+      bootstrap.createHostRoomBlockedDateCommandHandler,
+    );
+    CommandBus.register(
+      DeleteHostRoomBlockedDateCommand,
+      bootstrap.deleteHostRoomBlockedDateCommandHandler,
+    );
 
     QueryBus.register(
       GetHostProfileQuery,
@@ -97,6 +108,10 @@ export class HostModule implements OnModuleInit {
     QueryBus.register(
       GetHostRoomAmenitiesQuery,
       bootstrap.getHostRoomAmenitiesQueryHandler,
+    );
+    QueryBus.register(
+      ListHostRoomBlockedDatesQuery,
+      bootstrap.listHostRoomBlockedDatesQueryHandler,
     );
   }
 }

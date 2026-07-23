@@ -44,6 +44,9 @@ export class PropertyEntity {
   @Column()
   checkOutTime: string;
 
+  @Column({ default: 'moderate' })
+  cancellationPolicy: string;
+
   @Column()
   ownerId: number;
 

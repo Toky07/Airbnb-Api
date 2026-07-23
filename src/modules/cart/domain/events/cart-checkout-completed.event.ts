@@ -11,5 +11,6 @@ export class CartCheckoutCompletedEvent implements DomainEvent {
     public readonly amountInCents: number,
     public readonly currency: string,
     public readonly publishableKey: string,
+    public readonly holdUntil: string | null = null,
   ) {}
 }

@@ -1,0 +1,102 @@
+import {
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
+import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
+import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
+import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
+import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
+import { Reservation } from '../../../domain/entities/reservation.entity';
+import type { IReservationRepository } from '../../../domain/repositories/reservation.repository';
+import { ReservationOutput } from '../../dto/reservation.output';
+import type { EnrichReservationOutputsService } from '../../services/enrich-reservation-outputs.service';
+import type { MarkReservationNoShowCommand } from '../commands/MarkReservationNoShowCommand';
+
+export class MarkReservationNoShowCommandHandler implements ICommandHandler<
+  MarkReservationNoShowCommand,
+  ReservationOutput
+> {
+  constructor(
+    private readonly reservationRepository: IReservationRepository,
+    private readonly userRepository: IUserRepository,
+    private readonly roomRepository: IRoomRepository,
+    private readonly propertyRepository: IPropertyRepository,
+    private readonly enrichReservationOutputs: EnrichReservationOutputsService,
+  ) {}
+
+  async execute(
+    command: MarkReservationNoShowCommand,
+  ): Promise<ReservationOutput> {
+    const reservation = await this.reservationRepository.findById(command.id);
+
+    if (!reservation?.id) {
+      throw new NotFoundException('Réservation introuvable.');
+    }
+
+    if (reservation.status !== RESERVATION_STATUS.CONFIRMED) {
+      throw new BadRequestException(
+        'Seule une réservation confirmée peut être marquée no-show.',
+      );
+    }
+
+    await this.assertHostScope(reservation, command.authId);
+
+    const checkIn = reservation.items[0]?.checkIn;
+    if (!checkIn) {
+      throw new BadRequestException('Séjour invalide.');
+    }
+
+    const today = new Date().toISOString().slice(0, 10);
+    if (checkIn > today) {
+      throw new BadRequestException(
+        'Le no-show ne peut être marqué qu’à partir du jour d’arrivée.',
+      );
+    }
+
+    const updated = await this.reservationRepository.update(
+      new Reservation(
+        reservation.userId,
+        reservation.items,
+        RESERVATION_STATUS.NO_SHOW,
+        reservation.paymentId,
+        reservation.id,
+        reservation.createdAt,
+        reservation.updatedAt,
+        null,
+      ),
+    );
+
+    const [output] = await this.enrichReservationOutputs.enrich([
+      ReservationOutput.fromDomain(updated),
+    ]);
+    return output ?? ReservationOutput.fromDomain(updated);
+  }
+
+  private async assertHostScope(
+    reservation: Reservation,
+    authId: number,
+  ): Promise<void> {
+    const user = await this.userRepository.findByAuthId(authId);
+    if (!user?.id) {
+      throw new ForbiddenException('Accès refusé.');
+    }
+
+    const properties = await this.propertyRepository.findAllByOwnerId(user.id);
+    const propertyIds = new Set(
+      properties
+        .map((property) => property.id)
+        .filter((id): id is number => typeof id === 'number' && id > 0),
+    );
+
+    for (const item of reservation.items) {
+      const room = await this.roomRepository.findById(item.roomId);
+      if (room?.property?.id && propertyIds.has(room.property.id)) {
+        return;
+      }
+    }
+
+    throw new ForbiddenException('Accès refusé.');
+  }
+}

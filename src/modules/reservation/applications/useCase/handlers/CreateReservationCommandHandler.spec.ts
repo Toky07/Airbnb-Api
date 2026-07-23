@@ -14,13 +14,9 @@ import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
 import { User } from '../../../../user/domain/entities/user.entity';
 import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
 import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
-import { CheckRoomAvailabilityService } from '../../services/check-room-availability.service';
 import { CreateReservationCommandHandler } from './CreateReservationCommandHandler';
 import { CreateReservationCommand } from '../commands/CreateReservationCommand';
-import {
-  createReservationRepositoryMock,
-  createSampleReservation,
-} from '../reservation-test.helpers';
+import { createReservationRepositoryMock } from '../reservation-test.helpers';
 
 function createEnrichMock() {
   return {
@@ -64,7 +60,7 @@ describe('CreateReservationCommandHandler', () => {
     5,
   );
 
-  it('crée une réservation en attente', async () => {
+  it('crée une réservation en attente avec holdUntil', async () => {
     const reservationRepository = createReservationRepositoryMock();
     const handler = new CreateReservationCommandHandler(
       reservationRepository,
@@ -74,7 +70,6 @@ describe('CreateReservationCommandHandler', () => {
       {
         findByAuthId: vi.fn().mockResolvedValue(user),
       } as unknown as IUserRepository,
-      new CheckRoomAvailabilityService(reservationRepository),
       new CalculateStayAmountService(),
       createEnrichMock() as never,
     );
@@ -93,13 +88,19 @@ describe('CreateReservationCommandHandler', () => {
     expect(result.status).toBe(RESERVATION_STATUS.PENDING);
     expect(result.items[0]?.price).toBe(240);
     expect(result.items[0]?.nights).toBe(2);
+    expect(result.holdUntil).toBeInstanceOf(Date);
+    expect(reservationRepository.createWithHold).toHaveBeenCalled();
   });
 
-  it('rejette si la chambre est indisponible sur les dates', async () => {
+  it('rejette si createWithHold signale une indisponibilité', async () => {
     const reservationRepository = createReservationRepositoryMock({
-      findOverlapping: vi
+      createWithHold: vi
         .fn()
-        .mockResolvedValue([createSampleReservation({ id: 99 }).items[0]]),
+        .mockRejectedValue(
+          new BadRequestException(
+            'Cette chambre n’est pas disponible pour les dates sélectionnées.',
+          ),
+        ),
     });
 
     const handler = new CreateReservationCommandHandler(
@@ -110,7 +111,6 @@ describe('CreateReservationCommandHandler', () => {
       {
         findByAuthId: vi.fn().mockResolvedValue(user),
       } as unknown as IUserRepository,
-      new CheckRoomAvailabilityService(reservationRepository),
       new CalculateStayAmountService(),
       createEnrichMock() as never,
     );
@@ -136,7 +136,6 @@ describe('CreateReservationCommandHandler', () => {
       {
         findByAuthId: vi.fn().mockResolvedValue(null),
       } as unknown as IUserRepository,
-      new CheckRoomAvailabilityService(createReservationRepositoryMock()),
       new CalculateStayAmountService(),
       createEnrichMock() as never,
     );
@@ -164,7 +163,6 @@ describe('CreateReservationCommandHandler', () => {
       {
         findByAuthId: vi.fn().mockResolvedValue(user),
       } as unknown as IUserRepository,
-      new CheckRoomAvailabilityService(createReservationRepositoryMock()),
       new CalculateStayAmountService(),
       createEnrichMock() as never,
     );

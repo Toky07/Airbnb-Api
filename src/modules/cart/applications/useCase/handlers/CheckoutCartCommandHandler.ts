@@ -65,6 +65,7 @@ export class CheckoutCartCommandHandler implements ICommandHandler<
       completed.amountInCents,
       completed.currency,
       completed.publishableKey,
+      completed.holdUntil,
     );
   }
 }

@@ -13,6 +13,7 @@ export class ReservationMapper {
       entity.id,
       entity.createdAt,
       entity.updatedAt,
+      entity.holdUntil ?? null,
     );
   }
 
@@ -23,6 +24,7 @@ export class ReservationMapper {
     }
     entity.userId = reservation.userId;
     entity.status = reservation.status;
+    entity.holdUntil = reservation.holdUntil ?? null;
 
     entity.items = reservation.items.map((item) => {
       const itemEntity = ReservationItemMapper.toEntity(item);

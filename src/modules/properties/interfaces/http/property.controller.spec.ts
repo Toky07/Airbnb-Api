@@ -50,6 +50,7 @@ describe('PropertyController', () => {
     longitude: 0,
     checkInTime: 'Test CheckInTime',
     checkOutTime: 'Test CheckOutTime',
+    cancellationPolicy: 'moderate',
     ownerId: 1,
   } as const;
 

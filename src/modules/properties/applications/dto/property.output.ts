@@ -1,5 +1,6 @@
 import { RoomOutput } from '../../../rooms/applications/dto/room.output';
 import type { CategorySummary } from '../../../../shared/types/category-summary';
+import type { CancellationPolicy } from '../../../reservation/domain/constants/cancellation-policy.constant';
 import { Property } from '../../domain/entities/property.entity';
 import { Room } from '../../../rooms/domain/entities/room.entity';
 
@@ -15,6 +16,7 @@ export class PropertyOutput {
     public longitude: number,
     public checkInTime: string,
     public checkOutTime: string,
+    public cancellationPolicy: CancellationPolicy,
     public ownerId: number,
     public propertyTypeId: number | null,
     public propertyType: CategorySummary | null,
@@ -40,6 +42,7 @@ export class PropertyOutput {
       property.longitude,
       property.checkInTime,
       property.checkOutTime,
+      property.cancellationPolicy,
       property.ownerId,
       property.propertyTypeId,
       property.propertyType,

@@ -37,6 +37,7 @@ export function createSampleReservation(
     payment: Payment;
     status: (typeof RESERVATION_STATUS)[keyof typeof RESERVATION_STATUS];
     items: ReservationItem[];
+    holdUntil: Date | null;
   }> = {},
 ): Reservation {
   const item = createSampleReservationItem({
@@ -51,6 +52,9 @@ export function createSampleReservation(
     overrides.id ?? 1,
     new Date('2026-06-01T10:00:00.000Z'),
     new Date('2026-06-01T10:00:00.000Z'),
+    overrides.holdUntil === undefined
+      ? new Date('2026-06-01T10:20:00.000Z')
+      : overrides.holdUntil,
   );
 }
 
@@ -63,8 +67,20 @@ export function createReservationRepositoryMock(
         id: 1,
         userId: reservation.userId,
         items: reservation.items,
+        holdUntil: reservation.holdUntil ?? null,
       }),
     ),
+    createWithHold: vi
+      .fn()
+      .mockImplementation(async (reservation: Reservation) =>
+        createSampleReservation({
+          id: 1,
+          userId: reservation.userId,
+          items: reservation.items,
+          holdUntil:
+            reservation.holdUntil ?? new Date('2026-06-01T10:20:00.000Z'),
+        }),
+      ),
     updateItem: vi
       .fn()
       .mockImplementation(async (item: ReservationItem) => item),
@@ -73,6 +89,7 @@ export function createReservationRepositoryMock(
     findItemsByIds: vi.fn(),
     findPaginated: vi.fn(),
     findOverlapping: vi.fn().mockResolvedValue([]),
+    findRoomIdsUnavailable: vi.fn().mockResolvedValue([]),
     countByScope: vi.fn(),
     sumConfirmedRevenueForMonth: vi.fn(),
     sumConfirmedNightsForMonth: vi.fn(),

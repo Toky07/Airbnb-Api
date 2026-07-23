@@ -1,4 +1,5 @@
 import { IRoomRepository } from '../../../domain/repositories/room.repository';
+import type { IRoomBlockedDateRepository } from '../../../domain/repositories/room-blocked-date.repository';
 import { Room } from '../../../domain/entities/room.entity';
 import { Property } from '../../../../properties/domain/entities/property.entity';
 import { RoomDetailResolver } from '../../services/room-detail.resolver';
@@ -43,6 +44,7 @@ const repository = {
 } as IRoomRepository;
 
 const mockQueryBuilder = {
+  innerJoin: vi.fn().mockReturnThis(),
   select: vi.fn().mockReturnThis(),
   where: vi.fn().mockReturnThis(),
   andWhere: vi.fn().mockReturnThis(),
@@ -55,10 +57,28 @@ const mockReservationRepo = {
   createQueryBuilder: vi.fn().mockReturnValue(mockQueryBuilder),
 } as any;
 
+const mockBlockedDateRepo = {
+  findByRoomId: vi.fn().mockResolvedValue([
+    {
+      id: 1,
+      roomId: 1,
+      startDate: '2026-10-01',
+      endDate: '2026-10-05',
+      reason: 'Maintenance',
+    },
+  ]),
+  findOverlapping: vi.fn().mockResolvedValue([]),
+  findRoomIdsUnavailable: vi.fn().mockResolvedValue([]),
+  create: vi.fn(),
+  delete: vi.fn(),
+  findById: vi.fn(),
+} as unknown as IRoomBlockedDateRepository;
+
 function createHandler() {
   const roomDetailResolver = new RoomDetailResolver(
     mockRoomMediaPresenter,
     mockReservationRepo,
+    mockBlockedDateRepo,
   );
 
   return new FindRoomQueryHandler(repository, roomDetailResolver);
@@ -94,6 +114,17 @@ describe('FindRoomQueryHandler', () => {
         return [];
       },
     );
+    (
+      mockBlockedDateRepo.findByRoomId as ReturnType<typeof vi.fn>
+    ).mockResolvedValue([
+      {
+        id: 1,
+        roomId: 1,
+        startDate: '2026-10-01',
+        endDate: '2026-10-05',
+        reason: 'Maintenance',
+      },
+    ]);
   });
 
   it('should find one room with unavailable dates', async () => {
@@ -105,6 +136,7 @@ describe('FindRoomQueryHandler', () => {
     expect(room.images).toEqual([]);
     expect(room.unavailableDates).toEqual([
       { startDate: '2026-09-10', endDate: '2026-09-13' },
+      { startDate: '2026-10-01', endDate: '2026-10-05' },
     ]);
     expect(room.amenities).toHaveLength(1);
     expect(room.propertyAmenities).toHaveLength(1);

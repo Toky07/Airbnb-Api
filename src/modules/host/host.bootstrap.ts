@@ -15,6 +15,9 @@ import { ListHostRoomsQueryHandler } from './applications/useCase/handlers/ListH
 import { ListHostAmenityOptionsQueryHandler } from './applications/useCase/handlers/ListHostAmenityOptionsQueryHandler';
 import { GetHostPropertyAmenitiesQueryHandler } from './applications/useCase/handlers/GetHostPropertyAmenitiesQueryHandler';
 import { GetHostRoomAmenitiesQueryHandler } from './applications/useCase/handlers/GetHostRoomAmenitiesQueryHandler';
+import { CreateHostRoomBlockedDateCommandHandler } from './applications/useCase/handlers/CreateHostRoomBlockedDateCommandHandler';
+import { DeleteHostRoomBlockedDateCommandHandler } from './applications/useCase/handlers/DeleteHostRoomBlockedDateCommandHandler';
+import { ListHostRoomBlockedDatesQueryHandler } from './applications/useCase/handlers/ListHostRoomBlockedDatesQueryHandler';
 
 export class HostBootstrap {
   static create(deps: {
@@ -66,6 +69,12 @@ export class HostBootstrap {
         new SyncHostPropertyAmenitiesCommandHandler(deps.resolveHostProperty),
       syncHostRoomAmenitiesCommandHandler:
         new SyncHostRoomAmenitiesCommandHandler(deps.resolveHostProperty),
+      listHostRoomBlockedDatesQueryHandler:
+        new ListHostRoomBlockedDatesQueryHandler(deps.resolveHostProperty),
+      createHostRoomBlockedDateCommandHandler:
+        new CreateHostRoomBlockedDateCommandHandler(deps.resolveHostProperty),
+      deleteHostRoomBlockedDateCommandHandler:
+        new DeleteHostRoomBlockedDateCommandHandler(deps.resolveHostProperty),
     };
   }
 }

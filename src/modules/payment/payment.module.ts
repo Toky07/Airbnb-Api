@@ -37,7 +37,7 @@ import { VerifyPaymentCommand } from './applications/useCase/commands/VerifyPaym
       useClass: PaymentRepository,
     },
   ],
-  exports: [PAYMENT_REPOSITORY],
+  exports: [PAYMENT_REPOSITORY, PAYMENT_GATEWAY],
 })
 export class PaymentModule implements OnModuleInit {
   constructor(

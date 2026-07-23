@@ -65,6 +65,7 @@ export function createPaymentGatewayMock(
       status: 'requires_payment_method',
     }),
     retrievePaymentIntent: vi.fn(),
+    createRefund: vi.fn().mockResolvedValue({ id: 're_test_123' }),
     ...overrides,
   };
 }

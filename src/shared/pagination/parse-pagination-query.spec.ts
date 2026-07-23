@@ -7,6 +7,9 @@ describe('parsePaginationQuery', () => {
       page: 1,
       limit: 10,
       search: undefined,
+      propertyId: undefined,
+      checkIn: undefined,
+      checkOut: undefined,
     });
   });
 
@@ -20,5 +23,33 @@ describe('parsePaginationQuery', () => {
 
   it('trims search', () => {
     expect(parsePaginationQuery({ search: '  hotel  ' }).search).toBe('hotel');
+  });
+
+  it('accepte une plage de dates valide', () => {
+    expect(
+      parsePaginationQuery({
+        checkIn: '2026-08-01',
+        checkOut: '2026-08-05',
+      }),
+    ).toEqual(
+      expect.objectContaining({
+        checkIn: '2026-08-01',
+        checkOut: '2026-08-05',
+      }),
+    );
+  });
+
+  it('ignore une plage de dates invalide', () => {
+    expect(
+      parsePaginationQuery({
+        checkIn: '2026-08-05',
+        checkOut: '2026-08-01',
+      }),
+    ).toEqual(
+      expect.objectContaining({
+        checkIn: undefined,
+        checkOut: undefined,
+      }),
+    );
   });
 });

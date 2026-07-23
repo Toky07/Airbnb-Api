@@ -31,6 +31,7 @@ export class CartCheckoutPaymentListener {
             result.amount,
             result.currency,
             result.publishableKey,
+            event.holdUntil,
           ),
         );
       },

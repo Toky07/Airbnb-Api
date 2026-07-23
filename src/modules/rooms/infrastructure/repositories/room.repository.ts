@@ -6,6 +6,7 @@ import {
   type PaginatedResult,
   type PaginationParams,
 } from '../../../../shared/pagination/pagination.types';
+import { BLOCKING_RESERVATION_STATUSES } from '../../../reservation/domain/constants/reservation-status.constant';
 import { Room } from '../../domain/entities/room.entity';
 import { RoomEntity } from '../entities/room.entity';
 import { IRoomRepository } from '../../domain/repositories/room.repository';
@@ -55,6 +56,36 @@ export class RoomRepository implements IRoomRepository {
       qb.andWhere(
         '(room.name LIKE :term OR room.description LIKE :term OR property.name LIKE :term)',
         { term },
+      );
+    }
+
+    if (params.checkIn && params.checkOut) {
+      qb.andWhere(
+        `NOT EXISTS (
+          SELECT 1 FROM reservation_items item
+          INNER JOIN reservations reservation ON reservation.id = item."reservationId"
+          WHERE item."roomId" = room.id
+            AND item."checkIn" < :checkOut
+            AND item."checkOut" > :checkIn
+            AND reservation.status IN (:...blockingStatuses)
+        )`,
+        {
+          checkIn: params.checkIn,
+          checkOut: params.checkOut,
+          blockingStatuses: BLOCKING_RESERVATION_STATUSES,
+        },
+      );
+      qb.andWhere(
+        `NOT EXISTS (
+          SELECT 1 FROM room_blocked_dates blocked
+          WHERE blocked."roomId" = room.id
+            AND blocked."startDate" < :checkOut
+            AND blocked."endDate" > :checkIn
+        )`,
+        {
+          checkIn: params.checkIn,
+          checkOut: params.checkOut,
+        },
       );
     }
 

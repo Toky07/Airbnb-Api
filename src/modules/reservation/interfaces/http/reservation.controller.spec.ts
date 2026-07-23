@@ -1,14 +1,16 @@
 import request from 'supertest';
-import { Test } from '@nestjs/testing';
+import { Test, type TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { DataSource } from 'typeorm';
+import { vi } from 'vitest';
 import { AuthModule } from '../../../authentication/auth.module';
 import { UserModule } from '../../../user/user.module';
 import { RoomsModule } from '../../../rooms/room.module';
 import { PropertiesModule } from '../../../properties/properties.module';
 import { ReservationModule } from '../../reservation.module';
+import { PaymentModule } from '../../../payment/payment.module';
 import { PropertyEntity } from '../../../properties/infrastructure/entities/property-entity.entity';
 import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
 import { RESERVATION_STATUS } from '../../domain/constants/reservation-status.constant';
@@ -25,21 +27,33 @@ import {
 import { ReservationOrmEntity } from '../../infrastructure/entities/reservation.orm-entity';
 import { PaymentOrmEntity } from '../../../payment/infrastructure/entities/payment.orm-entity';
 import { PAYMENT_GATEWAY } from '../../../payment/domain/ports/payment-gateway.port';
-import { createPaymentGatewayMock } from '../../../payment/applications/useCase/payment-test.helpers';
+import {
+  createPaymentGatewayMock,
+  createWebhookVerifierMock,
+} from '../../../payment/applications/useCase/payment-test.helpers';
+import { StripeWebhookVerifier } from '../../../payment/infrastructure/stripe/StripeWebhookVerifier';
 import { UserEntity } from '../../../user/infrastructure/entities/user.entity';
+import {
+  RESERVATION_REPOSITORY,
+  type IReservationRepository,
+} from '../../domain/repositories/reservation.repository';
 
 describe('ReservationController', () => {
   let app: INestApplication;
   let dataSource: DataSource;
+  let moduleRef: TestingModule;
+  let reservationRepository: IReservationRepository;
   let token: string;
   let roomId: number;
   let propertyId: number;
+  const webhookVerifier = createWebhookVerifierMock();
 
   beforeAll(async () => {
     process.env.MAIL_TRANSPORT = 'console';
+    process.env.STRIPE_PUBLISHABLE_KEY = 'pk_test_reservation';
     await prepareIntegrationTestDatabase();
 
-    const moduleRef = await Test.createTestingModule({
+    moduleRef = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot(
           getIntegrationTestDatabaseConfig([
@@ -58,15 +72,19 @@ describe('ReservationController', () => {
         UserModule,
         PropertiesModule,
         RoomsModule,
+        PaymentModule,
         ReservationModule,
       ],
     })
       .overrideProvider(PAYMENT_GATEWAY)
       .useValue(createPaymentGatewayMock())
+      .overrideProvider(StripeWebhookVerifier)
+      .useValue(webhookVerifier)
       .compile();
 
     dataSource = moduleRef.get(DataSource);
-    app = moduleRef.createNestApplication();
+    reservationRepository = moduleRef.get(RESERVATION_REPOSITORY);
+    app = moduleRef.createNestApplication({ rawBody: true });
     app.useGlobalPipes(
       new ValidationPipe({ whitelist: true, transform: true }),
     );
@@ -131,6 +149,7 @@ describe('ReservationController', () => {
         id: expect.any(Number),
         userId: expect.any(Number),
         status: RESERVATION_STATUS.PENDING,
+        holdUntil: expect.any(String),
         items: [
           expect.objectContaining({
             roomId,
@@ -144,6 +163,12 @@ describe('ReservationController', () => {
         ],
       }),
     );
+
+    const reservation = await dataSource
+      .getRepository(ReservationOrmEntity)
+      .findOne({ where: { id: response.body.id } });
+    expect(reservation?.holdUntil).toBeTruthy();
+    expect(reservation!.holdUntil!.getTime()).toBeGreaterThan(Date.now());
   });
 
   it('GET /reservations/stats retourne les stats de réservation', async () => {
@@ -253,11 +278,102 @@ describe('ReservationController', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
-    expect(response.body).toEqual(
+    expect(response.body.reservation).toEqual(
       expect.objectContaining({
         status: RESERVATION_STATUS.CANCELLED,
       }),
     );
+  });
+
+  it('POST /payments/webhook annule une réservation dont le hold a expiré', async () => {
+    const payment = await dataSource.getRepository(PaymentOrmEntity).save({
+      amount: 20000,
+      currency: 'eur',
+      status: 'pending',
+      provider: 'stripe',
+      transactionId: 'pi_hold_expired_test',
+      userId: 1,
+      propertyType: 'reservation',
+      propertyId: 0,
+    });
+
+    const reservation = await dataSource
+      .getRepository(ReservationOrmEntity)
+      .save({
+        userId: 1,
+        status: RESERVATION_STATUS.PENDING,
+        holdUntil: new Date(Date.now() - 60_000),
+        payment,
+        items: [
+          {
+            roomId,
+            checkIn: '2027-02-01',
+            checkOut: '2027-02-03',
+            guestCount: 2,
+            price: 200,
+            nights: 2,
+          },
+        ],
+      });
+
+    webhookVerifier.verify = vi.fn().mockReturnValue({
+      type: 'payment_intent.succeeded',
+      paymentIntentId: payment.transactionId,
+      status: 'succeeded',
+      errorMessage: null,
+    });
+
+    await request(app.getHttpServer())
+      .post('/payments/webhook')
+      .set('stripe-signature', 'sig_hold_expired')
+      .set('Content-Type', 'application/json')
+      .send(Buffer.from('{"id":"evt_hold_expired"}'))
+      .expect(400);
+
+    const updated = await dataSource
+      .getRepository(ReservationOrmEntity)
+      .findOne({ where: { id: reservation.id } });
+    expect(updated?.status).toBe(RESERVATION_STATUS.CANCELLED);
+    expect(updated?.holdUntil).toBeNull();
+  });
+
+  it('clearExpiredReservations supprime les pending expirés et conserve les holds valides', async () => {
+    const expired = await dataSource.getRepository(ReservationOrmEntity).save({
+      userId: 1,
+      status: RESERVATION_STATUS.PENDING,
+      holdUntil: new Date(Date.now() - 60_000),
+      items: [
+        {
+          roomId,
+          checkIn: '2027-03-01',
+          checkOut: '2027-03-03',
+          guestCount: 2,
+          price: 200,
+          nights: 2,
+        },
+      ],
+    });
+
+    const active = await dataSource.getRepository(ReservationOrmEntity).save({
+      userId: 1,
+      status: RESERVATION_STATUS.PENDING,
+      holdUntil: new Date(Date.now() + 60 * 60 * 1000),
+      items: [
+        {
+          roomId,
+          checkIn: '2027-04-01',
+          checkOut: '2027-04-03',
+          guestCount: 2,
+          price: 200,
+          nights: 2,
+        },
+      ],
+    });
+
+    await reservationRepository.clearExpiredReservations();
+
+    expect(await reservationRepository.findById(expired.id)).toBeNull();
+    expect(await reservationRepository.findById(active.id)).not.toBeNull();
   });
 
   it('GET /reservations/bookings/host liste les commandes host', async () => {
@@ -316,6 +432,57 @@ describe('ReservationController', () => {
         customerName: expect.any(String),
         previewLabel: expect.any(String),
         propertyId,
+        reservationId: reservation.id,
+        reservationStatus: RESERVATION_STATUS.CONFIRMED,
+      }),
+    );
+  });
+
+  it('GET /reservations/:id/cancellation-preview estime le remboursement', async () => {
+    const payment = await dataSource.getRepository(PaymentOrmEntity).save({
+      amount: 20000,
+      currency: 'eur',
+      status: 'succeeded',
+      provider: 'stripe',
+      transactionId: 'pi_preview_test',
+      userId: 1,
+      propertyType: 'reservation',
+      propertyId: 1,
+    });
+
+    const reservation = await dataSource
+      .getRepository(ReservationOrmEntity)
+      .save({
+        userId: 1,
+        status: RESERVATION_STATUS.CONFIRMED,
+        payment,
+        items: [
+          {
+            roomId,
+            checkIn: '2026-10-01',
+            checkOut: '2026-10-03',
+            guestCount: 2,
+            price: 200,
+            nights: 2,
+          },
+        ],
+      });
+
+    await dataSource.getRepository(PaymentOrmEntity).update(payment.id, {
+      propertyId: reservation.id,
+    });
+
+    const response = await request(app.getHttpServer())
+      .get(`/reservations/${reservation.id}/cancellation-preview`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        reservationId: reservation.id,
+        refundPercent: expect.any(Number),
+        policyLabel: expect.any(String),
+        cancellationPolicy: 'moderate',
       }),
     );
   });

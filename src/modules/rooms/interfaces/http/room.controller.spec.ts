@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { RoomEntity } from '../../infrastructure/entities/room.entity';
+import { RoomBlockedDateOrmEntity } from '../../infrastructure/entities/room-blocked-date.orm-entity';
 import { RoomTypeEntity } from '../../infrastructure/entities/room-type.entity';
 import { PropertyEntity } from '../../../properties/infrastructure/entities/property-entity.entity';
 import { PropertyTypeEntity } from '../../../properties/infrastructure/entities/property-type.entity';
@@ -107,6 +108,41 @@ describe('RoomController', () => {
         updatedAt: expect.any(String),
       }),
     );
+  });
+
+  it('/GET rooms?checkIn&checkOut excludes rooms with blocked dates', async () => {
+    const property = await dataSource
+      .getRepository(PropertyEntity)
+      .save({ ...defaultProperty, name: 'Date Filter Property' });
+
+    const availableRoom = await dataSource.getRepository(RoomEntity).save({
+      ...defaultRoom,
+      name: 'Available Suite',
+      propertyId: property.id,
+    });
+    const blockedRoom = await dataSource.getRepository(RoomEntity).save({
+      ...defaultRoom,
+      name: 'Blocked Suite',
+      propertyId: property.id,
+    });
+
+    await dataSource.getRepository(RoomBlockedDateOrmEntity).save({
+      roomId: blockedRoom.id,
+      startDate: '2026-12-01',
+      endDate: '2026-12-10',
+      reason: 'Fermeture',
+    });
+
+    const response = await request(app.getHttpServer())
+      .get('/rooms')
+      .query({ checkIn: '2026-12-03', checkOut: '2026-12-06', limit: 25 })
+      .expect(200);
+
+    const ids = (response.body.data as Array<{ id: number }>).map(
+      (room) => room.id,
+    );
+    expect(ids).toContain(availableRoom.id);
+    expect(ids).not.toContain(blockedRoom.id);
   });
 
   it(`/GET rooms/:id`, async () => {
