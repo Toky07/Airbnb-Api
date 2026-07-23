@@ -14,7 +14,10 @@ import { resolveMediaPublicUrl } from '../../modules/media/utils/resolve-media-p
  */
 @Injectable()
 export class AbsoluteMediaUrlInterceptor implements NestInterceptor {
-  intercept(_context: ExecutionContext, next: CallHandler): Observable<unknown> {
+  intercept(
+    _context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<unknown> {
     return next.handle().pipe(map((data) => transformMediaUrls(data)));
   }
 }
@@ -33,7 +36,9 @@ export function transformMediaUrls(value: unknown): unknown {
   }
 
   const result: Record<string, unknown> = {};
-  for (const [key, nested] of Object.entries(value as Record<string, unknown>)) {
+  for (const [key, nested] of Object.entries(
+    value as Record<string, unknown>,
+  )) {
     result[key] = transformMediaUrls(nested);
   }
   return result;
