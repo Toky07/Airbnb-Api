@@ -327,6 +327,70 @@ describe('HostController', () => {
     expect(response.body[0].name).toBe('Host TV');
   });
 
+  it('POST /host/rooms/:id/blocked-dates creates a blocked range', async () => {
+    const response = await request(app.getHttpServer())
+      .post(`/host/rooms/${roomId}/blocked-dates`)
+      .query({ propertyId })
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        startDate: '2026-11-01',
+        endDate: '2026-11-05',
+        reason: 'Travaux',
+      })
+      .expect(201);
+
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        id: expect.any(Number),
+        roomId,
+        startDate: '2026-11-01',
+        endDate: '2026-11-05',
+        reason: 'Travaux',
+      }),
+    );
+  });
+
+  it('GET /host/rooms/:id/blocked-dates lists blocked ranges', async () => {
+    const response = await request(app.getHttpServer())
+      .get(`/host/rooms/${roomId}/blocked-dates`)
+      .query({ propertyId })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    expect(response.body.length).toBeGreaterThanOrEqual(1);
+    expect(response.body[0]).toEqual(
+      expect.objectContaining({
+        roomId,
+        startDate: '2026-11-01',
+        endDate: '2026-11-05',
+      }),
+    );
+  });
+
+  it('DELETE /host/rooms/:id/blocked-dates/:blockedDateId removes a range', async () => {
+    const listed = await request(app.getHttpServer())
+      .get(`/host/rooms/${roomId}/blocked-dates`)
+      .query({ propertyId })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    const blockedDateId = listed.body[0].id as number;
+
+    await request(app.getHttpServer())
+      .delete(`/host/rooms/${roomId}/blocked-dates/${blockedDateId}`)
+      .query({ propertyId })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    const after = await request(app.getHttpServer())
+      .get(`/host/rooms/${roomId}/blocked-dates`)
+      .query({ propertyId })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    expect(after.body.find((item: { id: number }) => item.id === blockedDateId)).toBeUndefined();
+  });
+
   it('POST /host/properties with image uploads property media', async () => {
     const response = await request(app.getHttpServer())
       .post('/host/properties')

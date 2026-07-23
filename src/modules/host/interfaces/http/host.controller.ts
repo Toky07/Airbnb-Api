@@ -44,6 +44,10 @@ import { GetHostPropertyAmenitiesQuery } from '../../applications/useCase/querie
 import { SyncHostPropertyAmenitiesCommand } from '../../applications/useCase/commands/SyncHostPropertyAmenitiesCommand';
 import { GetHostRoomAmenitiesQuery } from '../../applications/useCase/queries/GetHostRoomAmenitiesQuery';
 import { SyncHostRoomAmenitiesCommand } from '../../applications/useCase/commands/SyncHostRoomAmenitiesCommand';
+import { ListHostRoomBlockedDatesQuery } from '../../applications/useCase/queries/ListHostRoomBlockedDatesQuery';
+import { CreateHostRoomBlockedDateCommand } from '../../applications/useCase/commands/CreateHostRoomBlockedDateCommand';
+import { DeleteHostRoomBlockedDateCommand } from '../../applications/useCase/commands/DeleteHostRoomBlockedDateCommand';
+import type { CreateRoomBlockedDateDto } from '../../../rooms/applications/dto/create-room-blocked-date.dto';
 
 @Controller('host')
 export class HostController {
@@ -264,6 +268,57 @@ export class HostController {
         propertyId,
         Number(id),
         body,
+      ),
+    );
+  }
+
+  @Get('rooms/:id/blocked-dates')
+  @RequirePermissions('host.rooms.read')
+  listRoomBlockedDates(
+    @Req() request: { user: JwtPayload },
+    @Param('id') id: number,
+    @Query() query: Record<string, unknown>,
+  ) {
+    const propertyId = parseRequiredPropertyId(query);
+    return QueryBus.execute(
+      new ListHostRoomBlockedDatesQuery(request.user, propertyId, Number(id)),
+    );
+  }
+
+  @Post('rooms/:id/blocked-dates')
+  @RequirePermissions('host.rooms.update')
+  createRoomBlockedDate(
+    @Req() request: { user: JwtPayload },
+    @Param('id') id: number,
+    @Query() query: Record<string, unknown>,
+    @Body() body: CreateRoomBlockedDateDto,
+  ) {
+    const propertyId = parseRequiredPropertyId(query);
+    return CommandBus.execute(
+      new CreateHostRoomBlockedDateCommand(
+        request.user,
+        propertyId,
+        Number(id),
+        body,
+      ),
+    );
+  }
+
+  @Delete('rooms/:id/blocked-dates/:blockedDateId')
+  @RequirePermissions('host.rooms.update')
+  deleteRoomBlockedDate(
+    @Req() request: { user: JwtPayload },
+    @Param('id') id: number,
+    @Param('blockedDateId') blockedDateId: number,
+    @Query() query: Record<string, unknown>,
+  ) {
+    const propertyId = parseRequiredPropertyId(query);
+    return CommandBus.execute(
+      new DeleteHostRoomBlockedDateCommand(
+        request.user,
+        propertyId,
+        Number(id),
+        Number(blockedDateId),
       ),
     );
   }

@@ -21,11 +21,32 @@ import {
   createReservationRepositoryMock,
   createSampleReservation,
 } from '../reservation-test.helpers';
+import type { IRoomBlockedDateRepository } from '../../../../rooms/domain/repositories/room-blocked-date.repository';
 
 function createEnrichMock() {
   return {
     enrich: vi.fn().mockImplementation(async (outputs: unknown[]) => outputs),
   };
+}
+
+function createBlockedDateRepositoryMock(): IRoomBlockedDateRepository {
+  return {
+    create: vi.fn(),
+    delete: vi.fn(),
+    findById: vi.fn(),
+    findByRoomId: vi.fn().mockResolvedValue([]),
+    findOverlapping: vi.fn().mockResolvedValue([]),
+    findRoomIdsUnavailable: vi.fn().mockResolvedValue([]),
+  } as IRoomBlockedDateRepository;
+}
+
+function createAvailabilityService(
+  reservationRepository = createReservationRepositoryMock(),
+) {
+  return new CheckRoomAvailabilityService(
+    reservationRepository,
+    createBlockedDateRepositoryMock(),
+  );
 }
 
 describe('CreateReservationCommandHandler', () => {
@@ -74,7 +95,7 @@ describe('CreateReservationCommandHandler', () => {
       {
         findByAuthId: vi.fn().mockResolvedValue(user),
       } as unknown as IUserRepository,
-      new CheckRoomAvailabilityService(reservationRepository),
+      createAvailabilityService(reservationRepository),
       new CalculateStayAmountService(),
       createEnrichMock() as never,
     );
@@ -110,7 +131,7 @@ describe('CreateReservationCommandHandler', () => {
       {
         findByAuthId: vi.fn().mockResolvedValue(user),
       } as unknown as IUserRepository,
-      new CheckRoomAvailabilityService(reservationRepository),
+      createAvailabilityService(reservationRepository),
       new CalculateStayAmountService(),
       createEnrichMock() as never,
     );
@@ -136,7 +157,7 @@ describe('CreateReservationCommandHandler', () => {
       {
         findByAuthId: vi.fn().mockResolvedValue(null),
       } as unknown as IUserRepository,
-      new CheckRoomAvailabilityService(createReservationRepositoryMock()),
+      createAvailabilityService(),
       new CalculateStayAmountService(),
       createEnrichMock() as never,
     );
@@ -164,7 +185,7 @@ describe('CreateReservationCommandHandler', () => {
       {
         findByAuthId: vi.fn().mockResolvedValue(user),
       } as unknown as IUserRepository,
-      new CheckRoomAvailabilityService(createReservationRepositoryMock()),
+      createAvailabilityService(),
       new CalculateStayAmountService(),
       createEnrichMock() as never,
     );

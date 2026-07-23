@@ -12,6 +12,7 @@ import { PropertyTypeEntity } from '../modules/properties/infrastructure/entitie
 import { PropertyEntity } from '../modules/properties/infrastructure/entities/property-entity.entity';
 import { RoomTypeEntity } from '../modules/rooms/infrastructure/entities/room-type.entity';
 import { RoomEntity } from '../modules/rooms/infrastructure/entities/room.entity';
+import { RoomBlockedDateOrmEntity } from '../modules/rooms/infrastructure/entities/room-blocked-date.orm-entity';
 import { UserEntity } from '../modules/user/infrastructure/entities/user.entity';
 import { ACCOUNT_STATUS } from '../modules/authentication/domain/constants/account-status.constant';
 import { PasswordSetupTokenOrmEntity } from '../modules/authentication/infrastructure/entities/password-setup-token.orm-entity';
@@ -53,6 +54,7 @@ export const DOMAIN_TEST_ENTITIES = [
   PropertyTypeEntity,
   RoomEntity,
   RoomTypeEntity,
+  RoomBlockedDateOrmEntity,
   MediaOrmEntity,
   EmailOrmEntity,
   ReservationOrmEntity,

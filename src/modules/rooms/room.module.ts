@@ -4,12 +4,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RoomEntity } from './infrastructure/entities/room.entity';
 import { RoomTypeEntity } from './infrastructure/entities/room-type.entity';
+import { RoomBlockedDateOrmEntity } from './infrastructure/entities/room-blocked-date.orm-entity';
 import { ROOM_REPOSITORY } from './domain/repositories/room.repository';
 import type { IRoomRepository } from './domain/repositories/room.repository';
 import { ROOM_TYPE_REPOSITORY } from './domain/repositories/room-type.repository';
 import type { IRoomTypeRepository } from './domain/repositories/room-type.repository';
+import { ROOM_BLOCKED_DATE_REPOSITORY } from './domain/repositories/room-blocked-date.repository';
+import type { IRoomBlockedDateRepository } from './domain/repositories/room-blocked-date.repository';
 import { RoomRepository } from './infrastructure/repositories/room.repository';
 import { RoomTypeRepository } from './infrastructure/repositories/room-type.repository';
+import { RoomBlockedDateRepository } from './infrastructure/repositories/room-blocked-date.repository';
 import { RoomController } from './interfaces/http/room.controller';
 import { RoomTypeController } from './interfaces/http/room-type.controller';
 import { RoomTypesSeedService } from './infrastructure/seed/room-types.seed';
@@ -32,16 +36,20 @@ import { DeleteRoomCommand } from './applications/useCase/commands/DeleteRoomCom
 import { CreateRoomTypeCommand } from './applications/useCase/commands/CreateRoomTypeCommand';
 import { UpdateRoomTypeCommand } from './applications/useCase/commands/UpdateRoomTypeCommand';
 import { DeleteRoomTypeCommand } from './applications/useCase/commands/DeleteRoomTypeCommand';
+import { CreateRoomBlockedDateCommand } from './applications/useCase/commands/CreateRoomBlockedDateCommand';
+import { DeleteRoomBlockedDateCommand } from './applications/useCase/commands/DeleteRoomBlockedDateCommand';
 import { FindRoomQuery } from './applications/useCase/queries/FindRoomQuery';
 import { ListRoomsQuery } from './applications/useCase/queries/ListRoomsQuery';
 import { ListRoomTypesQuery } from './applications/useCase/queries/ListRoomTypesQuery';
 import { ListRoomTypeOptionsQuery } from './applications/useCase/queries/ListRoomTypeOptionsQuery';
+import { ListRoomBlockedDatesQuery } from './applications/useCase/queries/ListRoomBlockedDatesQuery';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       RoomEntity,
       RoomTypeEntity,
+      RoomBlockedDateOrmEntity,
       ReservationItemOrmEntity,
     ]),
     MediaModule,
@@ -65,10 +73,15 @@ import { ListRoomTypeOptionsQuery } from './applications/useCase/queries/ListRoo
       provide: ROOM_TYPE_REPOSITORY,
       useClass: RoomTypeRepository,
     },
+    {
+      provide: ROOM_BLOCKED_DATE_REPOSITORY,
+      useClass: RoomBlockedDateRepository,
+    },
   ],
   exports: [
     ROOM_REPOSITORY,
     ROOM_TYPE_REPOSITORY,
+    ROOM_BLOCKED_DATE_REPOSITORY,
     RoomMediaPresenter,
     RoomProductSummaryService,
     cartItemCatalogProvider,
@@ -81,6 +94,8 @@ export class RoomsModule implements OnModuleInit {
     private readonly roomRepository: IRoomRepository,
     @Inject(ROOM_TYPE_REPOSITORY)
     private readonly roomTypeRepository: IRoomTypeRepository,
+    @Inject(ROOM_BLOCKED_DATE_REPOSITORY)
+    private readonly roomBlockedDateRepository: IRoomBlockedDateRepository,
     private readonly roomMediaPresenter: RoomMediaPresenter,
     private readonly generateRoomSlug: GenerateRoomSlugService,
     @InjectRepository(ReservationItemOrmEntity)
@@ -91,6 +106,7 @@ export class RoomsModule implements OnModuleInit {
     const bootstrap = RoomsBootstrap.create({
       roomRepository: this.roomRepository,
       roomTypeRepository: this.roomTypeRepository,
+      roomBlockedDateRepository: this.roomBlockedDateRepository,
       roomMediaPresenter: this.roomMediaPresenter,
       generateRoomSlug: this.generateRoomSlug,
       reservationItemRepo: this.reservationItemRepo,
@@ -111,6 +127,14 @@ export class RoomsModule implements OnModuleInit {
       DeleteRoomTypeCommand,
       bootstrap.deleteRoomTypeCommandHandler,
     );
+    CommandBus.register(
+      CreateRoomBlockedDateCommand,
+      bootstrap.createRoomBlockedDateCommandHandler,
+    );
+    CommandBus.register(
+      DeleteRoomBlockedDateCommand,
+      bootstrap.deleteRoomBlockedDateCommandHandler,
+    );
 
     QueryBus.register(FindRoomQuery, bootstrap.findRoomQueryHandler);
     QueryBus.register(ListRoomsQuery, bootstrap.listRoomsQueryHandler);
@@ -118,6 +142,10 @@ export class RoomsModule implements OnModuleInit {
     QueryBus.register(
       ListRoomTypeOptionsQuery,
       bootstrap.listRoomTypeOptionsQueryHandler,
+    );
+    QueryBus.register(
+      ListRoomBlockedDatesQuery,
+      bootstrap.listRoomBlockedDatesQueryHandler,
     );
   }
 }

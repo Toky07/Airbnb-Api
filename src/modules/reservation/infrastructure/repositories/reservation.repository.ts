@@ -5,7 +5,7 @@ import {
   buildPaginationMeta,
   type PaginatedResult,
 } from '../../../../shared/pagination/pagination.types';
-import { RESERVATION_STATUS } from '../../domain/constants/reservation-status.constant';
+import { RESERVATION_STATUS, BLOCKING_RESERVATION_STATUSES } from '../../domain/constants/reservation-status.constant';
 import { Reservation } from '../../domain/entities/reservation.entity';
 import type { ReservationItem } from '../../domain/entities/reservation-item.entity';
 import type {
@@ -18,7 +18,7 @@ import { ReservationOrmEntity } from '../entities/reservation.orm-entity';
 import { ReservationItemMapper } from '../mappers/reservation-item.mapper';
 import { ReservationMapper } from '../mappers/reservation.mapper';
 import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
-import { ReservationStatus } from '../../domain/constants/reservation-status.constant';
+import type { ReservationStatus } from '../../domain/constants/reservation-status.constant';
 
 @Injectable()
 export class ReservationRepository implements IReservationRepository {
@@ -145,9 +145,13 @@ export class ReservationRepository implements IReservationRepository {
   ): Promise<ReservationItem[]> {
     const qb = this.itemRepository
       .createQueryBuilder('item')
+      .innerJoin('item.reservation', 'reservation')
       .where('item.roomId = :roomId', { roomId })
       .andWhere('item.checkIn < :checkOut', { checkOut })
-      .andWhere('item.checkOut > :checkIn', { checkIn });
+      .andWhere('item.checkOut > :checkIn', { checkIn })
+      .andWhere('reservation.status IN (:...statuses)', {
+        statuses: BLOCKING_RESERVATION_STATUSES,
+      });
 
     if (excludeItemId) {
       qb.andWhere('item.id != :excludeItemId', { excludeItemId });
@@ -155,6 +159,24 @@ export class ReservationRepository implements IReservationRepository {
 
     const entities = await qb.getMany();
     return entities.map((entity) => ReservationItemMapper.toDomain(entity));
+  }
+
+  async findRoomIdsUnavailable(
+    checkIn: string,
+    checkOut: string,
+  ): Promise<number[]> {
+    const rows = await this.itemRepository
+      .createQueryBuilder('item')
+      .innerJoin('item.reservation', 'reservation')
+      .select('DISTINCT item.roomId', 'roomId')
+      .where('item.checkIn < :checkOut', { checkOut })
+      .andWhere('item.checkOut > :checkIn', { checkIn })
+      .andWhere('reservation.status IN (:...statuses)', {
+        statuses: BLOCKING_RESERVATION_STATUSES,
+      })
+      .getRawMany<{ roomId: number }>();
+
+    return rows.map((row) => Number(row.roomId)).filter((id) => id > 0);
   }
 
   async countByScope(

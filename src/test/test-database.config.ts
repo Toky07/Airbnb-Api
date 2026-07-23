@@ -1,6 +1,7 @@
 import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { InitialSchema1783920447445 } from '../database/migrations/1783920447445-InitialSchema';
+import { AddRoomBlockedDates1783920447446 } from '../database/migrations/1783920447446-AddRoomBlockedDates';
 import { TYPEORM_ENTITIES } from '../config/typeorm.entities';
 import { EventBus } from '../shared/domain/event.bus';
 
@@ -41,7 +42,10 @@ async function createAdminDataSource(): Promise<DataSource> {
   const dataSource = new DataSource({
     ...getPostgresConnectionOptions(),
     entities: TYPEORM_ENTITIES,
-    migrations: [InitialSchema1783920447445],
+    migrations: [
+      InitialSchema1783920447445,
+      AddRoomBlockedDates1783920447446,
+    ],
     synchronize: false,
   });
   await dataSource.initialize();

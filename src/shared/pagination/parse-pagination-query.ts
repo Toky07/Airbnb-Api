@@ -31,6 +31,16 @@ export function parsePaginationQuery(
       ? Number.parseInt(toScalarString(propertyIdRaw), 10)
       : undefined;
 
+  const checkInRaw = toScalarString(query.checkIn, '').trim();
+  const checkOutRaw = toScalarString(query.checkOut, '').trim();
+  const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+  const checkIn = datePattern.test(checkInRaw) ? checkInRaw : undefined;
+  const checkOut = datePattern.test(checkOutRaw) ? checkOutRaw : undefined;
+  const hasValidDateRange =
+    checkIn !== undefined &&
+    checkOut !== undefined &&
+    checkOut > checkIn;
+
   return {
     page,
     limit,
@@ -39,5 +49,7 @@ export function parsePaginationQuery(
       propertyId !== undefined && Number.isFinite(propertyId) && propertyId > 0
         ? propertyId
         : undefined,
+    checkIn: hasValidDateRange ? checkIn : undefined,
+    checkOut: hasValidDateRange ? checkOut : undefined,
   };
 }

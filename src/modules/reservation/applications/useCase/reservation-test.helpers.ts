@@ -73,6 +73,7 @@ export function createReservationRepositoryMock(
     findItemsByIds: vi.fn(),
     findPaginated: vi.fn(),
     findOverlapping: vi.fn().mockResolvedValue([]),
+    findRoomIdsUnavailable: vi.fn().mockResolvedValue([]),
     countByScope: vi.fn(),
     sumConfirmedRevenueForMonth: vi.fn(),
     sumConfirmedNightsForMonth: vi.fn(),

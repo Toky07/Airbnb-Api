@@ -9,6 +9,8 @@ export type PaginationParams = {
   limit: PageSizeOption;
   search?: string;
   propertyId?: number;
+  checkIn?: string;
+  checkOut?: string;
 };
 
 export type PaginationMeta = {
