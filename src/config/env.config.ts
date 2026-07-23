@@ -53,6 +53,17 @@ export function getStripeCurrency(env: EnvSource = process.env): string {
   return (readEnv(env, 'STRIPE_CURRENCY') ?? 'eur').toLowerCase();
 }
 
+/** URL publique de l'API (préfixe des images/uploads renvoyés aux clients). */
+export function getApiPublicUrl(env: EnvSource = process.env): string {
+  const configured = readEnv(env, 'API_PUBLIC_URL');
+  if (configured) {
+    return configured.replace(/\/$/, '');
+  }
+
+  const port = readEnv(env, 'PORT') ?? '3000';
+  return `http://localhost:${port}`;
+}
+
 export function getResendApiKey(
   env: EnvSource = process.env,
 ): string | undefined {

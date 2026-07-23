@@ -1,4 +1,5 @@
 import { Module, OnModuleInit } from '@nestjs/common';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { CacheModule } from '@nestjs/cache-manager';
 import { UserModule } from './modules/user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -17,6 +18,7 @@ import { getDatabaseConfig } from './config/database.config';
 import { getCacheConfig } from './config/cache.config';
 import { HealthController } from './health/health.controller';
 import { RateLimitModule } from './shared/rate-limit.module';
+import { AbsoluteMediaUrlInterceptor } from './shared/interceptors/absolute-media-url.interceptor';
 
 @Module({
   imports: [
@@ -40,7 +42,12 @@ import { RateLimitModule } from './shared/rate-limit.module';
     AmenityModule,
   ],
   controllers: [HealthController],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: AbsoluteMediaUrlInterceptor,
+    },
+  ],
 })
 export class AppModule implements OnModuleInit {
   async onModuleInit() {

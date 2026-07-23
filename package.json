@@ -21,7 +21,8 @@
     "migration:run": "TS_NODE_PROJECT=tsconfig.typeorm.json typeorm-ts-node-commonjs migration:run -d src/config/typeorm-cli.config.ts",
     "migration:revert": "TS_NODE_PROJECT=tsconfig.typeorm.json typeorm-ts-node-commonjs migration:revert -d src/config/typeorm-cli.config.ts",
     "test:cov": "vitest run --coverage --project unit",
-    "import:sample-data": "ts-node -r tsconfig-paths/register --project tsconfig.json scripts/import-sample-data.ts"
+    "import:sample-data": "ts-node -r tsconfig-paths/register --project tsconfig.json scripts/import-sample-data.ts",
+    "media:reconcile": "ts-node -r tsconfig-paths/register --project tsconfig.json scripts/reconcile-media-paths.ts"
   },
   "dependencies": {
     "@keyv/redis": "^4.4.0",
