@@ -47,7 +47,11 @@ import { SyncHostRoomAmenitiesCommand } from '../../applications/useCase/command
 import { ListHostRoomBlockedDatesQuery } from '../../applications/useCase/queries/ListHostRoomBlockedDatesQuery';
 import { CreateHostRoomBlockedDateCommand } from '../../applications/useCase/commands/CreateHostRoomBlockedDateCommand';
 import { DeleteHostRoomBlockedDateCommand } from '../../applications/useCase/commands/DeleteHostRoomBlockedDateCommand';
+import { ListHostRoomRateOverridesQuery } from '../../applications/useCase/queries/ListHostRoomRateOverridesQuery';
+import { CreateHostRoomRateOverrideCommand } from '../../applications/useCase/commands/CreateHostRoomRateOverrideCommand';
+import { DeleteHostRoomRateOverrideCommand } from '../../applications/useCase/commands/DeleteHostRoomRateOverrideCommand';
 import type { CreateRoomBlockedDateDto } from '../../../rooms/applications/dto/create-room-blocked-date.dto';
+import type { CreateRoomRateOverrideDto } from '../../../rooms/applications/dto/create-room-rate-override.dto';
 import { CancelReservationCommand } from '../../../reservation/applications/useCase/commands/CancelReservationCommand';
 import { MarkReservationNoShowCommand } from '../../../reservation/applications/useCase/commands/MarkReservationNoShowCommand';
 
@@ -321,6 +325,57 @@ export class HostController {
         propertyId,
         Number(id),
         Number(blockedDateId),
+      ),
+    );
+  }
+
+  @Get('rooms/:id/rate-overrides')
+  @RequirePermissions('host.rooms.read')
+  listRoomRateOverrides(
+    @Req() request: { user: JwtPayload },
+    @Param('id') id: number,
+    @Query() query: Record<string, unknown>,
+  ) {
+    const propertyId = parseRequiredPropertyId(query);
+    return QueryBus.execute(
+      new ListHostRoomRateOverridesQuery(request.user, propertyId, Number(id)),
+    );
+  }
+
+  @Post('rooms/:id/rate-overrides')
+  @RequirePermissions('host.rooms.update')
+  createRoomRateOverride(
+    @Req() request: { user: JwtPayload },
+    @Param('id') id: number,
+    @Query() query: Record<string, unknown>,
+    @Body() body: CreateRoomRateOverrideDto,
+  ) {
+    const propertyId = parseRequiredPropertyId(query);
+    return CommandBus.execute(
+      new CreateHostRoomRateOverrideCommand(
+        request.user,
+        propertyId,
+        Number(id),
+        body,
+      ),
+    );
+  }
+
+  @Delete('rooms/:id/rate-overrides/:rateOverrideId')
+  @RequirePermissions('host.rooms.update')
+  deleteRoomRateOverride(
+    @Req() request: { user: JwtPayload },
+    @Param('id') id: number,
+    @Param('rateOverrideId') rateOverrideId: number,
+    @Query() query: Record<string, unknown>,
+  ) {
+    const propertyId = parseRequiredPropertyId(query);
+    return CommandBus.execute(
+      new DeleteHostRoomRateOverrideCommand(
+        request.user,
+        propertyId,
+        Number(id),
+        Number(rateOverrideId),
       ),
     );
   }

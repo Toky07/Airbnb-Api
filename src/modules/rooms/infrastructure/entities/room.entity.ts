@@ -27,6 +27,9 @@ export class RoomEntity {
   @Column()
   pricePerNight: number;
 
+  @Column({ type: 'int', nullable: true })
+  weekendPricePerNight: number | null;
+
   @Column()
   maxGuests: number;
 

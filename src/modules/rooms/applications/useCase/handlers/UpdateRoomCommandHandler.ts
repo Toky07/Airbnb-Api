@@ -32,6 +32,7 @@ export class UpdateRoomCommandHandler implements ICommandHandler<
     }
     room.description = command.dto.description;
     room.pricePerNight = command.dto.pricePerNight;
+    room.weekendPricePerNight = command.dto.weekendPricePerNight ?? null;
     room.maxGuests = command.dto.maxGuests;
     room.bedrooms = command.dto.bedrooms;
     room.bathrooms = command.dto.bathrooms;

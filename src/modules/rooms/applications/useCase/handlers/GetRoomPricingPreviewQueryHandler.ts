@@ -1,8 +1,9 @@
 import { BadRequestException } from '@nestjs/common';
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
 import { PricingBreakdownOutput } from '../../../../../shared/pricing/pricing-breakdown.output';
-import type { IRoomRepository } from '../../../domain/repositories/room.repository';
 import type { ComputePricingBreakdownService } from '../../../../../shared/pricing/compute-pricing-breakdown.service';
+import type { IRoomRepository } from '../../../domain/repositories/room.repository';
+import type { RoomStayPricingService } from '../../services/room-stay-pricing.service';
 import type { GetRoomPricingPreviewQuery } from '../queries/GetRoomPricingPreviewQuery';
 
 export class GetRoomPricingPreviewQueryHandler implements IQueryHandler<
@@ -11,6 +12,7 @@ export class GetRoomPricingPreviewQueryHandler implements IQueryHandler<
 > {
   constructor(
     private readonly roomRepository: IRoomRepository,
+    private readonly roomStayPricing: RoomStayPricingService,
     private readonly computePricingBreakdown: ComputePricingBreakdownService,
   ) {}
 
@@ -31,11 +33,17 @@ export class GetRoomPricingPreviewQueryHandler implements IQueryHandler<
       );
     }
 
+    const stayPricing = await this.roomStayPricing.resolveForRoom(
+      room,
+      query.startDate,
+      query.endDate,
+    );
+
     const breakdown = this.computePricingBreakdown.execute([
       {
         checkIn: query.startDate,
         checkOut: query.endDate,
-        pricePerNight: room.pricePerNight,
+        pricePerNight: stayPricing.averagePricePerNight,
         guestCount: query.guestCount,
         touristTaxPerGuestNight: room.property?.touristTaxPerGuestNight ?? 0,
         roomId: room.id,

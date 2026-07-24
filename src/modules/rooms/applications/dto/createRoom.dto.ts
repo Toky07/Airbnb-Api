@@ -4,6 +4,7 @@ export type CreateRoomDto = {
   name: string;
   description: string;
   pricePerNight: number;
+  weekendPricePerNight?: number | null;
   maxGuests: number;
   bedrooms: number;
   bathrooms: number;

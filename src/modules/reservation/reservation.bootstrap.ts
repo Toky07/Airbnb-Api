@@ -1,4 +1,4 @@
-import type { CalculateStayAmountService } from '../../shared/pricing/calculate-stay-amount.service';
+import type { RoomStayPricingService } from '../rooms/applications/services/room-stay-pricing.service';
 import type { IPaymentGateway } from '../payment/domain/ports/payment-gateway.port';
 import type { IPaymentRepository } from '../payment/domain/repositories/payment.repository';
 import type { IPropertyRepository } from '../properties/domain/repositories/property.repository';
@@ -38,7 +38,7 @@ export class ReservationBootstrap {
     paymentRepository: IPaymentRepository;
     paymentGateway: IPaymentGateway;
     checkRoomAvailability: CheckRoomAvailabilityService;
-    calculateStayAmount: CalculateStayAmountService;
+    roomStayPricing: RoomStayPricingService;
     enrichReservationOutputs: EnrichReservationOutputsService;
     resolvePaymentReservations: ResolvePaymentReservationsService;
     resolveHostPropertyIds: ResolveHostPropertyIdsService;
@@ -65,7 +65,7 @@ export class ReservationBootstrap {
         deps.reservationRepository,
         deps.roomRepository,
         deps.userRepository,
-        deps.calculateStayAmount,
+        deps.roomStayPricing,
         deps.enrichReservationOutputs,
       ),
       confirmReservationCommandHandler: new ConfirmReservationCommandHandler(

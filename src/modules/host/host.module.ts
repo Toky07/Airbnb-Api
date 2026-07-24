@@ -27,6 +27,9 @@ import { GetHostRoomAmenitiesQuery } from './applications/useCase/queries/GetHos
 import { CreateHostRoomBlockedDateCommand } from './applications/useCase/commands/CreateHostRoomBlockedDateCommand';
 import { DeleteHostRoomBlockedDateCommand } from './applications/useCase/commands/DeleteHostRoomBlockedDateCommand';
 import { ListHostRoomBlockedDatesQuery } from './applications/useCase/queries/ListHostRoomBlockedDatesQuery';
+import { CreateHostRoomRateOverrideCommand } from './applications/useCase/commands/CreateHostRoomRateOverrideCommand';
+import { DeleteHostRoomRateOverrideCommand } from './applications/useCase/commands/DeleteHostRoomRateOverrideCommand';
+import { ListHostRoomRateOverridesQuery } from './applications/useCase/queries/ListHostRoomRateOverridesQuery';
 
 @Module({
   imports: [UserModule, PropertiesModule, RoomsModule, AmenityModule],
@@ -83,6 +86,14 @@ export class HostModule implements OnModuleInit {
       DeleteHostRoomBlockedDateCommand,
       bootstrap.deleteHostRoomBlockedDateCommandHandler,
     );
+    CommandBus.register(
+      CreateHostRoomRateOverrideCommand,
+      bootstrap.createHostRoomRateOverrideCommandHandler,
+    );
+    CommandBus.register(
+      DeleteHostRoomRateOverrideCommand,
+      bootstrap.deleteHostRoomRateOverrideCommandHandler,
+    );
 
     QueryBus.register(
       GetHostProfileQuery,
@@ -112,6 +123,10 @@ export class HostModule implements OnModuleInit {
     QueryBus.register(
       ListHostRoomBlockedDatesQuery,
       bootstrap.listHostRoomBlockedDatesQueryHandler,
+    );
+    QueryBus.register(
+      ListHostRoomRateOverridesQuery,
+      bootstrap.listHostRoomRateOverridesQueryHandler,
     );
   }
 }

@@ -8,6 +8,7 @@ import {
   ROOM_REPOSITORY,
   type IRoomRepository,
 } from '../../../rooms/domain/repositories/room.repository';
+import { RoomStayPricingService } from '../../../rooms/applications/services/room-stay-pricing.service';
 
 @Injectable()
 export class BuildCartPricingBreakdownService {
@@ -15,6 +16,7 @@ export class BuildCartPricingBreakdownService {
     private readonly computePricingBreakdown: ComputePricingBreakdownService,
     @Inject(ROOM_REPOSITORY)
     private readonly roomRepository: IRoomRepository,
+    private readonly roomStayPricing: RoomStayPricingService,
   ) {}
 
   async buildFromCart(cart: Cart): Promise<PricingBreakdown> {
@@ -37,11 +39,17 @@ export class BuildCartPricingBreakdownService {
       throw new BadRequestException('Chambre introuvable.');
     }
 
+    const stayPricing = await this.roomStayPricing.resolveForRoom(
+      room,
+      input.startDate,
+      input.endDate,
+    );
+
     return this.computePricingBreakdown.execute([
       {
         checkIn: input.startDate,
         checkOut: input.endDate,
-        pricePerNight: room.pricePerNight,
+        pricePerNight: stayPricing.averagePricePerNight,
         guestCount: input.guestCount,
         touristTaxPerGuestNight: room.property?.touristTaxPerGuestNight ?? 0,
         roomId: room.id,
@@ -72,10 +80,16 @@ export class BuildCartPricingBreakdownService {
         continue;
       }
 
+      const stayPricing = await this.roomStayPricing.resolveForRoom(
+        room,
+        item.startDate,
+        item.endDate,
+      );
+
       lines.push({
         checkIn: item.startDate,
         checkOut: item.endDate,
-        pricePerNight: item.unitPrice,
+        pricePerNight: stayPricing.averagePricePerNight,
         guestCount: item.guestCount,
         touristTaxPerGuestNight: room.property?.touristTaxPerGuestNight ?? 0,
         roomId: item.roomId,

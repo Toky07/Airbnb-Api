@@ -3,6 +3,7 @@ import type { ReservationItemOrmEntity } from '../reservation/infrastructure/ent
 import type { IRoomRepository } from './domain/repositories/room.repository';
 import type { IRoomTypeRepository } from './domain/repositories/room-type.repository';
 import type { IRoomBlockedDateRepository } from './domain/repositories/room-blocked-date.repository';
+import type { IRoomRateOverrideRepository } from './domain/repositories/room-rate-override.repository';
 import { RoomDetailResolver } from './applications/services/room-detail.resolver';
 import type { RoomMediaPresenter } from './applications/presenters/room-media.presenter';
 import type { GenerateRoomSlugService } from './applications/services/generate-room-slug.service';
@@ -19,7 +20,11 @@ import { ListRoomTypeOptionsQueryHandler } from './applications/useCase/handlers
 import { CreateRoomBlockedDateCommandHandler } from './applications/useCase/handlers/CreateRoomBlockedDateCommandHandler';
 import { DeleteRoomBlockedDateCommandHandler } from './applications/useCase/handlers/DeleteRoomBlockedDateCommandHandler';
 import { ListRoomBlockedDatesQueryHandler } from './applications/useCase/handlers/ListRoomBlockedDatesQueryHandler';
+import { CreateRoomRateOverrideCommandHandler } from './applications/useCase/handlers/CreateRoomRateOverrideCommandHandler';
+import { DeleteRoomRateOverrideCommandHandler } from './applications/useCase/handlers/DeleteRoomRateOverrideCommandHandler';
+import { ListRoomRateOverridesQueryHandler } from './applications/useCase/handlers/ListRoomRateOverridesQueryHandler';
 import { GetRoomPricingPreviewQueryHandler } from './applications/useCase/handlers/GetRoomPricingPreviewQueryHandler';
+import type { RoomStayPricingService } from './applications/services/room-stay-pricing.service';
 import type { ComputePricingBreakdownService } from '../../shared/pricing/compute-pricing-breakdown.service';
 
 export class RoomsBootstrap {
@@ -27,8 +32,10 @@ export class RoomsBootstrap {
     roomRepository: IRoomRepository;
     roomTypeRepository: IRoomTypeRepository;
     roomBlockedDateRepository: IRoomBlockedDateRepository;
+    roomRateOverrideRepository: IRoomRateOverrideRepository;
     roomMediaPresenter: RoomMediaPresenter;
     generateRoomSlug: GenerateRoomSlugService;
+    roomStayPricing: RoomStayPricingService;
     reservationItemRepo: Repository<ReservationItemOrmEntity>;
     computePricingBreakdown: ComputePricingBreakdownService;
   }) {
@@ -85,8 +92,19 @@ export class RoomsBootstrap {
       listRoomBlockedDatesQueryHandler: new ListRoomBlockedDatesQueryHandler(
         deps.roomBlockedDateRepository,
       ),
+      createRoomRateOverrideCommandHandler:
+        new CreateRoomRateOverrideCommandHandler(
+          deps.roomRateOverrideRepository,
+          deps.roomRepository,
+        ),
+      deleteRoomRateOverrideCommandHandler:
+        new DeleteRoomRateOverrideCommandHandler(deps.roomRateOverrideRepository),
+      listRoomRateOverridesQueryHandler: new ListRoomRateOverridesQueryHandler(
+        deps.roomRateOverrideRepository,
+      ),
       getRoomPricingPreviewQueryHandler: new GetRoomPricingPreviewQueryHandler(
         deps.roomRepository,
+        deps.roomStayPricing,
         deps.computePricingBreakdown,
       ),
     };

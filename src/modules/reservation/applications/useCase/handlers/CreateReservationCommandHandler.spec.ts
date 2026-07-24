@@ -4,7 +4,8 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CalculateStayAmountService } from '../../../../../shared/pricing/calculate-stay-amount.service';
+import { ResolveDynamicStayAmountService } from '../../../../../shared/pricing/resolve-dynamic-stay-amount.service';
+import { RoomStayPricingService } from '../../../../rooms/applications/services/room-stay-pricing.service';
 import { Property } from '../../../../properties/domain/entities/property.entity';
 import { Room } from '../../../../rooms/domain/entities/room.entity';
 import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
@@ -22,6 +23,20 @@ function createEnrichMock() {
   return {
     enrich: vi.fn().mockImplementation(async (outputs: unknown[]) => outputs),
   };
+}
+
+function createRoomStayPricingMock() {
+  const resolver = new ResolveDynamicStayAmountService();
+  return {
+    resolveForRoom: vi.fn(async (room: Room, checkIn: string, checkOut: string) =>
+      resolver.resolve({
+        checkIn,
+        checkOut,
+        pricePerNight: room.pricePerNight,
+        weekendPricePerNight: room.weekendPricePerNight,
+      }),
+    ),
+  } as unknown as RoomStayPricingService;
 }
 
 describe('CreateReservationCommandHandler', () => {
@@ -70,7 +85,7 @@ describe('CreateReservationCommandHandler', () => {
       {
         findByAuthId: vi.fn().mockResolvedValue(user),
       } as unknown as IUserRepository,
-      new CalculateStayAmountService(),
+      createRoomStayPricingMock(),
       createEnrichMock() as never,
     );
 
@@ -111,7 +126,7 @@ describe('CreateReservationCommandHandler', () => {
       {
         findByAuthId: vi.fn().mockResolvedValue(user),
       } as unknown as IUserRepository,
-      new CalculateStayAmountService(),
+      createRoomStayPricingMock(),
       createEnrichMock() as never,
     );
 
@@ -136,7 +151,7 @@ describe('CreateReservationCommandHandler', () => {
       {
         findByAuthId: vi.fn().mockResolvedValue(null),
       } as unknown as IUserRepository,
-      new CalculateStayAmountService(),
+      createRoomStayPricingMock(),
       createEnrichMock() as never,
     );
 
@@ -163,7 +178,7 @@ describe('CreateReservationCommandHandler', () => {
       {
         findByAuthId: vi.fn().mockResolvedValue(user),
       } as unknown as IUserRepository,
-      new CalculateStayAmountService(),
+      createRoomStayPricingMock(),
       createEnrichMock() as never,
     );
 
