@@ -2,6 +2,22 @@ import type { InvoiceData } from '../../domain/types/invoice-data.type';
 import { INVOICE_PAYMENT_TYPE } from '../../domain/constants/invoice-payment-type.constant';
 import { InvoiceGenerateRequestedEvent } from '../../domain/events/invoice-generate-requested.event';
 
+import { vi } from 'vitest';
+import type { IInvoiceRepository } from '../../domain/repositories/invoice.repository';
+
+export function createInvoiceRepositoryMock(
+  overrides: Partial<IInvoiceRepository> = {},
+): IInvoiceRepository {
+  return {
+    create: vi.fn(),
+    findByPayment: vi.fn(),
+    findById: vi.fn(),
+    findByUserId: vi.fn(),
+    findPaginated: vi.fn(),
+    ...overrides,
+  };
+}
+
 export function createSampleInvoiceData(
   overrides: Partial<InvoiceData> = {},
 ): InvoiceData {

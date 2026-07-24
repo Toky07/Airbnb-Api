@@ -5,6 +5,7 @@ import type { InvoiceStorageService } from './infrastructure/storage/invoice-sto
 import { InvoiceNumberService } from './applications/services/invoice-number.service';
 import { CreateInvoiceCommandHandler } from './applications/useCase/handlers/CreateInvoiceCommandHandler';
 import { ListMyInvoicesQueryHandler } from './applications/useCase/handlers/ListMyInvoicesQueryHandler';
+import { ListInvoicesQueryHandler } from './applications/useCase/handlers/ListInvoicesQueryHandler';
 import { DownloadInvoiceQueryHandler } from './applications/useCase/handlers/DownloadInvoiceQueryHandler';
 
 export class InvoiceBootstrap {
@@ -24,6 +25,9 @@ export class InvoiceBootstrap {
       listMyInvoicesQueryHandler: new ListMyInvoicesQueryHandler(
         deps.invoiceRepository,
         deps.userRepository,
+      ),
+      listInvoicesQueryHandler: new ListInvoicesQueryHandler(
+        deps.invoiceRepository,
       ),
       downloadInvoiceQueryHandler: new DownloadInvoiceQueryHandler(
         deps.invoiceRepository,

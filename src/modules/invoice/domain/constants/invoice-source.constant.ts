@@ -1,4 +1,4 @@
-import type { EnvSource } from '../../../config/env.config';
+type EnvSource = NodeJS.ProcessEnv;
 
 export type InvoiceBrandConfig = {
   name: string;

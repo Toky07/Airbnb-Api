@@ -1,7 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
 import { PricingBreakdownOutput } from '../../../../../shared/pricing/pricing-breakdown.output';
-import type { IRoomRepository } from '../../domain/repositories/room.repository';
+import type { IRoomRepository } from '../../../domain/repositories/room.repository';
 import type { ComputePricingBreakdownService } from '../../../../../shared/pricing/compute-pricing-breakdown.service';
 import type { GetRoomPricingPreviewQuery } from '../queries/GetRoomPricingPreviewQuery';
 

@@ -19,6 +19,7 @@ import { QueryBus } from '../../shared/useCase/bus/query-bus';
 import { InvoiceGenerateRequestedEvent } from './domain/events/invoice-generate-requested.event';
 import { CreateInvoiceCommand } from './applications/useCase/commands/CreateInvoiceCommand';
 import { ListMyInvoicesQuery } from './applications/useCase/queries/ListMyInvoicesQuery';
+import { ListInvoicesQuery } from './applications/useCase/queries/ListInvoicesQuery';
 import { DownloadInvoiceQuery } from './applications/useCase/queries/DownloadInvoiceQuery';
 import { InvoiceBootstrap } from './invoice.bootstrap';
 
@@ -68,6 +69,10 @@ export class InvoiceModule implements OnModuleInit {
     QueryBus.register(
       ListMyInvoicesQuery,
       bootstrap.listMyInvoicesQueryHandler,
+    );
+    QueryBus.register(
+      ListInvoicesQuery,
+      bootstrap.listInvoicesQueryHandler,
     );
     QueryBus.register(
       DownloadInvoiceQuery,
