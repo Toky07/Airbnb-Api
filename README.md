@@ -21,8 +21,8 @@ Avec Docker : `make dev` depuis la racine du monorepo.
 |----------|-------------|
 | `npm run start:dev` | API en watch mode |
 | `npm run build` | Compile TypeScript → `dist/` |
-| `npm run test` | Tests unitaires (283+) |
-| `npm run test:e2e` | Tests e2e controllers (PostgreSQL `airbnb_test`) |
+| `npm run test` | Tests unitaires (370+) |
+| `npm run test:e2e` | Tests e2e controllers (PostgreSQL `airbnb_test`, 115+) |
 | `npm run import:sample-data` | Import CSV d’exemple |
 | `npm run migration:generate` | Génère une migration après changement d’entités |
 | `npm run migration:run` | Applique les migrations |
@@ -35,3 +35,5 @@ Modules sous `src/modules/` : Clean Architecture + CQRS (`commands/`, `queries/`
 Swagger (si activé) : `/api` ou documenté dans `main.ts`.
 
 Documentation monorepo : [../README.md](../README.md).
+
+OAuth Google (phase ultérieure) : [docs/OAUTH_GOOGLE.md](docs/OAUTH_GOOGLE.md).

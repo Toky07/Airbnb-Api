@@ -29,9 +29,13 @@ import { PROPERTY_REPOSITORY } from '../properties/infrastructure/repositories/p
 import type { IPropertyRepository } from '../properties/domain/repositories/property.repository';
 import { UserEntity } from '../user/infrastructure/entities/user.entity';
 import { PasswordSetupTokenOrmEntity } from './infrastructure/entities/password-setup-token.orm-entity';
+import { PasswordResetTokenOrmEntity } from './infrastructure/entities/password-reset-token.orm-entity';
 import { PASSWORD_SETUP_TOKEN_REPOSITORY } from './domain/repositories/password-setup-token.repository';
 import type { IPasswordSetupTokenRepository } from './domain/repositories/password-setup-token.repository';
 import { PasswordSetupTokenRepository } from './infrastructure/repositories/password-setup-token.repository';
+import { PASSWORD_RESET_TOKEN_REPOSITORY } from './domain/repositories/password-reset-token.repository';
+import type { IPasswordResetTokenRepository } from './domain/repositories/password-reset-token.repository';
+import { PasswordResetTokenRepository } from './infrastructure/repositories/password-reset-token.repository';
 import { AccountStatusSyncService } from './infrastructure/seed/account-status-sync.service';
 import { MailService } from '../mail/applications/services/mail.service';
 import { AuthBootstrap } from './auth.bootstrap';
@@ -50,6 +54,9 @@ import { GetMeQuery } from './applications/useCase/queries/GetMeQuery';
 import { ListRolesQuery } from './applications/useCase/queries/ListRolesQuery';
 import { ListPermissionsQuery } from './applications/useCase/queries/ListPermissionsQuery';
 import { ValidatePasswordSetupTokenQuery } from './applications/useCase/queries/ValidatePasswordSetupTokenQuery';
+import { ResetPasswordWithTokenCommand } from './applications/useCase/commands/ResetPasswordWithTokenCommand';
+import { RequestPasswordResetCommand } from './applications/useCase/commands/RequestPasswordResetCommand';
+import { ValidatePasswordResetTokenQuery } from './applications/useCase/queries/ValidatePasswordResetTokenQuery';
 import { RateLimitModule } from '../../shared/rate-limit.module';
 import { getJwtExpiresIn, getJwtSecret } from '../../config/env.config';
 
@@ -61,6 +68,7 @@ import { getJwtExpiresIn, getJwtSecret } from '../../config/env.config';
       Role,
       PermissionEntity,
       PasswordSetupTokenOrmEntity,
+      PasswordResetTokenOrmEntity,
       UserEntity,
     ]),
     JwtModule.registerAsync({
@@ -82,6 +90,7 @@ import { getJwtExpiresIn, getJwtSecret } from '../../config/env.config';
     AuthRbacSeedService,
     AccountStatusSyncService,
     PasswordSetupTokenRepository,
+    PasswordResetTokenRepository,
     {
       provide: AUTH_REPOSITORY,
       useClass: AuthRepository,
@@ -97,6 +106,10 @@ import { getJwtExpiresIn, getJwtSecret } from '../../config/env.config';
     {
       provide: PASSWORD_SETUP_TOKEN_REPOSITORY,
       useClass: PasswordSetupTokenRepository,
+    },
+    {
+      provide: PASSWORD_RESET_TOKEN_REPOSITORY,
+      useClass: PasswordResetTokenRepository,
     },
     {
       provide: APP_GUARD,
@@ -125,6 +138,8 @@ export class AuthModule implements OnModuleInit {
     private readonly propertyRepository: IPropertyRepository,
     @Inject(PASSWORD_SETUP_TOKEN_REPOSITORY)
     private readonly tokenRepository: IPasswordSetupTokenRepository,
+    @Inject(PASSWORD_RESET_TOKEN_REPOSITORY)
+    private readonly resetTokenRepository: IPasswordResetTokenRepository,
     @Inject(TOKEN_GENERATOR)
     private readonly tokenGenerator: TokenGenerator,
     private readonly ensurePropertyOwnerHostRole: EnsurePropertyOwnerHostRoleService,
@@ -138,6 +153,7 @@ export class AuthModule implements OnModuleInit {
       userRepository: this.userRepository,
       propertyRepository: this.propertyRepository,
       tokenRepository: this.tokenRepository,
+      resetTokenRepository: this.resetTokenRepository,
       tokenGenerator: this.tokenGenerator,
       ensurePropertyOwnerHostRole: this.ensurePropertyOwnerHostRole,
       mailService: this.mailService,
@@ -164,6 +180,14 @@ export class AuthModule implements OnModuleInit {
       SetPasswordWithTokenCommand,
       bootstrap.setPasswordWithTokenCommandHandler,
     );
+    CommandBus.register(
+      RequestPasswordResetCommand,
+      bootstrap.requestPasswordResetCommandHandler,
+    );
+    CommandBus.register(
+      ResetPasswordWithTokenCommand,
+      bootstrap.resetPasswordWithTokenCommandHandler,
+    );
 
     QueryBus.register(GetMeQuery, bootstrap.getMeQueryHandler);
     QueryBus.register(ListRolesQuery, bootstrap.listRolesQueryHandler);
@@ -174,6 +198,10 @@ export class AuthModule implements OnModuleInit {
     QueryBus.register(
       ValidatePasswordSetupTokenQuery,
       bootstrap.validatePasswordSetupTokenQueryHandler,
+    );
+    QueryBus.register(
+      ValidatePasswordResetTokenQuery,
+      bootstrap.validatePasswordResetTokenQueryHandler,
     );
   }
 }

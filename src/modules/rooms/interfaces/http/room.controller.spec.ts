@@ -91,7 +91,7 @@ describe('RoomController', () => {
       .getRepository(PropertyEntity)
       .save({ ...defaultProperty });
 
-    await repository.save({ ...defaultRoom, propertyId: property.id });
+    await repository.save({ ...defaultRoom, property });
 
     const response = await request(app.getHttpServer())
       .get('/rooms')
@@ -110,6 +110,76 @@ describe('RoomController', () => {
     );
   });
 
+  it('/GET rooms?minPrice&maxPrice&city filters rooms', async () => {
+    const cheapProperty = await dataSource.getRepository(PropertyEntity).save({
+      ...defaultProperty,
+      name: 'Budget Property',
+      city: 'Lyon',
+    });
+    const premiumProperty = await dataSource.getRepository(PropertyEntity).save({
+      ...defaultProperty,
+      name: 'Premium Property',
+      city: 'Paris',
+    });
+
+    const cheapRoom = await dataSource.getRepository(RoomEntity).save({
+      ...defaultRoom,
+      name: 'Budget Room',
+      pricePerNight: 80,
+      property: cheapProperty,
+    });
+    await dataSource.getRepository(RoomEntity).save({
+      ...defaultRoom,
+      name: 'Premium Room',
+      pricePerNight: 300,
+      property: premiumProperty,
+    });
+
+    const response = await request(app.getHttpServer())
+      .get('/rooms')
+      .query({ minPrice: 50, maxPrice: 120, city: 'Lyon', limit: 25 })
+      .expect(200);
+
+    const ids = (response.body.data as Array<{ id: number }>).map((room) => room.id);
+    expect(ids).toEqual([cheapRoom.id]);
+  });
+
+  it('/GET rooms?lat&lng&radiusKm filters rooms by distance', async () => {
+    const parisProperty = await dataSource.getRepository(PropertyEntity).save({
+      ...defaultProperty,
+      name: 'Paris Property',
+      city: 'Paris',
+      latitude: 48.8566,
+      longitude: 2.3522,
+    });
+    const lyonProperty = await dataSource.getRepository(PropertyEntity).save({
+      ...defaultProperty,
+      name: 'Lyon Property',
+      city: 'Lyon',
+      latitude: 45.764,
+      longitude: 4.8357,
+    });
+
+    const parisRoom = await dataSource.getRepository(RoomEntity).save({
+      ...defaultRoom,
+      name: 'Paris Room',
+      property: parisProperty,
+    });
+    await dataSource.getRepository(RoomEntity).save({
+      ...defaultRoom,
+      name: 'Lyon Room',
+      property: lyonProperty,
+    });
+
+    const response = await request(app.getHttpServer())
+      .get('/rooms')
+      .query({ lat: 48.8566, lng: 2.3522, radiusKm: 25, limit: 25 })
+      .expect(200);
+
+    const ids = (response.body.data as Array<{ id: number }>).map((room) => room.id);
+    expect(ids).toEqual([parisRoom.id]);
+  });
+
   it('/GET rooms?checkIn&checkOut excludes rooms with blocked dates', async () => {
     const property = await dataSource
       .getRepository(PropertyEntity)
@@ -118,12 +188,12 @@ describe('RoomController', () => {
     const availableRoom = await dataSource.getRepository(RoomEntity).save({
       ...defaultRoom,
       name: 'Available Suite',
-      propertyId: property.id,
+      property,
     });
     const blockedRoom = await dataSource.getRepository(RoomEntity).save({
       ...defaultRoom,
       name: 'Blocked Suite',
-      propertyId: property.id,
+      property,
     });
 
     await dataSource.getRepository(RoomBlockedDateOrmEntity).save({
@@ -238,7 +308,7 @@ describe('RoomController', () => {
 
     const room = await repository.save({
       ...defaultRoom,
-      propertyId: property.id,
+      property,
     });
 
     await request(app.getHttpServer())

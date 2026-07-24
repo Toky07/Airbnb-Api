@@ -10,6 +10,16 @@ describe('parsePaginationQuery', () => {
       propertyId: undefined,
       checkIn: undefined,
       checkOut: undefined,
+      minPrice: undefined,
+      maxPrice: undefined,
+      minGuests: undefined,
+      roomTypeId: undefined,
+      amenityIds: undefined,
+      city: undefined,
+      status: undefined,
+      lat: undefined,
+      lng: undefined,
+      radiusKm: undefined,
     });
   });
 

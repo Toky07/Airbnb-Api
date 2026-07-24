@@ -27,6 +27,10 @@ import { CartOrmEntity } from '../modules/cart/infrastructure/entities/cart.orm-
 import { CartItemOrmEntity } from '../modules/cart/infrastructure/entities/cart-item.orm-entity';
 import { InvoiceOrmEntity } from '../modules/invoice/infrastructure/entities/invoice.orm-entity';
 import { InvoiceSequenceOrmEntity } from '../modules/invoice/infrastructure/entities/invoice-sequence.orm-entity';
+import { ConversationOrmEntity } from '../modules/messaging/infrastructure/entities/conversation.orm-entity';
+import { MessageOrmEntity } from '../modules/messaging/infrastructure/entities/message.orm-entity';
+import { FavoriteOrmEntity } from '../modules/favorite/infrastructure/entities/favorite.orm-entity';
+import { ReviewOrmEntity } from '../modules/review/infrastructure/entities/review.orm-entity';
 
 export type RegisterPayload = {
   email: string;
@@ -71,6 +75,10 @@ export const DOMAIN_TEST_ENTITIES = [
   RoomAmenityOrmEntity,
   InvoiceOrmEntity,
   InvoiceSequenceOrmEntity,
+  ConversationOrmEntity,
+  MessageOrmEntity,
+  FavoriteOrmEntity,
+  ReviewOrmEntity,
 ] as const;
 
 export async function assignSuperAdminRole(

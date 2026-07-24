@@ -29,6 +29,10 @@ import { DeleteRoomCommand } from '../../applications/useCase/commands/DeleteRoo
 import { FindRoomQuery } from '../../applications/useCase/queries/FindRoomQuery';
 import { ListRoomsQuery } from '../../applications/useCase/queries/ListRoomsQuery';
 import { GetRoomPricingPreviewQuery } from '../../applications/useCase/queries/GetRoomPricingPreviewQuery';
+import { ListRoomReviewsQuery } from '../../../review/applications/useCase/queries/ListRoomReviewsQuery';
+import { GetRoomRatingSummaryQuery } from '../../../review/applications/useCase/queries/GetRoomRatingSummaryQuery';
+import { ReviewOutput } from '../../../review/applications/dto/review.output';
+import { RoomRatingSummaryOutput } from '../../../review/applications/dto/room-rating-summary.output';
 
 @Controller('rooms')
 export class RoomController {
@@ -38,6 +42,25 @@ export class RoomController {
     @Query() query: Record<string, unknown>,
   ): Promise<PaginatedResult<RoomOutput>> {
     return QueryBus.execute(new ListRoomsQuery(parsePaginationQuery(query)));
+  }
+
+  @Public()
+  @Get('by-slug/:slug/reviews')
+  async reviewsBySlug(
+    @Param('slug') slug: string,
+    @Query() query: Record<string, unknown>,
+  ): Promise<PaginatedResult<ReviewOutput>> {
+    return QueryBus.execute(
+      new ListRoomReviewsQuery(slug, parsePaginationQuery(query)),
+    );
+  }
+
+  @Public()
+  @Get('by-slug/:slug/rating-summary')
+  async ratingSummaryBySlug(
+    @Param('slug') slug: string,
+  ): Promise<RoomRatingSummaryOutput> {
+    return QueryBus.execute(new GetRoomRatingSummaryQuery(slug));
   }
 
   @Public()

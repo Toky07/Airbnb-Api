@@ -11,6 +11,7 @@ import { Room } from '../../domain/entities/room.entity';
 import { RoomEntity } from '../entities/room.entity';
 import { IRoomRepository } from '../../domain/repositories/room.repository';
 import { RoomMapper } from '../mappers/room.mapper';
+import { applyRoomListFilters } from './apply-room-list-filters';
 
 @Injectable()
 export class RoomRepository implements IRoomRepository {
@@ -45,19 +46,7 @@ export class RoomRepository implements IRoomRepository {
       .leftJoinAndSelect('room.roomType', 'roomType')
       .orderBy('room.name', 'ASC');
 
-    if (params.propertyId) {
-      qb.andWhere('room.propertyId = :propertyId', {
-        propertyId: params.propertyId,
-      });
-    }
-
-    if (params.search) {
-      const term = `%${params.search}%`;
-      qb.andWhere(
-        '(room.name LIKE :term OR room.description LIKE :term OR property.name LIKE :term)',
-        { term },
-      );
-    }
+    applyRoomListFilters(qb, params);
 
     if (params.checkIn && params.checkOut) {
       qb.andWhere(

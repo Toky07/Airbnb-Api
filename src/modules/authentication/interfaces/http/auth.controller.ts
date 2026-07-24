@@ -33,6 +33,9 @@ import { RegisterHostCommand } from '../../../user/applications/useCase/commands
 import { UpdateMyProfileCommand } from '../../../user/applications/useCase/commands/UpdateMyProfileCommand';
 import { LoginCommand } from '../../applications/useCase/commands/LoginCommand';
 import { AssignRoleCommand } from '../../applications/useCase/commands/AssignRoleCommand';
+import { ResetPasswordWithTokenCommand } from '../../applications/useCase/commands/ResetPasswordWithTokenCommand';
+import { RequestPasswordResetCommand } from '../../applications/useCase/commands/RequestPasswordResetCommand';
+import { ValidatePasswordResetTokenQuery } from '../../applications/useCase/queries/ValidatePasswordResetTokenQuery';
 import { GetMeQuery } from '../../applications/useCase/queries/GetMeQuery';
 
 @Controller('auth')
@@ -84,6 +87,37 @@ export class AuthController {
   ): Promise<{ success: boolean }> {
     await CommandBus.execute(
       new SetPasswordWithTokenCommand(body.token, body.password),
+    );
+    return { success: true };
+  }
+
+  @Public()
+  @SensitiveRouteThrottle(AUTH_PASSWORD_SETUP_THROTTLE)
+  @Post('forgot-password')
+  @HttpCode(200)
+  async forgotPassword(
+    @Body() body: { email: string },
+  ): Promise<{ success: boolean }> {
+    await CommandBus.execute(new RequestPasswordResetCommand(body.email));
+    return { success: true };
+  }
+
+  @Public()
+  @SensitiveRouteThrottle(AUTH_PASSWORD_SETUP_THROTTLE)
+  @Get('reset-password/validate')
+  async validatePasswordReset(@Query('token') token: string) {
+    return QueryBus.execute(new ValidatePasswordResetTokenQuery(token));
+  }
+
+  @Public()
+  @SensitiveRouteThrottle(AUTH_PASSWORD_SETUP_THROTTLE)
+  @Post('reset-password')
+  @HttpCode(200)
+  async resetPassword(
+    @Body() body: { token: string; password: string },
+  ): Promise<{ success: boolean }> {
+    await CommandBus.execute(
+      new ResetPasswordWithTokenCommand(body.token, body.password),
     );
     return { success: true };
   }

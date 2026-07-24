@@ -99,11 +99,12 @@ describe('RoomTypeController', () => {
     ).toBe(true);
   });
 
-  it('GET /room-types/options rejects host without rooms.read', async () => {
+  it('GET /room-types/options is public for search filters', async () => {
+    await request(app.getHttpServer()).get('/room-types/options').expect(200);
     await request(app.getHttpServer())
       .get('/room-types/options')
       .set('Authorization', `Bearer ${hostToken}`)
-      .expect(403);
+      .expect(200);
   });
 
   it('GET /room-types rejects non super admin users', async () => {
@@ -119,10 +120,6 @@ describe('RoomTypeController', () => {
       .set('Authorization', `Bearer ${hostToken}`)
       .send({ name: 'Forbidden Room Type' })
       .expect(403);
-  });
-
-  it('GET /room-types/options rejects unauthenticated requests', async () => {
-    await request(app.getHttpServer()).get('/room-types/options').expect(401);
   });
 
   it('POST /room-types creates a room type', async () => {

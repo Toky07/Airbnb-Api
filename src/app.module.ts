@@ -14,6 +14,9 @@ import { ReservationModule } from './modules/reservation/reservation.module';
 import { CartModule } from './modules/cart/cart.module';
 import { InvoiceModule } from './modules/invoice/invoice.module';
 import { AmenityModule } from './modules/amenity/amenity.module';
+import { MessagingModule } from './modules/messaging/messaging.module';
+import { FavoriteModule } from './modules/favorite/favorite.module';
+import { ReviewModule } from './modules/review/review.module';
 import { getDatabaseConfig } from './config/database.config';
 import { getCacheConfig } from './config/cache.config';
 import { HealthController } from './health/health.controller';
@@ -40,6 +43,9 @@ import { AbsoluteMediaUrlInterceptor } from './shared/interceptors/absolute-medi
     CartModule,
     InvoiceModule,
     AmenityModule,
+    MessagingModule,
+    FavoriteModule,
+    ReviewModule,
   ],
   controllers: [HealthController],
   providers: [

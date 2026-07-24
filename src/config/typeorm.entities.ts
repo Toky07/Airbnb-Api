@@ -11,6 +11,7 @@ import { RoomRateOverrideOrmEntity } from '../modules/rooms/infrastructure/entit
 import { MediaOrmEntity } from '../modules/media/infrastructure/entities/media-orm.entity';
 import { EmailOrmEntity } from '../modules/mail/infrastructure/entities/email.orm-entity';
 import { PasswordSetupTokenOrmEntity } from '../modules/authentication/infrastructure/entities/password-setup-token.orm-entity';
+import { PasswordResetTokenOrmEntity } from '../modules/authentication/infrastructure/entities/password-reset-token.orm-entity';
 import { PaymentOrmEntity } from '../modules/payment/infrastructure/entities/payment.orm-entity';
 import { ReservationOrmEntity } from '../modules/reservation/infrastructure/entities/reservation.orm-entity';
 import { ReservationItemOrmEntity } from '../modules/reservation/infrastructure/entities/reservation-item.orm-entity';
@@ -21,6 +22,10 @@ import { PropertyAmenityOrmEntity } from '../modules/amenity/infrastructure/enti
 import { RoomAmenityOrmEntity } from '../modules/amenity/infrastructure/entities/room-amenity.orm-entity';
 import { InvoiceOrmEntity } from '../modules/invoice/infrastructure/entities/invoice.orm-entity';
 import { InvoiceSequenceOrmEntity } from '../modules/invoice/infrastructure/entities/invoice-sequence.orm-entity';
+import { ConversationOrmEntity } from '../modules/messaging/infrastructure/entities/conversation.orm-entity';
+import { MessageOrmEntity } from '../modules/messaging/infrastructure/entities/message.orm-entity';
+import { FavoriteOrmEntity } from '../modules/favorite/infrastructure/entities/favorite.orm-entity';
+import { ReviewOrmEntity } from '../modules/review/infrastructure/entities/review.orm-entity';
 
 export const TYPEORM_ENTITIES = [
   AuthEntity,
@@ -36,6 +41,7 @@ export const TYPEORM_ENTITIES = [
   MediaOrmEntity,
   EmailOrmEntity,
   PasswordSetupTokenOrmEntity,
+  PasswordResetTokenOrmEntity,
   PaymentOrmEntity,
   ReservationOrmEntity,
   ReservationItemOrmEntity,
@@ -46,4 +52,8 @@ export const TYPEORM_ENTITIES = [
   RoomAmenityOrmEntity,
   InvoiceOrmEntity,
   InvoiceSequenceOrmEntity,
+  ConversationOrmEntity,
+  MessageOrmEntity,
+  FavoriteOrmEntity,
+  ReviewOrmEntity,
 ];
