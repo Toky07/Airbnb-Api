@@ -4,7 +4,7 @@ import type { IAuthRepository } from '../../../../authentication/domain/reposito
 import type { IRoleRepository } from '../../../../authentication/domain/repositories/role.repository';
 import type { IUserRepository } from '../../../domain/repositories/user.repository';
 import { EmailVO } from '../../../../../shared/valueObject/email.vo';
-import { HOST_ROLE_SLUG } from '../../../../authentication/domain/constants/permissions.constant';
+import { TRAVELER_ROLE_SLUG } from '../../../../authentication/domain/constants/system-roles.constant';
 import { User } from '../../../domain/entities/user.entity';
 import { UserNameVO } from '../../../domain/valueObject/username.vo';
 import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
@@ -67,15 +67,17 @@ export class RegisterHostCommandHandler implements ICommandHandler<
 
     await this.userRepository.linkAuthAccount(createdUser.id, pendingAuth.id);
 
-    const hostRole = await this.roleRepository.findBySlug(HOST_ROLE_SLUG);
-    if (hostRole?.id) {
-      await this.authRepository.assignRoles(pendingAuth.id, [hostRole.id]);
+    const travelerRole = await this.roleRepository.findBySlug(
+      TRAVELER_ROLE_SLUG,
+    );
+    if (travelerRole?.id) {
+      await this.authRepository.assignRoles(pendingAuth.id, [travelerRole.id]);
     }
 
     await CommandBus.execute(
       new SendAccountInvitationCommand({
         userId: createdUser.id,
-        sourceModule: 'host-registration',
+        sourceModule: 'user-registration',
       }),
     );
 

@@ -1,18 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { AUTH_REPOSITORY } from '../../domain/repositories/auth.repository';
 import type { IAuthRepository } from '../../domain/repositories/auth.repository';
-import { ROLE_REPOSITORY } from '../../domain/repositories/role.repository';
-import type { IRoleRepository } from '../../domain/repositories/role.repository';
 import { USER_REPOSITORY } from '../../../user/infrastructure/repositories/user.repository';
 import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
 import { HOST_ROLE_SLUG } from '../../domain/constants/permissions.constant';
+import { EnsureAuthHasRoleService } from './ensure-auth-has-role.service';
 
 @Injectable()
 export class EnsurePropertyOwnerHostRoleService {
   constructor(
     @Inject(AUTH_REPOSITORY) private readonly authRepository: IAuthRepository,
-    @Inject(ROLE_REPOSITORY) private readonly roleRepository: IRoleRepository,
     @Inject(USER_REPOSITORY) private readonly userRepository: IUserRepository,
+    private readonly ensureAuthHasRole: EnsureAuthHasRoleService,
   ) {}
 
   async executeForOwnerUserId(userId: number): Promise<boolean> {
@@ -29,21 +28,6 @@ export class EnsurePropertyOwnerHostRoleService {
       return false;
     }
 
-    const hasHostRole = auth.roles.some((role) => role.slug === HOST_ROLE_SLUG);
-    if (hasHostRole) {
-      return false;
-    }
-
-    const hostRole = await this.roleRepository.findBySlug(HOST_ROLE_SLUG);
-    if (!hostRole?.id) {
-      return false;
-    }
-
-    const roleIds = auth.roles
-      .map((role) => role.id)
-      .filter((id): id is number => id != null);
-
-    await this.authRepository.assignRoles(auth.id, [...roleIds, hostRole.id]);
-    return true;
+    return this.ensureAuthHasRole.execute(auth.id, HOST_ROLE_SLUG);
   }
 }

@@ -1,7 +1,7 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import type { IRoleRepository } from '../../../domain/repositories/role.repository';
-import { SUPERADMIN_ROLE_SLUG } from '../../../domain/constants/permissions.constant';
+import { isSystemRoleSlug } from '../../../domain/constants/system-roles.constant';
 import type { DeleteRoleCommand } from '../commands/DeleteRoleCommand';
 
 export class DeleteRoleCommandHandler implements ICommandHandler<
@@ -17,9 +17,9 @@ export class DeleteRoleCommandHandler implements ICommandHandler<
       throw new NotFoundException('Role not found');
     }
 
-    if (role.slug === SUPERADMIN_ROLE_SLUG) {
+    if (isSystemRoleSlug(role.slug)) {
       throw new ForbiddenException(
-        'Le rôle super administrateur ne peut pas être supprimé',
+        'Les rôles système ne peuvent pas être supprimés',
       );
     }
 

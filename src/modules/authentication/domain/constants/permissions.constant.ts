@@ -1,5 +1,6 @@
 export const SUPERADMIN_ROLE_SLUG = 'superadmin';
 export const HOST_ROLE_SLUG = 'host';
+export const TRAVELER_ROLE_SLUG = 'traveler';
 
 export type PermissionDefinition = {
   key: string;

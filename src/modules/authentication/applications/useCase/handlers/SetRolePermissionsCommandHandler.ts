@@ -2,7 +2,7 @@ import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import type { IRoleRepository } from '../../../domain/repositories/role.repository';
 import { RoleOutput } from '../../dto/role.output';
-import { SUPERADMIN_ROLE_SLUG } from '../../../domain/constants/permissions.constant';
+import { isPermissionLockedRoleSlug } from '../../../domain/constants/system-roles.constant';
 import type { SetRolePermissionsCommand } from '../commands/SetRolePermissionsCommand';
 
 export class SetRolePermissionsCommandHandler implements ICommandHandler<
@@ -18,7 +18,7 @@ export class SetRolePermissionsCommandHandler implements ICommandHandler<
       throw new NotFoundException('Role not found');
     }
 
-    if (role.slug === SUPERADMIN_ROLE_SLUG) {
+    if (isPermissionLockedRoleSlug(role.slug)) {
       throw new ForbiddenException(
         'Les permissions du super administrateur ne peuvent pas être modifiées',
       );

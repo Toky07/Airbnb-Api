@@ -5,6 +5,7 @@ import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import type { IAuthRepository } from '../../domain/repositories/auth.repository';
 import { AUTH_REPOSITORY } from '../../domain/repositories/auth.repository';
 import { buildJwtPayload } from '../../domain/utils/build-jwt-payload';
+import { ACCOUNT_STATUS } from '../../domain/constants/account-status.constant';
 
 @Injectable()
 export class JwtTokenGenerator implements TokenGenerator {
@@ -22,7 +23,7 @@ export class JwtTokenGenerator implements TokenGenerator {
   }): Promise<string> {
     const auth = await this.authRepository.findByEmail(email);
 
-    if (!auth || !auth.password || auth.status !== 'active') {
+    if (!auth || !auth.password || auth.status !== ACCOUNT_STATUS.ACTIVE) {
       throw new UnauthorizedException(
         'Compte non activé. Consultez votre email pour définir votre mot de passe.',
       );
@@ -34,6 +35,16 @@ export class JwtTokenGenerator implements TokenGenerator {
 
     if (!auth.id) {
       throw new UnauthorizedException('Invalid credentials');
+    }
+
+    return this.jwtService.signAsync(buildJwtPayload(auth));
+  }
+
+  async generateForAuthId(authId: number): Promise<string> {
+    const auth = await this.authRepository.findById(authId);
+
+    if (!auth?.id || auth.status !== ACCOUNT_STATUS.ACTIVE) {
+      throw new UnauthorizedException('Compte non activé.');
     }
 
     return this.jwtService.signAsync(buildJwtPayload(auth));

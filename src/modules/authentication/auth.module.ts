@@ -20,6 +20,7 @@ import { AuthRbacSeedService } from './infrastructure/seed/auth-rbac.seed';
 import { AuthGuard } from './interfaces/guard/auth.guard';
 import { PermissionsGuard } from './interfaces/guard/permissions.guard';
 import { EnsurePropertyOwnerHostRoleService } from './applications/services/ensure-property-owner-host-role.service';
+import { EnsureAuthHasRoleService } from './applications/services/ensure-auth-has-role.service';
 import { UserModule } from '../user/user.module';
 import { PropertiesModule } from '../properties/properties.module';
 import { MailModule } from '../mail/mail.module';
@@ -57,6 +58,7 @@ import { ValidatePasswordSetupTokenQuery } from './applications/useCase/queries/
 import { ResetPasswordWithTokenCommand } from './applications/useCase/commands/ResetPasswordWithTokenCommand';
 import { RequestPasswordResetCommand } from './applications/useCase/commands/RequestPasswordResetCommand';
 import { ValidatePasswordResetTokenQuery } from './applications/useCase/queries/ValidatePasswordResetTokenQuery';
+import { BecomeHostCommand } from './applications/useCase/commands/BecomeHostCommand';
 import { RateLimitModule } from '../../shared/rate-limit.module';
 import { getJwtExpiresIn, getJwtSecret } from '../../config/env.config';
 
@@ -86,6 +88,7 @@ import { getJwtExpiresIn, getJwtSecret } from '../../config/env.config';
   ],
   controllers: [AuthController, RoleController],
   providers: [
+    EnsureAuthHasRoleService,
     EnsurePropertyOwnerHostRoleService,
     AuthRbacSeedService,
     AccountStatusSyncService,
@@ -123,6 +126,7 @@ import { getJwtExpiresIn, getJwtSecret } from '../../config/env.config';
   exports: [
     AUTH_REPOSITORY,
     ROLE_REPOSITORY,
+    EnsureAuthHasRoleService,
     EnsurePropertyOwnerHostRoleService,
   ],
 })
@@ -142,6 +146,7 @@ export class AuthModule implements OnModuleInit {
     private readonly resetTokenRepository: IPasswordResetTokenRepository,
     @Inject(TOKEN_GENERATOR)
     private readonly tokenGenerator: TokenGenerator,
+    private readonly ensureAuthHasRole: EnsureAuthHasRoleService,
     private readonly ensurePropertyOwnerHostRole: EnsurePropertyOwnerHostRoleService,
     private readonly mailService: MailService,
   ) {}
@@ -155,6 +160,7 @@ export class AuthModule implements OnModuleInit {
       tokenRepository: this.tokenRepository,
       resetTokenRepository: this.resetTokenRepository,
       tokenGenerator: this.tokenGenerator,
+      ensureAuthHasRole: this.ensureAuthHasRole,
       ensurePropertyOwnerHostRole: this.ensurePropertyOwnerHostRole,
       mailService: this.mailService,
     });
@@ -171,6 +177,10 @@ export class AuthModule implements OnModuleInit {
     CommandBus.register(
       SetRolePermissionsCommand,
       bootstrap.setRolePermissionsCommandHandler,
+    );
+    CommandBus.register(
+      BecomeHostCommand,
+      bootstrap.becomeHostCommandHandler,
     );
     CommandBus.register(
       SendAccountInvitationCommand,
