@@ -35,15 +35,20 @@ export class CompleteCartCheckoutCommandHandler implements ICommandHandler<
         (event) => event.correlationId === correlationId,
       );
 
-    await EventBus.getInstance().publish(
-      new CartCheckoutCompleteRequestedEvent(
-        correlationId,
-        command.authId,
-        Number(command.paymentId),
-      ),
-    );
+    try {
+      await EventBus.getInstance().publish(
+        new CartCheckoutCompleteRequestedEvent(
+          correlationId,
+          command.authId,
+          Number(command.paymentId),
+        ),
+      );
+    } catch (error) {
+      waitForVerification.cancel();
+      throw error;
+    }
 
-    const verified = await waitForVerification;
+    const verified = await waitForVerification.promise;
     await this.cartRepository.clearItems(verified.cartId);
 
     const cart = await this.resolveCartService.resolve({

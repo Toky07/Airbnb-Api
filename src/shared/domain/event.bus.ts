@@ -2,8 +2,18 @@ import { DomainEvent } from './domain.event';
 
 type Handler<T extends DomainEvent> = (event: T) => Promise<void>;
 
+type PendingWait = {
+  cancel: () => void;
+};
+
+export type WaitOnceHandle<T extends DomainEvent> = {
+  promise: Promise<T>;
+  cancel: () => void;
+};
+
 export class EventBus {
   private handlers = new Map<string, Handler<any>[]>();
+  private pendingWaits = new Set<PendingWait>();
   private static instance: EventBus | null = null;
 
   private constructor() {}
@@ -39,29 +49,62 @@ export class EventBus {
     eventName: string,
     predicate: (event: T) => boolean,
     timeoutMs = 15000,
-  ): Promise<T> {
-    return new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => {
+  ): WaitOnceHandle<T> {
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+    let handler: Handler<T> | undefined;
+    let settled = false;
+
+    const waitHandle: PendingWait = {
+      cancel: () => {
+        /* assigned below */
+      },
+    };
+
+    const cleanup = () => {
+      if (settled) {
+        return;
+      }
+      settled = true;
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+      if (handler) {
         this.unsubscribe(eventName, handler);
+      }
+      this.pendingWaits.delete(waitHandle);
+    };
+
+    waitHandle.cancel = cleanup;
+
+    const promise = new Promise<T>((resolve, reject) => {
+      timeout = setTimeout(() => {
+        cleanup();
         reject(new Error(`Timeout waiting for ${eventName}`));
       }, timeoutMs);
 
-      const handler = async (event: T) => {
+      handler = async (event: T) => {
         if (!predicate(event)) {
           return;
         }
 
-        clearTimeout(timeout);
-        this.unsubscribe(eventName, handler);
+        cleanup();
         resolve(event);
       };
 
       this.subscribe(eventName, handler);
     });
+
+    this.pendingWaits.add(waitHandle);
+
+    return { promise, cancel: cleanup };
   }
 
-  /** Clears all handlers — used between e2e files when the module graph is shared. */
+  /** Clears all handlers and cancels pending waitOnce subscriptions. */
   clear(): void {
+    for (const wait of [...this.pendingWaits]) {
+      wait.cancel();
+    }
+    this.pendingWaits.clear();
     this.handlers.clear();
   }
 }

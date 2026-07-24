@@ -81,6 +81,7 @@ describe('Roles', () => {
       slug: 'test',
       description: null,
       permissionKeys: [],
+      isSystem: false,
     });
   });
 
@@ -100,6 +101,7 @@ describe('Roles', () => {
           slug: 'test-role',
           description: null,
           permissionKeys: [],
+          isSystem: false,
         },
       ]),
     );
@@ -120,6 +122,7 @@ describe('Roles', () => {
       slug: 'test-role',
       description: null,
       permissionKeys: [],
+      isSystem: false,
     });
   });
 

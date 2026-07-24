@@ -17,6 +17,7 @@ import { MediaOrmEntity } from '../../../media/infrastructure/entities/media-orm
 import { MediaModule } from '../../../media/media.module';
 import {
   AUTH_TEST_ENTITIES,
+  assignHostRole,
   clearEntitiesForTests,
   DOMAIN_TEST_ENTITIES,
   activateAuthAccountForTests,
@@ -47,7 +48,6 @@ describe('MailController', () => {
         ),
         JwtModule.register({
           global: true,
-          secret: '1234',
           secret: '1234',
           signOptions: { expiresIn: '5h' },
         }),
@@ -126,6 +126,8 @@ describe('MailController', () => {
       ];
       await roleRepo.save(hostRole);
     }
+
+    await assignHostRole(dataSource, 'mail-host@test.com');
 
     const relogin = await request(app.getHttpServer())
       .post('/auth/login')
