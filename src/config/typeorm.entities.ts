@@ -7,6 +7,7 @@ import { PropertyTypeEntity } from '../modules/properties/infrastructure/entitie
 import { RoomEntity } from '../modules/rooms/infrastructure/entities/room.entity';
 import { RoomTypeEntity } from '../modules/rooms/infrastructure/entities/room-type.entity';
 import { RoomBlockedDateOrmEntity } from '../modules/rooms/infrastructure/entities/room-blocked-date.orm-entity';
+import { RoomRateOverrideOrmEntity } from '../modules/rooms/infrastructure/entities/room-rate-override.orm-entity';
 import { MediaOrmEntity } from '../modules/media/infrastructure/entities/media-orm.entity';
 import { EmailOrmEntity } from '../modules/mail/infrastructure/entities/email.orm-entity';
 import { PasswordSetupTokenOrmEntity } from '../modules/authentication/infrastructure/entities/password-setup-token.orm-entity';
@@ -31,6 +32,7 @@ export const TYPEORM_ENTITIES = [
   RoomEntity,
   RoomTypeEntity,
   RoomBlockedDateOrmEntity,
+  RoomRateOverrideOrmEntity,
   MediaOrmEntity,
   EmailOrmEntity,
   PasswordSetupTokenOrmEntity,

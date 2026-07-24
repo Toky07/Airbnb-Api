@@ -8,6 +8,7 @@ import { AddPaymentRefundFields1783920447449 } from '../database/migrations/1783
 import { AddPropertyTouristTax1783920447450 } from '../database/migrations/1783920447450-AddPropertyTouristTax';
 import { AddPaymentPricingBreakdown1783920447451 } from '../database/migrations/1783920447451-AddPaymentPricingBreakdown';
 import { AddInvoiceSequences1783920447452 } from '../database/migrations/1783920447452-AddInvoiceSequences';
+import { AddDynamicPricing1783920447453 } from '../database/migrations/1783920447453-AddDynamicPricing';
 import { TYPEORM_ENTITIES } from '../config/typeorm.entities';
 import { EventBus } from '../shared/domain/event.bus';
 
@@ -57,6 +58,7 @@ async function createAdminDataSource(): Promise<DataSource> {
       AddPropertyTouristTax1783920447450,
       AddPaymentPricingBreakdown1783920447451,
       AddInvoiceSequences1783920447452,
+      AddDynamicPricing1783920447453,
     ],
     synchronize: false,
   });
