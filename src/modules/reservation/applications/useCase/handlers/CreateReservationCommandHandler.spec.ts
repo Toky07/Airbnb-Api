@@ -28,13 +28,14 @@ function createEnrichMock() {
 function createRoomStayPricingMock() {
   const resolver = new ResolveDynamicStayAmountService();
   return {
-    resolveForRoom: vi.fn(async (room: Room, checkIn: string, checkOut: string) =>
-      resolver.resolve({
-        checkIn,
-        checkOut,
-        pricePerNight: room.pricePerNight,
-        weekendPricePerNight: room.weekendPricePerNight,
-      }),
+    resolveForRoom: vi.fn(
+      async (room: Room, checkIn: string, checkOut: string) =>
+        resolver.resolve({
+          checkIn,
+          checkOut,
+          pricePerNight: room.pricePerNight,
+          weekendPricePerNight: room.weekendPricePerNight,
+        }),
     ),
   } as unknown as RoomStayPricingService;
 }

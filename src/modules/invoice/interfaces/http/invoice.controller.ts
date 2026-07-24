@@ -40,7 +40,9 @@ export class InvoiceController {
 
   @Get(':id/download')
   @RequirePermissions('invoices.read')
-  downloadAdmin(@Param('id', ParseIntPipe) id: number): Promise<StreamableFile> {
+  downloadAdmin(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<StreamableFile> {
     return QueryBus.execute(new DownloadInvoiceQuery(id, null, true));
   }
 }

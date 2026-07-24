@@ -15,7 +15,9 @@ export class ComputePricingBreakdownService {
 
   execute(lines: PricingLineInput[]): PricingBreakdown {
     if (lines.length === 0) {
-      throw new BadRequestException('Au moins une ligne de tarification est requise.');
+      throw new BadRequestException(
+        'Au moins une ligne de tarification est requise.',
+      );
     }
 
     const vatRate = getVatRate();

@@ -29,7 +29,8 @@ export function parseRoomBody(body: Record<string, unknown>): CreateRoomDto {
     description: String(body.description),
     pricePerNight: Number(body.pricePerNight),
     weekendPricePerNight:
-      body.weekendPricePerNight === undefined || body.weekendPricePerNight === ''
+      body.weekendPricePerNight === undefined ||
+      body.weekendPricePerNight === ''
         ? null
         : Number(body.weekendPricePerNight),
     maxGuests: Number(body.maxGuests),

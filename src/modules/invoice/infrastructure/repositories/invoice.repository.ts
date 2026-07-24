@@ -33,7 +33,8 @@ function mapRawInvoiceListRow(row: RawInvoiceListRow): InvoiceListRecord {
     userId: Number(row.userId),
     customerName: row.customerName?.trim() || '—',
     customerEmail: row.customerEmail?.trim() || '—',
-    createdAt: row.createdAt instanceof Date ? row.createdAt : new Date(row.createdAt),
+    createdAt:
+      row.createdAt instanceof Date ? row.createdAt : new Date(row.createdAt),
   };
 }
 

@@ -70,10 +70,7 @@ export class InvoiceModule implements OnModuleInit {
       ListMyInvoicesQuery,
       bootstrap.listMyInvoicesQueryHandler,
     );
-    QueryBus.register(
-      ListInvoicesQuery,
-      bootstrap.listInvoicesQueryHandler,
-    );
+    QueryBus.register(ListInvoicesQuery, bootstrap.listInvoicesQueryHandler);
     QueryBus.register(
       DownloadInvoiceQuery,
       bootstrap.downloadInvoiceQueryHandler,

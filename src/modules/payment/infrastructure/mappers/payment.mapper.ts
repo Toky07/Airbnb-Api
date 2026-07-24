@@ -63,10 +63,7 @@ export class PaymentMapper {
     entity.invoiceNotificationsSentAt = payment.invoiceNotificationsSentAt;
     entity.refundedAmount = payment.refundedAmount;
     entity.refundTransactionId = payment.refundTransactionId;
-    entity.pricingBreakdown = payment.pricingBreakdown as Record<
-      string,
-      unknown
-    > | null;
+    entity.pricingBreakdown = payment.pricingBreakdown;
     return entity;
   }
 }

@@ -1,4 +1,4 @@
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import { ForbiddenException } from '@nestjs/common';
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
 import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
 import { InvoiceOutput } from '../../dto/invoice.output';

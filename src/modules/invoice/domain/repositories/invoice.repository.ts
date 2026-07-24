@@ -16,5 +16,7 @@ export interface IInvoiceRepository {
   ): Promise<Invoice | null>;
   findById(id: number): Promise<Invoice | null>;
   findByUserId(userId: number): Promise<Invoice[]>;
-  findPaginated(params: PaginationParams): Promise<PaginatedResult<InvoiceListRecord>>;
+  findPaginated(
+    params: PaginationParams,
+  ): Promise<PaginatedResult<InvoiceListRecord>>;
 }

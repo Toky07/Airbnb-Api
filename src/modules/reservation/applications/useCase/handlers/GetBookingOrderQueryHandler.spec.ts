@@ -98,7 +98,10 @@ describe('GetBookingOrderQueryHandler', () => {
       }),
     );
 
-    expect(invoiceRepository.findByPayment).toHaveBeenCalledWith('reservation', 7);
+    expect(invoiceRepository.findByPayment).toHaveBeenCalledWith(
+      'reservation',
+      7,
+    );
     expect(result.invoiceId).toBe(42);
     expect(result.invoiceNumber).toBe('FACT-2026-000001');
   });

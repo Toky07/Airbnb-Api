@@ -269,10 +269,15 @@ export class GenerateInvoicePdfService {
         .text(row.label, boxLeft, rowY)
         .font('Helvetica-Bold')
         .fillColor('#111827')
-        .text(formatInvoiceAmount(row.value, data.currency), boxLeft + 80, rowY, {
-          width: 100,
-          align: 'right',
-        });
+        .text(
+          formatInvoiceAmount(row.value, data.currency),
+          boxLeft + 80,
+          rowY,
+          {
+            width: 100,
+            align: 'right',
+          },
+        );
       rowY += 18;
     }
 
@@ -306,11 +311,9 @@ export class GenerateInvoicePdfService {
         doc.page.height - 90,
         { width: doc.page.width - 100, align: 'center' },
       )
-      .text(
-        `Questions ? ${brand.supportEmail}`,
-        50,
-        doc.page.height - 72,
-        { width: doc.page.width - 100, align: 'center' },
-      );
+      .text(`Questions ? ${brand.supportEmail}`, 50, doc.page.height - 72, {
+        width: doc.page.width - 100,
+        align: 'center',
+      });
   }
 }

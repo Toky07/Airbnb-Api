@@ -25,10 +25,7 @@ describe('ResolveDynamicStayAmountService', () => {
     });
 
     expect(result.nightlyRates.map((night) => night.pricePerNight)).toEqual([
-      150,
-      150,
-      150,
-      100,
+      150, 150, 150, 100,
     ]);
     expect(result.amountInMajorUnit).toBe(550);
   });
@@ -48,9 +45,9 @@ describe('ResolveDynamicStayAmountService', () => {
       ],
     });
 
-    expect(result.nightlyRates.every((night) => night.pricePerNight === 200)).toBe(
-      true,
-    );
+    expect(
+      result.nightlyRates.every((night) => night.pricePerNight === 200),
+    ).toBe(true);
     expect(result.amountInMajorUnit).toBe(600);
   });
 
@@ -69,9 +66,7 @@ describe('ResolveDynamicStayAmountService', () => {
     });
 
     expect(result.nightlyRates.map((night) => night.pricePerNight)).toEqual([
-      80,
-      120,
-      80,
+      80, 120, 80,
     ]);
     expect(result.amountInMajorUnit).toBe(280);
   });

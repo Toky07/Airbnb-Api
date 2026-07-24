@@ -98,7 +98,9 @@ export class RoomsBootstrap {
           deps.roomRepository,
         ),
       deleteRoomRateOverrideCommandHandler:
-        new DeleteRoomRateOverrideCommandHandler(deps.roomRateOverrideRepository),
+        new DeleteRoomRateOverrideCommandHandler(
+          deps.roomRateOverrideRepository,
+        ),
       listRoomRateOverridesQueryHandler: new ListRoomRateOverridesQueryHandler(
         deps.roomRateOverrideRepository,
       ),

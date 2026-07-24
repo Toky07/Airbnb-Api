@@ -26,15 +26,22 @@ describe('CartCheckoutListener', () => {
     await listener.listen();
 
     await EventBus.getInstance().publish(
-      new CartCheckoutRequestedEvent('corr-1', 10, 5, 39600, [
-        {
-          itemType: 'reservation',
-          roomId: 10,
-          startDate: '2026-07-01',
-          endDate: '2026-07-04',
-          guestCount: 2,
-        },
-      ], samplePricingBreakdown),
+      new CartCheckoutRequestedEvent(
+        'corr-1',
+        10,
+        5,
+        39600,
+        [
+          {
+            itemType: 'reservation',
+            roomId: 10,
+            startDate: '2026-07-01',
+            endDate: '2026-07-04',
+            guestCount: 2,
+          },
+        ],
+        samplePricingBreakdown,
+      ),
     );
 
     expect(commandBusExecuteMock).toHaveBeenCalled();

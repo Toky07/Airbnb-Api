@@ -16,7 +16,9 @@ export class GetRoomPricingPreviewQueryHandler implements IQueryHandler<
     private readonly computePricingBreakdown: ComputePricingBreakdownService,
   ) {}
 
-  async execute(query: GetRoomPricingPreviewQuery): Promise<PricingBreakdownOutput> {
+  async execute(
+    query: GetRoomPricingPreviewQuery,
+  ): Promise<PricingBreakdownOutput> {
     const room = query.slug
       ? await this.roomRepository.findBySlug(query.slug)
       : query.roomId

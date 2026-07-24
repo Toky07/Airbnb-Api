@@ -9,7 +9,9 @@ describe('ComputePricingBreakdownService', () => {
     vi.unstubAllEnvs();
     vi.stubEnv('VAT_RATE', '0.10');
     vi.stubEnv('SERVICE_FEE_PERCENT', '0.05');
-    service = new ComputePricingBreakdownService(new CalculateStayAmountService());
+    service = new ComputePricingBreakdownService(
+      new CalculateStayAmountService(),
+    );
   });
 
   it('calcule TVA et frais de service sans taxe de séjour', () => {

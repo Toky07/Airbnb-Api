@@ -15,7 +15,9 @@ export class ListInvoicesQueryHandler implements IQueryHandler<
   ): Promise<PaginatedResult<InvoiceAdminListOutput>> {
     const result = await this.invoiceRepository.findPaginated(query.params);
     return {
-      data: result.data.map((record) => InvoiceAdminListOutput.fromRecord(record)),
+      data: result.data.map((record) =>
+        InvoiceAdminListOutput.fromRecord(record),
+      ),
       meta: result.meta,
     };
   }

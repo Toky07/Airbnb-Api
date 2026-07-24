@@ -48,7 +48,8 @@ export class CartPresenter {
     }
 
     try {
-      const breakdown = await this.buildCartPricingBreakdown.buildFromCart(cart);
+      const breakdown =
+        await this.buildCartPricingBreakdown.buildFromCart(cart);
       return PricingBreakdownOutput.fromDomain(breakdown);
     } catch {
       return null;
