@@ -4,6 +4,7 @@ import { EmailVO } from '../../../../shared/valueObject/email.vo';
 import { UserEntity } from '../entities/user.entity';
 import { PhoneNumberVO } from '../../../../shared/valueObject/phone.vo';
 import type { UserRoleSummary } from '../../domain/dtos/user.output';
+import type { AccountStatus } from '../../../authentication/domain/constants/account-status.constant';
 import { AccountStatusResolver } from '../../../authentication/domain/services/account-status.resolver';
 
 export class UserMapper {
@@ -13,7 +14,11 @@ export class UserMapper {
       name: role.name,
     }));
 
-    const status = AccountStatusResolver.resolve(user);
+    const status = AccountStatusResolver.resolve({
+      authId: user.authId,
+      auth: user.auth,
+      status: user.status as AccountStatus,
+    });
 
     return new User(
       new UserNameVO(user.firstName),

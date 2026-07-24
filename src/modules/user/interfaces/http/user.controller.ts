@@ -31,6 +31,12 @@ import { AssignUserRolesCommand } from '../../applications/useCase/commands/Assi
 import { FindUserQuery } from '../../applications/useCase/queries/FindUserQuery';
 import { ListUsersQuery } from '../../applications/useCase/queries/ListUsersQuery';
 import { ListUserOptionsQuery } from '../../applications/useCase/queries/ListUserOptionsQuery';
+import { SetUserPasswordCommand } from '../../applications/useCase/commands/SetUserPasswordCommand';
+import { UpdateUserStatusCommand } from '../../applications/useCase/commands/UpdateUserStatusCommand';
+import {
+  parseSetUserPasswordBody,
+  parseUpdateUserStatusBody,
+} from '../../applications/dto/user-account.dto';
 
 @Controller('users')
 export class UserController {
@@ -66,6 +72,26 @@ export class UserController {
         ? (body as CreateUserDto)
         : parseUserBody(body);
     return CommandBus.execute(new CreateUserCommand(createUserDto, avatar));
+  }
+
+  @Put(':id/password')
+  @RequirePermissions('users.update')
+  async setPassword(
+    @Param('id') id: string,
+    @Body() body: Record<string, unknown>,
+  ): Promise<UserOutput> {
+    const { password } = parseSetUserPasswordBody(body);
+    return CommandBus.execute(new SetUserPasswordCommand(Number(id), password));
+  }
+
+  @Put(':id/status')
+  @RequirePermissions('users.update')
+  async updateStatus(
+    @Param('id') id: string,
+    @Body() body: Record<string, unknown>,
+  ): Promise<UserOutput> {
+    const { status } = parseUpdateUserStatusBody(body);
+    return CommandBus.execute(new UpdateUserStatusCommand(Number(id), status));
   }
 
   @Put(':id/roles')

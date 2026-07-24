@@ -1,3 +1,4 @@
+import type { AccountStatus } from '../constants/account-status.constant';
 import { Auth } from '../entities/user.entity';
 
 export interface IAuthRepository {
@@ -8,6 +9,7 @@ export interface IAuthRepository {
   assignRoles(userId: number, roleId: number[]): Promise<boolean>;
   activateWithPassword(authId: number, passwordHash: string): Promise<void>;
   updatePassword(authId: number, passwordHash: string): Promise<void>;
+  updateStatus(authId: number, status: AccountStatus): Promise<void>;
   delete(id: number): Promise<boolean>;
 }
 

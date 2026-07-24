@@ -23,7 +23,13 @@ export class JwtTokenGenerator implements TokenGenerator {
   }): Promise<string> {
     const auth = await this.authRepository.findByEmail(email);
 
-    if (!auth || !auth.password || auth.status !== ACCOUNT_STATUS.ACTIVE) {
+    if (!auth?.id || auth.status === ACCOUNT_STATUS.DISABLED) {
+      throw new UnauthorizedException(
+        'Compte désactivé. Contactez un administrateur.',
+      );
+    }
+
+    if (!auth.password || auth.status !== ACCOUNT_STATUS.ACTIVE) {
       throw new UnauthorizedException(
         'Compte non activé. Consultez votre email pour définir votre mot de passe.',
       );
@@ -43,7 +49,7 @@ export class JwtTokenGenerator implements TokenGenerator {
   async generateForAuthId(authId: number): Promise<string> {
     const auth = await this.authRepository.findById(authId);
 
-    if (!auth?.id || auth.status !== ACCOUNT_STATUS.ACTIVE) {
+    if (!auth?.id || auth.status === ACCOUNT_STATUS.DISABLED) {
       throw new UnauthorizedException('Compte non activé.');
     }
 

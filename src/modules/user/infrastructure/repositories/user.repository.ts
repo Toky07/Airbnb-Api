@@ -11,6 +11,7 @@ import {
   type PaginatedResult,
   type PaginationParams,
 } from '../../../../shared/pagination/pagination.types';
+import type { AccountStatus } from '../../../authentication/domain/constants/account-status.constant';
 
 export const USER_REPOSITORY = 'UserRepository';
 
@@ -142,10 +143,7 @@ export class UserRepository implements IUserRepository {
     return UserMapper.toDomain(enriched);
   }
 
-  async updateStatus(
-    userId: number,
-    status: 'pending' | 'active',
-  ): Promise<void> {
+  async updateStatus(userId: number, status: AccountStatus): Promise<void> {
     const result = await this.repository.update(Number(userId), { status });
     if (!result.affected) {
       throw new NotFoundException('User not found');
