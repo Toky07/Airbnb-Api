@@ -15,6 +15,7 @@ export class Property {
   public checkInTime: string;
   public checkOutTime: string;
   public cancellationPolicy: CancellationPolicy;
+  public touristTaxPerGuestNight: number;
   public ownerId: number;
   public propertyTypeId: number | null;
   public propertyType: CategorySummary | null;
@@ -34,6 +35,7 @@ export class Property {
     checkInTime,
     checkOutTime,
     cancellationPolicy,
+    touristTaxPerGuestNight,
     ownerId,
     propertyTypeId,
     propertyType,
@@ -58,6 +60,7 @@ export class Property {
     this.checkInTime = checkInTime;
     this.checkOutTime = checkOutTime;
     this.cancellationPolicy = cancellationPolicy ?? DEFAULT_CANCELLATION_POLICY;
+    this.touristTaxPerGuestNight = touristTaxPerGuestNight ?? 0;
     this.ownerId = ownerId;
     this.propertyTypeId = propertyTypeId ?? null;
     this.propertyType = propertyType ?? null;

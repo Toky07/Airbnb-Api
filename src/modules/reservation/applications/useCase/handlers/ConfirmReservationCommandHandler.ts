@@ -1,6 +1,8 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
+import { EventBus } from '../../../../../shared/domain/event.bus';
 import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
+import { ReservationConfirmedEvent } from '../../../domain/events/reservation-confirmed.event';
 import { Reservation } from '../../../domain/entities/reservation.entity';
 import type { IReservationRepository } from '../../../domain/repositories/reservation.repository';
 import { ReservationOutput } from '../../dto/reservation.output';
@@ -67,6 +69,10 @@ export class ConfirmReservationCommandHandler implements ICommandHandler<
         reservation.updatedAt,
         null,
       ),
+    );
+
+    await EventBus.getInstance().publish(
+      new ReservationConfirmedEvent(reservationUpdated),
     );
 
     return ReservationOutput.fromDomain(reservationUpdated);

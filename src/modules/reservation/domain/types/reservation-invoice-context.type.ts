@@ -32,4 +32,11 @@ export type ReservationInvoiceContext = {
   customerEmail: string;
   customerPhone: string;
   lineItems: ReservationInvoiceLineItem[];
+  totals?: {
+    subtotalCents: number;
+    vatCents: number;
+    touristTaxCents: number;
+    serviceFeeCents: number;
+    totalCents: number;
+  };
 };

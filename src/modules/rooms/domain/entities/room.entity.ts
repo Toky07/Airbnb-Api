@@ -6,6 +6,7 @@ export class Room {
   public slug: string;
   public description: string;
   public pricePerNight: number;
+  public weekendPricePerNight: number | null;
   public maxGuests: number;
   public bedrooms: number;
   public bathrooms: number;
@@ -25,6 +26,7 @@ export class Room {
     slug,
     description,
     pricePerNight,
+    weekendPricePerNight,
     maxGuests,
     bedrooms,
     bathrooms,
@@ -43,6 +45,7 @@ export class Room {
     slug?: string;
     description: string;
     pricePerNight: number;
+    weekendPricePerNight?: number | null;
     maxGuests: number;
     bedrooms: number;
     bathrooms: number;
@@ -61,6 +64,7 @@ export class Room {
     this.slug = slug ?? '';
     this.description = description;
     this.pricePerNight = pricePerNight;
+    this.weekendPricePerNight = weekendPricePerNight ?? null;
     this.maxGuests = maxGuests;
     this.bedrooms = bedrooms;
     this.bathrooms = bathrooms;

@@ -28,6 +28,11 @@ export function parseRoomBody(body: Record<string, unknown>): CreateRoomDto {
     name: String(body.name),
     description: String(body.description),
     pricePerNight: Number(body.pricePerNight),
+    weekendPricePerNight:
+      body.weekendPricePerNight === undefined ||
+      body.weekendPricePerNight === ''
+        ? null
+        : Number(body.weekendPricePerNight),
     maxGuests: Number(body.maxGuests),
     bedrooms: Number(body.bedrooms),
     bathrooms: Number(body.bathrooms),

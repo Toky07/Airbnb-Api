@@ -7,7 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
+import { Public } from '../../../authentication/interfaces/decorators/public.decorator';
 import { RequireSuperAdmin } from '../../../authentication/interfaces/decorators/require-superadmin.decorator';
 import type {
   CreateRoomTypeDto,
@@ -30,8 +30,8 @@ export class RoomTypeController {
     return QueryBus.execute(new ListRoomTypesQuery());
   }
 
+  @Public()
   @Get('options')
-  @RequirePermissions('rooms.read')
   listOptions(): Promise<RoomTypeOutput[]> {
     return QueryBus.execute(new ListRoomTypeOptionsQuery());
   }

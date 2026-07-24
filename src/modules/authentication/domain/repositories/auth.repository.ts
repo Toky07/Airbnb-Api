@@ -7,6 +7,7 @@ export interface IAuthRepository {
   findById(id: number): Promise<Auth | null>;
   assignRoles(userId: number, roleId: number[]): Promise<boolean>;
   activateWithPassword(authId: number, passwordHash: string): Promise<void>;
+  updatePassword(authId: number, passwordHash: string): Promise<void>;
   delete(id: number): Promise<boolean>;
 }
 

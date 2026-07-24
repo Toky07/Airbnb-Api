@@ -6,8 +6,10 @@ import { EventBus } from '../../../../../shared/domain/event.bus';
 import { CartCheckoutRequestedEvent } from '../../../domain/events/cart-checkout-requested.event';
 import type { CartCheckoutCompletedEvent } from '../../../domain/events/cart-checkout-completed.event';
 import { CreatePaymentIntentOutput } from '../../dto/create-payment-intent.output';
+import { PricingBreakdownOutput } from '../../dto/pricing-breakdown.output';
 import type { BuildCartItemService } from '../../services/build-cart-item.service';
 import type { ResolveCartService } from '../../services/resolve-cart.service';
+import type { BuildCartPricingBreakdownService } from '../../services/build-cart-pricing-breakdown.service';
 
 export class CheckoutCartCommandHandler implements ICommandHandler<
   CheckoutCartCommand,
@@ -16,6 +18,7 @@ export class CheckoutCartCommandHandler implements ICommandHandler<
   constructor(
     private readonly resolveCartService: ResolveCartService,
     private readonly buildCartItemService: BuildCartItemService,
+    private readonly buildCartPricingBreakdown: BuildCartPricingBreakdownService,
   ) {}
 
   async execute(
@@ -39,8 +42,9 @@ export class CheckoutCartCommandHandler implements ICommandHandler<
       throw new BadRequestException('Aucun article payable dans le panier.');
     }
 
+    const pricingBreakdown =
+      await this.buildCartPricingBreakdown.buildFromCart(cart);
     const correlationId = randomUUID();
-    const amountInCents = Math.round(cart.totalPrice * 100);
     const waitForCompletion =
       EventBus.getInstance().waitOnce<CartCheckoutCompletedEvent>(
         'cart.checkout.completed',
@@ -52,8 +56,9 @@ export class CheckoutCartCommandHandler implements ICommandHandler<
         correlationId,
         command.authId,
         cart.id,
-        amountInCents,
+        pricingBreakdown.totalCents,
         items,
+        pricingBreakdown,
       ),
     );
 
@@ -66,6 +71,7 @@ export class CheckoutCartCommandHandler implements ICommandHandler<
       completed.currency,
       completed.publishableKey,
       completed.holdUntil,
+      PricingBreakdownOutput.fromDomain(pricingBreakdown),
     );
   }
 }

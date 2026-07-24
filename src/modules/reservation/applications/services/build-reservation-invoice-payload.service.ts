@@ -8,17 +8,20 @@ import type { IUserRepository } from '../../../user/domain/repositories/user.rep
 import { USER_REPOSITORY } from '../../../user/infrastructure/repositories/user.repository';
 import { InvoiceGenerateRequestedEvent } from '../../../invoice/domain/events/invoice-generate-requested.event';
 import { INVOICE_PAYMENT_TYPE } from '../../../invoice/domain/constants/invoice-payment-type.constant';
-import type { InvoiceData } from '../../../invoice/domain/types/invoice-data.type';
+import type {
+  InvoiceData,
+  InvoiceLineItem,
+  InvoiceTotals,
+} from '../../../invoice/domain/types/invoice-data.type';
+import { getInvoiceIssuer } from '../../../invoice/domain/constants/invoice-source.constant';
+import { InvoiceNumberService } from '../../../invoice/applications/services/invoice-number.service';
 import type {
   HostPaymentNotificationGroup,
   ReservationInvoiceContext,
   ReservationInvoiceLineItem,
 } from '../../domain/types/reservation-invoice-context.type';
 import { ResolvePaymentReservationsService } from './resolve-payment-reservations.service';
-import {
-  buildInvoiceNumber,
-  formatInvoiceDate,
-} from '../utils/format-invoice.util';
+import { formatInvoiceDate } from '../utils/format-invoice.util';
 import { ReservationItemOutput } from '../dto/reservation-item.output';
 
 @Injectable()
@@ -29,6 +32,7 @@ export class BuildReservationInvoicePayloadService {
     private readonly userRepository: IUserRepository,
     @Inject(ROOM_REPOSITORY)
     private readonly roomRepository: IRoomRepository,
+    private readonly invoiceNumberService: InvoiceNumberService,
   ) {}
 
   async execute(payment: Payment): Promise<ReservationInvoiceContext | null> {
@@ -50,10 +54,12 @@ export class BuildReservationInvoicePayloadService {
     }
 
     const paidAt = payment.updatedAt ?? payment.createdAt ?? new Date();
+    const invoiceNumber = await this.invoiceNumberService.generate(paidAt);
+    const totals = this.resolveTotals(payment);
 
     return {
       paymentId: payment.id,
-      invoiceNumber: buildInvoiceNumber(payment.id, paidAt),
+      invoiceNumber,
       transactionId: payment.transactionId ?? '',
       paidAt,
       amountCents: payment.amount,
@@ -62,6 +68,7 @@ export class BuildReservationInvoicePayloadService {
       customerEmail: customer.email,
       customerPhone: customer.phoneNumber,
       lineItems,
+      totals,
     };
   }
 
@@ -78,11 +85,15 @@ export class BuildReservationInvoicePayloadService {
   }
 
   toInvoiceData(context: ReservationInvoiceContext): InvoiceData {
+    const issuer = getInvoiceIssuer();
+    const totals = context.totals ?? this.fallbackTotals(context.amountCents);
+    const items = this.buildInvoiceItems(context.lineItems, totals);
+
     return {
       invoiceNumber: context.invoiceNumber,
       paidAt: context.paidAt,
       currency: context.currency,
-      totalCents: context.amountCents,
+      totalCents: totals.totalCents,
       recipient: {
         name: context.customerName,
         email: context.customerEmail,
@@ -92,20 +103,9 @@ export class BuildReservationInvoicePayloadService {
         { label: 'Stripe', value: context.transactionId },
         { label: 'Paiement', value: `#${context.paymentId}` },
       ],
-      items: context.lineItems.map((item) => ({
-        label: item.roomName,
-        subtitle:
-          [item.propertyName, item.propertyCity].filter(Boolean).join(' · ') ||
-          undefined,
-        quantity: item.nights,
-        unitPriceCents: Math.round(item.unitPrice * 100),
-        totalPriceCents: Math.round(item.totalPrice * 100),
-        columns: {
-          dates: `${formatInvoiceDate(item.startDate, { day: '2-digit', month: 'short' })} → ${formatInvoiceDate(item.endDate, { day: '2-digit', month: 'short', year: 'numeric' })}`,
-          guests: item.guestCount,
-          nights: item.nights,
-        },
-      })),
+      items,
+      issuer,
+      totals,
     };
   }
 
@@ -137,6 +137,82 @@ export class BuildReservationInvoicePayloadService {
     }
 
     return groups;
+  }
+
+  private resolveTotals(payment: Payment): InvoiceTotals {
+    const breakdown = payment.pricingBreakdown;
+    if (breakdown) {
+      return {
+        subtotalCents: breakdown.subtotalCents,
+        vatCents: breakdown.vatCents,
+        touristTaxCents: breakdown.touristTaxCents,
+        serviceFeeCents: breakdown.serviceFeeCents,
+        totalCents: breakdown.totalCents,
+      };
+    }
+
+    return this.fallbackTotals(payment.amount);
+  }
+
+  private fallbackTotals(totalCents: number): InvoiceTotals {
+    return {
+      subtotalCents: totalCents,
+      vatCents: 0,
+      touristTaxCents: 0,
+      serviceFeeCents: 0,
+      totalCents,
+    };
+  }
+
+  private buildInvoiceItems(
+    lineItems: ReservationInvoiceLineItem[],
+    totals: InvoiceTotals,
+  ): InvoiceLineItem[] {
+    const accommodationItems = lineItems.map((item) => ({
+      label: item.roomName,
+      subtitle:
+        [item.propertyName, item.propertyCity].filter(Boolean).join(' · ') ||
+        undefined,
+      quantity: item.nights,
+      unitPriceCents: Math.round(item.unitPrice * 100),
+      totalPriceCents: Math.round(item.totalPrice * 100),
+      columns: {
+        dates: `${formatInvoiceDate(item.startDate, { day: '2-digit', month: 'short' })} → ${formatInvoiceDate(item.endDate, { day: '2-digit', month: 'short', year: 'numeric' })}`,
+        guests: item.guestCount,
+        nights: item.nights,
+      },
+    }));
+
+    const feeItems: InvoiceLineItem[] = [];
+
+    if (totals.vatCents > 0) {
+      feeItems.push({
+        label: 'TVA',
+        quantity: 1,
+        unitPriceCents: totals.vatCents,
+        totalPriceCents: totals.vatCents,
+      });
+    }
+
+    if (totals.touristTaxCents > 0) {
+      feeItems.push({
+        label: 'Taxe de séjour',
+        quantity: 1,
+        unitPriceCents: totals.touristTaxCents,
+        totalPriceCents: totals.touristTaxCents,
+      });
+    }
+
+    if (totals.serviceFeeCents > 0) {
+      feeItems.push({
+        label: 'Frais de service',
+        quantity: 1,
+        unitPriceCents: totals.serviceFeeCents,
+        totalPriceCents: totals.serviceFeeCents,
+      });
+    }
+
+    return [...accommodationItems, ...feeItems];
   }
 
   private async buildLineItems(

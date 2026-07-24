@@ -46,6 +46,12 @@ export class AuthRepository implements IAuthRepository {
     });
   }
 
+  async updatePassword(authId: number, passwordHash: string): Promise<void> {
+    await this.repository.update(authId, {
+      password: passwordHash,
+    });
+  }
+
   async findByEmail(email: string): Promise<Auth | null> {
     const normalizedEmail = email.trim().toLowerCase();
     const auth = await this.repository.findOne({

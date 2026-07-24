@@ -50,6 +50,9 @@ export class PaymentOrmEntity {
   @Column({ type: 'varchar', nullable: true })
   refundTransactionId: string | null;
 
+  @Column({ type: 'jsonb', nullable: true })
+  pricingBreakdown: Record<string, unknown> | null;
+
   @CreateDateColumn()
   createdAt: Date;
 

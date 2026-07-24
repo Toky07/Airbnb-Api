@@ -41,6 +41,7 @@ export class CartCheckoutListener {
             reservation.id,
             event.amountInCents,
             holdUntil,
+            event.pricingBreakdown,
           ),
         );
       },

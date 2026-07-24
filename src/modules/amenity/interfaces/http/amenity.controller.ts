@@ -8,6 +8,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
+import { Public } from '../../../authentication/interfaces/decorators/public.decorator';
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
 import { RequireSuperAdmin } from '../../../authentication/interfaces/decorators/require-superadmin.decorator';
 import type {
@@ -36,6 +37,16 @@ export class AmenityController {
   list(@Query() query: Record<string, unknown>): Promise<AmenityOutput[]> {
     return QueryBus.execute(
       new ListAmenitiesQuery(parseAmenityScope(query.scope)),
+    );
+  }
+
+  @Public()
+  @Get('catalog')
+  listCatalog(
+    @Query() query: Record<string, unknown>,
+  ): Promise<AmenityOutput[]> {
+    return QueryBus.execute(
+      new ListAmenityOptionsQuery(parseAmenityScope(query.scope ?? 'room')),
     );
   }
 

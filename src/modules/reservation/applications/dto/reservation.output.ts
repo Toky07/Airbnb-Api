@@ -11,6 +11,7 @@ export class ReservationOutput {
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
     public readonly holdUntil: Date | null = null,
+    public readonly paymentId: number | null = null,
   ) {}
 
   get nights(): number {
@@ -26,6 +27,7 @@ export class ReservationOutput {
       reservation.createdAt!,
       reservation.updatedAt!,
       reservation.holdUntil ?? null,
+      reservation.paymentId ?? null,
     );
   }
 }

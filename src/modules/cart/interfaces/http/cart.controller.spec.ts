@@ -239,10 +239,17 @@ describe('CartController', () => {
       expect.objectContaining({
         paymentId: expect.any(Number),
         clientSecret: expect.stringContaining('pi_cart_checkout_test_secret_'),
-        amount: 20000,
+        amount: 22000,
         currency: 'eur',
         publishableKey: 'pk_test_cart',
         holdUntil: expect.any(String),
+        pricingBreakdown: expect.objectContaining({
+          subtotalCents: 20000,
+          vatCents: 2000,
+          touristTaxCents: 0,
+          serviceFeeCents: 0,
+          totalCents: 22000,
+        }),
       }),
     );
 

@@ -11,6 +11,16 @@ export type PaginationParams = {
   propertyId?: number;
   checkIn?: string;
   checkOut?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  minGuests?: number;
+  roomTypeId?: number;
+  amenityIds?: number[];
+  city?: string;
+  lat?: number;
+  lng?: number;
+  radiusKm?: number;
+  status?: string;
 };
 
 export type PaginationMeta = {

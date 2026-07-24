@@ -5,6 +5,13 @@ import { AddRoomBlockedDates1783920447446 } from '../database/migrations/1783920
 import { AddReservationHoldUntil1783920447447 } from '../database/migrations/1783920447447-AddReservationHoldUntil';
 import { AddPropertyCancellationPolicy1783920447448 } from '../database/migrations/1783920447448-AddPropertyCancellationPolicy';
 import { AddPaymentRefundFields1783920447449 } from '../database/migrations/1783920447449-AddPaymentRefundFields';
+import { AddPropertyTouristTax1783920447450 } from '../database/migrations/1783920447450-AddPropertyTouristTax';
+import { AddPaymentPricingBreakdown1783920447451 } from '../database/migrations/1783920447451-AddPaymentPricingBreakdown';
+import { AddInvoiceSequences1783920447452 } from '../database/migrations/1783920447452-AddInvoiceSequences';
+import { AddDynamicPricing1783920447453 } from '../database/migrations/1783920447453-AddDynamicPricing';
+import { AddFavoritesTable1783920447455 } from '../database/migrations/1783920447455-AddFavoritesTable';
+import { AddReviewsTable1783920447456 } from '../database/migrations/1783920447456-AddReviewsTable';
+import { AddMessagingTables1783920447457 } from '../database/migrations/1783920447457-AddMessagingTables';
 import { TYPEORM_ENTITIES } from '../config/typeorm.entities';
 import { EventBus } from '../shared/domain/event.bus';
 
@@ -51,6 +58,13 @@ async function createAdminDataSource(): Promise<DataSource> {
       AddReservationHoldUntil1783920447447,
       AddPropertyCancellationPolicy1783920447448,
       AddPaymentRefundFields1783920447449,
+      AddPropertyTouristTax1783920447450,
+      AddPaymentPricingBreakdown1783920447451,
+      AddInvoiceSequences1783920447452,
+      AddDynamicPricing1783920447453,
+      AddFavoritesTable1783920447455,
+      AddReviewsTable1783920447456,
+      AddMessagingTables1783920447457,
     ],
     synchronize: false,
   });

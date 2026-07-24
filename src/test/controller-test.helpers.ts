@@ -13,6 +13,7 @@ import { PropertyEntity } from '../modules/properties/infrastructure/entities/pr
 import { RoomTypeEntity } from '../modules/rooms/infrastructure/entities/room-type.entity';
 import { RoomEntity } from '../modules/rooms/infrastructure/entities/room.entity';
 import { RoomBlockedDateOrmEntity } from '../modules/rooms/infrastructure/entities/room-blocked-date.orm-entity';
+import { RoomRateOverrideOrmEntity } from '../modules/rooms/infrastructure/entities/room-rate-override.orm-entity';
 import { UserEntity } from '../modules/user/infrastructure/entities/user.entity';
 import { ACCOUNT_STATUS } from '../modules/authentication/domain/constants/account-status.constant';
 import { PasswordSetupTokenOrmEntity } from '../modules/authentication/infrastructure/entities/password-setup-token.orm-entity';
@@ -24,6 +25,12 @@ import { RoomAmenityOrmEntity } from '../modules/amenity/infrastructure/entities
 import { PaymentOrmEntity } from '../modules/payment/infrastructure/entities/payment.orm-entity';
 import { CartOrmEntity } from '../modules/cart/infrastructure/entities/cart.orm-entity';
 import { CartItemOrmEntity } from '../modules/cart/infrastructure/entities/cart-item.orm-entity';
+import { InvoiceOrmEntity } from '../modules/invoice/infrastructure/entities/invoice.orm-entity';
+import { InvoiceSequenceOrmEntity } from '../modules/invoice/infrastructure/entities/invoice-sequence.orm-entity';
+import { ConversationOrmEntity } from '../modules/messaging/infrastructure/entities/conversation.orm-entity';
+import { MessageOrmEntity } from '../modules/messaging/infrastructure/entities/message.orm-entity';
+import { FavoriteOrmEntity } from '../modules/favorite/infrastructure/entities/favorite.orm-entity';
+import { ReviewOrmEntity } from '../modules/review/infrastructure/entities/review.orm-entity';
 
 export type RegisterPayload = {
   email: string;
@@ -55,6 +62,7 @@ export const DOMAIN_TEST_ENTITIES = [
   RoomEntity,
   RoomTypeEntity,
   RoomBlockedDateOrmEntity,
+  RoomRateOverrideOrmEntity,
   MediaOrmEntity,
   EmailOrmEntity,
   ReservationOrmEntity,
@@ -65,6 +73,12 @@ export const DOMAIN_TEST_ENTITIES = [
   AmenityOrmEntity,
   PropertyAmenityOrmEntity,
   RoomAmenityOrmEntity,
+  InvoiceOrmEntity,
+  InvoiceSequenceOrmEntity,
+  ConversationOrmEntity,
+  MessageOrmEntity,
+  FavoriteOrmEntity,
+  ReviewOrmEntity,
 ] as const;
 
 export async function assignSuperAdminRole(

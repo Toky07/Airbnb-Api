@@ -8,12 +8,15 @@ import { Cart } from '../../domain/entities/cart.entity';
 import type { CartItem } from '../../domain/entities/cart-item.entity';
 import { CartItemOutput } from '../dto/cart-item.output';
 import { CartOutput } from '../dto/cart.output';
+import { PricingBreakdownOutput } from '../dto/pricing-breakdown.output';
+import { BuildCartPricingBreakdownService } from '../services/build-cart-pricing-breakdown.service';
 
 @Injectable()
 export class CartPresenter {
   constructor(
     @Inject(CART_PRODUCT_SUMMARY_PORT)
     private readonly productSummaryPort: ICartProductSummaryPort,
+    private readonly buildCartPricingBreakdown: BuildCartPricingBreakdownService,
   ) {}
 
   async toOutput(cart: Cart): Promise<CartOutput> {
@@ -22,6 +25,7 @@ export class CartPresenter {
       .filter((roomId): roomId is number => roomId != null);
 
     const summaries = await this.productSummaryPort.getByRoomIds(roomIds);
+    const pricingBreakdown = await this.safePricingBreakdown(cart);
 
     return new CartOutput(
       cart.id!,
@@ -32,7 +36,24 @@ export class CartPresenter {
       cart.itemCount,
       cart.createdAt!,
       cart.updatedAt!,
+      pricingBreakdown,
     );
+  }
+
+  private async safePricingBreakdown(
+    cart: Cart,
+  ): Promise<PricingBreakdownOutput | null> {
+    if (cart.items.length === 0) {
+      return null;
+    }
+
+    try {
+      const breakdown =
+        await this.buildCartPricingBreakdown.buildFromCart(cart);
+      return PricingBreakdownOutput.fromDomain(breakdown);
+    } catch {
+      return null;
+    }
   }
 
   private toItemOutput(

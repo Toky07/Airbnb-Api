@@ -11,6 +11,7 @@ import {
   type IRoomRepository,
 } from '../../domain/repositories/room.repository';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { RoomStayPricingService } from '../../applications/services/room-stay-pricing.service';
 
 @Injectable()
 export class CartItemCatalogAdapter implements ICartItemCatalogPort {
@@ -18,6 +19,7 @@ export class CartItemCatalogAdapter implements ICartItemCatalogPort {
     @Inject(ROOM_REPOSITORY)
     private readonly roomRepository: IRoomRepository,
     private readonly calculateStayAmount: CalculateStayAmountService,
+    private readonly roomStayPricing: RoomStayPricingService,
   ) {}
 
   async buildReservationItem(
@@ -50,17 +52,17 @@ export class CartItemCatalogAdapter implements ICartItemCatalogPort {
       );
     }
 
-    const stayAmount = this.calculateStayAmount.execute({
-      checkIn: input.startDate,
-      checkOut: input.endDate,
-      pricePerNight: room.pricePerNight,
-    });
+    const stayPricing = await this.roomStayPricing.resolveForRoom(
+      room,
+      input.startDate,
+      input.endDate,
+    );
 
     return {
       label: `${room.name} · ${room.property?.name ?? 'Établissement'}`,
-      unitPrice: room.pricePerNight,
-      totalPrice: stayAmount.amountInMajorUnit,
-      nights: stayAmount.nights,
+      unitPrice: stayPricing.averagePricePerNight,
+      totalPrice: stayPricing.amountInMajorUnit,
+      nights: stayPricing.nights,
       propertyId: room.property?.id ?? null,
       roomId: room.id,
     };

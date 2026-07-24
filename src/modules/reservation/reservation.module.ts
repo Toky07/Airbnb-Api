@@ -5,6 +5,7 @@ import { CalculateStayAmountService } from '../../shared/pricing/calculate-stay-
 import { PaymentModule } from '../payment/payment.module';
 import { PropertiesModule } from '../properties/properties.module';
 import { RoomsModule } from '../rooms/room.module';
+import { RoomStayPricingService } from '../rooms/applications/services/room-stay-pricing.service';
 import { UserModule } from '../user/user.module';
 import { PROPERTY_REPOSITORY } from '../properties/infrastructure/repositories/property.repository';
 import type { IPropertyRepository } from '../properties/domain/repositories/property.repository';
@@ -56,12 +57,16 @@ import { ListHostBookingOrdersQuery } from './applications/useCase/queries/ListH
 import { GetBookingOrderQuery } from './applications/useCase/queries/GetBookingOrderQuery';
 import { GetCancellationPreviewQuery } from './applications/useCase/queries/GetCancellationPreviewQuery';
 import { MarkReservationNoShowCommand } from './applications/useCase/commands/MarkReservationNoShowCommand';
+import { InvoiceModule } from '../invoice/invoice.module';
+import { INVOICE_REPOSITORY } from '../invoice/domain/repositories/invoice.repository';
+import type { IInvoiceRepository } from '../invoice/domain/repositories/invoice.repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([ReservationOrmEntity, ReservationItemOrmEntity]),
     ScheduleModule.forRoot(),
     forwardRef(() => PaymentModule),
+    InvoiceModule,
     RoomsModule,
     UserModule,
     PropertiesModule,
@@ -111,7 +116,7 @@ export class ReservationModule implements OnModuleInit {
     @Inject(PAYMENT_GATEWAY)
     private readonly paymentGateway: IPaymentGateway,
     private readonly checkRoomAvailability: CheckRoomAvailabilityService,
-    private readonly calculateStayAmount: CalculateStayAmountService,
+    private readonly roomStayPricing: RoomStayPricingService,
     private readonly enrichReservationOutputs: EnrichReservationOutputsService,
     private readonly resolvePaymentReservations: ResolvePaymentReservationsService,
     private readonly resolveHostPropertyIds: ResolveHostPropertyIdsService,
@@ -120,6 +125,8 @@ export class ReservationModule implements OnModuleInit {
     private readonly assertReservationAccess: AssertReservationAccessService,
     private readonly resolveCancellationPolicy: ResolveReservationCancellationPolicyService,
     private readonly computeCancellationRefund: ComputeCancellationRefundService,
+    @Inject(INVOICE_REPOSITORY)
+    private readonly invoiceRepository: IInvoiceRepository,
   ) {}
 
   onModuleInit() {
@@ -131,7 +138,7 @@ export class ReservationModule implements OnModuleInit {
       paymentRepository: this.paymentRepository,
       paymentGateway: this.paymentGateway,
       checkRoomAvailability: this.checkRoomAvailability,
-      calculateStayAmount: this.calculateStayAmount,
+      roomStayPricing: this.roomStayPricing,
       enrichReservationOutputs: this.enrichReservationOutputs,
       resolvePaymentReservations: this.resolvePaymentReservations,
       resolveHostPropertyIds: this.resolveHostPropertyIds,
@@ -140,6 +147,7 @@ export class ReservationModule implements OnModuleInit {
       assertReservationAccess: this.assertReservationAccess,
       resolveCancellationPolicy: this.resolveCancellationPolicy,
       computeCancellationRefund: this.computeCancellationRefund,
+      invoiceRepository: this.invoiceRepository,
     });
 
     CommandBus.register(

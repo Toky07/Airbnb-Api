@@ -1,5 +1,7 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
+import { INVOICE_PAYMENT_TYPE } from '../../../../invoice/domain/constants/invoice-payment-type.constant';
+import type { IInvoiceRepository } from '../../../../invoice/domain/repositories/invoice.repository';
 import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
 import type { IPaymentRepository } from '../../../../payment/domain/repositories/payment.repository';
 import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
@@ -18,6 +20,7 @@ export class GetBookingOrderQueryHandler implements IQueryHandler<
     private readonly userRepository: IUserRepository,
     private readonly propertyRepository: IPropertyRepository,
     private readonly resolvePaymentReservations: ResolvePaymentReservationsService,
+    private readonly invoiceRepository: IInvoiceRepository,
   ) {}
 
   async execute(
@@ -47,8 +50,19 @@ export class GetBookingOrderQueryHandler implements IQueryHandler<
     const items = filterItemsByPropertyIds(allItems, hostPropertyIds);
 
     const customer = await this.userRepository.findById(payment.userId);
+    const invoice = await this.invoiceRepository.findByPayment(
+      INVOICE_PAYMENT_TYPE.RESERVATION,
+      payment.id,
+    );
 
-    return BookingOrderDetailOutput.fromParts(payment, items, customer);
+    return BookingOrderDetailOutput.fromParts(
+      payment,
+      items,
+      customer,
+      invoice?.id
+        ? { id: invoice.id, invoiceNumber: invoice.invoiceNumber }
+        : null,
+    );
   }
 
   private async loadHostPropertyIds(authId: number): Promise<number[]> {

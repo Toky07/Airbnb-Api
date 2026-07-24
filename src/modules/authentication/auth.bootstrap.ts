@@ -3,6 +3,7 @@ import type { IRoleRepository } from './domain/repositories/role.repository';
 import type { IUserRepository } from '../user/domain/repositories/user.repository';
 import type { IPropertyRepository } from '../properties/domain/repositories/property.repository';
 import type { IPasswordSetupTokenRepository } from './domain/repositories/password-setup-token.repository';
+import type { IPasswordResetTokenRepository } from './domain/repositories/password-reset-token.repository';
 import type { TokenGenerator } from './domain/generator/token.generator';
 import type { EnsurePropertyOwnerHostRoleService } from './applications/services/ensure-property-owner-host-role.service';
 import type { MailService } from '../mail/applications/services/mail.service';
@@ -21,6 +22,10 @@ import { ListPermissionsQueryHandler } from './applications/useCase/handlers/Lis
 import { SendAccountInvitationCommandHandler } from './applications/useCase/handlers/SendAccountInvitationCommandHandler';
 import { SetPasswordWithTokenCommandHandler } from './applications/useCase/handlers/SetPasswordWithTokenCommandHandler';
 import { ValidatePasswordSetupTokenQueryHandler } from './applications/useCase/handlers/ValidatePasswordSetupTokenQueryHandler';
+import { PasswordResetLinkBuilder } from './domain/services/password-reset-link.builder';
+import { RequestPasswordResetCommandHandler } from './applications/useCase/handlers/RequestPasswordResetCommandHandler';
+import { ResetPasswordWithTokenCommandHandler } from './applications/useCase/handlers/ResetPasswordWithTokenCommandHandler';
+import { ValidatePasswordResetTokenQueryHandler } from './applications/useCase/handlers/ValidatePasswordResetTokenQueryHandler';
 
 export class AuthBootstrap {
   static create(deps: {
@@ -29,12 +34,14 @@ export class AuthBootstrap {
     userRepository: IUserRepository;
     propertyRepository: IPropertyRepository;
     tokenRepository: IPasswordSetupTokenRepository;
+    resetTokenRepository: IPasswordResetTokenRepository;
     tokenGenerator: TokenGenerator;
     ensurePropertyOwnerHostRole: EnsurePropertyOwnerHostRoleService;
     mailService: MailService;
   }) {
     const tokenService = new PasswordSetupTokenService();
     const linkBuilder = new PasswordSetupLinkBuilder();
+    const resetLinkBuilder = new PasswordResetLinkBuilder();
 
     return {
       createCredentialsCommandHandler: new CreateCredentialsCommandHandler(
@@ -83,6 +90,26 @@ export class AuthBootstrap {
       validatePasswordSetupTokenQueryHandler:
         new ValidatePasswordSetupTokenQueryHandler(
           deps.tokenRepository,
+          deps.userRepository,
+          tokenService,
+        ),
+      requestPasswordResetCommandHandler:
+        new RequestPasswordResetCommandHandler(
+          deps.authRepository,
+          deps.resetTokenRepository,
+          deps.mailService,
+          tokenService,
+          resetLinkBuilder,
+        ),
+      resetPasswordWithTokenCommandHandler:
+        new ResetPasswordWithTokenCommandHandler(
+          deps.authRepository,
+          deps.resetTokenRepository,
+          tokenService,
+        ),
+      validatePasswordResetTokenQueryHandler:
+        new ValidatePasswordResetTokenQueryHandler(
+          deps.resetTokenRepository,
           deps.userRepository,
           tokenService,
         ),

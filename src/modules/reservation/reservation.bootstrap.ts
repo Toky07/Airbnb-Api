@@ -1,4 +1,4 @@
-import type { CalculateStayAmountService } from '../../shared/pricing/calculate-stay-amount.service';
+import type { RoomStayPricingService } from '../rooms/applications/services/room-stay-pricing.service';
 import type { IPaymentGateway } from '../payment/domain/ports/payment-gateway.port';
 import type { IPaymentRepository } from '../payment/domain/repositories/payment.repository';
 import type { IPropertyRepository } from '../properties/domain/repositories/property.repository';
@@ -14,6 +14,7 @@ import type { ResolveHostPropertyIdsService } from './applications/services/reso
 import type { ResolvePaymentReservationsService } from './applications/services/resolve-payment-reservations.service';
 import type { ResolveReservationCancellationPolicyService } from './applications/services/resolve-reservation-cancellation-policy.service';
 import type { ResolveReservationStatsScopeService } from './applications/services/resolve-reservation-stats-scope.service';
+import type { IInvoiceRepository } from '../invoice/domain/repositories/invoice.repository';
 import { CancelReservationCommandHandler } from './applications/useCase/handlers/CancelReservationCommandHandler';
 import { ConfirmReservationCommandHandler } from './applications/useCase/handlers/ConfirmReservationCommandHandler';
 import { CreateReservationCommandHandler } from './applications/useCase/handlers/CreateReservationCommandHandler';
@@ -37,7 +38,7 @@ export class ReservationBootstrap {
     paymentRepository: IPaymentRepository;
     paymentGateway: IPaymentGateway;
     checkRoomAvailability: CheckRoomAvailabilityService;
-    calculateStayAmount: CalculateStayAmountService;
+    roomStayPricing: RoomStayPricingService;
     enrichReservationOutputs: EnrichReservationOutputsService;
     resolvePaymentReservations: ResolvePaymentReservationsService;
     resolveHostPropertyIds: ResolveHostPropertyIdsService;
@@ -46,6 +47,7 @@ export class ReservationBootstrap {
     assertReservationAccess: AssertReservationAccessService;
     resolveCancellationPolicy: ResolveReservationCancellationPolicyService;
     computeCancellationRefund: ComputeCancellationRefundService;
+    invoiceRepository: IInvoiceRepository;
   }) {
     const listReservationsQueryHandler = new ListReservationsQueryHandler(
       deps.reservationRepository,
@@ -63,7 +65,7 @@ export class ReservationBootstrap {
         deps.reservationRepository,
         deps.roomRepository,
         deps.userRepository,
-        deps.calculateStayAmount,
+        deps.roomStayPricing,
         deps.enrichReservationOutputs,
       ),
       confirmReservationCommandHandler: new ConfirmReservationCommandHandler(
@@ -131,6 +133,7 @@ export class ReservationBootstrap {
         deps.userRepository,
         deps.propertyRepository,
         deps.resolvePaymentReservations,
+        deps.invoiceRepository,
       ),
     };
   }

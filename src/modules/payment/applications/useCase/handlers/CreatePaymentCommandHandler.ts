@@ -45,6 +45,7 @@ export class CreatePaymentCommandHandler implements ICommandHandler<
         propertyId: command.propertyId,
         transactionId: paymentIntent.id,
         cartId: command.cartId,
+        pricingBreakdown: command.pricingBreakdown,
       }),
     );
 

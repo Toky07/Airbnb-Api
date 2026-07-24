@@ -20,6 +20,11 @@ export function parsePropertyBody(
     checkInTime: String(body.checkInTime),
     checkOutTime: String(body.checkOutTime),
     cancellationPolicy: cancellationPolicy ?? DEFAULT_CANCELLATION_POLICY,
+    touristTaxPerGuestNight:
+      body.touristTaxPerGuestNight === undefined ||
+      body.touristTaxPerGuestNight === ''
+        ? 0
+        : Number(body.touristTaxPerGuestNight),
     ownerId: Number(body.ownerId),
     propertyTypeId:
       body.propertyTypeId === undefined || body.propertyTypeId === ''

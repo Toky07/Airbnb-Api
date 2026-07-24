@@ -1,4 +1,5 @@
 import { toScalarString } from '../http/to-scalar-string';
+import { parseAdvancedFilterFields } from './parse-advanced-filter-query';
 import {
   DEFAULT_PAGE_SIZE,
   PAGE_SIZE_OPTIONS,
@@ -49,5 +50,6 @@ export function parsePaginationQuery(
         : undefined,
     checkIn: hasValidDateRange ? checkIn : undefined,
     checkOut: hasValidDateRange ? checkOut : undefined,
+    ...parseAdvancedFilterFields(query),
   };
 }

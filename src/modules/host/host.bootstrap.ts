@@ -18,6 +18,9 @@ import { GetHostRoomAmenitiesQueryHandler } from './applications/useCase/handler
 import { CreateHostRoomBlockedDateCommandHandler } from './applications/useCase/handlers/CreateHostRoomBlockedDateCommandHandler';
 import { DeleteHostRoomBlockedDateCommandHandler } from './applications/useCase/handlers/DeleteHostRoomBlockedDateCommandHandler';
 import { ListHostRoomBlockedDatesQueryHandler } from './applications/useCase/handlers/ListHostRoomBlockedDatesQueryHandler';
+import { CreateHostRoomRateOverrideCommandHandler } from './applications/useCase/handlers/CreateHostRoomRateOverrideCommandHandler';
+import { DeleteHostRoomRateOverrideCommandHandler } from './applications/useCase/handlers/DeleteHostRoomRateOverrideCommandHandler';
+import { ListHostRoomRateOverridesQueryHandler } from './applications/useCase/handlers/ListHostRoomRateOverridesQueryHandler';
 
 export class HostBootstrap {
   static create(deps: {
@@ -75,6 +78,12 @@ export class HostBootstrap {
         new CreateHostRoomBlockedDateCommandHandler(deps.resolveHostProperty),
       deleteHostRoomBlockedDateCommandHandler:
         new DeleteHostRoomBlockedDateCommandHandler(deps.resolveHostProperty),
+      listHostRoomRateOverridesQueryHandler:
+        new ListHostRoomRateOverridesQueryHandler(deps.resolveHostProperty),
+      createHostRoomRateOverrideCommandHandler:
+        new CreateHostRoomRateOverrideCommandHandler(deps.resolveHostProperty),
+      deleteHostRoomRateOverrideCommandHandler:
+        new DeleteHostRoomRateOverrideCommandHandler(deps.resolveHostProperty),
     };
   }
 }

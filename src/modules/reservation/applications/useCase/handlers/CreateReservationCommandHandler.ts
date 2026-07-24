@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { CalculateStayAmountService } from '../../../../../shared/pricing/calculate-stay-amount.service';
+import type { RoomStayPricingService } from '../../../../rooms/applications/services/room-stay-pricing.service';
 import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
 import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
 import type { Room } from '../../../../rooms/domain/entities/room.entity';
@@ -25,7 +25,7 @@ export class CreateReservationCommandHandler implements ICommandHandler<
     private readonly reservationRepository: IReservationRepository,
     private readonly roomRepository: IRoomRepository,
     private readonly userRepository: IUserRepository,
-    private readonly calculateStayAmount: CalculateStayAmountService,
+    private readonly roomStayPricing: RoomStayPricingService,
     private readonly enrichReservationOutputs: EnrichReservationOutputsService,
   ) {}
 
@@ -49,11 +49,11 @@ export class CreateReservationCommandHandler implements ICommandHandler<
 
       this.ensureRoomBasics(room, input.guestCount);
 
-      const stayAmount = this.calculateStayAmount.execute({
-        checkIn: input.startDate,
-        checkOut: input.endDate,
-        pricePerNight: room.pricePerNight,
-      });
+      const stayAmount = await this.roomStayPricing.resolveForRoom(
+        room,
+        input.startDate,
+        input.endDate,
+      );
 
       items.push(
         new ReservationItem(

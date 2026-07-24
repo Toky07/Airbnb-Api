@@ -34,6 +34,7 @@ export class EnrichReservationOutputsService {
           reservation.createdAt,
           reservation.updatedAt,
           reservation.holdUntil,
+          reservation.paymentId,
         ),
     );
   }

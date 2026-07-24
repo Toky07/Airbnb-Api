@@ -34,6 +34,7 @@ export class PropertyMapper {
       cancellationPolicy:
         parseCancellationPolicy(property.cancellationPolicy) ??
         DEFAULT_CANCELLATION_POLICY,
+      touristTaxPerGuestNight: Number(property.touristTaxPerGuestNight ?? 0),
       ownerId: property.ownerId,
       propertyTypeId: property.propertyTypeId,
       propertyType: mapPropertyType(property),
@@ -58,6 +59,7 @@ export class PropertyMapper {
       checkInTime: property.checkInTime,
       checkOutTime: property.checkOutTime,
       cancellationPolicy: property.cancellationPolicy,
+      touristTaxPerGuestNight: property.touristTaxPerGuestNight,
       ownerId: property.ownerId,
       propertyTypeId: property.propertyTypeId,
       createdAt: property.createdAt,
