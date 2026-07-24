@@ -1,7 +1,4 @@
-import {
-  BadRequestException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import type { TokenGenerator } from '../../../domain/generator/token.generator';
 import { HOST_ROLE_SLUG } from '../../../domain/constants/permissions.constant';

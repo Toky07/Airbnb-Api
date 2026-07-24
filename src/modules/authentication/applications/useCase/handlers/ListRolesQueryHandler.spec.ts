@@ -9,9 +9,7 @@ import { buildPaginationMeta } from '../../../../../shared/pagination/pagination
 const repository = {
   findPaginated: async () => ({
     data: [
-      RoleOutput.fromDomain(
-        new RoleEntity(new UserNameVO('test'), 'test', 1),
-      ),
+      RoleOutput.fromDomain(new RoleEntity(new UserNameVO('test'), 'test', 1)),
     ],
     meta: buildPaginationMeta(1, 1, 10),
   }),

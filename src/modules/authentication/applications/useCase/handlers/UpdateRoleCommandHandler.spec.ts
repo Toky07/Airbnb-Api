@@ -30,7 +30,7 @@ describe('UpdateRoleCommandHandler', () => {
     const handler = new UpdateRoleCommandHandler({
       ...repository,
       findById: async () => null,
-    } as unknown as IRoleRepository);
+    });
 
     await expect(
       handler.execute(new UpdateRoleCommand({ id: 2, name: 'test' })),
@@ -42,9 +42,8 @@ describe('UpdateRoleCommandHandler', () => {
     async (slug) => {
       const handler = new UpdateRoleCommandHandler({
         ...repository,
-        findById: async () =>
-          new RoleEntity(new UserNameVO(slug), slug, 10),
-      } as unknown as IRoleRepository);
+        findById: async () => new RoleEntity(new UserNameVO(slug), slug, 10),
+      });
 
       await expect(
         handler.execute(

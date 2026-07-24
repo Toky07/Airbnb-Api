@@ -19,7 +19,7 @@ describe('BecomeHostCommandHandler', () => {
     vi.clearAllMocks();
     handler = new BecomeHostCommandHandler(
       ensureAuthHasRole as never,
-      tokenGenerator as never,
+      tokenGenerator,
     );
   });
 

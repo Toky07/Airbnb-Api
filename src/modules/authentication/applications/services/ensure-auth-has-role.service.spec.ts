@@ -27,7 +27,10 @@ describe('EnsureAuthHasRoleService', () => {
       id: 7,
       roles: [{ id: 1, slug: TRAVELER_ROLE_SLUG }],
     });
-    roleRepository.findBySlug.mockResolvedValue({ id: 2, slug: HOST_ROLE_SLUG });
+    roleRepository.findBySlug.mockResolvedValue({
+      id: 2,
+      slug: HOST_ROLE_SLUG,
+    });
     authRepository.assignRoles.mockResolvedValue(true);
 
     const added = await service.execute(7, HOST_ROLE_SLUG);

@@ -178,10 +178,7 @@ export class AuthModule implements OnModuleInit {
       SetRolePermissionsCommand,
       bootstrap.setRolePermissionsCommandHandler,
     );
-    CommandBus.register(
-      BecomeHostCommand,
-      bootstrap.becomeHostCommandHandler,
-    );
+    CommandBus.register(BecomeHostCommand, bootstrap.becomeHostCommandHandler);
     CommandBus.register(
       SendAccountInvitationCommand,
       bootstrap.sendAccountInvitationCommandHandler,

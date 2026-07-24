@@ -18,9 +18,7 @@ export class CreateRoleCommandHandler implements ICommandHandler<
     const slug = command.dto.slug?.trim() || slugify(command.dto.name);
 
     if (isSystemRoleSlug(slug)) {
-      throw new ForbiddenException(
-        'Ce slug est réservé à un rôle système',
-      );
+      throw new ForbiddenException('Ce slug est réservé à un rôle système');
     }
 
     const existing = await this.repository.findBySlug(slug);

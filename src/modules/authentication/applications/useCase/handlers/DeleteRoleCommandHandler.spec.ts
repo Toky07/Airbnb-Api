@@ -27,7 +27,7 @@ describe('DeleteRoleCommandHandler', () => {
     const handler = new DeleteRoleCommandHandler({
       ...repository,
       findById: async () => null,
-    } as unknown as IRoleRepository);
+    });
 
     await expect(
       handler.execute(new DeleteRoleCommand(2)),
@@ -39,9 +39,8 @@ describe('DeleteRoleCommandHandler', () => {
     async (slug) => {
       const handler = new DeleteRoleCommandHandler({
         ...repository,
-        findById: async () =>
-          new RoleEntity(new UserNameVO(slug), slug, 10),
-      } as unknown as IRoleRepository);
+        findById: async () => new RoleEntity(new UserNameVO(slug), slug, 10),
+      });
 
       await expect(
         handler.execute(new DeleteRoleCommand(10)),

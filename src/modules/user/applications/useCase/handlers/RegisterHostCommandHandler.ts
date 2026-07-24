@@ -67,9 +67,8 @@ export class RegisterHostCommandHandler implements ICommandHandler<
 
     await this.userRepository.linkAuthAccount(createdUser.id, pendingAuth.id);
 
-    const travelerRole = await this.roleRepository.findBySlug(
-      TRAVELER_ROLE_SLUG,
-    );
+    const travelerRole =
+      await this.roleRepository.findBySlug(TRAVELER_ROLE_SLUG);
     if (travelerRole?.id) {
       await this.authRepository.assignRoles(pendingAuth.id, [travelerRole.id]);
     }
