@@ -37,6 +37,7 @@ import { ResetPasswordWithTokenCommand } from '../../applications/useCase/comman
 import { RequestPasswordResetCommand } from '../../applications/useCase/commands/RequestPasswordResetCommand';
 import { ValidatePasswordResetTokenQuery } from '../../applications/useCase/queries/ValidatePasswordResetTokenQuery';
 import { GetMeQuery } from '../../applications/useCase/queries/GetMeQuery';
+import { BecomeHostCommand } from '../../applications/useCase/commands/BecomeHostCommand';
 
 @Controller('auth')
 export class AuthController {
@@ -128,6 +129,21 @@ export class AuthController {
       throw new UnauthorizedException();
     }
     return QueryBus.execute(new GetMeQuery(request.user.sub));
+  }
+
+  @Post('become-host')
+  @HttpCode(200)
+  async becomeHost(
+    @Req() request: { user?: JwtPayload },
+  ): Promise<{ token: string }> {
+    if (!request.user?.sub) {
+      throw new UnauthorizedException();
+    }
+
+    const token = await CommandBus.execute<string>(
+      new BecomeHostCommand(request.user.sub),
+    );
+    return { token };
   }
 
   @Put('profile')

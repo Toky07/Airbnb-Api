@@ -282,6 +282,62 @@ describe('UserController', () => {
     );
   });
 
+  it('/PUT users/:id/password sets password and activates pending user', async () => {
+    const repository = dataSource.getRepository(UserEntity);
+    const user = await repository.save({
+      firstName: 'Pending',
+      lastName: 'User',
+      email: 'pending-password@test.com',
+      phoneNumber: '+1234567890',
+      avatar: '',
+    });
+
+    const response = await request(app.getHttpServer())
+      .put(`/users/${user.id}/password`)
+      .send({ password: 'secret12' })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    expect(response.body.status).toBe('active');
+    expect(response.body.authLinked).toBe(true);
+  });
+
+  it('/PUT users/:id/status disables and reactivates user', async () => {
+    const repository = dataSource.getRepository(UserEntity);
+    const authRepository = dataSource.getRepository(AuthEntity);
+
+    const auth = await authRepository.save({
+      email: 'status-user@test.com',
+      password: 'hashed-password',
+      status: 'active',
+    });
+    const user = await repository.save({
+      firstName: 'Status',
+      lastName: 'User',
+      email: 'status-user@test.com',
+      phoneNumber: '+1234567890',
+      avatar: '',
+      authId: auth.id,
+      status: 'active',
+    });
+
+    const disabled = await request(app.getHttpServer())
+      .put(`/users/${user.id}/status`)
+      .send({ status: 'disabled' })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    expect(disabled.body.status).toBe('disabled');
+
+    const reactivated = await request(app.getHttpServer())
+      .put(`/users/${user.id}/status`)
+      .send({ status: 'active' })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    expect(reactivated.body.status).toBe('active');
+  });
+
   it('/DELETE users/:id', async () => {
     const repository = dataSource.getRepository(UserEntity);
     const authRepository = dataSource.getRepository(AuthEntity);

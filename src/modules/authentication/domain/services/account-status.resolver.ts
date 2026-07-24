@@ -6,17 +6,25 @@ import {
 
 export class AccountStatusResolver {
   /**
-   * Un utilisateur est actif uniquement s'il existe dans `auth`
-   * avec un mot de passe et un statut actif.
+   * Statut affiché côté profil utilisateur, dérivé du compte auth lié.
    */
   static resolve(user: {
     authId?: number | null;
     auth?: AuthEntity | null;
+    status?: AccountStatus | null;
   }): AccountStatus {
     const auth = user.auth;
 
+    if (auth?.status === ACCOUNT_STATUS.DISABLED) {
+      return ACCOUNT_STATUS.DISABLED;
+    }
+
+    if (user.status === ACCOUNT_STATUS.DISABLED) {
+      return ACCOUNT_STATUS.DISABLED;
+    }
+
     if (!auth?.id) {
-      return ACCOUNT_STATUS.PENDING;
+      return user.status ?? ACCOUNT_STATUS.PENDING;
     }
 
     if (auth.status === ACCOUNT_STATUS.ACTIVE && auth.password) {

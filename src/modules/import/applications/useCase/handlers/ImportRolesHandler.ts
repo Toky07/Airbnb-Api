@@ -4,7 +4,10 @@ import { RoleOutput } from '../../../../authentication/applications/dto/role.out
 import { UpdateRoleCommand } from '../../../../authentication/applications/useCase/commands/UpdateRoleCommand';
 import { SetRolePermissionsCommand } from '../../../../authentication/applications/useCase/commands/SetRolePermissionsCommand';
 import type { IRoleRepository } from '../../../../authentication/domain/repositories/role.repository';
-import { SUPERADMIN_ROLE_SLUG } from '../../../../authentication/domain/constants/permissions.constant';
+import {
+  isPermissionLockedRoleSlug,
+  isSystemRoleSlug,
+} from '../../../../authentication/domain/constants/system-roles.constant';
 import type { ImportRoleRowDto } from '../../dto/import-batch.dto';
 import type { ImportEntityResult } from '../../dto/import-entity-result.dto';
 import { emptyImportEntityResult } from '../../dto/import-entity-result.dto';
@@ -41,26 +44,25 @@ export class ImportRolesHandler {
       const existing = await this.roleRepository.findBySlug(slug);
 
       try {
-        if (slug === SUPERADMIN_ROLE_SLUG) {
-          if (existing?.id) {
-            if (row.description?.trim()) {
-              await CommandBus.execute(
-                new UpdateRoleCommand({
-                  id: existing.id,
-                  description: row.description.trim(),
-                }),
-              );
-            }
-            result.created += 1;
-          } else {
+        if (isSystemRoleSlug(slug)) {
+          if (!existing?.id) {
             result.errors.push({
               entity: 'role',
               index,
               field: 'slug',
               message:
-                'Le rôle super administrateur doit exister avant import.',
+                'Les rôles système doivent être créés par le seed avant import.',
             });
+            continue;
           }
+
+          if (!isPermissionLockedRoleSlug(slug)) {
+            await CommandBus.execute(
+              new SetRolePermissionsCommand(existing.id, permissionKeys),
+            );
+          }
+
+          result.created += 1;
           continue;
         }
 

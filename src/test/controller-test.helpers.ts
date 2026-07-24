@@ -2,7 +2,10 @@ import type { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import type { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { SUPERADMIN_ROLE_SLUG } from '../modules/authentication/domain/constants/permissions.constant';
+import {
+  HOST_ROLE_SLUG,
+  SUPERADMIN_ROLE_SLUG,
+} from '../modules/authentication/domain/constants/permissions.constant';
 import { AuthEntity } from '../modules/authentication/infrastructure/entity/auth.entity';
 import { PermissionEntity } from '../modules/authentication/infrastructure/entity/permission.entity';
 import { Role } from '../modules/authentication/infrastructure/entity/role.entity';
@@ -81,9 +84,11 @@ export const DOMAIN_TEST_ENTITIES = [
   ReviewOrmEntity,
 ] as const;
 
-export async function assignSuperAdminRole(
+async function assignRoleBySlug(
   dataSource: DataSource,
   email: string,
+  roleSlug: string,
+  replaceExisting = false,
 ): Promise<void> {
   const authRepo = dataSource.getRepository(AuthEntity);
   const roleRepo = dataSource.getRepository(Role);
@@ -91,17 +96,40 @@ export async function assignSuperAdminRole(
     where: { email: email.trim().toLowerCase() },
     relations: ['roles'],
   });
-  const superAdmin = await roleRepo.findOne({
-    where: { slug: SUPERADMIN_ROLE_SLUG },
+  const role = await roleRepo.findOne({
+    where: { slug: roleSlug },
     relations: ['permissions'],
   });
 
-  if (!auth?.id || !superAdmin?.id) {
+  if (!auth?.id || !role?.id) {
     return;
   }
 
-  auth.roles = [superAdmin];
+  if (replaceExisting) {
+    auth.roles = [role];
+  } else {
+    const currentRoles = auth.roles ?? [];
+    const alreadyHasRole = currentRoles.some((item) => item.slug === roleSlug);
+    if (!alreadyHasRole) {
+      auth.roles = [...currentRoles, role];
+    }
+  }
+
   await authRepo.save(auth);
+}
+
+export async function assignSuperAdminRole(
+  dataSource: DataSource,
+  email: string,
+): Promise<void> {
+  await assignRoleBySlug(dataSource, email, SUPERADMIN_ROLE_SLUG, true);
+}
+
+export async function assignHostRole(
+  dataSource: DataSource,
+  email: string,
+): Promise<void> {
+  await assignRoleBySlug(dataSource, email, HOST_ROLE_SLUG);
 }
 
 export async function activateAuthAccountForTests(
@@ -190,6 +218,7 @@ export async function registerAndLoginAsHost(
     payload.email,
     payload.password,
   );
+  await assignHostRole(dataSource, payload.email);
 
   const login = await request(app.getHttpServer())
     .post('/auth/login')

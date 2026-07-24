@@ -6,6 +6,7 @@ import type { IPasswordSetupTokenRepository } from './domain/repositories/passwo
 import type { IPasswordResetTokenRepository } from './domain/repositories/password-reset-token.repository';
 import type { TokenGenerator } from './domain/generator/token.generator';
 import type { EnsurePropertyOwnerHostRoleService } from './applications/services/ensure-property-owner-host-role.service';
+import type { EnsureAuthHasRoleService } from './applications/services/ensure-auth-has-role.service';
 import type { MailService } from '../mail/applications/services/mail.service';
 import { PasswordSetupTokenService } from './domain/services/password-setup-token.service';
 import { PasswordSetupLinkBuilder } from './domain/services/password-setup-link.builder';
@@ -16,6 +17,7 @@ import { CreateRoleCommandHandler } from './applications/useCase/handlers/Create
 import { UpdateRoleCommandHandler } from './applications/useCase/handlers/UpdateRoleCommandHandler';
 import { DeleteRoleCommandHandler } from './applications/useCase/handlers/DeleteRoleCommandHandler';
 import { SetRolePermissionsCommandHandler } from './applications/useCase/handlers/SetRolePermissionsCommandHandler';
+import { BecomeHostCommandHandler } from './applications/useCase/handlers/BecomeHostCommandHandler';
 import { GetMeQueryHandler } from './applications/useCase/handlers/GetMeQueryHandler';
 import { ListRolesQueryHandler } from './applications/useCase/handlers/ListRolesQueryHandler';
 import { ListPermissionsQueryHandler } from './applications/useCase/handlers/ListPermissionsQueryHandler';
@@ -36,6 +38,7 @@ export class AuthBootstrap {
     tokenRepository: IPasswordSetupTokenRepository;
     resetTokenRepository: IPasswordResetTokenRepository;
     tokenGenerator: TokenGenerator;
+    ensureAuthHasRole: EnsureAuthHasRoleService;
     ensurePropertyOwnerHostRole: EnsurePropertyOwnerHostRoleService;
     mailService: MailService;
   }) {
@@ -62,6 +65,10 @@ export class AuthBootstrap {
       ),
       setRolePermissionsCommandHandler: new SetRolePermissionsCommandHandler(
         deps.roleRepository,
+      ),
+      becomeHostCommandHandler: new BecomeHostCommandHandler(
+        deps.ensureAuthHasRole,
+        deps.tokenGenerator,
       ),
       getMeQueryHandler: new GetMeQueryHandler(
         deps.authRepository,

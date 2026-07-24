@@ -3,7 +3,7 @@ import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-
 import type { IRoleRepository } from '../../../domain/repositories/role.repository';
 import { RoleOutput } from '../../dto/role.output';
 import { UserNameVO } from '../../../../user/domain/valueObject/username.vo';
-import { SUPERADMIN_ROLE_SLUG } from '../../../domain/constants/permissions.constant';
+import { isSystemRoleSlug } from '../../../domain/constants/system-roles.constant';
 import type { UpdateRoleCommand } from '../commands/UpdateRoleCommand';
 
 export class UpdateRoleCommandHandler implements ICommandHandler<
@@ -20,13 +20,9 @@ export class UpdateRoleCommandHandler implements ICommandHandler<
       throw new NotFoundException('Role not found');
     }
 
-    if (
-      role.slug === SUPERADMIN_ROLE_SLUG &&
-      name &&
-      name !== role.name.value
-    ) {
+    if (isSystemRoleSlug(role.slug)) {
       throw new ForbiddenException(
-        'Le rôle super administrateur ne peut pas être renommé',
+        'Les rôles système ne peuvent pas être modifiés (hors permissions)',
       );
     }
 

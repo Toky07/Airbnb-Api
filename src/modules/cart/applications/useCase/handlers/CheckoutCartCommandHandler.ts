@@ -51,18 +51,23 @@ export class CheckoutCartCommandHandler implements ICommandHandler<
         (event) => event.correlationId === correlationId,
       );
 
-    await EventBus.getInstance().publish(
-      new CartCheckoutRequestedEvent(
-        correlationId,
-        command.authId,
-        cart.id,
-        pricingBreakdown.totalCents,
-        items,
-        pricingBreakdown,
-      ),
-    );
+    try {
+      await EventBus.getInstance().publish(
+        new CartCheckoutRequestedEvent(
+          correlationId,
+          command.authId,
+          cart.id,
+          pricingBreakdown.totalCents,
+          items,
+          pricingBreakdown,
+        ),
+      );
+    } catch (error) {
+      waitForCompletion.cancel();
+      throw error;
+    }
 
-    const completed = await waitForCompletion;
+    const completed = await waitForCompletion.promise;
 
     return new CreatePaymentIntentOutput(
       completed.paymentId,

@@ -10,9 +10,15 @@ const tokenGenerator = {
     email: string;
     password: string;
   }): Promise<string> => {
+    void email;
+    void password;
     return 'token';
   },
-};
+  generateForAuthId: async (authId: number): Promise<string> => {
+    void authId;
+    return 'token';
+  },
+} satisfies TokenGenerator;
 
 describe('LoginCommandHandler', () => {
   it('should login', async () => {

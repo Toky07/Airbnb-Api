@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { RegisterHostCommandHandler } from './RegisterHostCommandHandler';
 import { RegisterHostCommand } from '../commands/RegisterHostCommand';
 import { commandBusExecuteMock } from '../../../../../test/command-bus.mock';
+import { TRAVELER_ROLE_SLUG } from '../../../../authentication/domain/constants/system-roles.constant';
 
 describe('RegisterHostCommandHandler', () => {
   const authRepository = {
@@ -31,10 +32,10 @@ describe('RegisterHostCommandHandler', () => {
     );
   });
 
-  it('crée un host et envoie l’invitation', async () => {
+  it('crée un voyageur et envoie l’invitation', async () => {
     const result = await handler.execute(
       new RegisterHostCommand({
-        email: 'host@test.com',
+        email: 'guest@test.com',
         firstName: 'Jean',
         lastName: 'Dupont',
         phoneNumber: '+33601020304',
@@ -43,6 +44,8 @@ describe('RegisterHostCommandHandler', () => {
 
     expect(result).toBe(true);
     expect(userRepository.linkAuthAccount).toHaveBeenCalledWith(5, 10);
+    expect(roleRepository.findBySlug).toHaveBeenCalledWith(TRAVELER_ROLE_SLUG);
+    expect(authRepository.assignRoles).toHaveBeenCalledWith(10, [3]);
     expect(commandBusExecuteMock).toHaveBeenCalled();
   });
 
@@ -52,7 +55,7 @@ describe('RegisterHostCommandHandler', () => {
     await expect(
       handler.execute(
         new RegisterHostCommand({
-          email: 'host@test.com',
+          email: 'guest@test.com',
           firstName: 'Jean',
           lastName: 'Dupont',
           phoneNumber: '+33601020304',

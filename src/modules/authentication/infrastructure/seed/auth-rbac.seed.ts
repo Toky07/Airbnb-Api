@@ -7,6 +7,7 @@ import {
   PERMISSION_DEFINITIONS,
   SUPERADMIN_ROLE_SLUG,
 } from '../../domain/constants/permissions.constant';
+import { TRAVELER_ROLE_SLUG } from '../../domain/constants/system-roles.constant';
 import { PermissionEntity } from '../entity/permission.entity';
 import { Role } from '../entity/role.entity';
 
@@ -23,6 +24,7 @@ export class AuthRbacSeedService implements OnModuleInit {
     await this.seedPermissions();
     await this.seedSuperAdminRole();
     await this.seedHostRole();
+    await this.seedTravelerRole();
   }
 
   private async seedPermissions(): Promise<void> {
@@ -83,6 +85,21 @@ export class AuthRbacSeedService implements OnModuleInit {
     await this.roleRepository.save(role);
   }
 
+  private async seedTravelerRole(): Promise<void> {
+    const role = await this.saveRole(
+      TRAVELER_ROLE_SLUG,
+      'Voyageur',
+      'Compte voyageur : réservations, favoris et messagerie',
+    );
+
+    // Voyageur n'a pas de permissions admin/hôte : les parcours guest
+    // s'appuient sur l'authentification, pas sur le RBAC métier.
+    if (!role.permissions || role.permissions.length === 0) {
+      role.permissions = [];
+      await this.roleRepository.save(role);
+    }
+  }
+
   private async saveRole(
     slug: string,
     name: string,
@@ -94,6 +111,10 @@ export class AuthRbacSeedService implements OnModuleInit {
     });
     if (!role) {
       role = this.roleRepository.create({ slug, name, description });
+      role = await this.roleRepository.save(role);
+    } else if (!role.description) {
+      role.description = description;
+      role.name = name;
       role = await this.roleRepository.save(role);
     }
 

@@ -12,6 +12,9 @@ import { UpdateMyProfileCommandHandler } from './applications/useCase/handlers/U
 import { FindUserQueryHandler } from './applications/useCase/handlers/FindUserQueryHandler';
 import { ListUsersQueryHandler } from './applications/useCase/handlers/ListUsersQueryHandler';
 import { ListUserOptionsQueryHandler } from './applications/useCase/handlers/ListUserOptionsQueryHandler';
+import { SetUserPasswordCommandHandler } from './applications/useCase/handlers/SetUserPasswordCommandHandler';
+import { UpdateUserStatusCommandHandler } from './applications/useCase/handlers/UpdateUserStatusCommandHandler';
+import type { EnsureUserAuthAccountService } from './applications/services/ensure-user-auth-account.service';
 
 export class UserBootstrap {
   static create(deps: {
@@ -19,6 +22,7 @@ export class UserBootstrap {
     authRepository: IAuthRepository;
     roleRepository: IRoleRepository;
     storage: ILocalStorageService;
+    ensureUserAuthAccount: EnsureUserAuthAccountService;
   }) {
     const saveUserAvatar = new SaveUserAvatarService(deps.storage);
 
@@ -54,6 +58,16 @@ export class UserBootstrap {
       listUsersQueryHandler: new ListUsersQueryHandler(deps.userRepository),
       listUserOptionsQueryHandler: new ListUserOptionsQueryHandler(
         deps.userRepository,
+      ),
+      setUserPasswordCommandHandler: new SetUserPasswordCommandHandler(
+        deps.userRepository,
+        deps.authRepository,
+        deps.ensureUserAuthAccount,
+      ),
+      updateUserStatusCommandHandler: new UpdateUserStatusCommandHandler(
+        deps.userRepository,
+        deps.authRepository,
+        deps.ensureUserAuthAccount,
       ),
     };
   }

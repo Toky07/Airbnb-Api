@@ -29,6 +29,9 @@ import { UpdateMyProfileCommand } from './applications/useCase/commands/UpdateMy
 import { FindUserQuery } from './applications/useCase/queries/FindUserQuery';
 import { ListUsersQuery } from './applications/useCase/queries/ListUsersQuery';
 import { ListUserOptionsQuery } from './applications/useCase/queries/ListUserOptionsQuery';
+import { SetUserPasswordCommand } from './applications/useCase/commands/SetUserPasswordCommand';
+import { UpdateUserStatusCommand } from './applications/useCase/commands/UpdateUserStatusCommand';
+import { EnsureUserAuthAccountService } from './applications/services/ensure-user-auth-account.service';
 
 @Module({
   imports: [
@@ -44,6 +47,7 @@ import { ListUserOptionsQuery } from './applications/useCase/queries/ListUserOpt
       useClass: UserRepository,
     },
     cartUserProvider,
+    EnsureUserAuthAccountService,
   ],
   exports: [USER_REPOSITORY, cartUserProvider],
 })
@@ -57,6 +61,7 @@ export class UserModule implements OnModuleInit {
     private readonly roleRepository: IRoleRepository,
     @Inject(LOCAL_STORAGE_SERVICE)
     private readonly storage: ILocalStorageService,
+    private readonly ensureUserAuthAccount: EnsureUserAuthAccountService,
   ) {}
 
   onModuleInit() {
@@ -65,6 +70,7 @@ export class UserModule implements OnModuleInit {
       authRepository: this.authRepository,
       roleRepository: this.roleRepository,
       storage: this.storage,
+      ensureUserAuthAccount: this.ensureUserAuthAccount,
     });
 
     CommandBus.register(CreateUserCommand, bootstrap.createUserCommandHandler);
@@ -81,6 +87,14 @@ export class UserModule implements OnModuleInit {
     CommandBus.register(
       UpdateMyProfileCommand,
       bootstrap.updateMyProfileCommandHandler,
+    );
+    CommandBus.register(
+      SetUserPasswordCommand,
+      bootstrap.setUserPasswordCommandHandler,
+    );
+    CommandBus.register(
+      UpdateUserStatusCommand,
+      bootstrap.updateUserStatusCommandHandler,
     );
 
     QueryBus.register(FindUserQuery, bootstrap.findUserQueryHandler);

@@ -6,7 +6,10 @@ import { AuthMapper } from '../mappers/auth.mappers';
 import { Auth } from '../../domain/entities/user.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Role } from '../entity/role.entity';
-import { ACCOUNT_STATUS } from '../../domain/constants/account-status.constant';
+import {
+  ACCOUNT_STATUS,
+  type AccountStatus,
+} from '../../domain/constants/account-status.constant';
 
 @Injectable()
 export class AuthRepository implements IAuthRepository {
@@ -50,6 +53,13 @@ export class AuthRepository implements IAuthRepository {
     await this.repository.update(authId, {
       password: passwordHash,
     });
+  }
+
+  async updateStatus(authId: number, status: AccountStatus): Promise<void> {
+    const result = await this.repository.update(authId, { status });
+    if (!result.affected) {
+      throw new NotFoundException('Auth not found');
+    }
   }
 
   async findByEmail(email: string): Promise<Auth | null> {
