@@ -15,7 +15,10 @@ export class ReviewEligibilityService {
     private readonly userRepository: IUserRepository,
   ) {}
 
-  async assertCanReview(authId: number, reservationId: number): Promise<{
+  async assertCanReview(
+    authId: number,
+    reservationId: number,
+  ): Promise<{
     userId: number;
     roomId: number;
   }> {

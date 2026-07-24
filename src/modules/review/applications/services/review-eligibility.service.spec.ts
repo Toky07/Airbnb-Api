@@ -25,15 +25,12 @@ describe('ReviewEligibilityService', () => {
     } as unknown as IReservationRepository;
 
     const reviewRepository = {
-      findByReservationId: async () =>
-        deps.existingReview ? { id: 1 } : null,
+      findByReservationId: async () => (deps.existingReview ? { id: 1 } : null),
     } as unknown as IReviewRepository;
 
     const userRepository = {
       findByAuthId: async () =>
-        deps.userId
-          ? { id: deps.userId, name: 'Traveler' }
-          : null,
+        deps.userId ? { id: deps.userId, name: 'Traveler' } : null,
     } as unknown as IUserRepository;
 
     return new ReviewEligibilityService(
@@ -50,9 +47,7 @@ describe('ReviewEligibilityService', () => {
   ) {
     return new Reservation(
       userId,
-      [
-        new ReservationItem(1, 5, '2020-01-01', checkout, 2, 10000, 4, 1),
-      ],
+      [new ReservationItem(1, 5, '2020-01-01', checkout, 2, 10000, 4, 1)],
       status,
       1,
       1,

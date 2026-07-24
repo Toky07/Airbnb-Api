@@ -15,7 +15,9 @@ describe('RequestPasswordResetCommandHandler', () => {
       expiresAt: new Date(Date.now() + 3600_000),
     })),
   };
-  const linkBuilder = { build: vi.fn(() => 'http://localhost/reset-password?token=raw-token') };
+  const linkBuilder = {
+    build: vi.fn(() => 'http://localhost/reset-password?token=raw-token'),
+  };
 
   let handler: RequestPasswordResetCommandHandler;
 
@@ -26,7 +28,7 @@ describe('RequestPasswordResetCommandHandler', () => {
       resetTokenRepository as never,
       mailService as never,
       tokenService as never,
-      linkBuilder as never,
+      linkBuilder,
     );
   });
 

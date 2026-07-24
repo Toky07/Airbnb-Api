@@ -57,7 +57,11 @@ import { ListMessagesQuery } from './applications/useCase/queries/ListMessagesQu
     GetOrCreateConversationService,
     MessagingEvent,
   ],
-  exports: [CONVERSATION_REPOSITORY, MESSAGE_REPOSITORY, GetOrCreateConversationService],
+  exports: [
+    CONVERSATION_REPOSITORY,
+    MESSAGE_REPOSITORY,
+    GetOrCreateConversationService,
+  ],
 })
 export class MessagingModule implements OnModuleInit {
   constructor(

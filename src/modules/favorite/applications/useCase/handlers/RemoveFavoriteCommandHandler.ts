@@ -1,7 +1,4 @@
-import {
-  ForbiddenException,
-  NotFoundException,
-} from '@nestjs/common';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
 import type { IFavoriteRepository } from '../../../domain/repositories/favorite.repository';

@@ -30,7 +30,9 @@ export class ReviewRepository implements IReviewRepository {
   }
 
   async update(review: Review): Promise<Review> {
-    const updated = await this.repository.preload(ReviewMapper.toEntity(review));
+    const updated = await this.repository.preload(
+      ReviewMapper.toEntity(review),
+    );
     const saved = await this.repository.save(updated!);
     return ReviewMapper.toDomain(saved);
   }

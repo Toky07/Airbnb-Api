@@ -1,8 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import {
-  ForbiddenException,
-  NotFoundException,
-} from '@nestjs/common';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { RemoveFavoriteCommandHandler } from './RemoveFavoriteCommandHandler';
 import { RemoveFavoriteCommand } from '../commands/RemoveFavoriteCommand';
 import { createFavoriteRepositoryMock } from '../favorite-test.helpers';
@@ -17,7 +14,7 @@ describe('RemoveFavoriteCommandHandler', () => {
     userRepository.findByAuthId.mockResolvedValue({ id: 9 });
     favoriteRepository.deleteByUserAndRoom.mockResolvedValue(true);
     handler = new RemoveFavoriteCommandHandler(
-      favoriteRepository as never,
+      favoriteRepository,
       userRepository as never,
     );
   });

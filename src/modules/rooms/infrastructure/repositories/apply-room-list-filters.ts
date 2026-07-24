@@ -72,9 +72,12 @@ export function applyRoomListFilters(
   if (params.lat !== undefined && params.lng !== undefined && params.radiusKm) {
     const latDelta = params.radiusKm / 111;
     const lngDelta =
-      params.radiusKm / (111 * Math.max(Math.cos((params.lat * Math.PI) / 180), 0.01));
+      params.radiusKm /
+      (111 * Math.max(Math.cos((params.lat * Math.PI) / 180), 0.01));
 
-    qb.andWhere('property.latitude IS NOT NULL AND property.longitude IS NOT NULL');
+    qb.andWhere(
+      'property.latitude IS NOT NULL AND property.longitude IS NOT NULL',
+    );
     qb.andWhere('property.latitude BETWEEN :minLat AND :maxLat', {
       minLat: params.lat - latDelta,
       maxLat: params.lat + latDelta,

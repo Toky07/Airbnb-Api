@@ -36,7 +36,11 @@ export class RequestPasswordResetCommandHandler implements ICommandHandler<
       Date.now() + PASSWORD_RESET_TOKEN_TTL_HOURS * 60 * 60 * 1000,
     );
 
-    await this.resetTokenRepository.create(auth.id, token.hash, token.expiresAt);
+    await this.resetTokenRepository.create(
+      auth.id,
+      token.hash,
+      token.expiresAt,
+    );
 
     const resetLink = this.linkBuilder.build(token.raw);
 

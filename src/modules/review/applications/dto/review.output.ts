@@ -14,10 +14,7 @@ export class ReviewOutput {
     public readonly authorName?: string,
   ) {}
 
-  static fromDomain(
-    review: Review,
-    authorName?: string,
-  ): ReviewOutput {
+  static fromDomain(review: Review, authorName?: string): ReviewOutput {
     return new ReviewOutput(
       review.id!,
       review.userId,

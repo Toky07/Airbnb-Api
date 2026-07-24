@@ -93,18 +93,20 @@ export class AuthBootstrap {
           deps.userRepository,
           tokenService,
         ),
-      requestPasswordResetCommandHandler: new RequestPasswordResetCommandHandler(
-        deps.authRepository,
-        deps.resetTokenRepository,
-        deps.mailService,
-        tokenService,
-        resetLinkBuilder,
-      ),
-      resetPasswordWithTokenCommandHandler: new ResetPasswordWithTokenCommandHandler(
-        deps.authRepository,
-        deps.resetTokenRepository,
-        tokenService,
-      ),
+      requestPasswordResetCommandHandler:
+        new RequestPasswordResetCommandHandler(
+          deps.authRepository,
+          deps.resetTokenRepository,
+          deps.mailService,
+          tokenService,
+          resetLinkBuilder,
+        ),
+      resetPasswordWithTokenCommandHandler:
+        new ResetPasswordWithTokenCommandHandler(
+          deps.authRepository,
+          deps.resetTokenRepository,
+          tokenService,
+        ),
       validatePasswordResetTokenQueryHandler:
         new ValidatePasswordResetTokenQueryHandler(
           deps.resetTokenRepository,

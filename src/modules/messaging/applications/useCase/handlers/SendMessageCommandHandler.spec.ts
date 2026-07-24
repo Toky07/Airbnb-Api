@@ -43,7 +43,9 @@ describe('SendMessageCommandHandler', () => {
       createConversationRepositoryMock(),
       createMessageRepositoryMock(),
       {
-        requireConversation: vi.fn().mockRejectedValue(new ForbiddenException()),
+        requireConversation: vi
+          .fn()
+          .mockRejectedValue(new ForbiddenException()),
         assertCanAccess: vi.fn(),
       } as never,
     );

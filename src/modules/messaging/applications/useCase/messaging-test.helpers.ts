@@ -59,7 +59,7 @@ export function createConversationRepositoryMock(
     findByParticipantUserId: vi.fn().mockResolvedValue([]),
     updateLastMessageAt: vi.fn(),
     ...overrides,
-  } as unknown as IConversationRepository;
+  };
 }
 
 export function createMessageRepositoryMock(
@@ -76,5 +76,5 @@ export function createMessageRepositoryMock(
     findByConversationId: vi.fn().mockResolvedValue([]),
     markAsRead: vi.fn(),
     ...overrides,
-  } as unknown as IMessageRepository;
+  };
 }

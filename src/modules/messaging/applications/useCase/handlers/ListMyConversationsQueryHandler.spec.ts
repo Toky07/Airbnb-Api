@@ -25,7 +25,9 @@ describe('ListMyConversationsQueryHandler', () => {
 
     expect(result).toHaveLength(1);
     expect(result[0]?.guestId).toBe(2);
-    expect(conversationRepository.findByParticipantUserId).toHaveBeenCalledWith(2);
+    expect(conversationRepository.findByParticipantUserId).toHaveBeenCalledWith(
+      2,
+    );
   });
 
   it('returns an empty list when the user is unknown', async () => {

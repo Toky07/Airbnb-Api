@@ -29,7 +29,9 @@ export class ConversationRepository implements IConversationRepository {
     return entity ? ConversationMapper.toDomain(entity) : null;
   }
 
-  async findByReservationId(reservationId: number): Promise<Conversation | null> {
+  async findByReservationId(
+    reservationId: number,
+  ): Promise<Conversation | null> {
     if (!Number.isFinite(reservationId) || reservationId <= 0) {
       return null;
     }

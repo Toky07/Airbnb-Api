@@ -58,10 +58,10 @@ describe('AddFavoriteCommandHandler', () => {
     favoriteRepository.create.mockResolvedValue(createSampleFavorite());
     roomMediaPresenter.toOutput.mockResolvedValue({ id: 10, name: 'Suite' });
     handler = new AddFavoriteCommandHandler(
-      favoriteRepository as never,
+      favoriteRepository,
       userRepository as never,
       roomRepository as never,
-      roomMediaPresenter as never,
+      roomMediaPresenter,
     );
   });
 
@@ -91,7 +91,9 @@ describe('AddFavoriteCommandHandler', () => {
   });
 
   it('refuse les doublons', async () => {
-    favoriteRepository.findByUserAndRoom.mockResolvedValue(createSampleFavorite());
+    favoriteRepository.findByUserAndRoom.mockResolvedValue(
+      createSampleFavorite(),
+    );
 
     await expect(
       handler.execute(new AddFavoriteCommand(1, { roomId: 10 })),

@@ -57,6 +57,8 @@ export class ModerateReviewCommandHandler implements ICommandHandler<
   private isValidModerationStatus(
     status: string,
   ): status is Exclude<ReviewStatus, 'pending'> {
-    return status === REVIEW_STATUS.PUBLISHED || status === REVIEW_STATUS.HIDDEN;
+    return (
+      status === REVIEW_STATUS.PUBLISHED || status === REVIEW_STATUS.HIDDEN
+    );
   }
 }

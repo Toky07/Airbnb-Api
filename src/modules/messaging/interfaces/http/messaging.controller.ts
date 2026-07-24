@@ -23,9 +23,7 @@ import { ListMessagesQuery } from '../../applications/useCase/queries/ListMessag
 export class MessagingController {
   @Get('me')
   listMine(@Req() request: { user?: JwtPayload }) {
-    return QueryBus.execute(
-      new ListMyConversationsQuery(request.user!.sub),
-    );
+    return QueryBus.execute(new ListMyConversationsQuery(request.user!.sub));
   }
 
   @Get(':id/messages')
@@ -55,10 +53,7 @@ export class MessagingController {
 
   @Post(':id/read')
   @HttpCode(HttpStatus.NO_CONTENT)
-  markRead(
-    @Req() request: { user?: JwtPayload },
-    @Param('id') id: string,
-  ) {
+  markRead(@Req() request: { user?: JwtPayload }, @Param('id') id: string) {
     return CommandBus.execute(
       new MarkConversationReadCommand(request.user!.sub, Number(id)),
     );

@@ -53,10 +53,10 @@ describe('ListMyFavoritesQueryHandler', () => {
     roomRepository.findById.mockResolvedValue(createSampleRoom());
     roomMediaPresenter.toOutput.mockResolvedValue({ id: 10, name: 'Suite' });
     handler = new ListMyFavoritesQueryHandler(
-      favoriteRepository as never,
+      favoriteRepository,
       userRepository as never,
       roomRepository as never,
-      roomMediaPresenter as never,
+      roomMediaPresenter,
     );
   });
 
@@ -70,8 +70,8 @@ describe('ListMyFavoritesQueryHandler', () => {
   it('refuse si utilisateur introuvable', async () => {
     userRepository.findByAuthId.mockResolvedValue(null);
 
-    await expect(handler.execute(new ListMyFavoritesQuery(1))).rejects.toBeInstanceOf(
-      ForbiddenException,
-    );
+    await expect(
+      handler.execute(new ListMyFavoritesQuery(1)),
+    ).rejects.toBeInstanceOf(ForbiddenException);
   });
 });

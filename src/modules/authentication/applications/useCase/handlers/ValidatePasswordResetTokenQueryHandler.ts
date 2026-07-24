@@ -15,7 +15,9 @@ export class ValidatePasswordResetTokenQueryHandler implements IQueryHandler<
     private readonly tokenService: PasswordSetupTokenService,
   ) {}
 
-  async execute(query: ValidatePasswordResetTokenQuery): Promise<{ email: string }> {
+  async execute(
+    query: ValidatePasswordResetTokenQuery,
+  ): Promise<{ email: string }> {
     const token = query.token?.trim();
     if (!token) {
       throw new NotFoundException('Lien invalide ou expiré.');

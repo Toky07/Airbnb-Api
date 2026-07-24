@@ -35,9 +35,14 @@ describe('ResetPasswordWithTokenCommandHandler', () => {
       auth: new Auth(1, new EmailVO('user@test.com'), 'old-hash', [], 'active'),
     });
 
-    await handler.execute(new ResetPasswordWithTokenCommand('token-abc', 'secret12'));
+    await handler.execute(
+      new ResetPasswordWithTokenCommand('token-abc', 'secret12'),
+    );
 
-    expect(authRepository.updatePassword).toHaveBeenCalledWith(1, expect.any(String));
+    expect(authRepository.updatePassword).toHaveBeenCalledWith(
+      1,
+      expect.any(String),
+    );
     expect(resetTokenRepository.consume).toHaveBeenCalledWith(3);
   });
 });

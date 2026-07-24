@@ -14,9 +14,10 @@ export class ListMessagesQueryHandler implements IQueryHandler<
   ) {}
 
   async execute(query: ListMessagesQuery): Promise<MessageOutput[]> {
-    const conversation = await this.assertConversationAccess.requireConversation(
-      query.conversationId,
-    );
+    const conversation =
+      await this.assertConversationAccess.requireConversation(
+        query.conversationId,
+      );
     await this.assertConversationAccess.assertCanAccess(
       conversation,
       query.authId,

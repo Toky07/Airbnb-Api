@@ -13,9 +13,10 @@ export class MarkConversationReadCommandHandler implements ICommandHandler<
   ) {}
 
   async execute(command: MarkConversationReadCommand): Promise<void> {
-    const conversation = await this.assertConversationAccess.requireConversation(
-      command.conversationId,
-    );
+    const conversation =
+      await this.assertConversationAccess.requireConversation(
+        command.conversationId,
+      );
     const readerId = await this.assertConversationAccess.assertCanAccess(
       conversation,
       command.authId,

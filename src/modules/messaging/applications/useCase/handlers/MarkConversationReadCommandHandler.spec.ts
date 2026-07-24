@@ -30,7 +30,9 @@ describe('MarkConversationReadCommandHandler', () => {
     const handler = new MarkConversationReadCommandHandler(
       createMessageRepositoryMock(),
       {
-        requireConversation: vi.fn().mockRejectedValue(new ForbiddenException()),
+        requireConversation: vi
+          .fn()
+          .mockRejectedValue(new ForbiddenException()),
         assertCanAccess: vi.fn(),
       } as never,
     );

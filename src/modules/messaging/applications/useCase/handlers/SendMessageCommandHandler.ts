@@ -17,9 +17,10 @@ export class SendMessageCommandHandler implements ICommandHandler<
   ) {}
 
   async execute(command: SendMessageCommand): Promise<MessageOutput> {
-    const conversation = await this.assertConversationAccess.requireConversation(
-      command.conversationId,
-    );
+    const conversation =
+      await this.assertConversationAccess.requireConversation(
+        command.conversationId,
+      );
     const senderId = await this.assertConversationAccess.assertCanAccess(
       conversation,
       command.authId,

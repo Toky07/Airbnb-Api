@@ -116,11 +116,13 @@ describe('RoomController', () => {
       name: 'Budget Property',
       city: 'Lyon',
     });
-    const premiumProperty = await dataSource.getRepository(PropertyEntity).save({
-      ...defaultProperty,
-      name: 'Premium Property',
-      city: 'Paris',
-    });
+    const premiumProperty = await dataSource
+      .getRepository(PropertyEntity)
+      .save({
+        ...defaultProperty,
+        name: 'Premium Property',
+        city: 'Paris',
+      });
 
     const cheapRoom = await dataSource.getRepository(RoomEntity).save({
       ...defaultRoom,
@@ -140,7 +142,9 @@ describe('RoomController', () => {
       .query({ minPrice: 50, maxPrice: 120, city: 'Lyon', limit: 25 })
       .expect(200);
 
-    const ids = (response.body.data as Array<{ id: number }>).map((room) => room.id);
+    const ids = (response.body.data as Array<{ id: number }>).map(
+      (room) => room.id,
+    );
     expect(ids).toEqual([cheapRoom.id]);
   });
 
@@ -176,7 +180,9 @@ describe('RoomController', () => {
       .query({ lat: 48.8566, lng: 2.3522, radiusKm: 25, limit: 25 })
       .expect(200);
 
-    const ids = (response.body.data as Array<{ id: number }>).map((room) => room.id);
+    const ids = (response.body.data as Array<{ id: number }>).map(
+      (room) => room.id,
+    );
     expect(ids).toEqual([parisRoom.id]);
   });
 

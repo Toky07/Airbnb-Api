@@ -8,7 +8,6 @@ import {
   Put,
 } from '@nestjs/common';
 import { Public } from '../../../authentication/interfaces/decorators/public.decorator';
-import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
 import { RequireSuperAdmin } from '../../../authentication/interfaces/decorators/require-superadmin.decorator';
 import type {
   CreateRoomTypeDto,

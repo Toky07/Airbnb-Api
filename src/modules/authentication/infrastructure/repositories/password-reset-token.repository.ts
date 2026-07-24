@@ -34,7 +34,9 @@ export class PasswordResetTokenRepository implements IPasswordResetTokenReposito
     return this.toRecord(saved);
   }
 
-  async findValidByHash(tokenHash: string): Promise<PasswordResetTokenRecord | null> {
+  async findValidByHash(
+    tokenHash: string,
+  ): Promise<PasswordResetTokenRecord | null> {
     const token = await this.repository.findOne({
       where: {
         tokenHash,
@@ -58,7 +60,9 @@ export class PasswordResetTokenRepository implements IPasswordResetTokenReposito
     );
   }
 
-  private toRecord(entity: PasswordResetTokenOrmEntity): PasswordResetTokenRecord {
+  private toRecord(
+    entity: PasswordResetTokenOrmEntity,
+  ): PasswordResetTokenRecord {
     return {
       id: entity.id,
       authId: entity.authId,

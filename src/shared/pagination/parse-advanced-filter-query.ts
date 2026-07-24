@@ -39,16 +39,18 @@ function parseFloatParam(value: unknown): number | undefined {
   return parsed;
 }
 
-export function parseAmenityIds(query: Record<string, unknown>): number[] | undefined {
+export function parseAmenityIds(
+  query: Record<string, unknown>,
+): number[] | undefined {
   const raw = query.amenityIds ?? query['amenityIds[]'];
 
   if (raw === undefined || raw === '') {
     return undefined;
   }
 
-  const values = Array.isArray(raw) ? raw : String(raw).split(',');
+  const values = Array.isArray(raw) ? raw : toScalarString(raw).split(',');
   const ids = values
-    .map((entry) => Number.parseInt(String(entry).trim(), 10))
+    .map((entry) => Number.parseInt(toScalarString(entry).trim(), 10))
     .filter((id) => Number.isFinite(id) && id > 0);
 
   return ids.length > 0 ? [...new Set(ids)] : undefined;
@@ -77,14 +79,13 @@ export function parseAdvancedFilterFields(query: Record<string, unknown>) {
       ? Math.min(100, Math.max(1, radiusKmRaw ?? 25))
       : undefined;
 
-  const hasGeo = lat !== undefined && lng !== undefined && radiusKm !== undefined;
+  const hasGeo =
+    lat !== undefined && lng !== undefined && radiusKm !== undefined;
 
   return {
     minPrice,
     maxPrice:
-      minPrice !== undefined &&
-      maxPrice !== undefined &&
-      maxPrice < minPrice
+      minPrice !== undefined && maxPrice !== undefined && maxPrice < minPrice
         ? undefined
         : maxPrice,
     minGuests,

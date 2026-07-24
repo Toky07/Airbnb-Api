@@ -19,9 +19,13 @@ export class MessageOrmEntity {
   @Index('IDX_messages_conversationId')
   conversationId!: number;
 
-  @ManyToOne(() => ConversationOrmEntity, (conversation) => conversation.messages, {
-    onDelete: 'CASCADE',
-  })
+  @ManyToOne(
+    () => ConversationOrmEntity,
+    (conversation) => conversation.messages,
+    {
+      onDelete: 'CASCADE',
+    },
+  )
   @JoinColumn({ name: 'conversationId' })
   conversation!: ConversationOrmEntity;
 

@@ -34,9 +34,7 @@ describe('GetOrCreateConversationCommandHandler', () => {
     const handler = new GetOrCreateConversationCommandHandler(
       { execute: vi.fn() } as never,
       {
-        assertParticipant: vi
-          .fn()
-          .mockRejectedValue(new ForbiddenException()),
+        assertParticipant: vi.fn().mockRejectedValue(new ForbiddenException()),
       } as never,
     );
 

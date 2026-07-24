@@ -107,11 +107,13 @@ describe('ReviewController', () => {
     });
     roomSlug = room.slug;
 
-    const reservation = await dataSource.getRepository(ReservationOrmEntity).save({
-      userId,
-      status: RESERVATION_STATUS.CONFIRMED,
-      holdUntil: null,
-    });
+    const reservation = await dataSource
+      .getRepository(ReservationOrmEntity)
+      .save({
+        userId,
+        status: RESERVATION_STATUS.CONFIRMED,
+        holdUntil: null,
+      });
 
     await dataSource.getRepository(ReservationItemOrmEntity).save({
       reservation: { id: reservation.id },

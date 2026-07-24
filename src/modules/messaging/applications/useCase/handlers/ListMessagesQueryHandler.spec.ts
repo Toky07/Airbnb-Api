@@ -41,13 +41,15 @@ describe('ListMessagesQueryHandler', () => {
     const handler = new ListMessagesQueryHandler(
       createMessageRepositoryMock(),
       {
-        requireConversation: vi.fn().mockRejectedValue(new ForbiddenException()),
+        requireConversation: vi
+          .fn()
+          .mockRejectedValue(new ForbiddenException()),
         assertCanAccess: vi.fn(),
       } as never,
     );
 
-    await expect(
-      handler.execute(new ListMessagesQuery(10, 1)),
-    ).rejects.toThrow(ForbiddenException);
+    await expect(handler.execute(new ListMessagesQuery(10, 1))).rejects.toThrow(
+      ForbiddenException,
+    );
   });
 });

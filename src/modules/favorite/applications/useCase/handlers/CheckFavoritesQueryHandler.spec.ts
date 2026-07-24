@@ -14,7 +14,7 @@ describe('CheckFavoritesQueryHandler', () => {
     userRepository.findByAuthId.mockResolvedValue({ id: 9 });
     favoriteRepository.findFavoritedRoomIds.mockResolvedValue([1, 3]);
     handler = new CheckFavoritesQueryHandler(
-      favoriteRepository as never,
+      favoriteRepository,
       userRepository as never,
     );
   });

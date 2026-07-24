@@ -31,9 +31,7 @@ export class ReviewController {
     @Req() request: { user?: JwtPayload },
     @Body() dto: CreateReviewDto,
   ): Promise<ReviewOutput> {
-    return CommandBus.execute(
-      new CreateReviewCommand(request.user!.sub, dto),
-    );
+    return CommandBus.execute(new CreateReviewCommand(request.user!.sub, dto));
   }
 
   @Get('me')

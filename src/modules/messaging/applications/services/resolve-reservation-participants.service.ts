@@ -35,7 +35,8 @@ export class ResolveReservationParticipantsService {
   async resolveFromReservationId(
     reservationId: number,
   ): Promise<ReservationParticipants> {
-    const reservation = await this.reservationRepository.findById(reservationId);
+    const reservation =
+      await this.reservationRepository.findById(reservationId);
     if (!reservation?.id) {
       throw new NotFoundException('Réservation introuvable.');
     }
@@ -72,10 +73,7 @@ export class ResolveReservationParticipantsService {
     }
 
     const participants = await this.resolveFromReservationId(reservationId);
-    if (
-      user.id !== participants.guestId &&
-      user.id !== participants.hostId
-    ) {
+    if (user.id !== participants.guestId && user.id !== participants.hostId) {
       throw new ForbiddenException('Accès refusé.');
     }
 

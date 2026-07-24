@@ -52,9 +52,7 @@ describe('ModerateReviewCommandHandler', () => {
     );
 
     await expect(
-      handler.execute(
-        new ModerateReviewCommand(99, { status: 'published' }),
-      ),
+      handler.execute(new ModerateReviewCommand(99, { status: 'published' })),
     ).rejects.toBeInstanceOf(NotFoundException);
   });
 
@@ -79,9 +77,7 @@ describe('ModerateReviewCommandHandler', () => {
     );
 
     await expect(
-      handler.execute(
-        new ModerateReviewCommand(1, { status: 'hidden' }),
-      ),
+      handler.execute(new ModerateReviewCommand(1, { status: 'hidden' })),
     ).rejects.toBeInstanceOf(BadRequestException);
   });
 });
