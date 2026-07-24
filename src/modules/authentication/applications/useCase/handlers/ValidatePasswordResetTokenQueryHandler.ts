@@ -33,7 +33,7 @@ export class ValidatePasswordResetTokenQueryHandler implements IQueryHandler<
     const user = await this.userRepository.findByAuthId(auth.id);
 
     return {
-      email: user?.email?.value ?? auth.email.value,
+      email: user?.email ?? auth.email,
     };
   }
 }

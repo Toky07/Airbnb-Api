@@ -1,5 +1,9 @@
 # OAuth Google — guide d’implémentation (phase ultérieure)
 
+> **Documentation déplacée :** voir [technique/oauth-google.md](technique/oauth-google.md) pour la version à jour.
+
+---
+
 > Statut : **non implémenté** — à activer lorsque les identifiants Google Cloud sont disponibles.
 
 ## Prérequis

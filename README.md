@@ -36,4 +36,8 @@ Swagger (si activé) : `/api` ou documenté dans `main.ts`.
 
 Documentation monorepo : [../README.md](../README.md).
 
-OAuth Google (phase ultérieure) : [docs/OAUTH_GOOGLE.md](docs/OAUTH_GOOGLE.md).
+## Documentation
+
+- [docs/README.md](docs/README.md) — index API (utilisateur + technique par module)
+- [docs/technique/oauth-google.md](docs/technique/oauth-google.md) — OAuth Google (phase ultérieure)
+- Vue globale : [../docs/README.md](../docs/README.md)
