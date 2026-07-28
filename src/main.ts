@@ -40,7 +40,7 @@ async function bootstrap() {
   });
 
   app.enableShutdownHooks(['SIGTERM', 'SIGINT'], { useProcessExit: true });
-//
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

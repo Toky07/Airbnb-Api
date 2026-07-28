@@ -48,6 +48,40 @@ function getPostgresConnectionOptions(database?: string) {
   };
 }
 
+async function ensureIntegrationTestDatabaseExists(): Promise<void> {
+  const database = process.env.DB_NAME ?? 'airbnb_test';
+  if (!/^[a-zA-Z0-9_]+$/.test(database)) {
+    throw new Error(`Invalid test database name: ${database}`);
+  }
+
+  const owner = process.env.DB_USER ?? 'airbnb';
+  if (!/^[a-zA-Z0-9_]+$/.test(owner)) {
+    throw new Error(`Invalid database owner: ${owner}`);
+  }
+
+  const adminDataSource = new DataSource({
+    ...getPostgresConnectionOptions('postgres'),
+    entities: [],
+    synchronize: false,
+  });
+
+  await adminDataSource.initialize();
+  try {
+    const existing: Array<{ exists: boolean }> = await adminDataSource.query(
+      'SELECT EXISTS (SELECT 1 FROM pg_database WHERE datname = $1) AS "exists"',
+      [database],
+    );
+
+    if (!existing[0]?.exists) {
+      await adminDataSource.query(
+        `CREATE DATABASE "${database}" OWNER "${owner}"`,
+      );
+    }
+  } finally {
+    await adminDataSource.destroy();
+  }
+}
+
 async function createAdminDataSource(): Promise<DataSource> {
   const dataSource = new DataSource({
     ...getPostgresConnectionOptions(),
@@ -109,6 +143,8 @@ export async function prepareIntegrationTestDatabase(): Promise<void> {
   if (process.env.DB_TYPE === 'sqlite') {
     return;
   }
+
+  await ensureIntegrationTestDatabaseExists();
 
   const state = getE2eDbState();
 
