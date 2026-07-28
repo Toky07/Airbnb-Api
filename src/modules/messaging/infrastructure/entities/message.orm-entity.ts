@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserEntity } from '../../../user/infrastructure/entities/user.entity';
-import { ConversationOrmEntity } from './conversation.orm-entity';
+import type { ConversationOrmEntity } from './conversation.orm-entity';
 
 @Entity({ name: 'messages' })
 export class MessageOrmEntity {
@@ -19,13 +19,9 @@ export class MessageOrmEntity {
   @Index('IDX_messages_conversationId')
   conversationId!: number;
 
-  @ManyToOne(
-    () => ConversationOrmEntity,
-    (conversation) => conversation.messages,
-    {
-      onDelete: 'CASCADE',
-    },
-  )
+  @ManyToOne('ConversationOrmEntity', 'messages', {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'conversationId' })
   conversation!: ConversationOrmEntity;
 

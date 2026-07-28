@@ -6,7 +6,7 @@ ENV npm_config_update_notifier=false
 
 FROM base AS deps
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends python3 make g++ dumb-init \
+  && apt-get install -y --no-install-recommends python3 make g++ dumb-init procps \
   && rm -rf /var/lib/apt/lists/*
 COPY package.json package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm \
@@ -14,7 +14,7 @@ RUN --mount=type=cache,target=/root/.npm \
 
 FROM deps AS build
 COPY . .
-RUN npm run build \
+RUN rm -rf dist && npm run build \
   && npm prune --omit=dev
 
 # ---------------------------------------------------------------------------
@@ -33,7 +33,7 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
 ENTRYPOINT ["dumb-init", "--", "/entrypoint.sh"]
 
 # ---------------------------------------------------------------------------
-# Production — build compilé (node dist/src/main.js)
+# Production — build compilé (node dist/main.js)
 # ---------------------------------------------------------------------------
 FROM node:22-bookworm-slim AS production
 WORKDIR /app

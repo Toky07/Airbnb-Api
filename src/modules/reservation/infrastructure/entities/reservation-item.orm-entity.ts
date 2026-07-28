@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ReservationOrmEntity } from './reservation.orm-entity';
+import type { ReservationOrmEntity } from './reservation.orm-entity';
 
 @Entity({ name: 'reservation_items' })
 export class ReservationItemOrmEntity {
@@ -17,7 +17,7 @@ export class ReservationItemOrmEntity {
   @Column({ type: 'integer' })
   reservationId: number;
 
-  @ManyToOne(() => ReservationOrmEntity, (reservation) => reservation.items, {
+  @ManyToOne('ReservationOrmEntity', 'items', {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'reservationId' })

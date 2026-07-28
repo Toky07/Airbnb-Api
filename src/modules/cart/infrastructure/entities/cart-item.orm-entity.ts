@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { CartOrmEntity } from './cart.orm-entity';
+import type { CartOrmEntity } from './cart.orm-entity';
 
 @Entity({ name: 'cart_items' })
 export class CartItemOrmEntity {
@@ -53,7 +53,7 @@ export class CartItemOrmEntity {
   @Column({ type: 'integer' })
   cartId: number;
 
-  @ManyToOne(() => CartOrmEntity, (cart) => cart.items, {
+  @ManyToOne('CartOrmEntity', 'items', {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'cartId' })

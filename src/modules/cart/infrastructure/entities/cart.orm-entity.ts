@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { CartItemOrmEntity } from './cart-item.orm-entity';
+import type { CartItemOrmEntity } from './cart-item.orm-entity';
 
 @Entity({ name: 'carts' })
 export class CartOrmEntity {
@@ -19,7 +19,7 @@ export class CartOrmEntity {
   @Column({ type: 'integer', nullable: true })
   userId: number | null;
 
-  @OneToMany(() => CartItemOrmEntity, (item) => item.cart, {
+  @OneToMany('CartItemOrmEntity', 'cart', {
     cascade: true,
     eager: true,
   })

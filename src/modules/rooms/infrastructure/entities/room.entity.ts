@@ -1,4 +1,4 @@
-import { PropertyEntity } from '../../../properties/infrastructure/entities/property-entity.entity';
+import type { PropertyEntity } from '../../../properties/infrastructure/entities/property-entity.entity';
 import { RoomTypeEntity } from './room-type.entity';
 import {
   PrimaryGeneratedColumn,
@@ -51,7 +51,7 @@ export class RoomEntity {
   @Column()
   status: string;
 
-  @ManyToOne(() => PropertyEntity, (property) => property.rooms)
+  @ManyToOne('PropertyEntity', 'rooms')
   @JoinColumn({ name: 'propertyId' })
   property: PropertyEntity;
 

@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ReservationItemOrmEntity } from './reservation-item.orm-entity';
+import type { ReservationItemOrmEntity } from './reservation-item.orm-entity';
 import { RESERVATION_STATUS } from '../../domain/constants/reservation-status.constant';
 import { PaymentOrmEntity } from '../../../payment/infrastructure/entities/payment.orm-entity';
 
@@ -20,7 +20,7 @@ export class ReservationOrmEntity {
   @Column({ type: 'integer' })
   userId: number;
 
-  @OneToMany(() => ReservationItemOrmEntity, (item) => item.reservation, {
+  @OneToMany('ReservationItemOrmEntity', 'reservation', {
     cascade: true,
   })
   items: ReservationItemOrmEntity[];

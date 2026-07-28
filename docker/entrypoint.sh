@@ -3,11 +3,12 @@ set -e
 
 case "${ENVIRONMENT:-prod}" in
   dev|development)
+    # npm install
     exec npm run start:dev
     ;;
   prod|production)
     npm run migration:run
-    exec node dist/src/main.js
+    exec node dist/main.js
     ;;
   *)
     echo "ENVIRONMENT must be 'dev' or 'prod' (got: ${ENVIRONMENT})" >&2

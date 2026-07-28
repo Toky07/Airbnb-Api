@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import { UserEntity } from '../../../user/infrastructure/entities/user.entity';
 import { ReservationOrmEntity } from '../../../reservation/infrastructure/entities/reservation.orm-entity';
-import { MessageOrmEntity } from './message.orm-entity';
+import type { MessageOrmEntity } from './message.orm-entity';
 
 @Entity({ name: 'conversations' })
 export class ConversationOrmEntity {
@@ -45,7 +45,7 @@ export class ConversationOrmEntity {
   @Column({ type: 'timestamp', nullable: true })
   lastMessageAt!: Date | null;
 
-  @OneToMany(() => MessageOrmEntity, (message) => message.conversation)
+  @OneToMany('MessageOrmEntity', 'conversation')
   messages!: MessageOrmEntity[];
 
   @CreateDateColumn()
