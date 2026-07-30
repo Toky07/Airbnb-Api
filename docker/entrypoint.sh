@@ -3,10 +3,10 @@ set -e
 
 case "${ENVIRONMENT:-prod}" in
   dev|development)
-    exec npm run start:dev
+    exec npx ts-node-dev --respawn --transpile-only -r tsconfig-paths/register src/main.ts
     ;;
   prod|production)
-    npm run migration:run
+    npx run migration:run
     exec node dist/src/main.js
     ;;
   *)
