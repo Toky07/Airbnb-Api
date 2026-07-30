@@ -38,6 +38,8 @@ async function bootstrap() {
   app.useStaticAssets(join(process.cwd(), uploadRoot), {
     prefix: `/${uploadRoot}`,
   });
+
+  app.enableShutdownHooks();
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
