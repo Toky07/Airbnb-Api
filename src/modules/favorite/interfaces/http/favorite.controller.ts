@@ -12,7 +12,8 @@ import {
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
+import type { AuthenticatedRequest } from '../../../../shared/http/authenticated-request.type';
+import { parseCommaSeparatedIds } from '../../../../shared/http/parse-comma-separated-ids';
 import { AddFavoriteDto } from '../../applications/dto/add-favorite.dto';
 import { AddFavoriteCommand } from '../../applications/useCase/commands/AddFavoriteCommand';
 import { RemoveFavoriteCommand } from '../../applications/useCase/commands/RemoveFavoriteCommand';
@@ -27,24 +28,24 @@ import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
 export class FavoriteController {
   @Get('me')
   @ApiOperation({ summary: 'Mes chambres favorites' })
-  listMine(@Req() request: { user?: JwtPayload }) {
-    return QueryBus.execute(new ListMyFavoritesQuery(request.user!.sub));
+  listMine(@Req() request: AuthenticatedRequest) {
+    return QueryBus.execute(new ListMyFavoritesQuery(request.user.sub));
   }
 
   @Post()
   @ApiOperation({ summary: 'Ajouter une chambre aux favoris' })
-  add(@Req() request: { user?: JwtPayload }, @Body() dto: AddFavoriteDto) {
-    return CommandBus.execute(new AddFavoriteCommand(request.user!.sub, dto));
+  add(@Req() request: AuthenticatedRequest, @Body() dto: AddFavoriteDto) {
+    return CommandBus.execute(new AddFavoriteCommand(request.user.sub, dto));
   }
 
   @Delete(':roomId')
   @ApiOperation({ summary: 'Retirer une chambre des favoris' })
   remove(
-    @Req() request: { user?: JwtPayload },
+    @Req() request: AuthenticatedRequest,
     @Param('roomId', ParseIntPipe) roomId: number,
   ) {
     return CommandBus.execute(
-      new RemoveFavoriteCommand(request.user!.sub, roomId),
+      new RemoveFavoriteCommand(request.user.sub, roomId),
     );
   }
 
@@ -57,15 +58,12 @@ export class FavoriteController {
     description: 'IDs séparés par des virgules',
     example: '1,2,3',
   })
-  check(
-    @Req() request: { user?: JwtPayload },
-    @Query('roomIds') roomIds: string,
-  ) {
-    const ids = (roomIds ?? '')
-      .split(',')
-      .map((value) => Number(value.trim()))
-      .filter((id) => Number.isInteger(id) && id > 0);
-
-    return QueryBus.execute(new CheckFavoritesQuery(request.user!.sub, ids));
+  check(@Req() request: AuthenticatedRequest, @Query('roomIds') roomIds: string) {
+    return QueryBus.execute(
+      new CheckFavoritesQuery(
+        request.user.sub,
+        parseCommaSeparatedIds(roomIds),
+      ),
+    );
   }
 }

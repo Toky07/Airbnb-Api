@@ -1,4 +1,5 @@
 import type { RoomOutput } from '../../../rooms/applications/dto/room.output';
+import type { Favorite } from '../../domain/entities/favorite.entity';
 
 export class FavoriteOutput {
   constructor(
@@ -7,4 +8,13 @@ export class FavoriteOutput {
     public readonly createdAt: Date,
     public readonly room: RoomOutput,
   ) {}
+
+  static fromFavorite(favorite: Favorite, room: RoomOutput): FavoriteOutput {
+    return new FavoriteOutput(
+      favorite.id!,
+      favorite.roomId,
+      favorite.createdAt!,
+      room,
+    );
+  }
 }

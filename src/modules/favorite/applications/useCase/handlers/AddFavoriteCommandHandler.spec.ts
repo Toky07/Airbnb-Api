@@ -8,10 +8,12 @@ import { AddFavoriteCommandHandler } from './AddFavoriteCommandHandler';
 import { AddFavoriteCommand } from '../commands/AddFavoriteCommand';
 import {
   createFavoriteRepositoryMock,
+  createResolveFavoriteUserServiceMock,
   createSampleFavorite,
 } from '../favorite-test.helpers';
 import { Room } from '../../../../rooms/domain/entities/room.entity';
 import { Property } from '../../../../properties/domain/entities/property.entity';
+import { ResolveFavoriteUserService } from '../../services/resolve-favorite-user.service';
 
 function createSampleRoom() {
   return new Room({
@@ -45,23 +47,23 @@ function createSampleRoom() {
 
 describe('AddFavoriteCommandHandler', () => {
   const favoriteRepository = createFavoriteRepositoryMock();
-  const userRepository = { findByAuthId: vi.fn() };
+  const resolveFavoriteUserService = createResolveFavoriteUserServiceMock();
   const roomRepository = { findById: vi.fn() };
   const roomMediaPresenter = { toOutput: vi.fn() };
   let handler: AddFavoriteCommandHandler;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    userRepository.findByAuthId.mockResolvedValue({ id: 9 });
+    resolveFavoriteUserService.resolveUserId.mockResolvedValue(9);
     roomRepository.findById.mockResolvedValue(createSampleRoom());
     favoriteRepository.findByUserAndRoom.mockResolvedValue(null);
     favoriteRepository.create.mockResolvedValue(createSampleFavorite());
     roomMediaPresenter.toOutput.mockResolvedValue({ id: 10, name: 'Suite' });
     handler = new AddFavoriteCommandHandler(
       favoriteRepository,
-      userRepository as never,
       roomRepository as never,
       roomMediaPresenter,
+      resolveFavoriteUserService as unknown as ResolveFavoriteUserService,
     );
   });
 
@@ -75,7 +77,9 @@ describe('AddFavoriteCommandHandler', () => {
   });
 
   it('refuse si utilisateur introuvable', async () => {
-    userRepository.findByAuthId.mockResolvedValue(null);
+    resolveFavoriteUserService.resolveUserId.mockRejectedValue(
+      new ForbiddenException('Accès refusé.'),
+    );
 
     await expect(
       handler.execute(new AddFavoriteCommand(1, { roomId: 10 })),

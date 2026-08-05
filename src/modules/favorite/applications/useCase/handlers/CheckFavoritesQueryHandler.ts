@@ -1,9 +1,8 @@
-import { ForbiddenException } from '@nestjs/common';
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
 import type { IFavoriteRepository } from '../../../domain/repositories/favorite.repository';
 import { CheckFavoritesOutput } from '../../dto/check-favorites.output';
 import type { CheckFavoritesQuery } from '../queries/CheckFavoritesQuery';
+import { ResolveFavoriteUserService } from '../../services/resolve-favorite-user.service';
 
 export class CheckFavoritesQueryHandler implements IQueryHandler<
   CheckFavoritesQuery,
@@ -11,17 +10,16 @@ export class CheckFavoritesQueryHandler implements IQueryHandler<
 > {
   constructor(
     private readonly favoriteRepository: IFavoriteRepository,
-    private readonly userRepository: IUserRepository,
+    private readonly resolveFavoriteUserService: ResolveFavoriteUserService,
   ) {}
 
   async execute(query: CheckFavoritesQuery): Promise<CheckFavoritesOutput> {
-    const user = await this.userRepository.findByAuthId(query.authId);
-    if (!user?.id) {
-      throw new ForbiddenException('Accès refusé.');
-    }
+    const userId = await this.resolveFavoriteUserService.resolveUserId(
+      query.authId,
+    );
 
     const favoritedRoomIds = await this.favoriteRepository.findFavoritedRoomIds(
-      user.id,
+      userId,
       query.roomIds,
     );
 

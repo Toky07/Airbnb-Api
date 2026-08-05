@@ -2,20 +2,24 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { RemoveFavoriteCommandHandler } from './RemoveFavoriteCommandHandler';
 import { RemoveFavoriteCommand } from '../commands/RemoveFavoriteCommand';
-import { createFavoriteRepositoryMock } from '../favorite-test.helpers';
+import {
+  createFavoriteRepositoryMock,
+  createResolveFavoriteUserServiceMock,
+} from '../favorite-test.helpers';
+import { ResolveFavoriteUserService } from '../../services/resolve-favorite-user.service';
 
 describe('RemoveFavoriteCommandHandler', () => {
   const favoriteRepository = createFavoriteRepositoryMock();
-  const userRepository = { findByAuthId: vi.fn() };
+  const resolveFavoriteUserService = createResolveFavoriteUserServiceMock();
   let handler: RemoveFavoriteCommandHandler;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    userRepository.findByAuthId.mockResolvedValue({ id: 9 });
+    resolveFavoriteUserService.resolveUserId.mockResolvedValue(9);
     favoriteRepository.deleteByUserAndRoom.mockResolvedValue(true);
     handler = new RemoveFavoriteCommandHandler(
       favoriteRepository,
-      userRepository as never,
+      resolveFavoriteUserService as unknown as ResolveFavoriteUserService,
     );
   });
 
@@ -26,7 +30,9 @@ describe('RemoveFavoriteCommandHandler', () => {
   });
 
   it('refuse si utilisateur introuvable', async () => {
-    userRepository.findByAuthId.mockResolvedValue(null);
+    resolveFavoriteUserService.resolveUserId.mockRejectedValue(
+      new ForbiddenException('Accès refusé.'),
+    );
 
     await expect(
       handler.execute(new RemoveFavoriteCommand(1, 10)),

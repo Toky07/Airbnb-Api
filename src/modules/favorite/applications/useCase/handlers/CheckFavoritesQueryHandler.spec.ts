@@ -2,20 +2,24 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ForbiddenException } from '@nestjs/common';
 import { CheckFavoritesQueryHandler } from './CheckFavoritesQueryHandler';
 import { CheckFavoritesQuery } from '../queries/CheckFavoritesQuery';
-import { createFavoriteRepositoryMock } from '../favorite-test.helpers';
+import {
+  createFavoriteRepositoryMock,
+  createResolveFavoriteUserServiceMock,
+} from '../favorite-test.helpers';
+import { ResolveFavoriteUserService } from '../../services/resolve-favorite-user.service';
 
 describe('CheckFavoritesQueryHandler', () => {
   const favoriteRepository = createFavoriteRepositoryMock();
-  const userRepository = { findByAuthId: vi.fn() };
+  const resolveFavoriteUserService = createResolveFavoriteUserServiceMock();
   let handler: CheckFavoritesQueryHandler;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    userRepository.findByAuthId.mockResolvedValue({ id: 9 });
+    resolveFavoriteUserService.resolveUserId.mockResolvedValue(9);
     favoriteRepository.findFavoritedRoomIds.mockResolvedValue([1, 3]);
     handler = new CheckFavoritesQueryHandler(
       favoriteRepository,
-      userRepository as never,
+      resolveFavoriteUserService as unknown as ResolveFavoriteUserService,
     );
   });
 
@@ -30,7 +34,9 @@ describe('CheckFavoritesQueryHandler', () => {
   });
 
   it('refuse si utilisateur introuvable', async () => {
-    userRepository.findByAuthId.mockResolvedValue(null);
+    resolveFavoriteUserService.resolveUserId.mockRejectedValue(
+      new ForbiddenException('Accès refusé.'),
+    );
 
     await expect(
       handler.execute(new CheckFavoritesQuery(1, [1])),

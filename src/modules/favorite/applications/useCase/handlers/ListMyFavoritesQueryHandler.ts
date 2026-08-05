@@ -1,11 +1,10 @@
-import { ForbiddenException } from '@nestjs/common';
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
 import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
 import type { IFavoriteRepository } from '../../../domain/repositories/favorite.repository';
 import { FavoriteOutput } from '../../dto/favorite.output';
 import type { RoomMediaPresenter } from '../../../../rooms/applications/presenters/room-media.presenter';
 import type { ListMyFavoritesQuery } from '../queries/ListMyFavoritesQuery';
+import { ResolveFavoriteUserService } from '../../services/resolve-favorite-user.service';
 
 export class ListMyFavoritesQueryHandler implements IQueryHandler<
   ListMyFavoritesQuery,
@@ -13,18 +12,17 @@ export class ListMyFavoritesQueryHandler implements IQueryHandler<
 > {
   constructor(
     private readonly favoriteRepository: IFavoriteRepository,
-    private readonly userRepository: IUserRepository,
     private readonly roomRepository: IRoomRepository,
     private readonly roomMediaPresenter: RoomMediaPresenter,
+    private readonly resolveFavoriteUserService: ResolveFavoriteUserService,
   ) {}
 
   async execute(query: ListMyFavoritesQuery): Promise<FavoriteOutput[]> {
-    const user = await this.userRepository.findByAuthId(query.authId);
-    if (!user?.id) {
-      throw new ForbiddenException('Accès refusé.');
-    }
+    const userId = await this.resolveFavoriteUserService.resolveUserId(
+      query.authId,
+    );
 
-    const favorites = await this.favoriteRepository.findByUserId(user.id);
+    const favorites = await this.favoriteRepository.findByUserId(userId);
     const outputs: FavoriteOutput[] = [];
 
     for (const favorite of favorites) {
@@ -34,14 +32,7 @@ export class ListMyFavoritesQueryHandler implements IQueryHandler<
       }
 
       const roomOutput = await this.roomMediaPresenter.toOutput(room);
-      outputs.push(
-        new FavoriteOutput(
-          favorite.id!,
-          favorite.roomId,
-          favorite.createdAt!,
-          roomOutput,
-        ),
-      );
+      outputs.push(FavoriteOutput.fromFavorite(favorite, roomOutput));
     }
 
     return outputs;

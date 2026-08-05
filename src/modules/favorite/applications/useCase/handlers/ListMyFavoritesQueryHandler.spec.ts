@@ -4,10 +4,12 @@ import { ListMyFavoritesQueryHandler } from './ListMyFavoritesQueryHandler';
 import { ListMyFavoritesQuery } from '../queries/ListMyFavoritesQuery';
 import {
   createFavoriteRepositoryMock,
+  createResolveFavoriteUserServiceMock,
   createSampleFavorite,
 } from '../favorite-test.helpers';
 import { Room } from '../../../../rooms/domain/entities/room.entity';
 import { Property } from '../../../../properties/domain/entities/property.entity';
+import { ResolveFavoriteUserService } from '../../services/resolve-favorite-user.service';
 
 function createSampleRoom() {
   return new Room({
@@ -41,22 +43,22 @@ function createSampleRoom() {
 
 describe('ListMyFavoritesQueryHandler', () => {
   const favoriteRepository = createFavoriteRepositoryMock();
-  const userRepository = { findByAuthId: vi.fn() };
+  const resolveFavoriteUserService = createResolveFavoriteUserServiceMock();
   const roomRepository = { findById: vi.fn() };
   const roomMediaPresenter = { toOutput: vi.fn() };
   let handler: ListMyFavoritesQueryHandler;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    userRepository.findByAuthId.mockResolvedValue({ id: 9 });
+    resolveFavoriteUserService.resolveUserId.mockResolvedValue(9);
     favoriteRepository.findByUserId.mockResolvedValue([createSampleFavorite()]);
     roomRepository.findById.mockResolvedValue(createSampleRoom());
     roomMediaPresenter.toOutput.mockResolvedValue({ id: 10, name: 'Suite' });
     handler = new ListMyFavoritesQueryHandler(
       favoriteRepository,
-      userRepository as never,
       roomRepository as never,
       roomMediaPresenter,
+      resolveFavoriteUserService as unknown as ResolveFavoriteUserService,
     );
   });
 
@@ -68,7 +70,9 @@ describe('ListMyFavoritesQueryHandler', () => {
   });
 
   it('refuse si utilisateur introuvable', async () => {
-    userRepository.findByAuthId.mockResolvedValue(null);
+    resolveFavoriteUserService.resolveUserId.mockRejectedValue(
+      new ForbiddenException('Accès refusé.'),
+    );
 
     await expect(
       handler.execute(new ListMyFavoritesQuery(1)),

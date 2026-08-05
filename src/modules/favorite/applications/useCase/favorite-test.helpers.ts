@@ -26,3 +26,9 @@ export function createFavoriteRepositoryMock() {
     findFavoritedRoomIds: vi.fn(),
   };
 }
+
+export function createResolveFavoriteUserServiceMock(userId = 9) {
+  return {
+    resolveUserId: vi.fn().mockResolvedValue(userId),
+  };
+}
