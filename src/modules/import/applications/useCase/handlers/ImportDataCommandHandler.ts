@@ -5,11 +5,13 @@ import type {
 } from '../../dto/import-batch.dto';
 import { ImportBatchContextService } from '../../services/import-batch-context.service';
 import { ImportPropertiesHandler } from './ImportPropertiesHandler';
-import { ImportPropertyTypesHandler } from './ImportPropertyTypesHandler';
 import { ImportRolesHandler } from './ImportRolesHandler';
-import { ImportRoomTypesHandler } from './ImportRoomTypesHandler';
 import { ImportRoomsHandler } from './ImportRoomsHandler';
 import { ImportUsersHandler } from './ImportUsersHandler';
+import {
+  ImportPropertyTypesHandler,
+  ImportRoomTypesHandler,
+} from './import-category-types.handler';
 import type { ImportDataCommand } from '../commands/ImportDataCommand';
 
 export class ImportDataCommandHandler implements ICommandHandler<

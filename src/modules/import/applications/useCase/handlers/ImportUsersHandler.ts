@@ -6,6 +6,11 @@ import type { ImportEntityResult } from '../../dto/import-entity-result.dto';
 import { emptyImportEntityResult } from '../../dto/import-entity-result.dto';
 import type { ImportBatchContext } from '../../services/import-batch-context.service';
 import { validateImportUserRow } from '../../validation/validate-import-user-row';
+import {
+  pushImportRowError,
+  pushImportValidationError,
+  toImportErrorMessage,
+} from '../../utils/import-error.util';
 
 export class ImportUsersHandler {
   async execute(
@@ -22,23 +27,19 @@ export class ImportUsersHandler {
       const row = rows[index];
       const validation = validateImportUserRow(row, index);
       if (!validation.ok) {
-        result.errors.push({
-          entity: 'user',
-          index,
-          field: validation.field,
-          message: validation.message,
-        });
+        pushImportValidationError(result, 'user', index, validation);
         continue;
       }
 
       const emailKey = row.email.trim().toLowerCase();
       if (context.emailToUserId.has(emailKey)) {
-        result.errors.push({
-          entity: 'user',
+        pushImportRowError(
+          result,
+          'user',
           index,
-          field: 'email',
-          message: `L’e-mail ${row.email} existe déjà.`,
-        });
+          `L’e-mail ${row.email} existe déjà.`,
+          'email',
+        );
         continue;
       }
 
@@ -61,12 +62,7 @@ export class ImportUsersHandler {
         context.emailToUserId.set(emailKey, created.id);
         result.created += 1;
       } catch (cause) {
-        result.errors.push({
-          entity: 'user',
-          index,
-          message:
-            cause instanceof Error ? cause.message : 'Création impossible.',
-        });
+        pushImportRowError(result, 'user', index, toImportErrorMessage(cause));
       }
     }
 
