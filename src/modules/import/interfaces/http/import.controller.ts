@@ -19,7 +19,9 @@ export class ImportController {
   @Post()
   @SensitiveRouteThrottle(IMPORT_THROTTLE)
   @RequirePermissions('import.execute')
-  @ApiOperation({ summary: 'Import CSV bulk (utilisateurs, établissements, etc.)' })
+  @ApiOperation({
+    summary: 'Import CSV bulk (utilisateurs, établissements, etc.)',
+  })
   async import(@Body() body: ImportBatchDto): Promise<ImportBatchResult> {
     return CommandBus.execute<ImportBatchResult>(new ImportDataCommand(body));
   }

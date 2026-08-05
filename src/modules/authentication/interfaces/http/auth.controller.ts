@@ -65,7 +65,9 @@ export class AuthController {
   @SensitiveRouteThrottle(AUTH_REGISTER_THROTTLE)
   @Post('register')
   @ApiOperation({ summary: 'Inscription voyageur' })
-  async create(@Body() registerHostDto: RegisterDto): Promise<SuccessResponseDto> {
+  async create(
+    @Body() registerHostDto: RegisterDto,
+  ): Promise<SuccessResponseDto> {
     const response = await CommandBus.execute<boolean>(
       new RegisterHostCommand(registerHostDto),
     );
@@ -77,7 +79,9 @@ export class AuthController {
   @Post('login')
   @HttpCode(200)
   @ApiOperation({ summary: 'Connexion — retourne un JWT' })
-  async login(@Body() loginCredentialsDto: LoginDto): Promise<LoginResponseDto> {
+  async login(
+    @Body() loginCredentialsDto: LoginDto,
+  ): Promise<LoginResponseDto> {
     const response = await CommandBus.execute<string>(
       new LoginCommand(loginCredentialsDto.email, loginCredentialsDto.password),
     );
@@ -87,7 +91,7 @@ export class AuthController {
   @Public()
   @SensitiveRouteThrottle(AUTH_PASSWORD_SETUP_THROTTLE)
   @Get('password-setup/validate')
-  @ApiOperation({ summary: 'Valider un token d\'invitation mot de passe' })
+  @ApiOperation({ summary: "Valider un token d'invitation mot de passe" })
   @ApiQuery({ name: 'token', required: true })
   async validatePasswordSetup(@Query('token') token: string) {
     return QueryBus.execute(new ValidatePasswordSetupTokenQuery(token));
@@ -98,7 +102,9 @@ export class AuthController {
   @Post('password-setup')
   @HttpCode(200)
   @ApiOperation({ summary: 'Définir le mot de passe via invitation' })
-  async setPassword(@Body() body: TokenPasswordDto): Promise<SuccessResponseDto> {
+  async setPassword(
+    @Body() body: TokenPasswordDto,
+  ): Promise<SuccessResponseDto> {
     await CommandBus.execute(
       new SetPasswordWithTokenCommand(body.token, body.password),
     );
@@ -110,7 +116,9 @@ export class AuthController {
   @Post('forgot-password')
   @HttpCode(200)
   @ApiOperation({ summary: 'Demander une réinitialisation de mot de passe' })
-  async forgotPassword(@Body() body: ForgotPasswordDto): Promise<SuccessResponseDto> {
+  async forgotPassword(
+    @Body() body: ForgotPasswordDto,
+  ): Promise<SuccessResponseDto> {
     await CommandBus.execute(new RequestPasswordResetCommand(body.email));
     return { success: true };
   }
@@ -129,7 +137,9 @@ export class AuthController {
   @Post('reset-password')
   @HttpCode(200)
   @ApiOperation({ summary: 'Réinitialiser le mot de passe' })
-  async resetPassword(@Body() body: TokenPasswordDto): Promise<SuccessResponseDto> {
+  async resetPassword(
+    @Body() body: TokenPasswordDto,
+  ): Promise<SuccessResponseDto> {
     await CommandBus.execute(
       new ResetPasswordWithTokenCommand(body.token, body.password),
     );
@@ -138,7 +148,7 @@ export class AuthController {
 
   @Get('me')
   @ApiJwtAuth()
-  @ApiOperation({ summary: 'Profil et permissions de l\'utilisateur connecté' })
+  @ApiOperation({ summary: "Profil et permissions de l'utilisateur connecté" })
   async me(@Req() request: { user?: JwtPayload }): Promise<MeOutput> {
     if (!request.user?.sub) {
       throw new UnauthorizedException();
@@ -202,7 +212,9 @@ export class AuthController {
   @RequirePermissions('roles.manage')
   @ApiJwtAuth()
   @ApiOperation({ summary: 'Assigner des rôles à un utilisateur (admin)' })
-  async assignRole(@Body() assignRoleDto: AssignRoleDto): Promise<SuccessResponseDto> {
+  async assignRole(
+    @Body() assignRoleDto: AssignRoleDto,
+  ): Promise<SuccessResponseDto> {
     const response = await CommandBus.execute<boolean>(
       new AssignRoleCommand(assignRoleDto.userId, assignRoleDto.roleId),
     );

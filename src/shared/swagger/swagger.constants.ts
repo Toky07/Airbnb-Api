@@ -7,7 +7,7 @@ export const SWAGGER_TAGS = {
   ROLES: 'Rôles & permissions',
   USERS: 'Utilisateurs',
   PROPERTIES: 'Établissements',
-  PROPERTY_TYPES: 'Types d\'établissement',
+  PROPERTY_TYPES: "Types d'établissement",
   ROOMS: 'Chambres',
   ROOM_TYPES: 'Types de chambre',
   AMENITIES: 'Équipements',

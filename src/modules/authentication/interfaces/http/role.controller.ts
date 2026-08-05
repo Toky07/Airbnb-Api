@@ -79,7 +79,7 @@ export class RoleController {
 
   @Put('roles/:id/permissions')
   @RequirePermissions('roles.manage')
-  @ApiOperation({ summary: 'Définir les permissions d\'un rôle' })
+  @ApiOperation({ summary: "Définir les permissions d'un rôle" })
   setPermissions(
     @Param('id') id: number,
     @Body() body: SetRolePermissionsSwaggerDto,

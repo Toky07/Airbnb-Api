@@ -6,7 +6,6 @@ import {
   Param,
   Patch,
   Post,
-  Query,
   Req,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -105,7 +104,9 @@ export class CartController {
   @Post('merge')
   @ApiJwtAuth()
   @ApiCartSessionHeader()
-  @ApiOperation({ summary: 'Fusionner le panier anonyme avec le compte connecté' })
+  @ApiOperation({
+    summary: 'Fusionner le panier anonyme avec le compte connecté',
+  })
   merge(
     @Req()
     request: {
@@ -123,7 +124,8 @@ export class CartController {
   @ApiJwtAuth()
   @ApiCartSessionHeader()
   @ApiOperation({
-    summary: 'Démarrer le checkout — crée réservation pending + PaymentIntent Stripe',
+    summary:
+      'Démarrer le checkout — crée réservation pending + PaymentIntent Stripe',
   })
   checkout(
     @Req()

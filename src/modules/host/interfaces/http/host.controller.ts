@@ -13,7 +13,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiConsumes, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
@@ -55,7 +55,10 @@ import type { CreateRoomBlockedDateDto } from '../../../rooms/applications/dto/c
 import type { CreateRoomRateOverrideDto } from '../../../rooms/applications/dto/create-room-rate-override.dto';
 import { CancelReservationCommand } from '../../../reservation/applications/useCase/commands/CancelReservationCommand';
 import { MarkReservationNoShowCommand } from '../../../reservation/applications/useCase/commands/MarkReservationNoShowCommand';
-import { ApiJwtAuth, ApiPaginationQuery } from '../../../../shared/swagger/swagger.decorators';
+import {
+  ApiJwtAuth,
+  ApiPaginationQuery,
+} from '../../../../shared/swagger/swagger.decorators';
 import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
 
 @ApiTags(SWAGGER_TAGS.HOST)
@@ -78,7 +81,7 @@ export class HostController {
 
   @Get('properties/:id')
   @RequirePermissions('host.property.read')
-  @ApiOperation({ summary: 'Détail d\'un de mes établissements' })
+  @ApiOperation({ summary: "Détail d'un de mes établissements" })
   property(@Req() request: { user: JwtPayload }, @Param('id') id: number) {
     return QueryBus.execute(new GetHostPropertyQuery(request.user, Number(id)));
   }
@@ -126,7 +129,7 @@ export class HostController {
 
   @Get('rooms')
   @RequirePermissions('host.rooms.read')
-  @ApiOperation({ summary: 'Chambres d\'un établissement' })
+  @ApiOperation({ summary: "Chambres d'un établissement" })
   @ApiQuery({ name: 'propertyId', required: true, type: Number })
   @ApiPaginationQuery()
   rooms(

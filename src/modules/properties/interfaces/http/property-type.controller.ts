@@ -31,7 +31,9 @@ export class PropertyTypeController {
   @Get()
   @RequireSuperAdmin()
   @ApiJwtAuth()
-  @ApiOperation({ summary: 'Lister tous les types d\'établissement (SuperAdmin)' })
+  @ApiOperation({
+    summary: "Lister tous les types d'établissement (SuperAdmin)",
+  })
   list(): Promise<PropertyTypeOutput[]> {
     return QueryBus.execute(new ListPropertyTypesQuery());
   }
@@ -39,7 +41,7 @@ export class PropertyTypeController {
   @Get('options')
   @RequirePermissions('properties.read')
   @ApiJwtAuth()
-  @ApiOperation({ summary: 'Options types d\'établissement' })
+  @ApiOperation({ summary: "Options types d'établissement" })
   listOptions(): Promise<PropertyTypeOutput[]> {
     return QueryBus.execute(new ListPropertyTypeOptionsQuery());
   }
@@ -47,15 +49,17 @@ export class PropertyTypeController {
   @Post()
   @RequireSuperAdmin()
   @ApiJwtAuth()
-  @ApiOperation({ summary: 'Créer un type d\'établissement' })
-  create(@Body() body: CreatePropertyTypeSwaggerDto): Promise<PropertyTypeOutput> {
+  @ApiOperation({ summary: "Créer un type d'établissement" })
+  create(
+    @Body() body: CreatePropertyTypeSwaggerDto,
+  ): Promise<PropertyTypeOutput> {
     return CommandBus.execute(new CreatePropertyTypeCommand(body));
   }
 
   @Put(':id')
   @RequireSuperAdmin()
   @ApiJwtAuth()
-  @ApiOperation({ summary: 'Modifier un type d\'établissement' })
+  @ApiOperation({ summary: "Modifier un type d'établissement" })
   update(
     @Param('id') id: number,
     @Body() body: UpdatePropertyTypeSwaggerDto,
@@ -66,7 +70,7 @@ export class PropertyTypeController {
   @Delete(':id')
   @RequireSuperAdmin()
   @ApiJwtAuth()
-  @ApiOperation({ summary: 'Supprimer un type d\'établissement' })
+  @ApiOperation({ summary: "Supprimer un type d'établissement" })
   delete(@Param('id') id: number): Promise<boolean> {
     return CommandBus.execute(new DeletePropertyTypeCommand(Number(id)));
   }

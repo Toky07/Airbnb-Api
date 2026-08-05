@@ -11,13 +11,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import {
-  ApiBody,
-  ApiConsumes,
-  ApiOperation,
-  ApiQuery,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiConsumes, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ENTITY_MEDIA_LIMITS, ENTITY_TYPE } from '../../../media/constant';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
 import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
@@ -61,7 +55,7 @@ export class RoomController {
 
   @Public()
   @Get('by-slug/:slug/reviews')
-  @ApiOperation({ summary: 'Avis d\'une chambre par slug' })
+  @ApiOperation({ summary: "Avis d'une chambre par slug" })
   @ApiPaginationQuery()
   async reviewsBySlug(
     @Param('slug') slug: string,
@@ -74,7 +68,7 @@ export class RoomController {
 
   @Public()
   @Get('by-slug/:slug/rating-summary')
-  @ApiOperation({ summary: 'Résumé des notes d\'une chambre' })
+  @ApiOperation({ summary: "Résumé des notes d'une chambre" })
   async ratingSummaryBySlug(
     @Param('slug') slug: string,
   ): Promise<RoomRatingSummaryOutput> {
@@ -105,14 +99,14 @@ export class RoomController {
 
   @Public()
   @Get('by-slug/:slug')
-  @ApiOperation({ summary: 'Détail d\'une chambre par slug' })
+  @ApiOperation({ summary: "Détail d'une chambre par slug" })
   async findBySlug(@Param('slug') slug: string) {
     return QueryBus.execute(new FindRoomQuery({ slug }));
   }
 
   @Public()
   @Get(':id')
-  @ApiOperation({ summary: 'Détail d\'une chambre par ID' })
+  @ApiOperation({ summary: "Détail d'une chambre par ID" })
   async findById(@Param('id') id: number) {
     return QueryBus.execute(new FindRoomQuery({ id: Number(id) }));
   }

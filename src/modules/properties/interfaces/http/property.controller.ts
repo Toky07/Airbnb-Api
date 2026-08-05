@@ -58,7 +58,7 @@ export class PropertyController {
 
   @Get(':id')
   @RequirePermissions('properties.read')
-  @ApiOperation({ summary: 'Détail d\'un établissement' })
+  @ApiOperation({ summary: "Détail d'un établissement" })
   findById(@Param('id') id: number): Promise<PropertyOutput> {
     return QueryBus.execute(new FindPropertyQuery(id));
   }

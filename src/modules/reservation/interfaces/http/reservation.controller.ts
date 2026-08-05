@@ -9,7 +9,7 @@ import {
   Query,
   Req,
 } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
 import { hasPermission } from '../../../authentication/domain/utils/build-jwt-payload';
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
@@ -65,7 +65,9 @@ export class ReservationController {
   }
 
   @Get('stats')
-  @ApiOperation({ summary: 'Statistiques réservations (scope selon permissions)' })
+  @ApiOperation({
+    summary: 'Statistiques réservations (scope selon permissions)',
+  })
   stats(@Req() request: { user?: JwtPayload }) {
     const user = request.user!;
 
@@ -104,7 +106,7 @@ export class ReservationController {
   }
 
   @Get('bookings/:paymentId')
-  @ApiOperation({ summary: 'Détail d\'une commande par ID paiement' })
+  @ApiOperation({ summary: "Détail d'une commande par ID paiement" })
   getBookingOrder(
     @Req() request: { user?: JwtPayload },
     @Param('paymentId') paymentId: string,
@@ -123,7 +125,7 @@ export class ReservationController {
 
   @Get('host')
   @RequirePermissions('host.reservations.read')
-  @ApiOperation({ summary: 'Réservations de l\'établissement hôte' })
+  @ApiOperation({ summary: "Réservations de l'établissement hôte" })
   @ApiPaginationQuery()
   listForHost(
     @Req() request: { user?: JwtPayload },
@@ -182,7 +184,7 @@ export class ReservationController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Détail d\'une réservation' })
+  @ApiOperation({ summary: "Détail d'une réservation" })
   getById(@Req() request: { user?: JwtPayload }, @Param('id') id: string) {
     const user = request.user!;
     const parsedId = Number.parseInt(id, 10);

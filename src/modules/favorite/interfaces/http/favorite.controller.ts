@@ -49,7 +49,9 @@ export class FavoriteController {
   }
 
   @Get('check')
-  @ApiOperation({ summary: 'Vérifier le statut favori pour plusieurs chambres' })
+  @ApiOperation({
+    summary: 'Vérifier le statut favori pour plusieurs chambres',
+  })
   @ApiQuery({
     name: 'roomIds',
     description: 'IDs séparés par des virgules',

@@ -75,7 +75,7 @@ export class AmenityController {
   @Get('properties/:propertyId')
   @RequirePermissions('properties.read')
   @ApiJwtAuth()
-  @ApiOperation({ summary: 'Équipements d\'un établissement' })
+  @ApiOperation({ summary: "Équipements d'un établissement" })
   listForProperty(
     @Param('propertyId') propertyId: number,
   ): Promise<AmenityOutput[]> {
@@ -85,7 +85,7 @@ export class AmenityController {
   @Put('properties/:propertyId')
   @RequirePermissions('properties.update')
   @ApiJwtAuth()
-  @ApiOperation({ summary: 'Synchroniser les équipements d\'un établissement' })
+  @ApiOperation({ summary: "Synchroniser les équipements d'un établissement" })
   syncForProperty(
     @Param('propertyId') propertyId: number,
     @Body() body: SyncAmenitiesSwaggerDto,
@@ -98,7 +98,7 @@ export class AmenityController {
   @Get('rooms/:roomId')
   @RequirePermissions('rooms.read')
   @ApiJwtAuth()
-  @ApiOperation({ summary: 'Équipements d\'une chambre' })
+  @ApiOperation({ summary: "Équipements d'une chambre" })
   listForRoom(@Param('roomId') roomId: number): Promise<AmenityOutput[]> {
     return QueryBus.execute(new ListRoomAmenitiesQuery(Number(roomId)));
   }
@@ -106,7 +106,7 @@ export class AmenityController {
   @Put('rooms/:roomId')
   @RequirePermissions('rooms.update')
   @ApiJwtAuth()
-  @ApiOperation({ summary: 'Synchroniser les équipements d\'une chambre' })
+  @ApiOperation({ summary: "Synchroniser les équipements d'une chambre" })
   syncForRoom(
     @Param('roomId') roomId: number,
     @Body() body: SyncAmenitiesSwaggerDto,

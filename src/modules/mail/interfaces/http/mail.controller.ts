@@ -37,7 +37,7 @@ const MAX_ATTACHMENTS = 5;
 export class MailController {
   @Get()
   @RequirePermissions('emails.read')
-  @ApiOperation({ summary: 'Liste des emails (file d\'envoi)' })
+  @ApiOperation({ summary: "Liste des emails (file d'envoi)" })
   @ApiPaginationQuery()
   list(@Query() query: Record<string, unknown>) {
     return QueryBus.execute(new ListEmailsQuery(parsePaginationQuery(query)));
@@ -45,7 +45,7 @@ export class MailController {
 
   @Get(':id')
   @RequirePermissions('emails.read')
-  @ApiOperation({ summary: 'Détail d\'un email' })
+  @ApiOperation({ summary: "Détail d'un email" })
   getById(@Param('id') id: number) {
     return QueryBus.execute(new GetEmailQuery(Number(id)));
   }

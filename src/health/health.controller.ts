@@ -8,7 +8,7 @@ import { SWAGGER_TAGS } from '../shared/swagger/swagger.constants';
 export class HealthController {
   @Public()
   @Get()
-  @ApiOperation({ summary: 'Vérification de disponibilité de l\'API' })
+  @ApiOperation({ summary: "Vérification de disponibilité de l'API" })
   check() {
     return { status: 'ok' };
   }

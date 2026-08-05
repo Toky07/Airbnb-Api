@@ -33,7 +33,7 @@ export class MessagingController {
   }
 
   @Get(':id/messages')
-  @ApiOperation({ summary: 'Messages d\'une conversation' })
+  @ApiOperation({ summary: "Messages d'une conversation" })
   @ApiQuery({
     name: 'since',
     required: false,
@@ -74,7 +74,9 @@ export class MessagingController {
   }
 
   @Post('from-reservation/:reservationId')
-  @ApiOperation({ summary: 'Obtenir ou créer une conversation pour une réservation' })
+  @ApiOperation({
+    summary: 'Obtenir ou créer une conversation pour une réservation',
+  })
   getOrCreateFromReservation(
     @Req() request: { user?: JwtPayload },
     @Param('reservationId') reservationId: string,

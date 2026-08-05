@@ -67,7 +67,7 @@ export class UserController {
 
   @Get(':id')
   @RequirePermissions('users.read')
-  @ApiOperation({ summary: 'Détail d\'un utilisateur' })
+  @ApiOperation({ summary: "Détail d'un utilisateur" })
   async findById(@Param('id') id: string): Promise<UserOutput> {
     return QueryBus.execute(new FindUserQuery(Number(id)));
   }
@@ -90,7 +90,7 @@ export class UserController {
 
   @Put(':id/password')
   @RequirePermissions('users.update')
-  @ApiOperation({ summary: 'Définir le mot de passe d\'un utilisateur' })
+  @ApiOperation({ summary: "Définir le mot de passe d'un utilisateur" })
   async setPassword(
     @Param('id') id: string,
     @Body() body: Record<string, unknown>,
@@ -101,7 +101,7 @@ export class UserController {
 
   @Put(':id/status')
   @RequirePermissions('users.update')
-  @ApiOperation({ summary: 'Modifier le statut d\'un compte' })
+  @ApiOperation({ summary: "Modifier le statut d'un compte" })
   async updateStatus(
     @Param('id') id: string,
     @Body() body: Record<string, unknown>,
