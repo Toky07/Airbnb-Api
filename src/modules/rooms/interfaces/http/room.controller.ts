@@ -11,6 +11,13 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ENTITY_MEDIA_LIMITS, ENTITY_TYPE } from '../../../media/constant';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
 import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
@@ -33,11 +40,19 @@ import { ListRoomReviewsQuery } from '../../../review/applications/useCase/queri
 import { GetRoomRatingSummaryQuery } from '../../../review/applications/useCase/queries/GetRoomRatingSummaryQuery';
 import { ReviewOutput } from '../../../review/applications/dto/review.output';
 import { RoomRatingSummaryOutput } from '../../../review/applications/dto/room-rating-summary.output';
+import {
+  ApiJwtAuth,
+  ApiPaginationQuery,
+} from '../../../../shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
 
+@ApiTags(SWAGGER_TAGS.ROOMS)
 @Controller('rooms')
 export class RoomController {
   @Public()
   @Get()
+  @ApiOperation({ summary: 'Recherche et liste des chambres (public)' })
+  @ApiPaginationQuery()
   async findAll(
     @Query() query: Record<string, unknown>,
   ): Promise<PaginatedResult<RoomOutput>> {
@@ -46,6 +61,8 @@ export class RoomController {
 
   @Public()
   @Get('by-slug/:slug/reviews')
+  @ApiOperation({ summary: 'Avis d\'une chambre par slug' })
+  @ApiPaginationQuery()
   async reviewsBySlug(
     @Param('slug') slug: string,
     @Query() query: Record<string, unknown>,
@@ -57,6 +74,7 @@ export class RoomController {
 
   @Public()
   @Get('by-slug/:slug/rating-summary')
+  @ApiOperation({ summary: 'Résumé des notes d\'une chambre' })
   async ratingSummaryBySlug(
     @Param('slug') slug: string,
   ): Promise<RoomRatingSummaryOutput> {
@@ -65,6 +83,10 @@ export class RoomController {
 
   @Public()
   @Get('by-slug/:slug/pricing-preview')
+  @ApiOperation({ summary: 'Aperçu tarifaire pour des dates' })
+  @ApiQuery({ name: 'startDate', required: true, example: '2026-09-01' })
+  @ApiQuery({ name: 'endDate', required: true, example: '2026-09-05' })
+  @ApiQuery({ name: 'guestCount', required: true, example: 2 })
   async pricingPreviewBySlug(
     @Param('slug') slug: string,
     @Query('startDate') startDate: string,
@@ -83,18 +105,23 @@ export class RoomController {
 
   @Public()
   @Get('by-slug/:slug')
+  @ApiOperation({ summary: 'Détail d\'une chambre par slug' })
   async findBySlug(@Param('slug') slug: string) {
     return QueryBus.execute(new FindRoomQuery({ slug }));
   }
 
   @Public()
   @Get(':id')
+  @ApiOperation({ summary: 'Détail d\'une chambre par ID' })
   async findById(@Param('id') id: number) {
     return QueryBus.execute(new FindRoomQuery({ id: Number(id) }));
   }
 
   @Post()
   @RequirePermissions('rooms.create')
+  @ApiJwtAuth()
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Créer une chambre (admin)' })
   @UseInterceptors(
     FilesInterceptor('images', ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM]),
   )
@@ -111,6 +138,9 @@ export class RoomController {
 
   @Put(':id')
   @RequirePermissions('rooms.update')
+  @ApiJwtAuth()
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Modifier une chambre (admin)' })
   @UseInterceptors(
     FilesInterceptor('images', ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM]),
   )
@@ -132,6 +162,8 @@ export class RoomController {
 
   @Delete(':id')
   @RequirePermissions('rooms.delete')
+  @ApiJwtAuth()
+  @ApiOperation({ summary: 'Supprimer une chambre (admin)' })
   async delete(@Param('id') id: number): Promise<{ status: boolean }> {
     const status = await CommandBus.execute<boolean>(
       new DeleteRoomCommand(Number(id)),

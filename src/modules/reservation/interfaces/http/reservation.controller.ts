@@ -9,6 +9,7 @@ import {
   Query,
   Req,
 } from '@nestjs/common';
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
 import { hasPermission } from '../../../authentication/domain/utils/build-jwt-payload';
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
@@ -27,10 +28,18 @@ import { ListBookingOrdersQuery } from '../../applications/useCase/queries/ListB
 import { GetBookingOrderQuery } from '../../applications/useCase/queries/GetBookingOrderQuery';
 import { GetCancellationPreviewQuery } from '../../applications/useCase/queries/GetCancellationPreviewQuery';
 import { ListReservationsQuery } from '../../applications/useCase/queries/ListReservationsQuery';
+import {
+  ApiJwtAuth,
+  ApiPaginationQuery,
+} from '../../../../shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
 
+@ApiTags(SWAGGER_TAGS.RESERVATIONS)
+@ApiJwtAuth()
 @Controller('reservations')
 export class ReservationController {
   @Post()
+  @ApiOperation({ summary: 'Créer une réservation (admin / direct)' })
   create(
     @Req() request: { user?: JwtPayload },
     @Body() dto: CreateReservationDto,
@@ -41,6 +50,8 @@ export class ReservationController {
   }
 
   @Get('me')
+  @ApiOperation({ summary: 'Mes réservations (voyageur)' })
+  @ApiPaginationQuery()
   listMine(
     @Req() request: { user?: JwtPayload },
     @Query() query: Record<string, unknown>,
@@ -54,6 +65,7 @@ export class ReservationController {
   }
 
   @Get('stats')
+  @ApiOperation({ summary: 'Statistiques réservations (scope selon permissions)' })
   stats(@Req() request: { user?: JwtPayload }) {
     const user = request.user!;
 
@@ -67,6 +79,8 @@ export class ReservationController {
 
   @Get('bookings/host')
   @RequirePermissions('host.reservations.read')
+  @ApiOperation({ summary: 'Commandes de réservation côté hôte' })
+  @ApiPaginationQuery()
   listBookingOrdersForHost(
     @Req() request: { user?: JwtPayload },
     @Query() query: Record<string, unknown>,
@@ -81,6 +95,8 @@ export class ReservationController {
 
   @Get('bookings')
   @RequirePermissions('reservations.read')
+  @ApiOperation({ summary: 'Commandes de réservation (admin)' })
+  @ApiPaginationQuery()
   listBookingOrders(@Query() query: Record<string, unknown>) {
     return QueryBus.execute(
       new ListBookingOrdersQuery(parseReservationQuery(query)),
@@ -88,6 +104,7 @@ export class ReservationController {
   }
 
   @Get('bookings/:paymentId')
+  @ApiOperation({ summary: 'Détail d\'une commande par ID paiement' })
   getBookingOrder(
     @Req() request: { user?: JwtPayload },
     @Param('paymentId') paymentId: string,
@@ -106,6 +123,8 @@ export class ReservationController {
 
   @Get('host')
   @RequirePermissions('host.reservations.read')
+  @ApiOperation({ summary: 'Réservations de l\'établissement hôte' })
+  @ApiPaginationQuery()
   listForHost(
     @Req() request: { user?: JwtPayload },
     @Query() query: Record<string, unknown>,
@@ -120,6 +139,8 @@ export class ReservationController {
 
   @Get()
   @RequirePermissions('reservations.read')
+  @ApiOperation({ summary: 'Liste des réservations (admin)' })
+  @ApiPaginationQuery()
   list(@Query() query: Record<string, unknown>) {
     return QueryBus.execute(
       new ListReservationsQuery(parseReservationQuery(query)),
@@ -128,6 +149,7 @@ export class ReservationController {
 
   @Post('me/:id/cancel')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Annuler sa propre réservation (voyageur)' })
   cancelMine(@Req() request: { user?: JwtPayload }, @Param('id') id: string) {
     const user = request.user!;
     const parsedId = Number.parseInt(id, 10);
@@ -142,6 +164,7 @@ export class ReservationController {
   }
 
   @Get(':id/cancellation-preview')
+  @ApiOperation({ summary: 'Aperçu remboursement avant annulation' })
   cancellationPreview(
     @Req() request: { user?: JwtPayload },
     @Param('id') id: string,
@@ -159,6 +182,7 @@ export class ReservationController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Détail d\'une réservation' })
   getById(@Req() request: { user?: JwtPayload }, @Param('id') id: string) {
     const user = request.user!;
     const parsedId = Number.parseInt(id, 10);
@@ -175,6 +199,7 @@ export class ReservationController {
   @Post('cancel/:id')
   @RequirePermissions('reservations.cancel')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Annuler une réservation (admin)' })
   cancel(@Req() request: { user?: JwtPayload }, @Param('id') id: string) {
     const user = request.user!;
     const parsedId = Number.parseInt(id, 10);
