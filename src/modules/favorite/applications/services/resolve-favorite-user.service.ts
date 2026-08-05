@@ -1,15 +1,16 @@
-import { ForbiddenException } from '@nestjs/common';
 import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
+import { ResolveAuthenticatedUserService } from '../../../../shared/auth/resolve-authenticated-user.service';
 
 export class ResolveFavoriteUserService {
-  constructor(private readonly userRepository: IUserRepository) {}
+  private readonly resolveAuthenticatedUser: ResolveAuthenticatedUserService;
 
-  async resolveUserId(authId: number): Promise<number> {
-    const user = await this.userRepository.findByAuthId(authId);
-    if (!user?.id) {
-      throw new ForbiddenException('Accès refusé.');
-    }
+  constructor(userRepository: IUserRepository) {
+    this.resolveAuthenticatedUser = new ResolveAuthenticatedUserService(
+      userRepository,
+    );
+  }
 
-    return user.id;
+  resolveUserId(authId: number): Promise<number> {
+    return this.resolveAuthenticatedUser.resolveUserId(authId);
   }
 }
