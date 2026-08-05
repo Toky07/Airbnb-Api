@@ -4,9 +4,9 @@ import type { PaginatedResult } from '../../../../../shared/pagination/paginatio
 import { REVIEW_STATUS } from '../../../domain/constants/review-status.constant';
 import type { IReviewRepository } from '../../../domain/repositories/review.repository';
 import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
 import { ReviewOutput } from '../../dto/review.output';
 import type { ListRoomReviewsQuery } from '../queries/ListRoomReviewsQuery';
+import { MapReviewOutputsService } from '../../services/map-review-outputs.service';
 
 export class ListRoomReviewsQueryHandler implements IQueryHandler<
   ListRoomReviewsQuery,
@@ -15,7 +15,7 @@ export class ListRoomReviewsQueryHandler implements IQueryHandler<
   constructor(
     private readonly reviewRepository: IReviewRepository,
     private readonly roomRepository: IRoomRepository,
-    private readonly userRepository: IUserRepository,
+    private readonly mapReviewOutputsService: MapReviewOutputsService,
   ) {}
 
   async execute(
@@ -33,13 +33,6 @@ export class ListRoomReviewsQueryHandler implements IQueryHandler<
       status: REVIEW_STATUS.PUBLISHED,
     });
 
-    const data = await Promise.all(
-      result.data.map(async (review) => {
-        const author = await this.userRepository.findById(review.userId);
-        return ReviewOutput.fromDomain(review, author?.name);
-      }),
-    );
-
-    return { data, meta: result.meta };
+    return this.mapReviewOutputsService.mapPaginatedWithAuthors(result);
   }
 }

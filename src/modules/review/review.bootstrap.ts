@@ -3,6 +3,8 @@ import type { IUserRepository } from '../user/domain/repositories/user.repositor
 import type { IRoomRepository } from '../rooms/domain/repositories/room.repository';
 import type { IReviewRepository } from './domain/repositories/review.repository';
 import { ReviewEligibilityService } from './applications/services/review-eligibility.service';
+import { ResolveReviewUserService } from './applications/services/resolve-review-user.service';
+import { MapReviewOutputsService } from './applications/services/map-review-outputs.service';
 import { CreateReviewCommandHandler } from './applications/useCase/handlers/CreateReviewCommandHandler';
 import { ModerateReviewCommandHandler } from './applications/useCase/handlers/ModerateReviewCommandHandler';
 import { ListRoomReviewsQueryHandler } from './applications/useCase/handlers/ListRoomReviewsQueryHandler';
@@ -22,6 +24,12 @@ export class ReviewBootstrap {
       deps.reviewRepository,
       deps.userRepository,
     );
+    const resolveReviewUserService = new ResolveReviewUserService(
+      deps.userRepository,
+    );
+    const mapReviewOutputsService = new MapReviewOutputsService(
+      deps.userRepository,
+    );
 
     return {
       createReviewCommandHandler: new CreateReviewCommandHandler(
@@ -35,11 +43,11 @@ export class ReviewBootstrap {
       listRoomReviewsQueryHandler: new ListRoomReviewsQueryHandler(
         deps.reviewRepository,
         deps.roomRepository,
-        deps.userRepository,
+        mapReviewOutputsService,
       ),
       listMyReviewsQueryHandler: new ListMyReviewsQueryHandler(
         deps.reviewRepository,
-        deps.userRepository,
+        resolveReviewUserService,
       ),
       getRoomRatingSummaryQueryHandler: new GetRoomRatingSummaryQueryHandler(
         deps.reviewRepository,
@@ -47,7 +55,7 @@ export class ReviewBootstrap {
       ),
       listPendingReviewsQueryHandler: new ListPendingReviewsQueryHandler(
         deps.reviewRepository,
-        deps.userRepository,
+        mapReviewOutputsService,
       ),
     };
   }
