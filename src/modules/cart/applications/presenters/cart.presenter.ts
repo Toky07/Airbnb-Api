@@ -8,7 +8,7 @@ import { Cart } from '../../domain/entities/cart.entity';
 import type { CartItem } from '../../domain/entities/cart-item.entity';
 import { CartItemOutput } from '../dto/cart-item.output';
 import { CartOutput } from '../dto/cart.output';
-import { PricingBreakdownOutput } from '../dto/pricing-breakdown.output';
+import { PricingBreakdownOutput } from '../../../../shared/pricing/pricing-breakdown.output';
 import { BuildCartPricingBreakdownService } from '../services/build-cart-pricing-breakdown.service';
 
 @Injectable()
