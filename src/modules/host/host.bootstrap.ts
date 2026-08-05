@@ -1,4 +1,5 @@
 import { PropertyMediaPresenter } from '../properties/applications/presenters/property-media.presenter';
+import { AssertHostRoomOwnershipService } from './applications/services/assert-host-room-ownership.service';
 import { ResolveHostUserService } from './applications/services/resolve-host-user.service';
 import { ResolveHostPropertyService } from './applications/services/resolve-host-property.service';
 import { CreateHostPropertyCommandHandler } from './applications/useCase/handlers/CreateHostPropertyCommandHandler';
@@ -28,6 +29,10 @@ export class HostBootstrap {
     resolveHostProperty: ResolveHostPropertyService;
     propertyMediaPresenter: PropertyMediaPresenter;
   }) {
+    const assertHostRoomOwnership = new AssertHostRoomOwnershipService(
+      deps.resolveHostProperty,
+    );
+
     return {
       getHostProfileQueryHandler: new GetHostProfileQueryHandler(
         deps.resolveHostUser,
@@ -57,33 +62,34 @@ export class HostBootstrap {
       ),
       updateHostRoomCommandHandler: new UpdateHostRoomCommandHandler(
         deps.resolveHostProperty,
+        assertHostRoomOwnership,
       ),
       deleteHostRoomCommandHandler: new DeleteHostRoomCommandHandler(
-        deps.resolveHostProperty,
+        assertHostRoomOwnership,
       ),
       listHostAmenityOptionsQueryHandler:
         new ListHostAmenityOptionsQueryHandler(),
       getHostPropertyAmenitiesQueryHandler:
         new GetHostPropertyAmenitiesQueryHandler(deps.resolveHostProperty),
       getHostRoomAmenitiesQueryHandler: new GetHostRoomAmenitiesQueryHandler(
-        deps.resolveHostProperty,
+        assertHostRoomOwnership,
       ),
       syncHostPropertyAmenitiesCommandHandler:
         new SyncHostPropertyAmenitiesCommandHandler(deps.resolveHostProperty),
       syncHostRoomAmenitiesCommandHandler:
-        new SyncHostRoomAmenitiesCommandHandler(deps.resolveHostProperty),
+        new SyncHostRoomAmenitiesCommandHandler(assertHostRoomOwnership),
       listHostRoomBlockedDatesQueryHandler:
-        new ListHostRoomBlockedDatesQueryHandler(deps.resolveHostProperty),
+        new ListHostRoomBlockedDatesQueryHandler(assertHostRoomOwnership),
       createHostRoomBlockedDateCommandHandler:
-        new CreateHostRoomBlockedDateCommandHandler(deps.resolveHostProperty),
+        new CreateHostRoomBlockedDateCommandHandler(assertHostRoomOwnership),
       deleteHostRoomBlockedDateCommandHandler:
-        new DeleteHostRoomBlockedDateCommandHandler(deps.resolveHostProperty),
+        new DeleteHostRoomBlockedDateCommandHandler(assertHostRoomOwnership),
       listHostRoomRateOverridesQueryHandler:
-        new ListHostRoomRateOverridesQueryHandler(deps.resolveHostProperty),
+        new ListHostRoomRateOverridesQueryHandler(assertHostRoomOwnership),
       createHostRoomRateOverrideCommandHandler:
-        new CreateHostRoomRateOverrideCommandHandler(deps.resolveHostProperty),
+        new CreateHostRoomRateOverrideCommandHandler(assertHostRoomOwnership),
       deleteHostRoomRateOverrideCommandHandler:
-        new DeleteHostRoomRateOverrideCommandHandler(deps.resolveHostProperty),
+        new DeleteHostRoomRateOverrideCommandHandler(assertHostRoomOwnership),
     };
   }
 }

@@ -1,3 +1,4 @@
+import { ForbiddenException } from '@nestjs/common';
 import { vi } from 'vitest';
 import type { JwtPayload } from '../../../../authentication/domain/types/jwt-payload';
 import { Property } from '../../../../properties/domain/entities/property.entity';
@@ -45,4 +46,16 @@ export function createPropertyPresenterMock() {
   return {
     toOutput: vi.fn().mockResolvedValue(propertyOutput),
   } as unknown as PropertyMediaPresenter;
+}
+
+export function createAssertHostRoomOwnershipMock(reject = false) {
+  return {
+    assert: reject
+      ? vi
+          .fn()
+          .mockRejectedValue(
+            new ForbiddenException('Chambre introuvable ou accès refusé.'),
+          )
+      : vi.fn().mockResolvedValue(undefined),
+  };
 }
