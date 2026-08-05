@@ -1,9 +1,10 @@
 import {
   ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Inject } from '@nestjs/common';
+import { ResolveAuthenticatedUserService } from '../../../../shared/auth/resolve-authenticated-user.service';
 import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
 import { USER_REPOSITORY } from '../../../user/infrastructure/repositories/user.repository';
 import type { Conversation } from '../../domain/entities/conversation.entity';
@@ -14,12 +15,17 @@ import {
 
 @Injectable()
 export class AssertConversationAccessService {
+  private readonly resolveAuthenticatedUser: ResolveAuthenticatedUserService;
+
   constructor(
     @Inject(CONVERSATION_REPOSITORY)
     private readonly conversationRepository: IConversationRepository,
-    @Inject(USER_REPOSITORY)
-    private readonly userRepository: IUserRepository,
-  ) {}
+    @Inject(USER_REPOSITORY) userRepository: IUserRepository,
+  ) {
+    this.resolveAuthenticatedUser = new ResolveAuthenticatedUserService(
+      userRepository,
+    );
+  }
 
   async requireConversation(id: number): Promise<Conversation> {
     const conversation = await this.conversationRepository.findById(id);
@@ -33,13 +39,10 @@ export class AssertConversationAccessService {
     conversation: Conversation,
     authId: number,
   ): Promise<number> {
-    const user = await this.userRepository.findByAuthId(authId);
-    if (!user?.id) {
-      throw new ForbiddenException('Accès refusé.');
-    }
+    const userId = await this.resolveAuthenticatedUser.resolveUserId(authId);
 
-    if (user.id === conversation.guestId || user.id === conversation.hostId) {
-      return user.id;
+    if (userId === conversation.guestId || userId === conversation.hostId) {
+      return userId;
     }
 
     throw new ForbiddenException('Accès refusé.');
