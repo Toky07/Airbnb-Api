@@ -47,8 +47,8 @@ export class BuildReservationPaymentContextService {
       reservationId: reservation.id,
       propertyIds: [...propertyIds],
       roomIds,
-      checkIn: checkIns[0]!,
-      checkOut: checkOuts[checkOuts.length - 1]!,
+      checkIn: checkIns[0],
+      checkOut: checkOuts[checkOuts.length - 1],
     };
   }
 }

@@ -8,14 +8,10 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Public } from '../../../authentication/interfaces/decorators/public.decorator';
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
 import { RequireSuperAdmin } from '../../../authentication/interfaces/decorators/require-superadmin.decorator';
-import type {
-  CreateAmenityDto,
-  SyncAmenitiesDto,
-  UpdateAmenityDto,
-} from '../../applications/dto/create-amenity.dto';
 import { AmenityOutput } from '../../applications/dto/amenity.output';
 import { parseAmenityScope } from '../../applications/utils/parse-amenity-scope';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
@@ -29,11 +25,22 @@ import { ListAmenitiesQuery } from '../../applications/useCase/queries/ListAmeni
 import { ListAmenityOptionsQuery } from '../../applications/useCase/queries/ListAmenityOptionsQuery';
 import { ListPropertyAmenitiesQuery } from '../../applications/useCase/queries/ListPropertyAmenitiesQuery';
 import { ListRoomAmenitiesQuery } from '../../applications/useCase/queries/ListRoomAmenitiesQuery';
+import {
+  CreateAmenitySwaggerDto,
+  SyncAmenitiesSwaggerDto,
+  UpdateAmenitySwaggerDto,
+} from '../../../../shared/swagger/swagger-schemas.dto';
+import { ApiJwtAuth } from '../../../../shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
 
+@ApiTags(SWAGGER_TAGS.AMENITIES)
 @Controller('amenities')
 export class AmenityController {
   @Get()
   @RequireSuperAdmin()
+  @ApiJwtAuth()
+  @ApiOperation({ summary: 'Liste complète des équipements (SuperAdmin)' })
+  @ApiQuery({ name: 'scope', required: false, enum: ['room', 'property'] })
   list(@Query() query: Record<string, unknown>): Promise<AmenityOutput[]> {
     return QueryBus.execute(
       new ListAmenitiesQuery(parseAmenityScope(query.scope)),
@@ -42,6 +49,8 @@ export class AmenityController {
 
   @Public()
   @Get('catalog')
+  @ApiOperation({ summary: 'Catalogue public des équipements' })
+  @ApiQuery({ name: 'scope', required: false, enum: ['room', 'property'] })
   listCatalog(
     @Query() query: Record<string, unknown>,
   ): Promise<AmenityOutput[]> {
@@ -52,6 +61,9 @@ export class AmenityController {
 
   @Get('options')
   @RequirePermissions('amenities.read')
+  @ApiJwtAuth()
+  @ApiOperation({ summary: 'Options équipements (admin)' })
+  @ApiQuery({ name: 'scope', required: false, enum: ['room', 'property'] })
   listOptions(
     @Query() query: Record<string, unknown>,
   ): Promise<AmenityOutput[]> {
@@ -62,6 +74,8 @@ export class AmenityController {
 
   @Get('properties/:propertyId')
   @RequirePermissions('properties.read')
+  @ApiJwtAuth()
+  @ApiOperation({ summary: "Équipements d'un établissement" })
   listForProperty(
     @Param('propertyId') propertyId: number,
   ): Promise<AmenityOutput[]> {
@@ -70,9 +84,11 @@ export class AmenityController {
 
   @Put('properties/:propertyId')
   @RequirePermissions('properties.update')
+  @ApiJwtAuth()
+  @ApiOperation({ summary: "Synchroniser les équipements d'un établissement" })
   syncForProperty(
     @Param('propertyId') propertyId: number,
-    @Body() body: SyncAmenitiesDto,
+    @Body() body: SyncAmenitiesSwaggerDto,
   ): Promise<AmenityOutput[]> {
     return CommandBus.execute(
       new SyncPropertyAmenitiesCommand(Number(propertyId), body),
@@ -81,15 +97,19 @@ export class AmenityController {
 
   @Get('rooms/:roomId')
   @RequirePermissions('rooms.read')
+  @ApiJwtAuth()
+  @ApiOperation({ summary: "Équipements d'une chambre" })
   listForRoom(@Param('roomId') roomId: number): Promise<AmenityOutput[]> {
     return QueryBus.execute(new ListRoomAmenitiesQuery(Number(roomId)));
   }
 
   @Put('rooms/:roomId')
   @RequirePermissions('rooms.update')
+  @ApiJwtAuth()
+  @ApiOperation({ summary: "Synchroniser les équipements d'une chambre" })
   syncForRoom(
     @Param('roomId') roomId: number,
-    @Body() body: SyncAmenitiesDto,
+    @Body() body: SyncAmenitiesSwaggerDto,
   ): Promise<AmenityOutput[]> {
     return CommandBus.execute(
       new SyncRoomAmenitiesCommand(Number(roomId), body),
@@ -98,21 +118,27 @@ export class AmenityController {
 
   @Post()
   @RequireSuperAdmin()
-  create(@Body() body: CreateAmenityDto): Promise<AmenityOutput> {
+  @ApiJwtAuth()
+  @ApiOperation({ summary: 'Créer un équipement' })
+  create(@Body() body: CreateAmenitySwaggerDto): Promise<AmenityOutput> {
     return CommandBus.execute(new CreateAmenityCommand(body));
   }
 
   @Put(':id')
   @RequireSuperAdmin()
+  @ApiJwtAuth()
+  @ApiOperation({ summary: 'Modifier un équipement' })
   update(
     @Param('id') id: number,
-    @Body() body: UpdateAmenityDto,
+    @Body() body: UpdateAmenitySwaggerDto,
   ): Promise<AmenityOutput> {
     return CommandBus.execute(new UpdateAmenityCommand(Number(id), body));
   }
 
   @Delete(':id')
   @RequireSuperAdmin()
+  @ApiJwtAuth()
+  @ApiOperation({ summary: 'Supprimer un équipement' })
   delete(@Param('id') id: number): Promise<boolean> {
     return CommandBus.execute(new DeleteAmenityCommand(Number(id)));
   }

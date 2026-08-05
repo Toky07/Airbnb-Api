@@ -1,4 +1,5 @@
 import type { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
+import { getApiPublicUrl } from './env.config';
 
 function normalizeOrigin(origin: string): string {
   return origin.trim().replace(/\/$/, '');
@@ -32,7 +33,11 @@ function getDefaultOrigins(): string[] {
 
 export function getAllowedCorsOrigins(): string[] {
   const configuredOrigins = parseOrigins(process.env.CORS_ORIGINS);
-  return configuredOrigins.length > 0 ? configuredOrigins : getDefaultOrigins();
+  const baseOrigins =
+    configuredOrigins.length > 0 ? configuredOrigins : getDefaultOrigins();
+
+  // Swagger UI (servi sur l'API) envoie Origin = API_PUBLIC_URL
+  return [...new Set([...baseOrigins, normalizeOrigin(getApiPublicUrl())])];
 }
 
 export function getCorsConfig(): CorsOptions {

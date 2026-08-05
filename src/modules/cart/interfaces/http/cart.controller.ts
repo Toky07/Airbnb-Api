@@ -8,6 +8,7 @@ import {
   Post,
   Req,
 } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
 import { Public } from '../../../authentication/interfaces/decorators/public.decorator';
 import { CompleteCartCheckoutDto } from '../../applications/dto/complete-cart-checkout.dto';
@@ -25,11 +26,19 @@ import { RemoveCartItemCommand } from '../../applications/useCase/commands/Remov
 import { MergeCartCommand } from '../../applications/useCase/commands/MergeCartCommand';
 import { CheckoutCartCommand } from '../../applications/useCase/commands/CheckoutCartCommand';
 import { CompleteCartCheckoutCommand } from '../../applications/useCase/commands/CompleteCartCheckoutCommand';
+import {
+  ApiCartSessionHeader,
+  ApiJwtAuth,
+} from '../../../../shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
 
+@ApiTags(SWAGGER_TAGS.CART)
 @Controller('cart')
 export class CartController {
   @Get()
   @Public()
+  @ApiCartSessionHeader()
+  @ApiOperation({ summary: 'Contenu du panier (anonyme ou connecté)' })
   get(
     @Req()
     request: {
@@ -42,6 +51,8 @@ export class CartController {
 
   @Post('items')
   @Public()
+  @ApiCartSessionHeader()
+  @ApiOperation({ summary: 'Ajouter un article au panier' })
   addItem(
     @Req()
     request: {
@@ -57,6 +68,8 @@ export class CartController {
 
   @Patch('items/:id')
   @Public()
+  @ApiCartSessionHeader()
+  @ApiOperation({ summary: 'Modifier un article du panier' })
   updateItem(
     @Req()
     request: {
@@ -73,6 +86,8 @@ export class CartController {
 
   @Delete('items/:id')
   @Public()
+  @ApiCartSessionHeader()
+  @ApiOperation({ summary: 'Retirer un article du panier' })
   removeItem(
     @Req()
     request: {
@@ -87,6 +102,11 @@ export class CartController {
   }
 
   @Post('merge')
+  @ApiJwtAuth()
+  @ApiCartSessionHeader()
+  @ApiOperation({
+    summary: 'Fusionner le panier anonyme avec le compte connecté',
+  })
   merge(
     @Req()
     request: {
@@ -101,6 +121,12 @@ export class CartController {
   }
 
   @Post('checkout')
+  @ApiJwtAuth()
+  @ApiCartSessionHeader()
+  @ApiOperation({
+    summary:
+      'Démarrer le checkout — crée réservation pending + PaymentIntent Stripe',
+  })
   checkout(
     @Req()
     request: {
@@ -114,6 +140,9 @@ export class CartController {
   }
 
   @Post('checkout/complete')
+  @ApiJwtAuth()
+  @ApiCartSessionHeader()
+  @ApiOperation({ summary: 'Finaliser le checkout après paiement Stripe' })
   completeCheckout(
     @Req()
     request: {

@@ -8,13 +8,14 @@ import {
   Query,
   Req,
 } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
 import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import type {
+import {
   CreateReviewDto,
   ModerateReviewDto,
 } from '../../applications/dto/create-review.dto';
@@ -23,10 +24,18 @@ import { CreateReviewCommand } from '../../applications/useCase/commands/CreateR
 import { ModerateReviewCommand } from '../../applications/useCase/commands/ModerateReviewCommand';
 import { ListMyReviewsQuery } from '../../applications/useCase/queries/ListMyReviewsQuery';
 import { ListPendingReviewsQuery } from '../../applications/useCase/queries/ListPendingReviewsQuery';
+import {
+  ApiJwtAuth,
+  ApiPaginationQuery,
+} from '../../../../shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
 
+@ApiTags(SWAGGER_TAGS.REVIEWS)
+@ApiJwtAuth()
 @Controller('reviews')
 export class ReviewController {
   @Post()
+  @ApiOperation({ summary: 'Soumettre un avis sur une réservation' })
   create(
     @Req() request: { user?: JwtPayload },
     @Body() dto: CreateReviewDto,
@@ -35,6 +44,8 @@ export class ReviewController {
   }
 
   @Get('me')
+  @ApiOperation({ summary: 'Mes avis' })
+  @ApiPaginationQuery()
   listMine(
     @Req() request: { user?: JwtPayload },
     @Query() query: Record<string, unknown>,
@@ -46,6 +57,8 @@ export class ReviewController {
 
   @Get()
   @RequirePermissions('reviews.moderate')
+  @ApiOperation({ summary: 'File de modération des avis en attente' })
+  @ApiPaginationQuery()
   listPending(
     @Query() query: Record<string, unknown>,
   ): Promise<PaginatedResult<ReviewOutput>> {
@@ -56,6 +69,7 @@ export class ReviewController {
 
   @Patch(':id/moderate')
   @RequirePermissions('reviews.moderate')
+  @ApiOperation({ summary: 'Approuver ou masquer un avis' })
   moderate(
     @Param('id') id: string,
     @Body() dto: ModerateReviewDto,

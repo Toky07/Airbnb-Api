@@ -8,13 +8,11 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
 import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
-import { type CreateRoleDto } from '../../applications/dto/create-role.dto';
 import { RoleOutput } from '../../applications/dto/role.output';
-import type { UpdateRoleDto } from '../../applications/dto/update-role.dto';
 import { PermissionOutput } from '../../applications/dto/permission.output';
-import type { SetRolePermissionsDto } from '../../applications/dto/set-role-permissions.dto';
 import { RequirePermissions } from '../decorators/require-permissions.decorator';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
@@ -24,17 +22,32 @@ import { DeleteRoleCommand } from '../../applications/useCase/commands/DeleteRol
 import { SetRolePermissionsCommand } from '../../applications/useCase/commands/SetRolePermissionsCommand';
 import { ListRolesQuery } from '../../applications/useCase/queries/ListRolesQuery';
 import { ListPermissionsQuery } from '../../applications/useCase/queries/ListPermissionsQuery';
+import {
+  ApiJwtAuth,
+  ApiPaginationQuery,
+} from '../../../../shared/swagger/swagger.decorators';
+import {
+  CreateRoleSwaggerDto,
+  SetRolePermissionsSwaggerDto,
+  UpdateRoleSwaggerDto,
+} from '../../../../shared/swagger/swagger-schemas.dto';
+import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
 
+@ApiTags(SWAGGER_TAGS.ROLES)
+@ApiJwtAuth()
 @Controller('auth')
 export class RoleController {
   @Get('permissions')
   @RequirePermissions('roles.read')
+  @ApiOperation({ summary: 'Lister toutes les permissions' })
   listPermissions(): Promise<PermissionOutput[]> {
     return QueryBus.execute(new ListPermissionsQuery());
   }
 
   @Get('roles')
   @RequirePermissions('roles.read')
+  @ApiOperation({ summary: 'Lister les rôles (paginé)' })
+  @ApiPaginationQuery()
   list(
     @Query() query: Record<string, unknown>,
   ): Promise<PaginatedResult<RoleOutput>> {
@@ -43,15 +56,17 @@ export class RoleController {
 
   @Post('roles')
   @RequirePermissions('roles.manage')
-  create(@Body() createRoleDto: CreateRoleDto): Promise<RoleOutput> {
+  @ApiOperation({ summary: 'Créer un rôle' })
+  create(@Body() createRoleDto: CreateRoleSwaggerDto): Promise<RoleOutput> {
     return CommandBus.execute(new CreateRoleCommand(createRoleDto));
   }
 
   @Put('roles/:id')
   @RequirePermissions('roles.manage')
+  @ApiOperation({ summary: 'Modifier un rôle' })
   update(
     @Param('id') id: number,
-    @Body() updateRoleDto: UpdateRoleDto,
+    @Body() updateRoleDto: UpdateRoleSwaggerDto,
   ): Promise<RoleOutput> {
     return CommandBus.execute(
       new UpdateRoleCommand({
@@ -64,9 +79,10 @@ export class RoleController {
 
   @Put('roles/:id/permissions')
   @RequirePermissions('roles.manage')
+  @ApiOperation({ summary: "Définir les permissions d'un rôle" })
   setPermissions(
     @Param('id') id: number,
-    @Body() body: SetRolePermissionsDto,
+    @Body() body: SetRolePermissionsSwaggerDto,
   ): Promise<RoleOutput> {
     return CommandBus.execute(
       new SetRolePermissionsCommand(Number(id), body.permissionKeys ?? []),
@@ -75,6 +91,7 @@ export class RoleController {
 
   @Delete('roles/:id')
   @RequirePermissions('roles.manage')
+  @ApiOperation({ summary: 'Supprimer un rôle' })
   delete(@Param('id') id: number): Promise<boolean> {
     return CommandBus.execute(new DeleteRoleCommand(Number(id)));
   }

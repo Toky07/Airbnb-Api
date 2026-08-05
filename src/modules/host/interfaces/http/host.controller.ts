@@ -13,6 +13,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { ApiConsumes, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
@@ -54,29 +55,41 @@ import type { CreateRoomBlockedDateDto } from '../../../rooms/applications/dto/c
 import type { CreateRoomRateOverrideDto } from '../../../rooms/applications/dto/create-room-rate-override.dto';
 import { CancelReservationCommand } from '../../../reservation/applications/useCase/commands/CancelReservationCommand';
 import { MarkReservationNoShowCommand } from '../../../reservation/applications/useCase/commands/MarkReservationNoShowCommand';
+import {
+  ApiJwtAuth,
+  ApiPaginationQuery,
+} from '../../../../shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
 
+@ApiTags(SWAGGER_TAGS.HOST)
+@ApiJwtAuth()
 @Controller('host')
 export class HostController {
   @Get('profile')
   @RequirePermissions('host.dashboard.read')
+  @ApiOperation({ summary: 'Profil tableau de bord hôte' })
   profile(@Req() request: { user: JwtPayload }) {
     return QueryBus.execute(new GetHostProfileQuery(request.user));
   }
 
   @Get('properties')
   @RequirePermissions('host.property.read')
+  @ApiOperation({ summary: 'Mes établissements' })
   properties(@Req() request: { user: JwtPayload }) {
     return QueryBus.execute(new ListHostPropertiesQuery(request.user));
   }
 
   @Get('properties/:id')
   @RequirePermissions('host.property.read')
+  @ApiOperation({ summary: "Détail d'un de mes établissements" })
   property(@Req() request: { user: JwtPayload }, @Param('id') id: number) {
     return QueryBus.execute(new GetHostPropertyQuery(request.user, Number(id)));
   }
 
   @Post('properties')
   @RequirePermissions('host.property.create')
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Créer un établissement' })
   @UseInterceptors(FileInterceptor('image'))
   createProperty(
     @Req() request: { user: JwtPayload },
@@ -95,6 +108,8 @@ export class HostController {
 
   @Put('properties/:id')
   @RequirePermissions('host.property.update')
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Modifier un établissement' })
   @UseInterceptors(FileInterceptor('image'))
   updateProperty(
     @Req() request: { user: JwtPayload },
@@ -114,6 +129,9 @@ export class HostController {
 
   @Get('rooms')
   @RequirePermissions('host.rooms.read')
+  @ApiOperation({ summary: "Chambres d'un établissement" })
+  @ApiQuery({ name: 'propertyId', required: true, type: Number })
+  @ApiPaginationQuery()
   rooms(
     @Req() request: { user: JwtPayload },
     @Query() query: Record<string, unknown>,

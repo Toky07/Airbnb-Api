@@ -32,7 +32,7 @@ Avec Docker : `make dev` depuis la racine du monorepo.
 
 Modules sous `src/modules/` : Clean Architecture + CQRS (`commands/`, `queries/`, `handlers/`, `*.bootstrap.ts`).
 
-Swagger (si activé) : `/api` ou documenté dans `main.ts`.
+Swagger (si activé) : `/docs` (configurable via `SWAGGER_PATH`).
 
 Documentation monorepo : [../README.md](../README.md).
 

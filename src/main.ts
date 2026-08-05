@@ -11,6 +11,7 @@ import { validateEnv } from './config/env.config';
 import { getHelmetOptions, isHelmetEnabled } from './config/helmet.config';
 import { resolveUploadRoot } from './modules/media/utils/resolve-upload-root';
 import { AllExceptionsFilter } from './shared/filters/all-exceptions.filter';
+import { setupSwagger } from './config/swagger.config';
 
 async function bootstrap() {
   validateEnv();
@@ -38,6 +39,8 @@ async function bootstrap() {
   app.useStaticAssets(join(process.cwd(), uploadRoot), {
     prefix: `/${uploadRoot}`,
   });
+
+  setupSwagger(app);
 
   app.enableShutdownHooks();
   await app.listen(process.env.PORT ?? 3000);
