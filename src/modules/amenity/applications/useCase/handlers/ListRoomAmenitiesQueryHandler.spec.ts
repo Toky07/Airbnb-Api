@@ -5,6 +5,7 @@ import { Amenity } from '../../../domain/entities/amenity.entity';
 import { AMENITY_SCOPE } from '../../../domain/constants/amenity-scope.constant';
 import { ListRoomAmenitiesQueryHandler } from './ListRoomAmenitiesQueryHandler';
 import { ListRoomAmenitiesQuery } from '../queries/ListRoomAmenitiesQuery';
+import { ListEntityAmenitiesService } from '../../services/entity-amenities.service';
 
 const property = new Property({
   name: 'Hôtel Test',
@@ -38,8 +39,10 @@ const room = new Room({
 
 describe('ListRoomAmenitiesQueryHandler', () => {
   it('lists amenities linked to a room', async () => {
-    const handler = new ListRoomAmenitiesQueryHandler(
+    const listEntityAmenitiesService = new ListEntityAmenitiesService(
+      {} as never,
       { findById: async () => room } as never,
+      {} as never,
       { findAmenityIdsByRoomId: async () => [2] } as never,
       {
         findByIds: async () => [
@@ -47,6 +50,7 @@ describe('ListRoomAmenitiesQueryHandler', () => {
         ],
       } as never,
     );
+    const handler = new ListRoomAmenitiesQueryHandler(listEntityAmenitiesService);
 
     const result = await handler.execute(new ListRoomAmenitiesQuery(5));
 
@@ -55,11 +59,14 @@ describe('ListRoomAmenitiesQueryHandler', () => {
   });
 
   it('throws when room is not found', async () => {
-    const handler = new ListRoomAmenitiesQueryHandler(
+    const listEntityAmenitiesService = new ListEntityAmenitiesService(
+      {} as never,
       { findById: async () => null } as never,
       {} as never,
       {} as never,
+      {} as never,
     );
+    const handler = new ListRoomAmenitiesQueryHandler(listEntityAmenitiesService);
 
     await expect(
       handler.execute(new ListRoomAmenitiesQuery(99)),

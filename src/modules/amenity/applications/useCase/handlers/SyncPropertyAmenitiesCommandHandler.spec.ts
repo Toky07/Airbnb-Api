@@ -3,21 +3,17 @@ import { AMENITY_SCOPE } from '../../../domain/constants/amenity-scope.constant'
 import { Amenity } from '../../../domain/entities/amenity.entity';
 import { SyncPropertyAmenitiesCommandHandler } from './SyncPropertyAmenitiesCommandHandler';
 import { SyncPropertyAmenitiesCommand } from '../commands/SyncPropertyAmenitiesCommand';
-import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
-import type { IPropertyAmenityRepository } from '../../../domain/repositories/property-amenity.repository';
+import { SyncEntityAmenitiesService } from '../../services/entity-amenities.service';
 import { ResolveAmenitiesService } from '../../services/resolve-amenities.service';
-import type { IAmenityRepository } from '../../../domain/repositories/amenity.repository';
 
 describe('SyncPropertyAmenitiesCommandHandler', () => {
   it('syncs amenities for an existing property', async () => {
     const propertyRepository = {
       findById: async () => ({ id: 1 }),
-    } as unknown as IPropertyRepository;
-
+    };
     const propertyAmenityRepository = {
       replaceForProperty: async () => undefined,
-    } as unknown as IPropertyAmenityRepository;
-
+    };
     const amenityRepository = {
       findByIds: async () => [
         new Amenity(
@@ -28,15 +24,17 @@ describe('SyncPropertyAmenitiesCommandHandler', () => {
           1,
         ),
       ],
-    } as unknown as IAmenityRepository;
+    };
 
-    const resolveAmenitiesService = new ResolveAmenitiesService(
-      amenityRepository,
+    const syncEntityAmenitiesService = new SyncEntityAmenitiesService(
+      propertyRepository as never,
+      {} as never,
+      propertyAmenityRepository as never,
+      {} as never,
+      new ResolveAmenitiesService(amenityRepository as never),
     );
     const handler = new SyncPropertyAmenitiesCommandHandler(
-      propertyRepository,
-      propertyAmenityRepository,
-      resolveAmenitiesService,
+      syncEntityAmenitiesService,
     );
 
     const result = await handler.execute(
@@ -48,14 +46,15 @@ describe('SyncPropertyAmenitiesCommandHandler', () => {
   });
 
   it('throws when property is missing', async () => {
-    const propertyRepository = {
-      findById: async () => null,
-    } as unknown as IPropertyRepository;
-
+    const syncEntityAmenitiesService = new SyncEntityAmenitiesService(
+      { findById: async () => null } as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      new ResolveAmenitiesService({ findByIds: async () => [] } as never),
+    );
     const handler = new SyncPropertyAmenitiesCommandHandler(
-      propertyRepository,
-      {} as IPropertyAmenityRepository,
-      new ResolveAmenitiesService({} as IAmenityRepository),
+      syncEntityAmenitiesService,
     );
 
     await expect(

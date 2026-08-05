@@ -3,34 +3,32 @@ import { AMENITY_SCOPE } from '../../../domain/constants/amenity-scope.constant'
 import { Amenity } from '../../../domain/entities/amenity.entity';
 import { SyncRoomAmenitiesCommandHandler } from './SyncRoomAmenitiesCommandHandler';
 import { SyncRoomAmenitiesCommand } from '../commands/SyncRoomAmenitiesCommand';
-import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
-import type { IRoomAmenityRepository } from '../../../domain/repositories/room-amenity.repository';
+import { SyncEntityAmenitiesService } from '../../services/entity-amenities.service';
 import { ResolveAmenitiesService } from '../../services/resolve-amenities.service';
-import type { IAmenityRepository } from '../../../domain/repositories/amenity.repository';
 
 describe('SyncRoomAmenitiesCommandHandler', () => {
   it('syncs amenities for an existing room', async () => {
     const roomRepository = {
       findById: async () => ({ id: 1 }),
-    } as unknown as IRoomRepository;
-
+    };
     const roomAmenityRepository = {
       replaceForRoom: async () => undefined,
-    } as unknown as IRoomAmenityRepository;
-
+    };
     const amenityRepository = {
       findByIds: async () => [
         new Amenity('TV', 'tv', AMENITY_SCOPE.ROOM, true, 2),
       ],
-    } as unknown as IAmenityRepository;
+    };
 
-    const resolveAmenitiesService = new ResolveAmenitiesService(
-      amenityRepository,
+    const syncEntityAmenitiesService = new SyncEntityAmenitiesService(
+      {} as never,
+      roomRepository as never,
+      {} as never,
+      roomAmenityRepository as never,
+      new ResolveAmenitiesService(amenityRepository as never),
     );
     const handler = new SyncRoomAmenitiesCommandHandler(
-      roomRepository,
-      roomAmenityRepository,
-      resolveAmenitiesService,
+      syncEntityAmenitiesService,
     );
 
     const result = await handler.execute(
@@ -42,14 +40,15 @@ describe('SyncRoomAmenitiesCommandHandler', () => {
   });
 
   it('throws when room is missing', async () => {
-    const roomRepository = {
-      findById: async () => null,
-    } as unknown as IRoomRepository;
-
+    const syncEntityAmenitiesService = new SyncEntityAmenitiesService(
+      {} as never,
+      { findById: async () => null } as never,
+      {} as never,
+      {} as never,
+      new ResolveAmenitiesService({ findByIds: async () => [] } as never),
+    );
     const handler = new SyncRoomAmenitiesCommandHandler(
-      roomRepository,
-      {} as IRoomAmenityRepository,
-      new ResolveAmenitiesService({} as IAmenityRepository),
+      syncEntityAmenitiesService,
     );
 
     await expect(

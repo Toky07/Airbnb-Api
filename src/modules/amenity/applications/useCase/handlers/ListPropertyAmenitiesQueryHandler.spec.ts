@@ -4,6 +4,7 @@ import { Amenity } from '../../../domain/entities/amenity.entity';
 import { AMENITY_SCOPE } from '../../../domain/constants/amenity-scope.constant';
 import { ListPropertyAmenitiesQueryHandler } from './ListPropertyAmenitiesQueryHandler';
 import { ListPropertyAmenitiesQuery } from '../queries/ListPropertyAmenitiesQuery';
+import { ListEntityAmenitiesService } from '../../services/entity-amenities.service';
 
 describe('ListPropertyAmenitiesQueryHandler', () => {
   const property = new Property({
@@ -21,18 +22,19 @@ describe('ListPropertyAmenitiesQueryHandler', () => {
   });
 
   it('lists amenities linked to a property', async () => {
-    const handler = new ListPropertyAmenitiesQueryHandler(
-      {
-        findById: async () => property,
-      } as never,
-      {
-        findAmenityIdsByPropertyId: async () => [1],
-      } as never,
+    const listEntityAmenitiesService = new ListEntityAmenitiesService(
+      { findById: async () => property } as never,
+      {} as never,
+      { findAmenityIdsByPropertyId: async () => [1] } as never,
+      {} as never,
       {
         findByIds: async () => [
           new Amenity('Parking', 'parking', AMENITY_SCOPE.PROPERTY, true, 1),
         ],
       } as never,
+    );
+    const handler = new ListPropertyAmenitiesQueryHandler(
+      listEntityAmenitiesService,
     );
 
     const result = await handler.execute(new ListPropertyAmenitiesQuery(1));
@@ -42,10 +44,15 @@ describe('ListPropertyAmenitiesQueryHandler', () => {
   });
 
   it('throws when property is not found', async () => {
-    const handler = new ListPropertyAmenitiesQueryHandler(
+    const listEntityAmenitiesService = new ListEntityAmenitiesService(
       { findById: async () => null } as never,
       {} as never,
       {} as never,
+      {} as never,
+      {} as never,
+    );
+    const handler = new ListPropertyAmenitiesQueryHandler(
+      listEntityAmenitiesService,
     );
 
     await expect(

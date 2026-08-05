@@ -4,6 +4,10 @@ import type { IRoomAmenityRepository } from './domain/repositories/room-amenity.
 import type { IPropertyRepository } from '../properties/domain/repositories/property.repository';
 import type { IRoomRepository } from '../rooms/domain/repositories/room.repository';
 import { ResolveAmenitiesService } from './applications/services/resolve-amenities.service';
+import {
+  ListEntityAmenitiesService,
+  SyncEntityAmenitiesService,
+} from './applications/services/entity-amenities.service';
 import { CreateAmenityCommandHandler } from './applications/useCase/handlers/CreateAmenityCommandHandler';
 import { UpdateAmenityCommandHandler } from './applications/useCase/handlers/UpdateAmenityCommandHandler';
 import { DeleteAmenityCommandHandler } from './applications/useCase/handlers/DeleteAmenityCommandHandler';
@@ -25,6 +29,20 @@ export class AmenityBootstrap {
     const resolveAmenitiesService = new ResolveAmenitiesService(
       deps.amenityRepository,
     );
+    const syncEntityAmenitiesService = new SyncEntityAmenitiesService(
+      deps.propertyRepository,
+      deps.roomRepository,
+      deps.propertyAmenityRepository,
+      deps.roomAmenityRepository,
+      resolveAmenitiesService,
+    );
+    const listEntityAmenitiesService = new ListEntityAmenitiesService(
+      deps.propertyRepository,
+      deps.roomRepository,
+      deps.propertyAmenityRepository,
+      deps.roomAmenityRepository,
+      deps.amenityRepository,
+    );
 
     return {
       createAmenityCommandHandler: new CreateAmenityCommandHandler(
@@ -37,15 +55,9 @@ export class AmenityBootstrap {
         deps.amenityRepository,
       ),
       syncPropertyAmenitiesCommandHandler:
-        new SyncPropertyAmenitiesCommandHandler(
-          deps.propertyRepository,
-          deps.propertyAmenityRepository,
-          resolveAmenitiesService,
-        ),
+        new SyncPropertyAmenitiesCommandHandler(syncEntityAmenitiesService),
       syncRoomAmenitiesCommandHandler: new SyncRoomAmenitiesCommandHandler(
-        deps.roomRepository,
-        deps.roomAmenityRepository,
-        resolveAmenitiesService,
+        syncEntityAmenitiesService,
       ),
       listAmenitiesQueryHandler: new ListAmenitiesQueryHandler(
         deps.amenityRepository,
@@ -54,14 +66,10 @@ export class AmenityBootstrap {
         deps.amenityRepository,
       ),
       listPropertyAmenitiesQueryHandler: new ListPropertyAmenitiesQueryHandler(
-        deps.propertyRepository,
-        deps.propertyAmenityRepository,
-        deps.amenityRepository,
+        listEntityAmenitiesService,
       ),
       listRoomAmenitiesQueryHandler: new ListRoomAmenitiesQueryHandler(
-        deps.roomRepository,
-        deps.roomAmenityRepository,
-        deps.amenityRepository,
+        listEntityAmenitiesService,
       ),
     };
   }
