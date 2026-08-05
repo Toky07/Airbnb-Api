@@ -1,9 +1,10 @@
+import { Inject } from '@nestjs/common';
+import { EventBus } from '../../../../shared/domain/event.bus';
+import { PaymentCreatedEvent } from '../../../payment/domain/events/payment-created.event';
 import {
   type IReservationRepository,
   RESERVATION_REPOSITORY,
 } from '../../domain/repositories/reservation.repository';
-import { Inject } from '@nestjs/common';
-import { EventBus } from '../../../../shared/domain/event.bus';
 
 export class PaymentListener {
   constructor(
@@ -12,21 +13,24 @@ export class PaymentListener {
   ) {}
 
   async listen(): Promise<void> {
-    EventBus.getInstance().subscribe('payment.created', async (payload) => {
-      const reservation = await this.reservationRepository.findById(
-        payload.propertyId,
-      );
+    EventBus.getInstance().subscribe(
+      'payment.created',
+      async (event: PaymentCreatedEvent) => {
+        const reservation = await this.reservationRepository.findById(
+          event.propertyId,
+        );
 
-      if (!reservation) {
-        throw new Error('Reservation not found');
-      }
+        if (!reservation) {
+          throw new Error('Reservation not found');
+        }
 
-      reservation.paymentId = payload.paymentId;
+        reservation.paymentId = event.paymentId;
 
-      await this.reservationRepository.setPayment(
-        reservation,
-        payload.paymentId,
-      );
-    });
+        await this.reservationRepository.setPayment(
+          reservation,
+          event.paymentId,
+        );
+      },
+    );
   }
 }
