@@ -14,7 +14,7 @@ import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
-import type { UploadFile } from '../../../media/types/upload-file';
+import type { UploadFile } from '../../../media/contracts';
 import type { SendEmailDto } from '../../applications/dto/send-email.dto';
 import { parseEmailBody } from './parse-email-body';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';

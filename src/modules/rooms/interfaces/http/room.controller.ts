@@ -12,14 +12,14 @@ import {
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { ENTITY_MEDIA_LIMITS, ENTITY_TYPE } from '../../../media/constant';
+import { ENTITY_MEDIA_LIMITS, ENTITY_TYPE } from '../../../media/contracts';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
 import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
 import { RoomOutput } from '../../applications/dto/room.output';
 import type { CreateRoomDto } from '../../applications/dto/createRoom.dto';
 import { parseKeptImages } from './parse-kept-images';
 import { parseRoomBody } from './parse-room-body';
-import type { UploadFile } from '../../../media/types/upload-file';
+import type { UploadFile } from '../../../media/contracts';
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
 import { Public } from '../../../authentication/interfaces/decorators/public.decorator';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';

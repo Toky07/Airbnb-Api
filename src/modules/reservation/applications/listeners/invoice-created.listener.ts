@@ -3,8 +3,8 @@ import type { BuildCustomerInvoiceEmailBodyService } from '../services/build-cus
 import type { BuildHostPaymentNotificationEmailBodyService } from '../services/build-host-payment-notification-email-body.service';
 import type { BuildReservationInvoicePayloadService } from '../services/build-reservation-invoice-payload.service';
 import { RESERVATION_NOTIFICATION_SOURCE } from '../../domain/constants/reservation-notification.constant';
-import type { InvoiceCreatedEvent } from '../../../invoice/domain/events/invoice-created.event';
-import { EmailSendRequestedEvent } from '../../../mail/domain/events/email-send-requested.event';
+import type { InvoiceCreatedEvent } from '../../../invoice/contracts';
+import { EmailSendRequestedEvent } from '../../../mail/contracts';
 import { EventBus } from '../../../../shared/domain/event.bus';
 
 export class InvoiceCreatedListener {

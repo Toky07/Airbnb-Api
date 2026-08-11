@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { EventBus } from '../../../../shared/domain/event.bus';
-import { INVOICE_PAYMENT_TYPE } from '../../../invoice/domain/constants/invoice-payment-type.constant';
-import { InvoiceCreatedEvent } from '../../../invoice/domain/events/invoice-created.event';
-import { EmailSendRequestedEvent } from '../../../mail/domain/events/email-send-requested.event';
+import { INVOICE_PAYMENT_TYPE } from '../../../invoice/contracts';
+import { InvoiceCreatedEvent } from '../../../invoice/contracts';
+import { EmailSendRequestedEvent } from '../../../mail/contracts';
 import {
   PAYMENT_PROVIDER,
   PAYMENT_STATUS,

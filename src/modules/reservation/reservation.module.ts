@@ -58,8 +58,10 @@ import { GetBookingOrderQuery } from './applications/useCase/queries/GetBookingO
 import { GetCancellationPreviewQuery } from './applications/useCase/queries/GetCancellationPreviewQuery';
 import { MarkReservationNoShowCommand } from './applications/useCase/commands/MarkReservationNoShowCommand';
 import { InvoiceModule } from '../invoice/invoice.module';
-import { INVOICE_REPOSITORY } from '../invoice/domain/repositories/invoice.repository';
-import type { IInvoiceRepository } from '../invoice/domain/repositories/invoice.repository';
+import {
+  INVOICE_REPOSITORY,
+  type IInvoiceRepository,
+} from '../invoice/contracts';
 
 @Module({
   imports: [

@@ -23,8 +23,8 @@ import { parsePropertyBody } from '../../../properties/interfaces/http/parse-pro
 import { parseRoomBody } from '../../../rooms/interfaces/http/parse-room-body';
 import { parseKeptImages } from '../../../rooms/interfaces/http/parse-kept-images';
 import type { CreateRoomDto } from '../../../rooms/applications/dto/createRoom.dto';
-import { ENTITY_MEDIA_LIMITS, ENTITY_TYPE } from '../../../media/constant';
-import type { UploadFile } from '../../../media/types/upload-file';
+import { ENTITY_MEDIA_LIMITS, ENTITY_TYPE } from '../../../media/contracts';
+import type { UploadFile } from '../../../media/contracts';
 import { ListPropertyTypeOptionsQuery } from '../../../properties/applications/useCase/queries/ListPropertyTypeOptionsQuery';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';

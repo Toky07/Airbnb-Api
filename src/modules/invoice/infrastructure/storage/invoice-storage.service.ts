@@ -1,9 +1,9 @@
 import { mkdir, writeFile } from 'fs/promises';
 import { dirname, join } from 'path';
 import { Injectable } from '@nestjs/common';
-import { UPLOAD_ROOT } from '../../../media/constant';
-import { toDiskPath } from '../../../media/utils/build-upload-path';
-import { resolveUploadRoot } from '../../../media/utils/resolve-upload-root';
+import { UPLOAD_ROOT } from '../../../media/contracts';
+import { toDiskPath } from '../../../media/contracts';
+import { resolveUploadRoot } from '../../../media/contracts';
 
 @Injectable()
 export class InvoiceStorageService {

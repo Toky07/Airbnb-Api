@@ -1,8 +1,8 @@
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import { CommandBus } from '../../../../../shared/useCase/bus/bus';
 import type { IRoomRepository } from '../../../domain/repositories/room.repository';
-import { ENTITY_TYPE } from '../../../../media/constant';
-import { DeleteMediasByEntityCommand } from '../../../../media/applications/useCase/commands/DeleteMediasByEntityCommand';
+import { ENTITY_TYPE } from '../../../../media/contracts';
+import { DeleteMediasByEntityCommand } from '../../../../media/contracts';
 import type { DeleteRoomCommand } from '../commands/DeleteRoomCommand';
 
 export class DeleteRoomCommandHandler implements ICommandHandler<

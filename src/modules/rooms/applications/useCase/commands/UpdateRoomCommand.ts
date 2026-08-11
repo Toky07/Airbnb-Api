@@ -1,5 +1,5 @@
 import type { CreateRoomDto } from '../../dto/createRoom.dto';
-import type { UploadFile } from '../../../../media/types/upload-file';
+import type { UploadFile } from '../../../../media/contracts';
 
 export class UpdateRoomCommand {
   constructor(

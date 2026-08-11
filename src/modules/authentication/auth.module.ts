@@ -38,7 +38,7 @@ import { PASSWORD_RESET_TOKEN_REPOSITORY } from './domain/repositories/password-
 import type { IPasswordResetTokenRepository } from './domain/repositories/password-reset-token.repository';
 import { PasswordResetTokenRepository } from './infrastructure/repositories/password-reset-token.repository';
 import { AccountStatusSyncService } from './infrastructure/seed/account-status-sync.service';
-import { MailService } from '../mail/applications/services/mail.service';
+import { MailService } from '../mail/contracts';
 import { AuthBootstrap } from './auth.bootstrap';
 import { CommandBus } from '../../shared/useCase/bus/bus';
 import { QueryBus } from '../../shared/useCase/bus/query-bus';

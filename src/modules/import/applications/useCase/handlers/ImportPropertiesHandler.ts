@@ -1,6 +1,6 @@
 import { CommandBus } from '../../../../../shared/useCase/bus/bus';
 import { CreatePropertyCommand } from '../../../../properties/applications/useCase/commands/CreatePropertyCommand';
-import { fetchImageFromUrl } from '../../../../media/utils/fetch-image-from-url';
+import { fetchImageFromUrl } from '../../../../media/contracts';
 import type { ImportPropertyRowDto } from '../../dto/import-batch.dto';
 import type { ImportEntityResult } from '../../dto/import-entity-result.dto';
 import { emptyImportEntityResult } from '../../dto/import-entity-result.dto';

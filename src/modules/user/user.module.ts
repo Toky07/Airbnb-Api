@@ -5,8 +5,8 @@ import { AUTH_REPOSITORY } from '../authentication/domain/repositories/auth.repo
 import type { IAuthRepository } from '../authentication/domain/repositories/auth.repository';
 import { ROLE_REPOSITORY } from '../authentication/domain/repositories/role.repository';
 import type { IRoleRepository } from '../authentication/domain/repositories/role.repository';
-import { LOCAL_STORAGE_SERVICE } from '../media/services/localStorage.service';
-import type { ILocalStorageService } from '../media/services/localStorage.service';
+import { LOCAL_STORAGE_SERVICE } from '../media/contracts';
+import type { ILocalStorageService } from '../media/contracts';
 import { UserController } from './interfaces/http/user.controller';
 import {
   USER_REPOSITORY,

@@ -1,5 +1,5 @@
 import type { UpdateMyProfileDto } from '../../dto/update-my-profile.dto';
-import type { UploadFile } from '../../../../media/types/upload-file';
+import type { UploadFile } from '../../../../media/contracts';
 
 export class UpdateMyProfileCommand {
   constructor(

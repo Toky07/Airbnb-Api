@@ -9,7 +9,7 @@ import { AppModule } from './app.module';
 import { getCorsConfig } from './config/cors.config';
 import { validateEnv } from './config/env.config';
 import { getHelmetOptions, isHelmetEnabled } from './config/helmet.config';
-import { resolveUploadRoot } from './modules/media/utils/resolve-upload-root';
+import { resolveUploadRoot } from './modules/media/contracts';
 import { AllExceptionsFilter } from './shared/filters/all-exceptions.filter';
 import { setupSwagger } from './config/swagger.config';
 

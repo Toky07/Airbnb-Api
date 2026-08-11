@@ -1,8 +1,8 @@
 import { readFile } from 'fs/promises';
 import { Injectable } from '@nestjs/common';
-import { toDiskPath } from '../../../media/utils/build-upload-path';
-import { resolveUploadRoot } from '../../../media/utils/resolve-upload-root';
-import type { UploadFile } from '../../../media/types/upload-file';
+import { toDiskPath } from '../../../media/contracts';
+import { resolveUploadRoot } from '../../../media/contracts';
+import type { UploadFile } from '../../../media/contracts';
 import type { EmailSendAttachmentPayload } from '../../domain/events/email-send-requested.event';
 
 @Injectable()

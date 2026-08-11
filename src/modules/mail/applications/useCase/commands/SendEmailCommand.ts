@@ -1,4 +1,4 @@
-import type { UploadFile } from '../../../../media/types/upload-file';
+import type { UploadFile } from '../../../../media/contracts';
 import type { SendEmailDto } from '../../dto/send-email.dto';
 
 export type SendEmailCommandPayload = SendEmailDto & {

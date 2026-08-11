@@ -6,22 +6,22 @@ import {
 } from '../../../rooms/domain/repositories/room.repository';
 import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
 import { USER_REPOSITORY } from '../../../user/infrastructure/repositories/user.repository';
-import { InvoiceGenerateRequestedEvent } from '../../../invoice/domain/events/invoice-generate-requested.event';
-import { INVOICE_PAYMENT_TYPE } from '../../../invoice/domain/constants/invoice-payment-type.constant';
-import type {
-  InvoiceData,
-  InvoiceLineItem,
-  InvoiceTotals,
-} from '../../../invoice/domain/types/invoice-data.type';
-import { getInvoiceIssuer } from '../../../invoice/domain/constants/invoice-source.constant';
-import { InvoiceNumberService } from '../../../invoice/applications/services/invoice-number.service';
+import {
+  INVOICE_PAYMENT_TYPE,
+  InvoiceGenerateRequestedEvent,
+  InvoiceNumberService,
+  formatInvoiceDate,
+  getInvoiceIssuer,
+  type InvoiceData,
+  type InvoiceLineItem,
+  type InvoiceTotals,
+} from '../../../invoice/contracts';
 import type {
   HostPaymentNotificationGroup,
   ReservationInvoiceContext,
   ReservationInvoiceLineItem,
 } from '../../domain/types/reservation-invoice-context.type';
 import { ResolvePaymentReservationsService } from './resolve-payment-reservations.service';
-import { formatInvoiceDate } from '../../../invoice/contracts';
 import { ReservationItemOutput } from '../dto/reservation-item.output';
 
 @Injectable()

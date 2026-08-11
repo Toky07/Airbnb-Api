@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { ENTITY_TYPE } from '../../../media/constant';
+import { ENTITY_TYPE } from '../../../media/contracts';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { GetMediasByEntityQuery } from '../../../media/applications/useCase/queries/GetMediasByEntityQuery';
-import { Media } from '../../../media/domain/entities/media.entity';
+import { GetMediasByEntityQuery } from '../../../media/contracts';
+import { Media } from '../../../media/contracts';
 import { RoomOutput } from '../../../rooms/applications/dto/room.output';
 import { Room } from '../../../rooms/domain/entities/room.entity';
 import { Property } from '../../domain/entities/property.entity';

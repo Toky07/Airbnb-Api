@@ -1,9 +1,11 @@
-import { ENTITY_TYPE } from '../../../media/constant';
-import type { ILocalStorageService } from '../../../media/services/localStorage.service';
-import type { UploadFile } from '../../../media/types/upload-file';
-import { toSaveMediaContext } from '../../../media/utils/build-upload-path';
-import { dataUrlToUploadFile } from '../../../media/utils/data-url-to-upload-file';
-import { isStoredUploadPath } from '../../../media/utils/is-stored-upload-path';
+import {
+  ENTITY_TYPE,
+  dataUrlToUploadFile,
+  isStoredUploadPath,
+  toSaveMediaContext,
+  type ILocalStorageService,
+  type UploadFile,
+} from '../../../media/contracts';
 
 export type ResolveUserAvatarInput = {
   file?: UploadFile;

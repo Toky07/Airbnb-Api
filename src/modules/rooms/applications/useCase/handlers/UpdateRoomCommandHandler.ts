@@ -2,8 +2,8 @@ import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-
 import { CommandBus } from '../../../../../shared/useCase/bus/bus';
 import type { IRoomRepository } from '../../../domain/repositories/room.repository';
 import { RoomOutput } from '../../dto/room.output';
-import { ENTITY_TYPE } from '../../../../media/constant';
-import { SyncEntityMediasCommand } from '../../../../media/applications/useCase/commands/SyncEntityMediasCommand';
+import { ENTITY_TYPE } from '../../../../media/contracts';
+import { SyncEntityMediasCommand } from '../../../../media/contracts';
 import type { RoomMediaPresenter } from '../../presenters/room-media.presenter';
 import type { GenerateRoomSlugService } from '../../services/generate-room-slug.service';
 import type { UpdateRoomCommand } from '../commands/UpdateRoomCommand';

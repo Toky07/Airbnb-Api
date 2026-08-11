@@ -24,7 +24,7 @@ import { Public } from '../decorators/public.decorator';
 import { RequirePermissions } from '../decorators/require-permissions.decorator';
 import type { JwtPayload } from '../../domain/types/jwt-payload';
 import type { MeOutput } from '../../applications/dto/me.output';
-import type { UploadFile } from '../../../media/types/upload-file';
+import type { UploadFile } from '../../../media/contracts';
 import { UserOutput } from '../../../user/domain/dtos/user.output';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';

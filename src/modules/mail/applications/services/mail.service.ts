@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import type { UploadFile } from '../../../media/types/upload-file';
+import type { UploadFile } from '../../../media/contracts';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import {
   SendEmailCommand,

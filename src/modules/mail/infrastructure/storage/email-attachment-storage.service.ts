@@ -2,10 +2,10 @@ import { mkdir, writeFile } from 'fs/promises';
 import { join, dirname } from 'path';
 import { randomUUID } from 'crypto';
 import { Injectable } from '@nestjs/common';
-import { UPLOAD_ROOT } from '../../../media/constant';
-import { toDiskPath } from '../../../media/utils/build-upload-path';
-import { resolveUploadRoot } from '../../../media/utils/resolve-upload-root';
-import type { UploadFile } from '../../../media/types/upload-file';
+import { UPLOAD_ROOT } from '../../../media/contracts';
+import { toDiskPath } from '../../../media/contracts';
+import { resolveUploadRoot } from '../../../media/contracts';
+import type { UploadFile } from '../../../media/contracts';
 import type { EmailAttachment } from '../../domain/entities/email-attachment.entity';
 
 @Injectable()

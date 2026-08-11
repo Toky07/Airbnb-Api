@@ -85,6 +85,67 @@ export default tseslint.config(
               message:
                 'Importer payment uniquement via payment/contracts (sauf ORM TypeORM).',
             },
+            {
+              group: [
+                '**/invoice/applications/**',
+                '**/invoice/infrastructure/**',
+                '**/invoice/domain/**',
+              ],
+              message:
+                'Importer invoice uniquement via invoice/contracts (sauf ORM TypeORM).',
+            },
+            {
+              group: [
+                '**/mail/applications/**',
+                '**/mail/infrastructure/**',
+                '**/mail/domain/**',
+              ],
+              message:
+                'Importer mail uniquement via mail/contracts (sauf ORM TypeORM).',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: [
+      'src/modules/rooms/**/*.ts',
+      'src/modules/properties/**/*.ts',
+      'src/modules/host/**/*.ts',
+      'src/modules/user/**/*.ts',
+      'src/modules/import/**/*.ts',
+      'src/modules/authentication/**/*.ts',
+    ],
+    ignores: ['**/*.spec.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '**/media/applications/**',
+                '**/media/infrastructure/**',
+                '**/media/domain/**',
+                '**/media/types/**',
+                '**/media/utils/**',
+                '**/media/services/**',
+                '**/media/constant',
+                '**/media/constant.ts',
+              ],
+              message:
+                'Importer media uniquement via media/contracts (sauf MediaModule / ORM).',
+            },
+            {
+              group: [
+                '**/mail/applications/**',
+                '**/mail/infrastructure/**',
+                '**/mail/domain/**',
+              ],
+              message:
+                'Importer mail uniquement via mail/contracts (sauf MailModule / ORM).',
+            },
           ],
         },
       ],

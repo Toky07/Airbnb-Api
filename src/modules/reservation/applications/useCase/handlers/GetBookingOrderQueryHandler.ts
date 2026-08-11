@@ -1,7 +1,9 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import { INVOICE_PAYMENT_TYPE } from '../../../../invoice/domain/constants/invoice-payment-type.constant';
-import type { IInvoiceRepository } from '../../../../invoice/domain/repositories/invoice.repository';
+import {
+  INVOICE_PAYMENT_TYPE,
+  type IInvoiceRepository,
+} from '../../../../invoice/contracts';
 import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
 import type { IPaymentRepository } from '../../../../payment/contracts';
 import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';

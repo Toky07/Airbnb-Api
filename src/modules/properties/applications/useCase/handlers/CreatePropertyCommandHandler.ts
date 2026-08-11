@@ -3,8 +3,8 @@ import { CommandBus } from '../../../../../shared/useCase/bus/bus';
 import type { IPropertyRepository } from '../../../domain/repositories/property.repository';
 import { Property } from '../../../domain/entities/property.entity';
 import { PropertyOutput } from '../../dto/property.output';
-import { ENTITY_TYPE } from '../../../../media/constant';
-import { SaveEntityMediasCommand } from '../../../../media/applications/useCase/commands/SaveEntityMediasCommand';
+import { ENTITY_TYPE } from '../../../../media/contracts';
+import { SaveEntityMediasCommand } from '../../../../media/contracts';
 import type { PropertyMediaPresenter } from '../../presenters/property-media.presenter';
 import type { CreatePropertyCommand } from '../commands/CreatePropertyCommand';
 

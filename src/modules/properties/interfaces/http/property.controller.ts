@@ -17,7 +17,7 @@ import type { PaginatedResult } from '../../../../shared/pagination/pagination.t
 import { PropertyOutput } from '../../applications/dto/property.output';
 import type { CreatePropertyDto } from '../../applications/dto/createProperty.dto';
 import { parsePropertyBody } from './parse-property-body';
-import type { UploadFile } from '../../../media/types/upload-file';
+import type { UploadFile } from '../../../media/contracts';
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';

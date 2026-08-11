@@ -7,7 +7,7 @@ import type { IPasswordResetTokenRepository } from './domain/repositories/passwo
 import type { TokenGenerator } from './domain/generator/token.generator';
 import type { EnsurePropertyOwnerHostRoleService } from './applications/services/ensure-property-owner-host-role.service';
 import type { EnsureAuthHasRoleService } from './applications/services/ensure-auth-has-role.service';
-import type { MailService } from '../mail/applications/services/mail.service';
+import type { MailService } from '../mail/contracts';
 import { PasswordSetupTokenService } from './domain/services/password-setup-token.service';
 import { PasswordSetupLinkBuilder } from './domain/services/password-setup-link.builder';
 import { CreateCredentialsCommandHandler } from './applications/useCase/handlers/CreateCredentialsCommandHandler';

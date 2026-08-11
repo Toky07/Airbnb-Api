@@ -1,7 +1,7 @@
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import type { IAuthRepository } from '../../../domain/repositories/auth.repository';
 import type { IPasswordResetTokenRepository } from '../../../domain/repositories/password-reset-token.repository';
-import type { MailService } from '../../../../mail/applications/services/mail.service';
+import type { MailService } from '../../../../mail/contracts';
 import { PasswordSetupTokenService } from '../../../domain/services/password-setup-token.service';
 import { PasswordResetLinkBuilder } from '../../../domain/services/password-reset-link.builder';
 import { PASSWORD_RESET_TOKEN_TTL_HOURS } from '../../../domain/constants/account-status.constant';
