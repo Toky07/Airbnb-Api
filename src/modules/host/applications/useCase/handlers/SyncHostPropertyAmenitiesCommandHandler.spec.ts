@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SyncHostPropertyAmenitiesCommandHandler } from './SyncHostPropertyAmenitiesCommandHandler';
 import { SyncHostPropertyAmenitiesCommand } from '../commands/SyncHostPropertyAmenitiesCommand';
-import { SyncPropertyAmenitiesCommand } from '../../../../amenity/applications/useCase/commands/SyncPropertyAmenitiesCommand';
+import { SyncPropertyAmenitiesCommand } from '../../../../amenity/contracts';
 import { authUser, createResolveHostPropertyMock } from './host-test.helpers';
 import { commandBusExecuteMock } from '../../../../../test/command-bus.mock';
 

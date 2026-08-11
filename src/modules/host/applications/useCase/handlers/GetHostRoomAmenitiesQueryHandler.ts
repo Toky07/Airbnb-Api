@@ -1,7 +1,7 @@
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
 import { QueryBus } from '../../../../../shared/useCase/bus/query-bus';
-import { AmenityOutput } from '../../../../amenity/applications/dto/amenity.output';
-import { ListRoomAmenitiesQuery } from '../../../../amenity/applications/useCase/queries/ListRoomAmenitiesQuery';
+import { AmenityOutput } from '../../../../amenity/contracts';
+import { ListRoomAmenitiesQuery } from '../../../../amenity/contracts';
 import { AssertHostRoomOwnershipService } from '../../services/assert-host-room-ownership.service';
 import type { GetHostRoomAmenitiesQuery } from '../queries/GetHostRoomAmenitiesQuery';
 

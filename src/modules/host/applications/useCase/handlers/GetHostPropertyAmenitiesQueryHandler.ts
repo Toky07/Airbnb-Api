@@ -1,7 +1,7 @@
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
 import { QueryBus } from '../../../../../shared/useCase/bus/query-bus';
-import { AmenityOutput } from '../../../../amenity/applications/dto/amenity.output';
-import { ListPropertyAmenitiesQuery } from '../../../../amenity/applications/useCase/queries/ListPropertyAmenitiesQuery';
+import { AmenityOutput } from '../../../../amenity/contracts';
+import { ListPropertyAmenitiesQuery } from '../../../../amenity/contracts';
 import { ResolveHostPropertyService } from '../../services/resolve-host-property.service';
 import type { GetHostPropertyAmenitiesQuery } from '../queries/GetHostPropertyAmenitiesQuery';
 

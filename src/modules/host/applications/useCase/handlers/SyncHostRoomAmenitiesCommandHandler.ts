@@ -1,7 +1,7 @@
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { AmenityOutput } from '../../../../amenity/applications/dto/amenity.output';
-import { SyncRoomAmenitiesCommand } from '../../../../amenity/applications/useCase/commands/SyncRoomAmenitiesCommand';
+import { AmenityOutput } from '../../../../amenity/contracts';
+import { SyncRoomAmenitiesCommand } from '../../../../amenity/contracts';
 import { AssertHostRoomOwnershipService } from '../../services/assert-host-room-ownership.service';
 import type { SyncHostRoomAmenitiesCommand } from '../commands/SyncHostRoomAmenitiesCommand';
 

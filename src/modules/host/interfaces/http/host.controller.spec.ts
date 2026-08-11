@@ -10,7 +10,7 @@ import { HostModule } from '../../host.module';
 import { PropertyEntity } from '../../../properties/infrastructure/entities/property-entity.entity';
 import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
 import { AmenityOrmEntity } from '../../../amenity/infrastructure/entities/amenity.orm-entity';
-import { AMENITY_SCOPE } from '../../../amenity/domain/constants/amenity-scope.constant';
+import { AMENITY_SCOPE } from '../../../amenity/contracts';
 import {
   AUTH_TEST_ENTITIES,
   DOMAIN_TEST_ENTITIES,

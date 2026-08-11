@@ -331,4 +331,32 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    files: ['src/modules/host/**/*.ts', 'src/modules/rooms/**/*.ts'],
+    ignores: [
+      '**/*.spec.ts',
+      '**/infrastructure/entities/**',
+      'src/modules/host/host.module.ts',
+      'src/modules/rooms/room.module.ts',
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '**/amenity/applications/**',
+                '**/amenity/domain/**',
+                '**/amenity/interfaces/**',
+                '**/amenity/infrastructure/**',
+              ],
+              message:
+                'Importer amenity uniquement via amenity/contracts (sauf AmenityModule / ORM).',
+            },
+          ],
+        },
+      ],
+    },
+  },
 );

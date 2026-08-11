@@ -1,8 +1,8 @@
 import { NotFoundException } from '@nestjs/common';
 import type { Repository } from 'typeorm';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { ListPropertyAmenitiesQuery } from '../../../amenity/applications/useCase/queries/ListPropertyAmenitiesQuery';
-import { ListRoomAmenitiesQuery } from '../../../amenity/applications/useCase/queries/ListRoomAmenitiesQuery';
+import { ListPropertyAmenitiesQuery } from '../../../amenity/contracts';
+import { ListRoomAmenitiesQuery } from '../../../amenity/contracts';
 import type { IRoomRepository } from '../../domain/repositories/room.repository';
 import type { IRoomBlockedDateRepository } from '../../domain/repositories/room-blocked-date.repository';
 import type { ReservationItemOrmEntity } from '../../../reservation/infrastructure/entities/reservation-item.orm-entity';
