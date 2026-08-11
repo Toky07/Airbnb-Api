@@ -33,18 +33,6 @@ export class ReservationRepository implements IReservationRepository {
     private readonly itemRepository: Repository<ReservationItemOrmEntity>,
   ) {}
 
-  async create(reservation: Reservation): Promise<Reservation> {
-    const saved = await this.repository.save(
-      this.repository.create(ReservationMapper.toEntity(reservation)),
-    );
-
-    const loaded = await this.repository.findOne({
-      where: { id: saved.id },
-      relations: ['items'],
-    });
-    return ReservationMapper.toDomain(loaded!);
-  }
-
   async update(reservation: Reservation): Promise<Reservation> {
     const updatedReservation = await this.repository.preload(
       ReservationMapper.toEntity(reservation),
@@ -61,13 +49,6 @@ export class ReservationRepository implements IReservationRepository {
     });
   }
 
-  async updateItem(item: ReservationItem): Promise<ReservationItem> {
-    const saved = await this.itemRepository.save(
-      ReservationItemMapper.toEntity(item),
-    );
-    return ReservationItemMapper.toDomain(saved);
-  }
-
   async findById(id: number): Promise<Reservation | null> {
     if (!Number.isFinite(id) || id <= 0) {
       return null;
@@ -78,31 +59,6 @@ export class ReservationRepository implements IReservationRepository {
       relations: ['items', 'payment'],
     });
     return entity ? ReservationMapper.toDomain(entity) : null;
-  }
-
-  async findItemById(id: number): Promise<ReservationItem | null> {
-    if (!Number.isFinite(id) || id <= 0) {
-      return null;
-    }
-
-    const entity = await this.itemRepository.findOne({ where: { id } });
-    return entity ? ReservationItemMapper.toDomain(entity) : null;
-  }
-
-  async findItemsByIds(ids: number[]): Promise<ReservationItem[]> {
-    const uniqueIds = [
-      ...new Set(ids.filter((id) => Number.isFinite(id) && id > 0)),
-    ];
-    if (uniqueIds.length === 0) {
-      return [];
-    }
-
-    const entities = await this.itemRepository.find({
-      where: { id: In(uniqueIds) },
-      order: { createdAt: 'ASC' },
-    });
-
-    return entities.map((entity) => ReservationItemMapper.toDomain(entity));
   }
 
   async findPaginated(
@@ -233,24 +189,6 @@ export class ReservationRepository implements IReservationRepository {
     });
   }
 
-  async findRoomIdsUnavailable(
-    checkIn: string,
-    checkOut: string,
-  ): Promise<number[]> {
-    const rows = await this.itemRepository
-      .createQueryBuilder('item')
-      .innerJoin('item.reservation', 'reservation')
-      .select('DISTINCT item.roomId', 'roomId')
-      .where('item.checkIn < :checkOut', { checkOut })
-      .andWhere('item.checkOut > :checkIn', { checkIn })
-      .andWhere('reservation.status IN (:...statuses)', {
-        statuses: BLOCKING_RESERVATION_STATUSES,
-      })
-      .getRawMany<{ roomId: number }>();
-
-    return rows.map((row) => Number(row.roomId)).filter((id) => id > 0);
-  }
-
   async countByScope(
     scope: ReservationStatsScope,
     status?: ReservationStatus,
@@ -361,42 +299,6 @@ export class ReservationRepository implements IReservationRepository {
     });
 
     return entities.map((entity) => ReservationMapper.toDomain(entity));
-  }
-
-  async findIdsByFilters(
-    params: Omit<ReservationListParams, 'page' | 'limit'>,
-  ): Promise<number[]> {
-    const qb = this.repository
-      .createQueryBuilder('reservation')
-      .select('reservation.id', 'id');
-
-    if (params.userId) {
-      qb.andWhere('reservation.userId = :userId', { userId: params.userId });
-    }
-
-    if (params.roomId) {
-      qb.innerJoin('reservation.items', 'item', 'item.roomId = :roomId', {
-        roomId: params.roomId,
-      });
-    }
-
-    this.applyPropertyScope(qb, params.propertyIds, params.propertyId);
-
-    if (params.search) {
-      qb.innerJoin('reservation.items', 'searchItem');
-      const term = `%${params.search}%`;
-      qb.andWhere(
-        '(searchItem.checkIn LIKE :term OR searchItem.checkOut LIKE :term)',
-        { term },
-      );
-    }
-
-    const rows = await qb.getRawMany<{ id: number }>();
-    return rows.map((row) => Number(row.id)).filter((id) => id > 0);
-  }
-
-  async findIdsByPropertyId(propertyId: number): Promise<number[]> {
-    return this.findIdsByPropertyIds([propertyId]);
   }
 
   async findIdsByPropertyIds(propertyIds: number[]): Promise<number[]> {

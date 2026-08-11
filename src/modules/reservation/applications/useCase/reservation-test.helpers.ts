@@ -62,14 +62,6 @@ export function createReservationRepositoryMock(
   overrides: Partial<IReservationRepository> = {},
 ): IReservationRepository {
   return {
-    create: vi.fn().mockImplementation(async (reservation: Reservation) =>
-      createSampleReservation({
-        id: 1,
-        userId: reservation.userId,
-        items: reservation.items,
-        holdUntil: reservation.holdUntil ?? null,
-      }),
-    ),
     createWithHold: vi
       .fn()
       .mockImplementation(async (reservation: Reservation) =>
@@ -81,27 +73,19 @@ export function createReservationRepositoryMock(
             reservation.holdUntil ?? new Date('2026-06-01T10:20:00.000Z'),
         }),
       ),
-    updateItem: vi
-      .fn()
-      .mockImplementation(async (item: ReservationItem) => item),
     findById: vi.fn(),
-    findItemById: vi.fn(),
-    findItemsByIds: vi.fn(),
     findPaginated: vi.fn(),
     findOverlapping: vi.fn().mockResolvedValue([]),
-    findRoomIdsUnavailable: vi.fn().mockResolvedValue([]),
     countByScope: vi.fn(),
     sumConfirmedRevenueForMonth: vi.fn(),
     sumConfirmedNightsForMonth: vi.fn(),
     findRecentItems: vi.fn(),
     findByIds: vi.fn(),
-    findIdsByPropertyId: vi.fn(),
     findIdsByPropertyIds: vi.fn(),
-    findIdsByFilters: vi.fn(),
     findByPaymentId: vi.fn(),
     clearExpiredReservations: vi.fn(),
     update: vi.fn(),
     setPayment: vi.fn(),
     ...overrides,
-  } as unknown as IReservationRepository;
+  };
 }

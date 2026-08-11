@@ -22,11 +22,8 @@ export type ReservationStatsScope = {
 };
 
 export interface IReservationRepository extends IReservationByIdReader {
-  create(reservation: Reservation): Promise<Reservation>;
   update(reservation: Reservation): Promise<Reservation>;
   setPayment(reservation: Reservation, paymentId: number): Promise<void>;
-  findItemById(id: number): Promise<ReservationItem | null>;
-  findItemsByIds(ids: number[]): Promise<ReservationItem[]>;
   findPaginated(
     params: ReservationListParams,
   ): Promise<PaginatedResult<Reservation>>;
@@ -37,7 +34,6 @@ export interface IReservationRepository extends IReservationByIdReader {
     excludeReservationId?: number,
   ): Promise<ReservationItem[]>;
   createWithHold(reservation: Reservation): Promise<Reservation>;
-  findRoomIdsUnavailable(checkIn: string, checkOut: string): Promise<number[]>;
   countByScope(
     scope: ReservationStatsScope,
     status?: ReservationStatus,
@@ -57,11 +53,7 @@ export interface IReservationRepository extends IReservationByIdReader {
     scope?: ReservationStatsScope,
   ): Promise<ReservationItem[]>;
   findByIds(ids: number[]): Promise<Reservation[]>;
-  findIdsByPropertyId(propertyId: number): Promise<number[]>;
   findIdsByPropertyIds(propertyIds: number[]): Promise<number[]>;
-  findIdsByFilters(
-    params: Omit<ReservationListParams, 'page' | 'limit'>,
-  ): Promise<number[]>;
   findByPaymentId(paymentId: number): Promise<Reservation | null>;
   clearExpiredReservations(): Promise<void>;
 }
