@@ -290,4 +290,45 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    files: [
+      'src/modules/user/**/*.ts',
+      'src/modules/rooms/**/*.ts',
+      'src/modules/reservation/**/*.ts',
+      'src/modules/payment/**/*.ts',
+      'src/modules/host/**/*.ts',
+      'src/modules/review/**/*.ts',
+      'src/modules/messaging/**/*.ts',
+      'src/modules/favorite/**/*.ts',
+      'src/modules/invoice/**/*.ts',
+      'src/modules/mail/**/*.ts',
+    ],
+    ignores: [
+      '**/*.spec.ts',
+      '**/infrastructure/entities/**',
+      '**/infrastructure/repositories/**',
+      'src/modules/reservation/reservation.module.ts',
+      'src/modules/rooms/room.module.ts',
+      'src/modules/user/user.module.ts',
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '**/cart/applications/**',
+                '**/cart/domain/**',
+                '**/cart/interfaces/**',
+                '**/cart/infrastructure/**',
+              ],
+              message:
+                'Importer cart uniquement via cart/contracts (sauf CartModule / ORM).',
+            },
+          ],
+        },
+      ],
+    },
+  },
 );

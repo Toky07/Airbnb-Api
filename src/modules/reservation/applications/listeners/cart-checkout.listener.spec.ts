@@ -1,7 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { EventBus } from '../../../../shared/domain/event.bus';
-import { CartCheckoutRequestedEvent } from '../../../cart/domain/events/cart-checkout-requested.event';
-import { CartCheckoutReservationCreatedEvent } from '../../../cart/domain/events/cart-checkout-reservation-created.event';
+import {
+  CartCheckoutRequestedEvent,
+  CartCheckoutReservationCreatedEvent,
+} from '../../../cart/contracts';
 import { CartCheckoutListener } from './cart-checkout.listener';
 import { commandBusExecuteMock } from '../../../../test/command-bus.mock';
 import { samplePricingBreakdown } from '../../../cart/applications/useCase/handlers/checkout-test.helpers';

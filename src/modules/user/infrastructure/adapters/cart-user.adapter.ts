@@ -3,7 +3,7 @@ import {
   CART_USER_PORT,
   type CartUserSnapshot,
   type ICartUserPort,
-} from '../../../cart/domain/ports/cart-user.port';
+} from '../../../cart/contracts';
 import { USER_REPOSITORY } from '../../domain/repositories/user.repository';
 import type { IUserRepository } from '../../domain/repositories/user.repository';
 

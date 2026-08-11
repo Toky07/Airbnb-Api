@@ -9,8 +9,8 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
-import { Public } from '../../../authentication/interfaces/decorators/public.decorator';
+import type { JwtPayload } from '../../../authentication/contracts';
+import { Public } from '../../../authentication/contracts';
 import { CompleteCartCheckoutDto } from '../../applications/dto/complete-cart-checkout.dto';
 import {
   AddCartItemDto,

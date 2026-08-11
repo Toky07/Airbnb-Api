@@ -3,7 +3,7 @@ import {
   CART_PRODUCT_SUMMARY_PORT,
   type CartProductSummary,
   type ICartProductSummaryPort,
-} from '../../../cart/domain/ports/cart-product-summary.port';
+} from '../../../cart/contracts';
 import { RoomProductSummaryService } from '../../applications/services/room-product-summary.service';
 
 @Injectable()

@@ -1,4 +1,4 @@
-import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
+import type { JwtPayload } from '../../../authentication/contracts';
 import { CART_SESSION_HEADER } from '../../domain/constants/cart-item-type.constant';
 import type { CartRequestContext } from '../../applications/services/resolve-cart.service';
 

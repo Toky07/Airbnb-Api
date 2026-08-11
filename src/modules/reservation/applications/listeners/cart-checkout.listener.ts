@@ -1,5 +1,5 @@
-import type { CartCheckoutRequestedEvent } from '../../../cart/domain/events/cart-checkout-requested.event';
-import { CartCheckoutReservationCreatedEvent } from '../../../cart/domain/events/cart-checkout-reservation-created.event';
+import type { CartCheckoutRequestedEvent } from '../../../cart/contracts';
+import { CartCheckoutReservationCreatedEvent } from '../../../cart/contracts';
 import { EventBus } from '../../../../shared/domain/event.bus';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { CreateReservationCommand } from '../useCase/commands/CreateReservationCommand';

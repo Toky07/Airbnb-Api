@@ -5,7 +5,7 @@ import {
   type ICartItemCatalogPort,
   type ReservationCartItemDetails,
   type ReservationCartItemInput,
-} from '../../../cart/domain/ports/cart-item-catalog.port';
+} from '../../../cart/contracts';
 import {
   ROOM_REPOSITORY,
   type IRoomRepository,
