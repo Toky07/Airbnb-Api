@@ -6,7 +6,7 @@ import {
 import { RESERVATION_STATUS } from '../../../reservation/contracts';
 import { Reservation } from '../../../reservation/contracts';
 import { ReservationItem } from '../../../reservation/contracts';
-import type { IReservationRepository } from '../../../reservation/contracts';
+import type { IReservationByIdReader } from '../../../reservation/contracts';
 import type { IUserRepository } from '../../../user/contracts';
 import type { IReviewRepository } from '../../domain/repositories/review.repository';
 import { ReviewEligibilityService } from './review-eligibility.service';
@@ -20,9 +20,9 @@ describe('ReviewEligibilityService', () => {
     existingReview?: boolean;
     userId?: number;
   }) {
-    const reservationRepository = {
+    const reservationRepository: IReservationByIdReader = {
       findById: async () => deps.reservation ?? null,
-    } as unknown as IReservationRepository;
+    };
 
     const reviewRepository = {
       findByReservationId: async () => (deps.existingReview ? { id: 1 } : null),

@@ -1,4 +1,4 @@
-import type { IReservationRepository } from '../reservation/contracts';
+import type { IReservationByIdReader } from '../reservation/contracts';
 import type { IUserRepository } from '../user/contracts';
 import type { IRoomRepository } from '../rooms/contracts';
 import type { IReviewRepository } from './domain/repositories/review.repository';
@@ -15,7 +15,7 @@ import { ListPendingReviewsQueryHandler } from './applications/useCase/handlers/
 export class ReviewBootstrap {
   static create(deps: {
     reviewRepository: IReviewRepository;
-    reservationRepository: IReservationRepository;
+    reservationRepository: IReservationByIdReader;
     userRepository: IUserRepository;
     roomRepository: IRoomRepository;
   }) {

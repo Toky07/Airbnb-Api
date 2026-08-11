@@ -4,7 +4,7 @@ import { ReservationModule } from '../reservation/reservation.module';
 import { RoomsModule } from '../rooms/room.module';
 import { UserModule } from '../user/user.module';
 import { RESERVATION_REPOSITORY } from '../reservation/contracts';
-import type { IReservationRepository } from '../reservation/contracts';
+import type { IReservationByIdReader } from '../reservation/contracts';
 import { ROOM_REPOSITORY } from '../rooms/contracts';
 import type { IRoomRepository } from '../rooms/contracts';
 import { USER_REPOSITORY } from '../user/contracts';
@@ -46,7 +46,7 @@ export class ReviewModule implements OnModuleInit {
     @Inject(REVIEW_REPOSITORY)
     private readonly reviewRepository: IReviewRepository,
     @Inject(RESERVATION_REPOSITORY)
-    private readonly reservationRepository: IReservationRepository,
+    private readonly reservationRepository: IReservationByIdReader,
     @Inject(ROOM_REPOSITORY)
     private readonly roomRepository: IRoomRepository,
     @Inject(USER_REPOSITORY)

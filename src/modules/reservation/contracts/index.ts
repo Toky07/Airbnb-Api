@@ -3,6 +3,7 @@
  * Les autres modules doivent importer uniquement depuis ce barrel
  * (sauf ReservationModule Nest et ORM).
  */
+export type { IReservationByIdReader } from '../domain/repositories/reservation-by-id.reader';
 export {
   RESERVATION_REPOSITORY,
   type IReservationRepository,

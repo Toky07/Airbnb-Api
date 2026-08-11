@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { IReservationByIdReader } from './index';
 import {
   BLOCKING_RESERVATION_STATUSES,
   CANCELLATION_POLICY,
@@ -30,5 +31,12 @@ describe('reservation/contracts', () => {
   it('expose cancellation-policy via contrat feuille (anti-cycle)', () => {
     expect(LeafDefault).toBe(LeafCancellationPolicy.MODERATE);
     expect(LeafCancellationPolicy).toBe(CANCELLATION_POLICY);
+  });
+
+  it('expose le port étroit IReservationByIdReader (ISP)', () => {
+    const reader: IReservationByIdReader = {
+      findById: async () => null,
+    };
+    expect(reader.findById).toBeTypeOf('function');
   });
 });

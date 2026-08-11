@@ -5,6 +5,7 @@ import type {
 import type { Reservation } from '../entities/reservation.entity';
 import type { ReservationItem } from '../entities/reservation-item.entity';
 import { ReservationStatus } from '../constants/reservation-status.constant';
+import type { IReservationByIdReader } from './reservation-by-id.reader';
 
 export const RESERVATION_REPOSITORY = 'RESERVATION_REPOSITORY';
 
@@ -20,11 +21,10 @@ export type ReservationStatsScope = {
   propertyIds?: number[];
 };
 
-export interface IReservationRepository {
+export interface IReservationRepository extends IReservationByIdReader {
   create(reservation: Reservation): Promise<Reservation>;
   update(reservation: Reservation): Promise<Reservation>;
   setPayment(reservation: Reservation, paymentId: number): Promise<void>;
-  findById(id: number): Promise<Reservation | null>;
   findItemById(id: number): Promise<ReservationItem | null>;
   findItemsByIds(ids: number[]): Promise<ReservationItem[]>;
   findPaginated(

@@ -4,13 +4,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { RESERVATION_STATUS } from '../../../reservation/contracts';
-import type { IReservationRepository } from '../../../reservation/contracts';
+import type { IReservationByIdReader } from '../../../reservation/contracts';
 import type { IUserRepository } from '../../../user/contracts';
 import type { IReviewRepository } from '../../domain/repositories/review.repository';
 
 export class ReviewEligibilityService {
   constructor(
-    private readonly reservationRepository: IReservationRepository,
+    private readonly reservationRepository: IReservationByIdReader,
     private readonly reviewRepository: IReviewRepository,
     private readonly userRepository: IUserRepository,
   ) {}
