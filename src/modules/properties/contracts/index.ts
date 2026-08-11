@@ -2,7 +2,14 @@
  * Surface publique du module properties.
  * Les autres modules doivent importer uniquement depuis ce barrel
  * (sauf PropertiesModule Nest et ORM PropertyEntity).
+ * Pour éviter les cycles rooms↔properties, préférer le leaf
+ * `contracts/property-summary` depuis le module rooms.
  */
+export {
+  toPropertySummary,
+  type PropertySummary,
+  type PropertySummarySource,
+} from './property-summary';
 export {
   PROPERTY_REPOSITORY,
   type IPropertyRepository,

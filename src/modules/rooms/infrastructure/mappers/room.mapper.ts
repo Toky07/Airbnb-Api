@@ -1,5 +1,5 @@
 import { Property } from '../../../properties/domain/entities/property.entity';
-import { PropertyMapper } from '../../../properties/infrastructure/mappers/property.mapper';
+import { toPropertySummary } from '../../../properties/contracts/property-summary';
 import type { CategorySummary } from '../../../../shared/types/category-summary';
 import { Room } from '../../domain/entities/room.entity';
 import { RoomEntity } from '../entities/room.entity';
@@ -17,7 +17,10 @@ function mapRoomType(entity: RoomEntity): CategorySummary | null {
 
 function mapRoomProperty(room: RoomEntity): Property {
   if (room.property?.id != null) {
-    return PropertyMapper.toDomainWithoutRooms(room.property);
+    return new Property({
+      ...toPropertySummary(room.property),
+      rooms: [],
+    });
   }
 
   return new Property({

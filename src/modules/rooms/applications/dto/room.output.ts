@@ -1,5 +1,8 @@
-import type { Property } from '../../../properties/domain/entities/property.entity';
 import type { AmenityOutput } from '../../../amenity/contracts';
+import {
+  toPropertySummary,
+  type PropertySummary,
+} from '../../../properties/contracts/property-summary';
 import type { CategorySummary } from '../../../../shared/types/category-summary';
 import { Room } from '../../domain/entities/room.entity';
 
@@ -25,7 +28,7 @@ export class RoomOutput {
     public readonly status: string,
     public readonly roomTypeId: number | null,
     public readonly roomType: CategorySummary | null,
-    public readonly property: Property,
+    public readonly property: PropertySummary,
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
     public readonly images: string[],
@@ -57,7 +60,7 @@ export class RoomOutput {
       room.status,
       room.roomTypeId,
       room.roomType,
-      room.property,
+      toPropertySummary(room.property),
       room.createdAt!,
       room.updatedAt!,
       images,
