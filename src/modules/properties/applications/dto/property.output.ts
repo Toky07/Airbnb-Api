@@ -1,7 +1,9 @@
 import type { CategorySummary } from '../../../../shared/types/category-summary';
 import type { CancellationPolicy } from '../../../reservation/contracts/cancellation-policy';
-import { RoomOutput } from '../../../rooms/applications/dto/room.output';
-import type { Room } from '../../../rooms/domain/entities/room.entity';
+import {
+  toRoomSummary,
+  type RoomSummary,
+} from '../../../rooms/contracts/room-summary';
 import { Property } from '../../domain/entities/property.entity';
 
 export class PropertyOutput {
@@ -21,7 +23,7 @@ export class PropertyOutput {
     public ownerId: number,
     public propertyTypeId: number | null,
     public propertyType: CategorySummary | null,
-    public rooms: RoomOutput[],
+    public rooms: RoomSummary[],
     public createdAt: Date,
     public updatedAt: Date,
     public image: string | null,
@@ -30,7 +32,7 @@ export class PropertyOutput {
   static fromDomain(
     property: Property,
     image: string | null = null,
-    rooms?: RoomOutput[],
+    rooms?: RoomSummary[],
   ): PropertyOutput {
     return new PropertyOutput(
       property.id!,
@@ -48,7 +50,7 @@ export class PropertyOutput {
       property.ownerId,
       property.propertyTypeId,
       property.propertyType,
-      rooms ?? property.rooms.map((r: Room) => RoomOutput.fromDomain(r)),
+      rooms ?? property.rooms.map((room) => toRoomSummary(room)),
       property.createdAt!,
       property.updatedAt!,
       image,

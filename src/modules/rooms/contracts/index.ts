@@ -2,7 +2,15 @@
  * Surface publique du module rooms.
  * Les autres modules doivent importer uniquement depuis ce barrel
  * (sauf RoomsModule Nest et ORM RoomEntity).
+ * Pour éviter les cycles properties↔rooms, préférer le leaf
+ * `contracts/room-summary` depuis le module properties.
  */
+export {
+  toRoomDomain,
+  toRoomSummary,
+  type RoomSummary,
+  type RoomSummarySource,
+} from './room-summary';
 export {
   ROOM_REPOSITORY,
   type IRoomRepository,

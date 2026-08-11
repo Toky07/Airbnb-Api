@@ -404,4 +404,32 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    files: ['src/modules/properties/**/*.ts'],
+    ignores: [
+      '**/*.spec.ts',
+      '**/infrastructure/entities/**',
+      'src/modules/properties/properties.module.ts',
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '**/rooms/applications/**',
+                '**/rooms/interfaces/**',
+                '**/rooms/infrastructure/mappers/**',
+                '**/rooms/infrastructure/repositories/**',
+                '**/rooms/infrastructure/adapters/**',
+              ],
+              message:
+                'Importer rooms via rooms/contracts ou contracts/room-summary (pas RoomMapper/RoomOutput).',
+            },
+          ],
+        },
+      ],
+    },
+  },
 );

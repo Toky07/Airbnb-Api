@@ -1,16 +1,17 @@
 import { toPropertySummary } from '../../contracts/property-summary';
+import { toRoomDomain } from '../../../rooms/contracts/room-summary';
 import { Property } from '../../domain/entities/property.entity';
-import { RoomMapper } from '../../../rooms/infrastructure/mappers/room.mapper';
-import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
 import { PropertyEntity } from '../entities/property-entity.entity';
 
 export class PropertyMapper {
   static toDomain(property: PropertyEntity): Property {
-    return new Property({
+    const domain = new Property({
       ...toPropertySummary(property),
-      rooms:
-        property.rooms?.map((r: RoomEntity) => RoomMapper.toDomain(r)) || [],
+      rooms: [],
     });
+    domain.rooms =
+      property.rooms?.map((room) => toRoomDomain(room, domain)) || [];
+    return domain;
   }
 
   /** Évite la récursion Property ↔ Room lors du mapping inverse. */

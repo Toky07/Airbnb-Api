@@ -1,7 +1,7 @@
 /**
  * Contrat feuille : résumé d'établissement sans nested rooms.
  * Rooms importe ce fichier (pas properties/contracts/index) pour éviter
- * le cycle RoomMapper ↔ PropertyMapper / PropertyOutput ↔ RoomOutput.
+ * le cycle RoomMapper ↔ PropertyMapper (voir aussi rooms/contracts/room-summary).
  */
 import type { CategorySummary } from '../../../shared/types/category-summary';
 import {
