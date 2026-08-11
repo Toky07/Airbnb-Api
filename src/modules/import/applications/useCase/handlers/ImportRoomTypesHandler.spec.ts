@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ImportRoomTypesHandler } from './import-category-types.handler';
+import { ImportRoomTypesHandler } from './ImportRoomTypesHandler';
 import { createImportBatchContext } from './import-test.helpers';
 import { CreateRoomTypeCommand } from '@src/modules/rooms/contracts';
 import { commandBusExecuteMock } from '@src/test/command-bus.mock';

@@ -5,7 +5,7 @@ import type {
   Payment,
 } from '@src/modules/payment/contracts';
 import type { IUserRepository } from '@src/modules/user/contracts';
-import { BookingOrderListItemOutput } from '@src/modules/reservation/applications/dto/booking-order.output';
+import { BookingOrderListItemOutput } from '@src/modules/reservation/applications/dto/booking-order-list-item.output';
 import type { ResolvePaymentReservationsService } from '@src/modules/reservation/applications/services/resolve-payment-reservations.service';
 import {
   filterItemsByPropertyIds,

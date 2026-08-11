@@ -3,7 +3,7 @@ import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.in
 import { REVIEW_STATUS } from '@src/modules/review/domain/constants/review-status.constant';
 import { Review } from '@src/modules/review/domain/entities/review.entity';
 import type { IReviewRepository } from '@src/modules/review/domain/repositories/review.repository';
-import { isValidRating } from '@src/modules/review/applications/dto/create-review.dto';
+import { isValidRating } from '@src/modules/review/applications/dto/is-valid-rating';
 import { ReviewOutput } from '@src/modules/review/applications/dto/review.output';
 import type { ReviewEligibilityService } from '@src/modules/review/applications/services/review-eligibility.service';
 import type { CreateReviewCommand } from '@src/modules/review/applications/useCase/commands/CreateReviewCommand';

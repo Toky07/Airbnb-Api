@@ -6,7 +6,7 @@ import { CART_ITEM_TYPE } from '@src/modules/cart/domain/constants/cart-item-typ
 import { CartItem } from '@src/modules/cart/domain/entities/cart-item.entity';
 import type { ICartItemCatalogPort } from '@src/modules/cart/domain/ports/cart-item-catalog.port';
 import type { ICartRepository } from '@src/modules/cart/domain/repositories/cart.repository';
-import type { UpdateCartItemDto } from '@src/modules/cart/applications/dto/add-cart-item.dto';
+import type { UpdateCartItemDto } from '@src/modules/cart/applications/dto/update-cart-item.dto';
 import type { CartPresenter } from '@src/modules/cart/applications/presenters/cart.presenter';
 import type { ResolveCartService } from '@src/modules/cart/applications/services/resolve-cart.service';
 

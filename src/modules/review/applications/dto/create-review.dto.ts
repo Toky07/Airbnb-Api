@@ -1,5 +1,4 @@
 import {
-  IsIn,
   IsInt,
   IsString,
   Max,
@@ -10,7 +9,6 @@ import {
 import {
   REVIEW_RATING_MAX,
   REVIEW_RATING_MIN,
-  REVIEW_STATUS,
 } from '@src/modules/review/domain/constants/review-status.constant';
 
 export class CreateReviewDto {
@@ -27,17 +25,4 @@ export class CreateReviewDto {
   @MinLength(1)
   @MaxLength(2000)
   comment: string;
-}
-
-export class ModerateReviewDto {
-  @IsIn([REVIEW_STATUS.PUBLISHED, REVIEW_STATUS.HIDDEN])
-  status: 'published' | 'hidden';
-}
-
-export function isValidRating(rating: number): boolean {
-  return (
-    Number.isInteger(rating) &&
-    rating >= REVIEW_RATING_MIN &&
-    rating <= REVIEW_RATING_MAX
-  );
 }

@@ -1,4 +1,4 @@
-import type { SyncAmenitiesDto } from '@src/modules/amenity/applications/dto/create-amenity.dto';
+import type { SyncAmenitiesDto } from '@src/modules/amenity/applications/dto/sync-amenities.dto';
 
 export class SyncRoomAmenitiesCommand {
   constructor(

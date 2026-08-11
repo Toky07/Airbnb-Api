@@ -6,7 +6,7 @@ import {
 } from '@src/modules/reservation/domain/repositories/reservation.repository';
 import { ReservationItemOutput } from '@src/modules/reservation/applications/dto/reservation-item.output';
 import { BookingOrderItemOutput } from '@src/modules/reservation/applications/dto/booking-order-item.output';
-import { resolvePaymentReservationIds } from '@src/modules/reservation/applications/dto/booking-order.output';
+import { resolvePaymentReservationIds } from '@src/modules/reservation/applications/dto/resolve-payment-reservation-ids';
 import { EnrichReservationOutputsService } from './enrich-reservation-outputs.service';
 import { ReservationOutput } from '@src/modules/reservation/applications/dto/reservation.output';
 

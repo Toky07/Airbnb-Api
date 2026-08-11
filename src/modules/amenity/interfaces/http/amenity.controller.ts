@@ -13,11 +13,9 @@ import { Public } from '@src/modules/authentication/contracts';
 import { RequirePermissions } from '@src/modules/authentication/contracts';
 import { RequireSuperAdmin } from '@src/modules/authentication/contracts';
 import { AmenityOutput } from '@src/modules/amenity/applications/dto/amenity.output';
-import {
-  CreateAmenityDto,
-  SyncAmenitiesDto,
-  UpdateAmenityDto,
-} from '@src/modules/amenity/applications/dto/create-amenity.dto';
+import { CreateAmenityDto } from '@src/modules/amenity/applications/dto/create-amenity.dto';
+import { SyncAmenitiesDto } from '@src/modules/amenity/applications/dto/sync-amenities.dto';
+import { UpdateAmenityDto } from '@src/modules/amenity/applications/dto/update-amenity.dto';
 import { ListAmenitiesQueryDto } from '@src/modules/amenity/applications/dto/list-amenities-query.dto';
 import { parseAmenityScope } from '@src/modules/amenity/applications/utils/parse-amenity-scope';
 import { CommandBus } from '@src/shared/useCase/bus/bus';

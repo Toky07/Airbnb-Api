@@ -26,11 +26,9 @@ import {
   ApiJwtAuth,
   ApiPaginationQuery,
 } from '@src/shared/swagger/swagger.decorators';
-import {
-  CreateRoleSwaggerDto,
-  SetRolePermissionsSwaggerDto,
-  UpdateRoleSwaggerDto,
-} from '@src/shared/swagger/swagger-schemas.dto';
+import { CreateRoleSwaggerDto } from '@src/shared/swagger/create-role-swagger.dto';
+import { SetRolePermissionsSwaggerDto } from '@src/shared/swagger/set-role-permissions-swagger.dto';
+import { UpdateRoleSwaggerDto } from '@src/shared/swagger/update-role-swagger.dto';
 import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 
 @ApiTags(SWAGGER_TAGS.ROLES)

@@ -4,10 +4,6 @@ export class SetUserPasswordDto {
   password!: string;
 }
 
-export class UpdateUserStatusDto {
-  status!: 'active' | 'disabled';
-}
-
 export function parseSetUserPasswordBody(
   body: Record<string, unknown>,
 ): SetUserPasswordDto {
@@ -25,18 +21,4 @@ export function parseSetUserPasswordBody(
   }
 
   return { password };
-}
-
-export function parseUpdateUserStatusBody(
-  body: Record<string, unknown>,
-): UpdateUserStatusDto {
-  const status = typeof body.status === 'string' ? body.status.trim() : '';
-
-  if (status !== 'active' && status !== 'disabled') {
-    throw new BadRequestException(
-      'Le statut doit être « active » ou « disabled ».',
-    );
-  }
-
-  return { status };
 }

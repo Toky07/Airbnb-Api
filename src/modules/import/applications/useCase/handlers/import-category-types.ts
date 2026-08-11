@@ -20,13 +20,13 @@ type CategoryTypeImportTarget = Extract<
   'propertyType' | 'roomType'
 >;
 
-type CategoryTypeImportConfig = {
+export type CategoryTypeImportConfig = {
   entity: CategoryTypeImportTarget;
   getSlugSet: (context: ImportBatchContext) => Set<string>;
   create: (row: ImportCategoryTypeRowDto) => Promise<{ slug: string }>;
 };
 
-const PROPERTY_TYPE_CONFIG: CategoryTypeImportConfig = {
+export const PROPERTY_TYPE_CONFIG: CategoryTypeImportConfig = {
   entity: 'propertyType',
   getSlugSet: (context) => context.propertyTypeSlugs,
   create: (row) =>
@@ -39,7 +39,7 @@ const PROPERTY_TYPE_CONFIG: CategoryTypeImportConfig = {
     ),
 };
 
-const ROOM_TYPE_CONFIG: CategoryTypeImportConfig = {
+export const ROOM_TYPE_CONFIG: CategoryTypeImportConfig = {
   entity: 'roomType',
   getSlugSet: (context) => context.roomTypeSlugs,
   create: (row) =>
@@ -99,22 +99,4 @@ export async function importCategoryTypes(
   }
 
   return result;
-}
-
-export class ImportPropertyTypesHandler {
-  execute(
-    rows: ImportCategoryTypeRowDto[] | undefined,
-    context: ImportBatchContext,
-  ): Promise<ImportEntityResult> {
-    return importCategoryTypes(rows, context, PROPERTY_TYPE_CONFIG);
-  }
-}
-
-export class ImportRoomTypesHandler {
-  execute(
-    rows: ImportCategoryTypeRowDto[] | undefined,
-    context: ImportBatchContext,
-  ): Promise<ImportEntityResult> {
-    return importCategoryTypes(rows, context, ROOM_TYPE_CONFIG);
-  }
 }

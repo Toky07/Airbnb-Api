@@ -5,8 +5,8 @@ import { ImportDataCommandHandler } from './applications/useCase/handlers/Import
 import { ImportUsersHandler } from './applications/useCase/handlers/ImportUsersHandler';
 import { ImportPropertiesHandler } from './applications/useCase/handlers/ImportPropertiesHandler';
 import { ImportRoomsHandler } from './applications/useCase/handlers/ImportRoomsHandler';
-import { ImportPropertyTypesHandler } from './applications/useCase/handlers/import-category-types.handler';
-import { ImportRoomTypesHandler } from './applications/useCase/handlers/import-category-types.handler';
+import { ImportPropertyTypesHandler } from './applications/useCase/handlers/ImportPropertyTypesHandler';
+import { ImportRoomTypesHandler } from './applications/useCase/handlers/ImportRoomTypesHandler';
 import { ImportRolesHandler } from './applications/useCase/handlers/ImportRolesHandler';
 
 export class ImportBootstrap {

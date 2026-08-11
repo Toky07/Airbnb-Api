@@ -9,7 +9,7 @@ export {
   type AmenityScope,
 } from '@src/modules/amenity/domain/constants/amenity-scope.constant';
 export { AmenityOutput } from '@src/modules/amenity/applications/dto/amenity.output';
-export { SyncAmenitiesDto } from '@src/modules/amenity/applications/dto/create-amenity.dto';
+export { SyncAmenitiesDto } from '@src/modules/amenity/applications/dto/sync-amenities.dto';
 export { ListAmenityOptionsQuery } from '@src/modules/amenity/applications/useCase/queries/ListAmenityOptionsQuery';
 export { ListPropertyAmenitiesQuery } from '@src/modules/amenity/applications/useCase/queries/ListPropertyAmenitiesQuery';
 export { ListRoomAmenitiesQuery } from '@src/modules/amenity/applications/useCase/queries/ListRoomAmenitiesQuery';
