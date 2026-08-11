@@ -1,8 +1,8 @@
 import type { PaginatedResult } from '../../../../../shared/pagination/pagination.types';
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
 import { QueryBus } from '../../../../../shared/useCase/bus/query-bus';
-import { ListRoomsQuery } from '../../../../rooms/applications/useCase/queries/ListRoomsQuery';
-import { RoomOutput } from '../../../../rooms/applications/dto/room.output';
+import { ListRoomsQuery } from '../../../../rooms/contracts';
+import { RoomOutput } from '../../../../rooms/contracts';
 import { ResolveHostPropertyService } from '../../services/resolve-host-property.service';
 import type { ListHostRoomsQuery } from '../queries/ListHostRoomsQuery';
 

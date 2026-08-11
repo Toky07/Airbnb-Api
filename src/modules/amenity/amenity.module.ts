@@ -16,10 +16,10 @@ import { PropertyAmenityRepository } from './infrastructure/repositories/propert
 import { RoomAmenityRepository } from './infrastructure/repositories/room-amenity.repository';
 import { AmenitiesSeedService } from './infrastructure/seed/amenities.seed';
 import { AmenityController } from './interfaces/http/amenity.controller';
-import { PROPERTY_REPOSITORY } from '../properties/infrastructure/repositories/property.repository';
-import type { IPropertyRepository } from '../properties/domain/repositories/property.repository';
-import { ROOM_REPOSITORY } from '../rooms/domain/repositories/room.repository';
-import type { IRoomRepository } from '../rooms/domain/repositories/room.repository';
+import { PROPERTY_REPOSITORY } from '../properties/contracts';
+import type { IPropertyRepository } from '../properties/contracts';
+import { ROOM_REPOSITORY } from '../rooms/contracts';
+import type { IRoomRepository } from '../rooms/contracts';
 import { AmenityBootstrap } from './amenity.bootstrap';
 import { CommandBus } from '../../shared/useCase/bus/bus';
 import { QueryBus } from '../../shared/useCase/bus/query-bus';

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RoomProductSummaryService } from '../../../rooms/applications/services/room-product-summary.service';
+import { RoomProductSummaryService } from '../../../rooms/contracts';
 import { ReservationItemOutput } from '../dto/reservation-item.output';
 import { ReservationOutput } from '../dto/reservation.output';
 

@@ -1,7 +1,7 @@
 import type { IFavoriteRepository } from './domain/repositories/favorite.repository';
 import type { IUserRepository } from '../user/contracts';
-import type { IRoomRepository } from '../rooms/domain/repositories/room.repository';
-import type { RoomMediaPresenter } from '../rooms/applications/presenters/room-media.presenter';
+import type { IRoomRepository } from '../rooms/contracts';
+import type { RoomMediaPresenter } from '../rooms/contracts';
 import { ResolveAuthenticatedUserService } from '../../shared/auth/resolve-authenticated-user.service';
 import { AddFavoriteCommandHandler } from './applications/useCase/handlers/AddFavoriteCommandHandler';
 import { RemoveFavoriteCommandHandler } from './applications/useCase/handlers/RemoveFavoriteCommandHandler';

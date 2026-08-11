@@ -10,7 +10,7 @@ import {
 } from '../reservation-test.helpers';
 import { Reservation } from '../../../domain/entities/reservation.entity';
 import { CheckRoomAvailabilityService } from '../../services/check-room-availability.service';
-import type { IRoomBlockedDateRepository } from '../../../../rooms/domain/repositories/room-blocked-date.repository';
+import type { IRoomBlockedDateRepository } from '../../../../rooms/contracts';
 
 function createBlockedDateRepositoryMock(): IRoomBlockedDateRepository {
   return {

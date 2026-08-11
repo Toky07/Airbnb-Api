@@ -11,8 +11,8 @@ import {
   createResolveAuthenticatedUserServiceMock,
   createSampleFavorite,
 } from '../favorite-test.helpers';
-import { Room } from '../../../../rooms/domain/entities/room.entity';
-import { Property } from '../../../../properties/domain/entities/property.entity';
+import { Room } from '../../../../rooms/contracts';
+import { Property } from '../../../../properties/contracts';
 import { ResolveAuthenticatedUserService } from '../../../../../shared/auth/resolve-authenticated-user.service';
 
 function createSampleRoom() {

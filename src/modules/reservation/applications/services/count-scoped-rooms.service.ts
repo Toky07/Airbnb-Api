@@ -2,7 +2,7 @@ import { Inject } from '@nestjs/common';
 import {
   ROOM_REPOSITORY,
   type IRoomRepository,
-} from '../../../rooms/domain/repositories/room.repository';
+} from '../../../rooms/contracts';
 import type { ReservationStatsScope } from '../../domain/repositories/reservation.repository';
 
 export class CountScopedRoomsService {

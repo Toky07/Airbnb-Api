@@ -2,7 +2,7 @@ import { ForbiddenException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AssertHostRoomOwnershipService } from './assert-host-room-ownership.service';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { FindRoomQuery } from '../../../rooms/applications/useCase/queries/FindRoomQuery';
+import { FindRoomQuery } from '../../../rooms/contracts';
 import type { ResolveHostPropertyService } from './resolve-host-property.service';
 import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
 

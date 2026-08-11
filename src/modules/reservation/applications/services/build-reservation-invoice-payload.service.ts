@@ -3,7 +3,7 @@ import type { Payment } from '../../../payment/contracts';
 import {
   ROOM_REPOSITORY,
   type IRoomRepository,
-} from '../../../rooms/domain/repositories/room.repository';
+} from '../../../rooms/contracts';
 import type { IUserRepository } from '../../../user/contracts';
 import { USER_REPOSITORY } from '../../../user/contracts';
 import {

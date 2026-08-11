@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { PROPERTY_REPOSITORY } from '../../../properties/infrastructure/repositories/property.repository';
-import type { IPropertyRepository } from '../../../properties/domain/repositories/property.repository';
-import { PROPERTY_TYPE_REPOSITORY } from '../../../properties/domain/repositories/property-type.repository';
-import type { IPropertyTypeRepository } from '../../../properties/domain/repositories/property-type.repository';
-import { ROOM_TYPE_REPOSITORY } from '../../../rooms/domain/repositories/room-type.repository';
-import type { IRoomTypeRepository } from '../../../rooms/domain/repositories/room-type.repository';
+import { PROPERTY_REPOSITORY } from '../../../properties/contracts';
+import type { IPropertyRepository } from '../../../properties/contracts';
+import { PROPERTY_TYPE_REPOSITORY } from '../../../properties/contracts';
+import type { IPropertyTypeRepository } from '../../../properties/contracts';
+import { ROOM_TYPE_REPOSITORY } from '../../../rooms/contracts';
+import type { IRoomTypeRepository } from '../../../rooms/contracts';
 import { USER_REPOSITORY } from '../../../user/contracts';
 import type { IUserRepository } from '../../../user/contracts';
 

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { UpdateHostPropertyCommandHandler } from './UpdateHostPropertyCommandHandler';
 import { UpdateHostPropertyCommand } from '../commands/UpdateHostPropertyCommand';
-import { UpdatePropertyCommand } from '../../../../properties/applications/useCase/commands/UpdatePropertyCommand';
+import { UpdatePropertyCommand } from '../../../../properties/contracts';
 import {
   authUser,
   createResolveHostPropertyMock,

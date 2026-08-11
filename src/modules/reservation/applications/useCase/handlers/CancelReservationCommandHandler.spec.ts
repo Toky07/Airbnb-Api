@@ -6,16 +6,16 @@ import {
   createSamplePayment,
 } from '../../../../payment/applications/useCase/payment-test.helpers';
 import { PAYMENT_STATUS } from '../../../../payment/contracts';
-import { Property } from '../../../../properties/domain/entities/property.entity';
+import { Property } from '../../../../properties/contracts';
 import { CANCELLATION_POLICY } from '../../../domain/constants/cancellation-policy.constant';
 import { UserNameVO } from '../../../../user/contracts';
 import { EmailVO } from '../../../../../shared/valueObject/email.vo';
 import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
 import { User } from '../../../../user/contracts';
 import type { IUserRepository } from '../../../../user/contracts';
-import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
-import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
-import { Room } from '../../../../rooms/domain/entities/room.entity';
+import type { IPropertyRepository } from '../../../../properties/contracts';
+import type { IRoomRepository } from '../../../../rooms/contracts';
+import { Room } from '../../../../rooms/contracts';
 import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
 import { ComputeCancellationRefundService } from '../../services/compute-cancellation-refund.service';
 import { ResolveReservationCancellationPolicyService } from '../../services/resolve-reservation-cancellation-policy.service';

@@ -1,7 +1,7 @@
-import type { RoomStayPricingService } from '../rooms/applications/services/room-stay-pricing.service';
+import type { RoomStayPricingService } from '../rooms/contracts';
 import type { IPaymentGateway, IPaymentRepository } from '../payment/contracts';
-import type { IPropertyRepository } from '../properties/domain/repositories/property.repository';
-import type { IRoomRepository } from '../rooms/domain/repositories/room.repository';
+import type { IPropertyRepository } from '../properties/contracts';
+import type { IRoomRepository } from '../rooms/contracts';
 import type { IUserRepository } from '../user/contracts';
 import type { IReservationRepository } from './domain/repositories/reservation.repository';
 import type { AssertReservationAccessService } from './applications/services/assert-reservation-access.service';

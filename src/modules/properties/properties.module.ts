@@ -2,11 +2,11 @@ import { Inject, Module, OnModuleInit } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PropertyController } from './interfaces/http/property.controller';
 import { PropertyTypeController } from './interfaces/http/property-type.controller';
+import { PropertyRepository } from './infrastructure/repositories/property.repository';
 import {
   PROPERTY_REPOSITORY,
-  PropertyRepository,
-} from './infrastructure/repositories/property.repository';
-import type { IPropertyRepository } from './domain/repositories/property.repository';
+  type IPropertyRepository,
+} from './domain/repositories/property.repository';
 import { PROPERTY_TYPE_REPOSITORY } from './domain/repositories/property-type.repository';
 import type { IPropertyTypeRepository } from './domain/repositories/property-type.repository';
 import { PropertyTypeRepository } from './infrastructure/repositories/property-type.repository';

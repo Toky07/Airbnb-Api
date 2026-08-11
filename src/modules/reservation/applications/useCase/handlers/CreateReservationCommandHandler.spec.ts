@@ -5,10 +5,10 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ResolveDynamicStayAmountService } from '../../../../../shared/pricing/resolve-dynamic-stay-amount.service';
-import { RoomStayPricingService } from '../../../../rooms/applications/services/room-stay-pricing.service';
-import { Property } from '../../../../properties/domain/entities/property.entity';
-import { Room } from '../../../../rooms/domain/entities/room.entity';
-import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
+import { RoomStayPricingService } from '../../../../rooms/contracts';
+import { Property } from '../../../../properties/contracts';
+import { Room } from '../../../../rooms/contracts';
+import type { IRoomRepository } from '../../../../rooms/contracts';
 import { UserNameVO } from '../../../../user/contracts';
 import { EmailVO } from '../../../../../shared/valueObject/email.vo';
 import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';

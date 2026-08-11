@@ -5,9 +5,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
-import type { Property } from '../../../properties/domain/entities/property.entity';
-import { PROPERTY_REPOSITORY } from '../../../properties/infrastructure/repositories/property.repository';
-import type { IPropertyRepository } from '../../../properties/domain/repositories/property.repository';
+import type { Property } from '../../../properties/contracts';
+import { PROPERTY_REPOSITORY } from '../../../properties/contracts';
+import type { IPropertyRepository } from '../../../properties/contracts';
 import { ResolveHostUserService } from './resolve-host-user.service';
 
 @Injectable()

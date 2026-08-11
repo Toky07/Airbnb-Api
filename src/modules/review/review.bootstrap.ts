@@ -1,6 +1,6 @@
 import type { IReservationRepository } from '../reservation/domain/repositories/reservation.repository';
 import type { IUserRepository } from '../user/contracts';
-import type { IRoomRepository } from '../rooms/domain/repositories/room.repository';
+import type { IRoomRepository } from '../rooms/contracts';
 import type { IReviewRepository } from './domain/repositories/review.repository';
 import { ReviewEligibilityService } from './applications/services/review-eligibility.service';
 import { ResolveAuthenticatedUserService } from '../../shared/auth/resolve-authenticated-user.service';

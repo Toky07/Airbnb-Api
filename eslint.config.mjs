@@ -200,4 +200,52 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    files: [
+      'src/modules/amenity/**/*.ts',
+      'src/modules/host/**/*.ts',
+      'src/modules/reservation/**/*.ts',
+      'src/modules/cart/**/*.ts',
+      'src/modules/favorite/**/*.ts',
+      'src/modules/messaging/**/*.ts',
+      'src/modules/import/**/*.ts',
+      'src/modules/authentication/**/*.ts',
+      'src/modules/review/**/*.ts',
+    ],
+    ignores: [
+      '**/*.spec.ts',
+      '**/infrastructure/entities/**',
+      '**/infrastructure/repositories/**',
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '**/properties/applications/**',
+                '**/properties/domain/**',
+                '**/properties/interfaces/**',
+                '**/properties/infrastructure/repositories/**',
+              ],
+              message:
+                'Importer properties uniquement via properties/contracts (sauf PropertiesModule / ORM).',
+            },
+            {
+              group: [
+                '**/rooms/applications/**',
+                '**/rooms/domain/**',
+                '**/rooms/interfaces/**',
+                '**/rooms/infrastructure/repositories/**',
+                '**/rooms/infrastructure/adapters/**',
+              ],
+              message:
+                'Importer rooms uniquement via rooms/contracts (sauf RoomsModule / ORM).',
+            },
+          ],
+        },
+      ],
+    },
+  },
 );

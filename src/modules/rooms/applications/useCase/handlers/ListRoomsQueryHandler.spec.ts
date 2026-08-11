@@ -1,4 +1,4 @@
-import { Property } from '../../../../properties/domain/entities/property.entity';
+import { Property } from '../../../../properties/contracts';
 import { Room } from '../../../domain/entities/room.entity';
 import type { IRoomRepository } from '../../../domain/repositories/room.repository';
 import { RoomOutput } from '../../dto/room.output';

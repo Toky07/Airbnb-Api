@@ -1,7 +1,7 @@
 import { IRoomRepository } from '../../../domain/repositories/room.repository';
 import type { IRoomBlockedDateRepository } from '../../../domain/repositories/room-blocked-date.repository';
 import { Room } from '../../../domain/entities/room.entity';
-import { Property } from '../../../../properties/domain/entities/property.entity';
+import { Property } from '../../../../properties/contracts';
 import { RoomDetailResolver } from '../../services/room-detail.resolver';
 import { FindRoomQueryHandler } from './FindRoomQueryHandler';
 import { FindRoomQuery } from '../queries/FindRoomQuery';

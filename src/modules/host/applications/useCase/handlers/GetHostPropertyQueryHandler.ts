@@ -1,6 +1,6 @@
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import { PropertyMediaPresenter } from '../../../../properties/applications/presenters/property-media.presenter';
-import { PropertyOutput } from '../../../../properties/applications/dto/property.output';
+import { PropertyMediaPresenter } from '../../../../properties/contracts';
+import { PropertyOutput } from '../../../../properties/contracts';
 import { ResolveHostPropertyService } from '../../services/resolve-host-property.service';
 import type { GetHostPropertyQuery } from '../queries/GetHostPropertyQuery';
 

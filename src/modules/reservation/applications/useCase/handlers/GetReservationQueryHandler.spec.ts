@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import { Property } from '../../../../properties/domain/entities/property.entity';
-import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
-import { Room } from '../../../../rooms/domain/entities/room.entity';
-import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
+import { Property } from '../../../../properties/contracts';
+import type { IPropertyRepository } from '../../../../properties/contracts';
+import { Room } from '../../../../rooms/contracts';
+import type { IRoomRepository } from '../../../../rooms/contracts';
 import { UserNameVO } from '../../../../user/contracts';
 import { EmailVO } from '../../../../../shared/valueObject/email.vo';
 import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';

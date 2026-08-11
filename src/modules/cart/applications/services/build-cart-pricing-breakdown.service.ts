@@ -7,8 +7,8 @@ import type { Cart } from '../../domain/entities/cart.entity';
 import {
   ROOM_REPOSITORY,
   type IRoomRepository,
-} from '../../../rooms/domain/repositories/room.repository';
-import { RoomStayPricingService } from '../../../rooms/applications/services/room-stay-pricing.service';
+} from '../../../rooms/contracts';
+import { RoomStayPricingService } from '../../../rooms/contracts';
 
 @Injectable()
 export class BuildCartPricingBreakdownService {

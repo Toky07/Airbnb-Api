@@ -5,12 +5,12 @@ import { CalculateStayAmountService } from '../../shared/pricing/calculate-stay-
 import { PaymentModule } from '../payment/payment.module';
 import { PropertiesModule } from '../properties/properties.module';
 import { RoomsModule } from '../rooms/room.module';
-import { RoomStayPricingService } from '../rooms/applications/services/room-stay-pricing.service';
+import { RoomStayPricingService } from '../rooms/contracts';
 import { UserModule } from '../user/user.module';
-import { PROPERTY_REPOSITORY } from '../properties/infrastructure/repositories/property.repository';
-import type { IPropertyRepository } from '../properties/domain/repositories/property.repository';
-import { ROOM_REPOSITORY } from '../rooms/domain/repositories/room.repository';
-import type { IRoomRepository } from '../rooms/domain/repositories/room.repository';
+import { PROPERTY_REPOSITORY } from '../properties/contracts';
+import type { IPropertyRepository } from '../properties/contracts';
+import { ROOM_REPOSITORY } from '../rooms/contracts';
+import type { IRoomRepository } from '../rooms/contracts';
 import { USER_REPOSITORY } from '../user/contracts';
 import type { IUserRepository } from '../user/contracts';
 import {

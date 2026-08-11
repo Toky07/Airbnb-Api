@@ -1,4 +1,4 @@
-import { Property } from '../../../properties/domain/entities/property.entity';
+import type { Property } from '../../../properties/domain/entities/property.entity';
 
 export type CreateRoomDto = {
   name: string;

@@ -1,6 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
-import type { IPropertyRepository } from '../../../properties/domain/repositories/property.repository';
-import type { IRoomRepository } from '../../../rooms/domain/repositories/room.repository';
+import type { IPropertyRepository } from '../../../properties/contracts';
+import type { IRoomRepository } from '../../../rooms/contracts';
 import type { IAmenityRepository } from '../../domain/repositories/amenity.repository';
 import type { IPropertyAmenityRepository } from '../../domain/repositories/property-amenity.repository';
 import type { IRoomAmenityRepository } from '../../domain/repositories/room-amenity.repository';

@@ -1,5 +1,5 @@
 import type { JwtPayload } from '../../../../authentication/domain/types/jwt-payload';
-import type { CreatePropertyDto } from '../../../../properties/applications/dto/createProperty.dto';
+import type { CreatePropertyDto } from '../../../../properties/contracts';
 import type { UploadFile } from '../../../../media/contracts';
 
 export class CreateHostPropertyCommand {

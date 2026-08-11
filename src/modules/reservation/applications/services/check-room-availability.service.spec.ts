@@ -5,7 +5,7 @@ import {
   createReservationRepositoryMock,
   createSampleReservation,
 } from '../useCase/reservation-test.helpers';
-import type { IRoomBlockedDateRepository } from '../../../rooms/domain/repositories/room-blocked-date.repository';
+import type { IRoomBlockedDateRepository } from '../../../rooms/contracts';
 
 function createBlockedDateRepositoryMock(
   overrides: Partial<IRoomBlockedDateRepository> = {},

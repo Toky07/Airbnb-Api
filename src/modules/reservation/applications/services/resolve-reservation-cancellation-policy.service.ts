@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
-import type { IPropertyRepository } from '../../../properties/domain/repositories/property.repository';
-import { PROPERTY_REPOSITORY } from '../../../properties/infrastructure/repositories/property.repository';
-import type { IRoomRepository } from '../../../rooms/domain/repositories/room.repository';
-import { ROOM_REPOSITORY } from '../../../rooms/domain/repositories/room.repository';
+import type { IPropertyRepository } from '../../../properties/contracts';
+import { PROPERTY_REPOSITORY } from '../../../properties/contracts';
+import type { IRoomRepository } from '../../../rooms/contracts';
+import { ROOM_REPOSITORY } from '../../../rooms/contracts';
 import {
   DEFAULT_CANCELLATION_POLICY,
   type CancellationPolicy,

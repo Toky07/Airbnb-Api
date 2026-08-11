@@ -18,17 +18,17 @@ import type { JwtPayload } from '../../../authentication/domain/types/jwt-payloa
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
 import { parseRequiredPropertyId } from './parse-required-property-id';
-import type { CreatePropertyDto } from '../../../properties/applications/dto/createProperty.dto';
-import { parsePropertyBody } from '../../../properties/interfaces/http/parse-property-body';
-import { parseRoomBody } from '../../../rooms/interfaces/http/parse-room-body';
-import { parseKeptImages } from '../../../rooms/interfaces/http/parse-kept-images';
-import type { CreateRoomDto } from '../../../rooms/applications/dto/createRoom.dto';
+import type { CreatePropertyDto } from '../../../properties/contracts';
+import { parsePropertyBody } from '../../../properties/contracts';
+import { parseRoomBody } from '../../../rooms/contracts';
+import { parseKeptImages } from '../../../rooms/contracts';
+import type { CreateRoomDto } from '../../../rooms/contracts';
 import { ENTITY_MEDIA_LIMITS, ENTITY_TYPE } from '../../../media/contracts';
 import type { UploadFile } from '../../../media/contracts';
-import { ListPropertyTypeOptionsQuery } from '../../../properties/applications/useCase/queries/ListPropertyTypeOptionsQuery';
+import { ListPropertyTypeOptionsQuery } from '../../../properties/contracts';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { ListRoomTypeOptionsQuery } from '../../../rooms/applications/useCase/queries/ListRoomTypeOptionsQuery';
+import { ListRoomTypeOptionsQuery } from '../../../rooms/contracts';
 import { AMENITY_SCOPE } from '../../../amenity/domain/constants/amenity-scope.constant';
 import type { SyncAmenitiesDto } from '../../../amenity/applications/dto/create-amenity.dto';
 import { GetHostProfileQuery } from '../../applications/useCase/queries/GetHostProfileQuery';
@@ -51,8 +51,8 @@ import { DeleteHostRoomBlockedDateCommand } from '../../applications/useCase/com
 import { ListHostRoomRateOverridesQuery } from '../../applications/useCase/queries/ListHostRoomRateOverridesQuery';
 import { CreateHostRoomRateOverrideCommand } from '../../applications/useCase/commands/CreateHostRoomRateOverrideCommand';
 import { DeleteHostRoomRateOverrideCommand } from '../../applications/useCase/commands/DeleteHostRoomRateOverrideCommand';
-import type { CreateRoomBlockedDateDto } from '../../../rooms/applications/dto/create-room-blocked-date.dto';
-import type { CreateRoomRateOverrideDto } from '../../../rooms/applications/dto/create-room-rate-override.dto';
+import type { CreateRoomBlockedDateDto } from '../../../rooms/contracts';
+import type { CreateRoomRateOverrideDto } from '../../../rooms/contracts';
 import { CancelReservationCommand } from '../../../reservation/applications/useCase/commands/CancelReservationCommand';
 import { MarkReservationNoShowCommand } from '../../../reservation/applications/useCase/commands/MarkReservationNoShowCommand';
 import {

@@ -1,7 +1,7 @@
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
 import { QueryBus } from '../../../../../shared/useCase/bus/query-bus';
-import { ListRoomBlockedDatesQuery } from '../../../../rooms/applications/useCase/queries/ListRoomBlockedDatesQuery';
-import { RoomBlockedDateOutput } from '../../../../rooms/applications/dto/room-blocked-date.output';
+import { ListRoomBlockedDatesQuery } from '../../../../rooms/contracts';
+import { RoomBlockedDateOutput } from '../../../../rooms/contracts';
 import { AssertHostRoomOwnershipService } from '../../services/assert-host-room-ownership.service';
 import type { ListHostRoomBlockedDatesQuery } from '../queries/ListHostRoomBlockedDatesQuery';
 

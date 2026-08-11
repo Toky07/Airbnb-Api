@@ -1,6 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
+import type { IRoomRepository } from '../../../../rooms/contracts';
 import type { IReviewRepository } from '../../../domain/repositories/review.repository';
 import { RoomRatingSummaryOutput } from '../../dto/room-rating-summary.output';
 import type { GetRoomRatingSummaryQuery } from '../queries/GetRoomRatingSummaryQuery';

@@ -3,7 +3,7 @@ import { UserModule } from '../user/user.module';
 import { PropertiesModule } from '../properties/properties.module';
 import { RoomsModule } from '../rooms/room.module';
 import { AmenityModule } from '../amenity/amenity.module';
-import { PropertyMediaPresenter } from '../properties/applications/presenters/property-media.presenter';
+import { PropertyMediaPresenter } from '../properties/contracts';
 import { CommandBus } from '../../shared/useCase/bus/bus';
 import { QueryBus } from '../../shared/useCase/bus/query-bus';
 import { HostController } from './interfaces/http/host.controller';

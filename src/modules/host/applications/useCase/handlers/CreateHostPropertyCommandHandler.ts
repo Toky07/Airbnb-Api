@@ -1,7 +1,7 @@
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { CreatePropertyCommand } from '../../../../properties/applications/useCase/commands/CreatePropertyCommand';
-import { PropertyOutput } from '../../../../properties/applications/dto/property.output';
+import { CreatePropertyCommand } from '../../../../properties/contracts';
+import { PropertyOutput } from '../../../../properties/contracts';
 import { ResolveHostUserService } from '../../services/resolve-host-user.service';
 import type { CreateHostPropertyCommand } from '../commands/CreateHostPropertyCommand';
 

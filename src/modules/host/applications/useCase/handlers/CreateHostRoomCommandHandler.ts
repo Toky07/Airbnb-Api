@@ -1,7 +1,7 @@
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { CreateRoomCommand } from '../../../../rooms/applications/useCase/commands/CreateRoomCommand';
-import { RoomOutput } from '../../../../rooms/applications/dto/room.output';
+import { CreateRoomCommand } from '../../../../rooms/contracts';
+import { RoomOutput } from '../../../../rooms/contracts';
 import { ResolveHostPropertyService } from '../../services/resolve-host-property.service';
 import type { CreateHostRoomCommand } from '../commands/CreateHostRoomCommand';
 

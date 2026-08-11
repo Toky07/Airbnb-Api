@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { PROPERTY_REPOSITORY } from '../../../properties/infrastructure/repositories/property.repository';
-import type { IPropertyRepository } from '../../../properties/domain/repositories/property.repository';
+import { PROPERTY_REPOSITORY } from '../../../properties/contracts';
+import type { IPropertyRepository } from '../../../properties/contracts';
 import { USER_REPOSITORY } from '../../../user/contracts';
 import type { IUserRepository } from '../../../user/contracts';
 

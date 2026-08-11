@@ -1,7 +1,7 @@
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { CreateRoomBlockedDateCommand } from '../../../../rooms/applications/useCase/commands/CreateRoomBlockedDateCommand';
-import { RoomBlockedDateOutput } from '../../../../rooms/applications/dto/room-blocked-date.output';
+import { CreateRoomBlockedDateCommand } from '../../../../rooms/contracts';
+import { RoomBlockedDateOutput } from '../../../../rooms/contracts';
 import { AssertHostRoomOwnershipService } from '../../services/assert-host-room-ownership.service';
 import type { CreateHostRoomBlockedDateCommand } from '../commands/CreateHostRoomBlockedDateCommand';
 

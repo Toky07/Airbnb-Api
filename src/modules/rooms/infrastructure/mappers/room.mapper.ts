@@ -17,7 +17,7 @@ function mapRoomType(entity: RoomEntity): CategorySummary | null {
 
 function mapRoomProperty(room: RoomEntity): Property {
   if (room.property?.id != null) {
-    return PropertyMapper.toDomain(room.property);
+    return PropertyMapper.toDomainWithoutRooms(room.property);
   }
 
   return new Property({

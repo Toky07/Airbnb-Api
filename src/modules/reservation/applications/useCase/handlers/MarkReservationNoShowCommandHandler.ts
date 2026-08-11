@@ -4,8 +4,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
-import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
+import type { IPropertyRepository } from '../../../../properties/contracts';
+import type { IRoomRepository } from '../../../../rooms/contracts';
 import type { IUserRepository } from '../../../../user/contracts';
 import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
 import { Reservation } from '../../../domain/entities/reservation.entity';

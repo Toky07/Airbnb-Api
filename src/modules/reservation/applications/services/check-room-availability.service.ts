@@ -6,7 +6,7 @@ import {
 import {
   ROOM_BLOCKED_DATE_REPOSITORY,
   type IRoomBlockedDateRepository,
-} from '../../../rooms/domain/repositories/room-blocked-date.repository';
+} from '../../../rooms/contracts';
 
 @Injectable()
 export class CheckRoomAvailabilityService {

@@ -4,7 +4,7 @@ import { Room } from '../../../domain/entities/room.entity';
 import { RoomBlockedDate } from '../../../domain/entities/room-blocked-date.entity';
 import type { IRoomRepository } from '../../../domain/repositories/room.repository';
 import type { IRoomBlockedDateRepository } from '../../../domain/repositories/room-blocked-date.repository';
-import { Property } from '../../../../properties/domain/entities/property.entity';
+import { Property } from '../../../../properties/contracts';
 import { CreateRoomBlockedDateCommandHandler } from './CreateRoomBlockedDateCommandHandler';
 import { CreateRoomBlockedDateCommand } from '../commands/CreateRoomBlockedDateCommand';
 import { DeleteRoomBlockedDateCommandHandler } from './DeleteRoomBlockedDateCommandHandler';

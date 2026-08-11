@@ -4,7 +4,7 @@ import {
   INVOICE_PAYMENT_TYPE,
   type IInvoiceRepository,
 } from '../../../../invoice/contracts';
-import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
+import type { IPropertyRepository } from '../../../../properties/contracts';
 import type { IPaymentRepository } from '../../../../payment/contracts';
 import type { IUserRepository } from '../../../../user/contracts';
 import { BookingOrderDetailOutput } from '../../dto/booking-order.output';

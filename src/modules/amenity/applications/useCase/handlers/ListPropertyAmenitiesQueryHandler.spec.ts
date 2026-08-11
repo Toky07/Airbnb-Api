@@ -1,5 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
-import { Property } from '../../../../properties/domain/entities/property.entity';
+import { Property } from '../../../../properties/contracts';
 import { Amenity } from '../../../domain/entities/amenity.entity';
 import { AMENITY_SCOPE } from '../../../domain/constants/amenity-scope.constant';
 import { ListPropertyAmenitiesQueryHandler } from './ListPropertyAmenitiesQueryHandler';

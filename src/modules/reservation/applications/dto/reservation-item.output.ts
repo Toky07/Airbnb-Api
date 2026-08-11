@@ -1,4 +1,4 @@
-import type { RoomProductSummary } from '../../../rooms/applications/services/room-product-summary.service';
+import type { RoomProductSummary } from '../../../rooms/contracts';
 import type { ReservationItem } from '../../domain/entities/reservation-item.entity';
 
 export class ReservationItemOutput {

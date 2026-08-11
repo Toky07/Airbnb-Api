@@ -1,8 +1,8 @@
-import { RoomOutput } from '../../../rooms/applications/dto/room.output';
 import type { CategorySummary } from '../../../../shared/types/category-summary';
 import type { CancellationPolicy } from '../../../reservation/domain/constants/cancellation-policy.constant';
+import { RoomOutput } from '../../../rooms/applications/dto/room.output';
+import type { Room } from '../../../rooms/domain/entities/room.entity';
 import { Property } from '../../domain/entities/property.entity';
-import { Room } from '../../../rooms/domain/entities/room.entity';
 
 export class PropertyOutput {
   constructor(

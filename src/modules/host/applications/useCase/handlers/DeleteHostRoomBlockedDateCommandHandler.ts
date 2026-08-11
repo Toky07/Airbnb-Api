@@ -1,6 +1,6 @@
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { DeleteRoomBlockedDateCommand } from '../../../../rooms/applications/useCase/commands/DeleteRoomBlockedDateCommand';
+import { DeleteRoomBlockedDateCommand } from '../../../../rooms/contracts';
 import { AssertHostRoomOwnershipService } from '../../services/assert-host-room-ownership.service';
 import type { DeleteHostRoomBlockedDateCommand } from '../commands/DeleteHostRoomBlockedDateCommand';
 

@@ -1,16 +1,19 @@
-import { PropertyEntity } from '../entities/property-entity.entity';
-import { IPropertyRepository } from '../../domain/repositories/property.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Property } from '../../domain/entities/property.entity';
-import { PropertyMapper } from '../mappers/property.mapper';
 import {
   buildPaginationMeta,
   type PaginatedResult,
   type PaginationParams,
 } from '../../../../shared/pagination/pagination.types';
+import {
+  PROPERTY_REPOSITORY,
+  type IPropertyRepository,
+} from '../../domain/repositories/property.repository';
+import { Property } from '../../domain/entities/property.entity';
+import { PropertyEntity } from '../entities/property-entity.entity';
+import { PropertyMapper } from '../mappers/property.mapper';
 
-export const PROPERTY_REPOSITORY = 'PROPERTY_REPOSITORY';
+export { PROPERTY_REPOSITORY };
 
 export class PropertyRepository implements IPropertyRepository {
   constructor(

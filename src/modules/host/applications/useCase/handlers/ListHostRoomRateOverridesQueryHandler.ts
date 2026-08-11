@@ -1,7 +1,7 @@
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
 import { QueryBus } from '../../../../../shared/useCase/bus/query-bus';
-import { ListRoomRateOverridesQuery } from '../../../../rooms/applications/useCase/queries/ListRoomRateOverridesQuery';
-import { RoomRateOverrideOutput } from '../../../../rooms/applications/dto/room-rate-override.output';
+import { ListRoomRateOverridesQuery } from '../../../../rooms/contracts';
+import { RoomRateOverrideOutput } from '../../../../rooms/contracts';
 import { AssertHostRoomOwnershipService } from '../../services/assert-host-room-ownership.service';
 import type { ListHostRoomRateOverridesQuery } from '../queries/ListHostRoomRateOverridesQuery';
 

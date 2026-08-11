@@ -1,6 +1,6 @@
 import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { CreateRoomCommand } from '../../../../rooms/applications/useCase/commands/CreateRoomCommand';
-import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
+import { CreateRoomCommand } from '../../../../rooms/contracts';
+import type { IPropertyRepository } from '../../../../properties/contracts';
 import { fetchImageFromUrl } from '../../../../media/contracts';
 import type { ImportRoomRowDto } from '../../dto/import-batch.dto';
 import type { ImportEntityResult } from '../../dto/import-entity-result.dto';

@@ -22,6 +22,22 @@ function mapPropertyType(entity: PropertyEntity): CategorySummary | null {
 export class PropertyMapper {
   static toDomain(property: PropertyEntity): Property {
     return new Property({
+      ...PropertyMapper.toDomainFields(property),
+      rooms:
+        property.rooms?.map((r: RoomEntity) => RoomMapper.toDomain(r)) || [],
+    });
+  }
+
+  /** Évite la récursion Property ↔ Room lors du mapping inverse. */
+  static toDomainWithoutRooms(property: PropertyEntity): Property {
+    return new Property({
+      ...PropertyMapper.toDomainFields(property),
+      rooms: [],
+    });
+  }
+
+  private static toDomainFields(property: PropertyEntity) {
+    return {
       name: property.name,
       description: property.description,
       address: property.address,
@@ -41,9 +57,7 @@ export class PropertyMapper {
       createdAt: property.createdAt,
       updatedAt: property.updatedAt,
       id: property.id,
-      rooms:
-        property.rooms?.map((r: RoomEntity) => RoomMapper.toDomain(r)) || [],
-    });
+    };
   }
 
   static toEntity(property: Property): Partial<PropertyEntity> {

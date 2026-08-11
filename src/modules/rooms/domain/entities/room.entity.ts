@@ -1,4 +1,4 @@
-import { Property } from '../../../properties/domain/entities/property.entity';
+import type { Property } from '../../../properties/domain/entities/property.entity';
 import type { CategorySummary } from '../../../../shared/types/category-summary';
 
 export class Room {

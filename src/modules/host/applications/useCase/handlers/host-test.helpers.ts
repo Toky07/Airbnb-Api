@@ -1,9 +1,9 @@
 import { ForbiddenException } from '@nestjs/common';
 import { vi } from 'vitest';
 import type { JwtPayload } from '../../../../authentication/domain/types/jwt-payload';
-import { Property } from '../../../../properties/domain/entities/property.entity';
-import { PropertyOutput } from '../../../../properties/applications/dto/property.output';
-import type { PropertyMediaPresenter } from '../../../../properties/applications/presenters/property-media.presenter';
+import { Property } from '../../../../properties/contracts';
+import { PropertyOutput } from '../../../../properties/contracts';
+import type { PropertyMediaPresenter } from '../../../../properties/contracts';
 
 export const authUser = { sub: 99 } as JwtPayload;
 

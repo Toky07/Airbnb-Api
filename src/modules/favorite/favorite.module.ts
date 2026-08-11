@@ -4,9 +4,9 @@ import { UserModule } from '../user/user.module';
 import { RoomsModule } from '../rooms/room.module';
 import { USER_REPOSITORY } from '../user/contracts';
 import type { IUserRepository } from '../user/contracts';
-import { ROOM_REPOSITORY } from '../rooms/domain/repositories/room.repository';
-import type { IRoomRepository } from '../rooms/domain/repositories/room.repository';
-import { RoomMediaPresenter } from '../rooms/applications/presenters/room-media.presenter';
+import { ROOM_REPOSITORY } from '../rooms/contracts';
+import type { IRoomRepository } from '../rooms/contracts';
+import { RoomMediaPresenter } from '../rooms/contracts';
 import {
   FAVORITE_REPOSITORY,
   type IFavoriteRepository,

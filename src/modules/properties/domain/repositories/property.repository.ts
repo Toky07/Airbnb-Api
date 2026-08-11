@@ -4,6 +4,8 @@ import type {
 } from '../../../../shared/pagination/pagination.types';
 import { Property } from '../entities/property.entity';
 
+export const PROPERTY_REPOSITORY = 'PROPERTY_REPOSITORY';
+
 export interface IPropertyRepository {
   create(property: Property): Promise<Property>;
   update(property: Property): Promise<Property>;

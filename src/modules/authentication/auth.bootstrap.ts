@@ -1,7 +1,7 @@
 import type { IAuthRepository } from './domain/repositories/auth.repository';
 import type { IRoleRepository } from './domain/repositories/role.repository';
 import type { IUserRepository } from '../user/contracts';
-import type { IPropertyRepository } from '../properties/domain/repositories/property.repository';
+import type { IPropertyRepository } from '../properties/contracts';
 import type { IPasswordSetupTokenRepository } from './domain/repositories/password-setup-token.repository';
 import type { IPasswordResetTokenRepository } from './domain/repositories/password-reset-token.repository';
 import type { TokenGenerator } from './domain/generator/token.generator';

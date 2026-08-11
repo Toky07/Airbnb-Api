@@ -1,8 +1,8 @@
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
+import type { IRoomRepository } from '../../../../rooms/contracts';
 import type { IFavoriteRepository } from '../../../domain/repositories/favorite.repository';
 import { FavoriteOutput } from '../../dto/favorite.output';
-import type { RoomMediaPresenter } from '../../../../rooms/applications/presenters/room-media.presenter';
+import type { RoomMediaPresenter } from '../../../../rooms/contracts';
 import type { ListMyFavoritesQuery } from '../queries/ListMyFavoritesQuery';
 import { ResolveAuthenticatedUserService } from '../../../../../shared/auth/resolve-authenticated-user.service';
 

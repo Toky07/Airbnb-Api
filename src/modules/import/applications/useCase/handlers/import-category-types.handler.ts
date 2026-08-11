@@ -1,7 +1,7 @@
 import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { CreatePropertyTypeCommand } from '../../../../properties/applications/useCase/commands/CreatePropertyTypeCommand';
-import { CreateRoomTypeCommand } from '../../../../rooms/applications/useCase/commands/CreateRoomTypeCommand';
-import { RoomTypeOutput } from '../../../../rooms/applications/dto/room-type.output';
+import { CreatePropertyTypeCommand } from '../../../../properties/contracts';
+import { CreateRoomTypeCommand } from '../../../../rooms/contracts';
+import { RoomTypeOutput } from '../../../../rooms/contracts';
 import { slugify } from '../../../../../shared/utils/slug.util';
 import type { ImportCategoryTypeRowDto } from '../../dto/import-batch.dto';
 import type { ImportEntityResult } from '../../dto/import-entity-result.dto';

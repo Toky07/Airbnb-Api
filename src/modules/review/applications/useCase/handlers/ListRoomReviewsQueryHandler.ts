@@ -3,7 +3,7 @@ import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-hand
 import type { PaginatedResult } from '../../../../../shared/pagination/pagination.types';
 import { REVIEW_STATUS } from '../../../domain/constants/review-status.constant';
 import type { IReviewRepository } from '../../../domain/repositories/review.repository';
-import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
+import type { IRoomRepository } from '../../../../rooms/contracts';
 import { ReviewOutput } from '../../dto/review.output';
 import type { ListRoomReviewsQuery } from '../queries/ListRoomReviewsQuery';
 import { MapReviewOutputsService } from '../../services/map-review-outputs.service';

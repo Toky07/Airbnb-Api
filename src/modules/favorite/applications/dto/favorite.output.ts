@@ -1,4 +1,4 @@
-import type { RoomOutput } from '../../../rooms/applications/dto/room.output';
+import type { RoomOutput } from '../../../rooms/contracts';
 import type { Favorite } from '../../domain/entities/favorite.entity';
 
 export class FavoriteOutput {

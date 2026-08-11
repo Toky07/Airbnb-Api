@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 import { IRoomRepository } from '../../../domain/repositories/room.repository';
 import { Room } from '../../../domain/entities/room.entity';
-import { Property } from '../../../../properties/domain/entities/property.entity';
+import { Property } from '../../../../properties/contracts';
 import { UpdateRoomCommandHandler } from './UpdateRoomCommandHandler';
 import { UpdateRoomCommand } from '../commands/UpdateRoomCommand';
 import {
