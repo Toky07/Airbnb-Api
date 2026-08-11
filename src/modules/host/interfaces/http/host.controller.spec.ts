@@ -21,7 +21,7 @@ import {
   prepareIntegrationTestDatabase,
 } from '../../../../test/test-database.config';
 
-describe('HostController', () => {
+describe('Host HTTP (/host)', () => {
   let app: INestApplication;
   let dataSource: DataSource;
   let token: string;

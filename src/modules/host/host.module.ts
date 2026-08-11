@@ -6,7 +6,10 @@ import { AmenityModule } from '../amenity/amenity.module';
 import { PropertyMediaPresenter } from '../properties/contracts';
 import { CommandBus } from '../../shared/useCase/bus/bus';
 import { QueryBus } from '../../shared/useCase/bus/query-bus';
-import { HostController } from './interfaces/http/host.controller';
+import { HostProfileController } from './interfaces/http/host-profile.controller';
+import { HostPropertiesController } from './interfaces/http/host-properties.controller';
+import { HostRoomsController } from './interfaces/http/host-rooms.controller';
+import { HostReservationsController } from './interfaces/http/host-reservations.controller';
 import { ResolveHostUserService } from './applications/services/resolve-host-user.service';
 import { ResolveHostPropertyService } from './applications/services/resolve-host-property.service';
 import { HostBootstrap } from './host.bootstrap';
@@ -33,7 +36,13 @@ import { ListHostRoomRateOverridesQuery } from './applications/useCase/queries/L
 
 @Module({
   imports: [UserModule, PropertiesModule, RoomsModule, AmenityModule],
-  controllers: [HostController],
+  controllers: [
+    HostProfileController,
+    HostPropertiesController,
+    HostRoomsController,
+    HostReservationsController,
+  ],
+
   providers: [ResolveHostUserService, ResolveHostPropertyService],
 })
 export class HostModule implements OnModuleInit {
