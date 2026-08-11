@@ -7,6 +7,10 @@ import {
   RESERVATION_REPOSITORY,
   RESERVATION_STATUS,
 } from './index';
+import {
+  CANCELLATION_POLICY as LeafCancellationPolicy,
+  DEFAULT_CANCELLATION_POLICY as LeafDefault,
+} from './cancellation-policy';
 
 describe('reservation/contracts', () => {
   it('expose tokens, constantes et commands publics', () => {
@@ -21,5 +25,10 @@ describe('reservation/contracts', () => {
         canCancelHost: false,
       }),
     ).toBeInstanceOf(CancelReservationCommand);
+  });
+
+  it('expose cancellation-policy via contrat feuille (anti-cycle)', () => {
+    expect(LeafDefault).toBe(LeafCancellationPolicy.MODERATE);
+    expect(LeafCancellationPolicy).toBe(CANCELLATION_POLICY);
   });
 });

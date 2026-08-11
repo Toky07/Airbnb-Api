@@ -1,5 +1,5 @@
 import type { CategorySummary } from '../../../../shared/types/category-summary';
-import type { CancellationPolicy } from '../../../reservation/domain/constants/cancellation-policy.constant';
+import type { CancellationPolicy } from '../../../reservation/contracts/cancellation-policy';
 import { RoomOutput } from '../../../rooms/applications/dto/room.output';
 import type { Room } from '../../../rooms/domain/entities/room.entity';
 import { Property } from '../../domain/entities/property.entity';

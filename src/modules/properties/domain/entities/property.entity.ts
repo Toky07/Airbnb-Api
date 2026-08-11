@@ -1,7 +1,7 @@
 import { CreatePropertyDto } from '../../applications/dto/createProperty.dto';
 import type { CategorySummary } from '../../../../shared/types/category-summary';
-import type { CancellationPolicy } from '../../../reservation/domain/constants/cancellation-policy.constant';
-import { DEFAULT_CANCELLATION_POLICY } from '../../../reservation/domain/constants/cancellation-policy.constant';
+import type { CancellationPolicy } from '../../../reservation/contracts/cancellation-policy';
+import { DEFAULT_CANCELLATION_POLICY } from '../../../reservation/contracts/cancellation-policy';
 import type { Room } from '../../../rooms/domain/entities/room.entity';
 
 export class Property {

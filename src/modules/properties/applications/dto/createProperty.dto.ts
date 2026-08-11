@@ -1,4 +1,4 @@
-import type { CancellationPolicy } from '../../../reservation/domain/constants/cancellation-policy.constant';
+import type { CancellationPolicy } from '../../../reservation/contracts/cancellation-policy';
 
 export type CreatePropertyDto = {
   name: string;

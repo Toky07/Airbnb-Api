@@ -21,7 +21,7 @@ export {
   isCancellationPolicy,
   parseCancellationPolicy,
   type CancellationPolicy,
-} from '../domain/constants/cancellation-policy.constant';
+} from './cancellation-policy';
 export { Reservation } from '../domain/entities/reservation.entity';
 export { ReservationItem } from '../domain/entities/reservation-item.entity';
 export { ReservationConfirmedEvent } from '../domain/events/reservation-confirmed.event';

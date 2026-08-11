@@ -2,7 +2,7 @@ import type { CategorySummary } from '../../../../shared/types/category-summary'
 import {
   DEFAULT_CANCELLATION_POLICY,
   parseCancellationPolicy,
-} from '../../../reservation/domain/constants/cancellation-policy.constant';
+} from '../../../reservation/contracts/cancellation-policy';
 import { Property } from '../../domain/entities/property.entity';
 import { RoomMapper } from '../../../rooms/infrastructure/mappers/room.mapper';
 import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';

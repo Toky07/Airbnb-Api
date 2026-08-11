@@ -292,6 +292,7 @@ export default tseslint.config(
       'src/modules/favorite/**/*.ts',
       'src/modules/invoice/**/*.ts',
       'src/modules/mail/**/*.ts',
+      'src/modules/properties/**/*.ts',
     ],
     ignores: [
       '**/*.spec.ts',
@@ -302,6 +303,7 @@ export default tseslint.config(
       'src/modules/rooms/rooms.bootstrap.ts',
       'src/modules/messaging/messaging.module.ts',
       'src/modules/review/review.module.ts',
+      'src/modules/properties/properties.module.ts',
     ],
     rules: {
       'no-restricted-imports': [
@@ -316,7 +318,7 @@ export default tseslint.config(
                 '**/reservation/infrastructure/repositories/**',
               ],
               message:
-                'Importer reservation uniquement via reservation/contracts (sauf ReservationModule / ORM).',
+                'Importer reservation via reservation/contracts (ou contracts/cancellation-policy pour properties ; sauf ReservationModule / ORM).',
             },
           ],
         },
