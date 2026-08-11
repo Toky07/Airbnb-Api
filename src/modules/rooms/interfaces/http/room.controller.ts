@@ -30,10 +30,12 @@ import { DeleteRoomCommand } from '../../applications/useCase/commands/DeleteRoo
 import { FindRoomQuery } from '../../applications/useCase/queries/FindRoomQuery';
 import { ListRoomsQuery } from '../../applications/useCase/queries/ListRoomsQuery';
 import { GetRoomPricingPreviewQuery } from '../../applications/useCase/queries/GetRoomPricingPreviewQuery';
-import { ListRoomReviewsQuery } from '../../../review/applications/useCase/queries/ListRoomReviewsQuery';
-import { GetRoomRatingSummaryQuery } from '../../../review/applications/useCase/queries/GetRoomRatingSummaryQuery';
-import { ReviewOutput } from '../../../review/applications/dto/review.output';
-import { RoomRatingSummaryOutput } from '../../../review/applications/dto/room-rating-summary.output';
+import {
+  GetRoomRatingSummaryQuery,
+  ListRoomReviewsQuery,
+  ReviewOutput,
+  RoomRatingSummaryOutput,
+} from '../../../review/contracts';
 import {
   ApiJwtAuth,
   ApiPaginationQuery,

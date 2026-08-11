@@ -354,6 +354,16 @@ export default tseslint.config(
               message:
                 'Importer amenity uniquement via amenity/contracts (sauf AmenityModule / ORM).',
             },
+            {
+              group: [
+                '**/review/applications/**',
+                '**/review/domain/**',
+                '**/review/interfaces/**',
+                '**/review/infrastructure/**',
+              ],
+              message:
+                'Importer review uniquement via review/contracts (sauf ReviewModule / ORM).',
+            },
           ],
         },
       ],
