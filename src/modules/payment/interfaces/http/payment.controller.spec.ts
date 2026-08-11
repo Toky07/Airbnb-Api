@@ -22,7 +22,7 @@ import {
 } from '../../applications/useCase/payment-test.helpers';
 import { StripeWebhookVerifier } from '../../infrastructure/stripe/StripeWebhookVerifier';
 import { ReservationOrmEntity } from '../../../reservation/infrastructure/entities/reservation.orm-entity';
-import { RESERVATION_STATUS } from '../../../reservation/domain/constants/reservation-status.constant';
+import { RESERVATION_STATUS } from '../../../reservation/contracts';
 import { PropertyEntity } from '../../../properties/infrastructure/entities/property-entity.entity';
 import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
 

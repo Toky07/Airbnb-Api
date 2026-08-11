@@ -3,10 +3,10 @@ import {
   ForbiddenException,
   NotFoundException,
 } from '@nestjs/common';
-import { RESERVATION_STATUS } from '../../../reservation/domain/constants/reservation-status.constant';
-import { Reservation } from '../../../reservation/domain/entities/reservation.entity';
-import { ReservationItem } from '../../../reservation/domain/entities/reservation-item.entity';
-import type { IReservationRepository } from '../../../reservation/domain/repositories/reservation.repository';
+import { RESERVATION_STATUS } from '../../../reservation/contracts';
+import { Reservation } from '../../../reservation/contracts';
+import { ReservationItem } from '../../../reservation/contracts';
+import type { IReservationRepository } from '../../../reservation/contracts';
 import type { IUserRepository } from '../../../user/contracts';
 import type { IReviewRepository } from '../../domain/repositories/review.repository';
 import { ReviewEligibilityService } from './review-eligibility.service';

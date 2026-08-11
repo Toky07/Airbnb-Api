@@ -6,7 +6,7 @@ import { ListRoomAmenitiesQuery } from '../../../amenity/applications/useCase/qu
 import type { IRoomRepository } from '../../domain/repositories/room.repository';
 import type { IRoomBlockedDateRepository } from '../../domain/repositories/room-blocked-date.repository';
 import type { ReservationItemOrmEntity } from '../../../reservation/infrastructure/entities/reservation-item.orm-entity';
-import { BLOCKING_RESERVATION_STATUSES } from '../../../reservation/domain/constants/reservation-status.constant';
+import { BLOCKING_RESERVATION_STATUSES } from '../../../reservation/contracts';
 import type { UnavailableDateRange } from '../dto/room.output';
 import type { RoomMediaPresenter } from '../presenters/room-media.presenter';
 

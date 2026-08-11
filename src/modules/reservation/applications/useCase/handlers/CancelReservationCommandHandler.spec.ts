@@ -17,6 +17,7 @@ import type { IPropertyRepository } from '../../../../properties/contracts';
 import type { IRoomRepository } from '../../../../rooms/contracts';
 import { Room } from '../../../../rooms/contracts';
 import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
+import { AssertReservationAccessService } from '../../services/assert-reservation-access.service';
 import { ComputeCancellationRefundService } from '../../services/compute-cancellation-refund.service';
 import { ResolveReservationCancellationPolicyService } from '../../services/resolve-reservation-cancellation-policy.service';
 import { CancelReservationCommandHandler } from './CancelReservationCommandHandler';
@@ -36,6 +37,8 @@ function createHandler(overrides: {
 }) {
   const paymentGateway = createPaymentGatewayMock();
   const computeCancellationRefund = new ComputeCancellationRefundService();
+  const reservationRepository =
+    overrides.reservationRepository ?? createReservationRepositoryMock();
   const roomRepository = (overrides.roomRepository ?? {
     findById: vi.fn().mockResolvedValue(
       new Room({
@@ -87,18 +90,24 @@ function createHandler(overrides: {
     ),
     findAllByOwnerId: vi.fn().mockResolvedValue([]),
   }) as IPropertyRepository;
+  const userRepository = (overrides.userRepository ?? {
+    findByAuthId: vi.fn(),
+  }) as IUserRepository;
   const resolveCancellationPolicy =
     new ResolveReservationCancellationPolicyService(
       roomRepository,
       propertyRepository,
     );
+  const assertReservationAccess = new AssertReservationAccessService(
+    reservationRepository,
+    userRepository,
+    roomRepository,
+    propertyRepository,
+  );
 
   return {
     handler: new CancelReservationCommandHandler(
-      overrides.reservationRepository ?? createReservationRepositoryMock(),
-      (overrides.userRepository ?? {
-        findByAuthId: vi.fn(),
-      }) as IUserRepository,
+      reservationRepository,
       overrides.paymentRepository ??
         createPaymentRepositoryMock({
           findById: vi.fn().mockResolvedValue(
@@ -110,8 +119,7 @@ function createHandler(overrides: {
           ),
           update: vi.fn().mockImplementation(async (payment) => payment),
         }),
-      roomRepository,
-      propertyRepository,
+      assertReservationAccess,
       resolveCancellationPolicy,
       computeCancellationRefund,
       paymentGateway,

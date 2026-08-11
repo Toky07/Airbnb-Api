@@ -53,8 +53,8 @@ import { CreateHostRoomRateOverrideCommand } from '../../applications/useCase/co
 import { DeleteHostRoomRateOverrideCommand } from '../../applications/useCase/commands/DeleteHostRoomRateOverrideCommand';
 import type { CreateRoomBlockedDateDto } from '../../../rooms/contracts';
 import type { CreateRoomRateOverrideDto } from '../../../rooms/contracts';
-import { CancelReservationCommand } from '../../../reservation/applications/useCase/commands/CancelReservationCommand';
-import { MarkReservationNoShowCommand } from '../../../reservation/applications/useCase/commands/MarkReservationNoShowCommand';
+import { CancelReservationCommand } from '../../../reservation/contracts';
+import { MarkReservationNoShowCommand } from '../../../reservation/contracts';
 import {
   ApiJwtAuth,
   ApiPaginationQuery,

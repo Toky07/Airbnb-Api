@@ -1,4 +1,4 @@
-import type { IReservationRepository } from '../reservation/domain/repositories/reservation.repository';
+import type { IReservationRepository } from '../reservation/contracts';
 import type { IUserRepository } from '../user/contracts';
 import type { IRoomRepository } from '../rooms/contracts';
 import type { IReviewRepository } from './domain/repositories/review.repository';

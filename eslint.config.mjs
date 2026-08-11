@@ -248,4 +248,46 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    files: [
+      'src/modules/host/**/*.ts',
+      'src/modules/review/**/*.ts',
+      'src/modules/messaging/**/*.ts',
+      'src/modules/rooms/**/*.ts',
+      'src/modules/cart/**/*.ts',
+      'src/modules/payment/**/*.ts',
+      'src/modules/favorite/**/*.ts',
+      'src/modules/invoice/**/*.ts',
+      'src/modules/mail/**/*.ts',
+    ],
+    ignores: [
+      '**/*.spec.ts',
+      '**/infrastructure/entities/**',
+      '**/infrastructure/repositories/**',
+      // ORM / Nest wiring exceptions
+      'src/modules/rooms/room.module.ts',
+      'src/modules/rooms/rooms.bootstrap.ts',
+      'src/modules/messaging/messaging.module.ts',
+      'src/modules/review/review.module.ts',
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '**/reservation/applications/**',
+                '**/reservation/domain/**',
+                '**/reservation/interfaces/**',
+                '**/reservation/infrastructure/repositories/**',
+              ],
+              message:
+                'Importer reservation uniquement via reservation/contracts (sauf ReservationModule / ORM).',
+            },
+          ],
+        },
+      ],
+    },
+  },
 );

@@ -22,7 +22,7 @@ import { PAYMENT_GATEWAY } from '../../../payment/domain/ports/payment-gateway.p
 import { PAYMENT_STATUS } from '../../../payment/domain/constants/payment-status.constant';
 import { PaymentOrmEntity } from '../../../payment/infrastructure/entities/payment.orm-entity';
 import { ReservationOrmEntity } from '../../../reservation/infrastructure/entities/reservation.orm-entity';
-import { RESERVATION_STATUS } from '../../../reservation/domain/constants/reservation-status.constant';
+import { RESERVATION_STATUS } from '../../../reservation/contracts';
 import { createPaymentGatewayMock } from '../../../payment/applications/useCase/payment-test.helpers';
 import {
   AUTH_TEST_ENTITIES,

@@ -11,8 +11,8 @@ import type { IRoomRepository } from '../../../rooms/contracts';
 import { ROOM_REPOSITORY } from '../../../rooms/contracts';
 import type { IUserRepository } from '../../../user/contracts';
 import { USER_REPOSITORY } from '../../../user/contracts';
-import type { IReservationRepository } from '../../../reservation/domain/repositories/reservation.repository';
-import { RESERVATION_REPOSITORY } from '../../../reservation/domain/repositories/reservation.repository';
+import type { IReservationRepository } from '../../../reservation/contracts';
+import { RESERVATION_REPOSITORY } from '../../../reservation/contracts';
 
 export type ReservationParticipants = {
   guestId: number;

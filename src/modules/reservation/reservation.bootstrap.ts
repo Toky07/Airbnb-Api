@@ -73,10 +73,8 @@ export class ReservationBootstrap {
       ),
       cancelReservationCommandHandler: new CancelReservationCommandHandler(
         deps.reservationRepository,
-        deps.userRepository,
         deps.paymentRepository,
-        deps.roomRepository,
-        deps.propertyRepository,
+        deps.assertReservationAccess,
         deps.resolveCancellationPolicy,
         deps.computeCancellationRefund,
         deps.paymentGateway,

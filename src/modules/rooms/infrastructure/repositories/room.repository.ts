@@ -6,7 +6,7 @@ import {
   type PaginatedResult,
   type PaginationParams,
 } from '../../../../shared/pagination/pagination.types';
-import { BLOCKING_RESERVATION_STATUSES } from '../../../reservation/domain/constants/reservation-status.constant';
+import { BLOCKING_RESERVATION_STATUSES } from '../../../reservation/contracts';
 import { Room } from '../../domain/entities/room.entity';
 import { RoomEntity } from '../entities/room.entity';
 import { IRoomRepository } from '../../domain/repositories/room.repository';

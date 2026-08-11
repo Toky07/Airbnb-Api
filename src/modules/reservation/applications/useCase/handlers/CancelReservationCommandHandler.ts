@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import {
   PAYMENT_STATUS,
@@ -10,14 +6,12 @@ import {
   type IPaymentGateway,
   type IPaymentRepository,
 } from '../../../../payment/contracts';
-import type { IPropertyRepository } from '../../../../properties/contracts';
-import type { IRoomRepository } from '../../../../rooms/contracts';
-import type { IUserRepository } from '../../../../user/contracts';
 import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
 import { Reservation } from '../../../domain/entities/reservation.entity';
 import type { IReservationRepository } from '../../../domain/repositories/reservation.repository';
 import { CancelReservationOutput } from '../../dto/cancel-reservation.output';
 import { ReservationOutput } from '../../dto/reservation.output';
+import type { AssertReservationAccessService } from '../../services/assert-reservation-access.service';
 import type { ComputeCancellationRefundService } from '../../services/compute-cancellation-refund.service';
 import type { EnrichReservationOutputsService } from '../../services/enrich-reservation-outputs.service';
 import type { ResolveReservationCancellationPolicyService } from '../../services/resolve-reservation-cancellation-policy.service';
@@ -29,10 +23,8 @@ export class CancelReservationCommandHandler implements ICommandHandler<
 > {
   constructor(
     private readonly reservationRepository: IReservationRepository,
-    private readonly userRepository: IUserRepository,
     private readonly paymentRepository: IPaymentRepository,
-    private readonly roomRepository: IRoomRepository,
-    private readonly propertyRepository: IPropertyRepository,
+    private readonly assertReservationAccess: AssertReservationAccessService,
     private readonly resolveCancellationPolicy: ResolveReservationCancellationPolicyService,
     private readonly computeCancellationRefund: ComputeCancellationRefundService,
     private readonly paymentGateway: IPaymentGateway,
@@ -64,7 +56,11 @@ export class CancelReservationCommandHandler implements ICommandHandler<
       throw new BadRequestException('Ce séjour est déjà marqué no-show.');
     }
 
-    await this.assertAccess(reservation, command);
+    await this.assertReservationAccess.assertCanManage(reservation, {
+      authId: command.access.authId,
+      canReadAll: command.access.canCancelAll,
+      canReadHost: command.access.canCancelHost,
+    });
 
     const checkIn = reservation.items[0]?.checkIn;
     if (!checkIn) {
@@ -122,41 +118,5 @@ export class CancelReservationCommandHandler implements ICommandHandler<
       refund.refundPercent,
       refund.policyLabel,
     );
-  }
-
-  private async assertAccess(
-    reservation: Reservation,
-    command: CancelReservationCommand,
-  ): Promise<void> {
-    if (command.access.canCancelAll) {
-      return;
-    }
-
-    const user = await this.userRepository.findByAuthId(command.access.authId);
-    const isOwner = user?.id === reservation.userId;
-
-    if (isOwner) {
-      return;
-    }
-
-    if (command.access.canCancelHost && user?.id) {
-      const properties = await this.propertyRepository.findAllByOwnerId(
-        user.id,
-      );
-      const propertyIds = new Set(
-        properties
-          .map((property) => property.id)
-          .filter((id): id is number => typeof id === 'number' && id > 0),
-      );
-
-      for (const item of reservation.items) {
-        const room = await this.roomRepository.findById(item.roomId);
-        if (room?.property?.id && propertyIds.has(room.property.id)) {
-          return;
-        }
-      }
-    }
-
-    throw new ForbiddenException('Accès refusé.');
   }
 }

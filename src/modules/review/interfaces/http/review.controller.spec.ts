@@ -17,7 +17,7 @@ import { ReservationOrmEntity } from '../../../reservation/infrastructure/entiti
 import { ReservationItemOrmEntity } from '../../../reservation/infrastructure/entities/reservation-item.orm-entity';
 import { ReviewOrmEntity } from '../../infrastructure/entities/review.orm-entity';
 import { REVIEW_STATUS } from '../../domain/constants/review-status.constant';
-import { RESERVATION_STATUS } from '../../../reservation/domain/constants/reservation-status.constant';
+import { RESERVATION_STATUS } from '../../../reservation/contracts';
 import {
   AUTH_TEST_ENTITIES,
   DEFAULT_REGISTER,
