@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { AMENITY_SCOPE } from '../../../../amenity/contracts';
+import { AMENITY_SCOPE } from '@src/modules/amenity/contracts';
 import { ListHostAmenityOptionsQueryHandler } from './ListHostAmenityOptionsQueryHandler';
-import { ListHostAmenityOptionsQuery } from '../queries/ListHostAmenityOptionsQuery';
-import { ListAmenityOptionsQuery } from '../../../../amenity/contracts';
+import { ListHostAmenityOptionsQuery } from '@src/modules/host/applications/useCase/queries/ListHostAmenityOptionsQuery';
+import { ListAmenityOptionsQuery } from '@src/modules/amenity/contracts';
 
 const mockQueryExecute = vi.fn();
 

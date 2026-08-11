@@ -1,9 +1,9 @@
 import { BadRequestException } from '@nestjs/common';
-import { REVIEW_STATUS } from '../../../domain/constants/review-status.constant';
-import { Review } from '../../../domain/entities/review.entity';
-import type { IReviewRepository } from '../../../domain/repositories/review.repository';
-import type { ReviewEligibilityService } from '../../services/review-eligibility.service';
-import { CreateReviewCommand } from '../commands/CreateReviewCommand';
+import { REVIEW_STATUS } from '@src/modules/review/domain/constants/review-status.constant';
+import { Review } from '@src/modules/review/domain/entities/review.entity';
+import type { IReviewRepository } from '@src/modules/review/domain/repositories/review.repository';
+import type { ReviewEligibilityService } from '@src/modules/review/applications/services/review-eligibility.service';
+import { CreateReviewCommand } from '@src/modules/review/applications/useCase/commands/CreateReviewCommand';
 import { CreateReviewCommandHandler } from './CreateReviewCommandHandler';
 
 describe('CreateReviewCommandHandler', () => {

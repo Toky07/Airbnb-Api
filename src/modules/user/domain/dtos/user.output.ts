@@ -1,5 +1,5 @@
-import { User } from '../entities/user.entity';
-import type { AccountStatus } from '../../../authentication/contracts';
+import { User } from '@src/modules/user/domain/entities/user.entity';
+import type { AccountStatus } from '@src/modules/authentication/contracts';
 
 export type UserRoleSummary = {
   slug: string;

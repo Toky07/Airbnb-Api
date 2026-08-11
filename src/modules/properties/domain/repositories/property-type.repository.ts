@@ -1,4 +1,4 @@
-import type { PropertyType } from '../entities/property-type.entity';
+import type { PropertyType } from '@src/modules/properties/domain/entities/property-type.entity';
 
 export interface IPropertyTypeRepository {
   findAll(): Promise<PropertyType[]>;

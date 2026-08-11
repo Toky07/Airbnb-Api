@@ -1,8 +1,8 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { RequestPasswordResetCommandHandler } from './RequestPasswordResetCommandHandler';
-import { RequestPasswordResetCommand } from '../commands/RequestPasswordResetCommand';
-import { Auth } from '../../../domain/entities/user.entity';
-import { EmailVO } from '../../../../../shared/valueObject/email.vo';
+import { RequestPasswordResetCommand } from '@src/modules/authentication/applications/useCase/commands/RequestPasswordResetCommand';
+import { Auth } from '@src/modules/authentication/domain/entities/user.entity';
+import { EmailVO } from '@src/shared/valueObject/email.vo';
 
 describe('RequestPasswordResetCommandHandler', () => {
   const authRepository = { findByEmail: vi.fn() };

@@ -1,11 +1,14 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { readFile, rm } from 'fs/promises';
 import { join } from 'path';
-import { ENTITY_TYPE } from '../constant';
+import { ENTITY_TYPE } from '@src/modules/media/constant';
 import { LocalStorageService } from './localStorage.service';
-import type { UploadFile } from '../types/upload-file';
-import { toDiskPath, toSaveMediaContext } from '../utils/build-upload-path';
-import { resolveUploadRoot } from '../utils/resolve-upload-root';
+import type { UploadFile } from '@src/modules/media/types/upload-file';
+import {
+  toDiskPath,
+  toSaveMediaContext,
+} from '@src/modules/media/utils/build-upload-path';
+import { resolveUploadRoot } from '@src/modules/media/utils/resolve-upload-root';
 
 describe('LocalStorageService', () => {
   const service = new LocalStorageService();

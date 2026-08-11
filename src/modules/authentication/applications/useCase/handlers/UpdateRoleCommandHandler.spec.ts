@@ -1,14 +1,14 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import { UserNameVO } from '../../../../user/contracts';
-import { RoleEntity } from '../../../domain/entities/role.entity';
+import { UserNameVO } from '@src/modules/user/contracts';
+import { RoleEntity } from '@src/modules/authentication/domain/entities/role.entity';
 import {
   HOST_ROLE_SLUG,
   SUPERADMIN_ROLE_SLUG,
-} from '../../../domain/constants/permissions.constant';
-import { TRAVELER_ROLE_SLUG } from '../../../domain/constants/system-roles.constant';
-import type { IRoleRepository } from '../../../domain/repositories/role.repository';
+} from '@src/modules/authentication/domain/constants/permissions.constant';
+import { TRAVELER_ROLE_SLUG } from '@src/modules/authentication/domain/constants/system-roles.constant';
+import type { IRoleRepository } from '@src/modules/authentication/domain/repositories/role.repository';
 import { UpdateRoleCommandHandler } from './UpdateRoleCommandHandler';
-import { UpdateRoleCommand } from '../commands/UpdateRoleCommand';
+import { UpdateRoleCommand } from '@src/modules/authentication/applications/useCase/commands/UpdateRoleCommand';
 
 describe('UpdateRoleCommandHandler', () => {
   const customRole = new RoleEntity(new UserNameVO('test'), 'test', 1);

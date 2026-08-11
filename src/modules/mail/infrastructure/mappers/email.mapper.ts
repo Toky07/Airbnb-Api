@@ -1,6 +1,6 @@
-import { Email } from '../../domain/entities/email.entity';
-import type { EmailStatus } from '../../domain/constants/email-status.constant';
-import { EmailOrmEntity } from '../entities/email.orm-entity';
+import { Email } from '@src/modules/mail/domain/entities/email.entity';
+import type { EmailStatus } from '@src/modules/mail/domain/constants/email-status.constant';
+import { EmailOrmEntity } from '@src/modules/mail/infrastructure/entities/email.orm-entity';
 
 export class EmailMapper {
   static toDomain(entity: EmailOrmEntity): Email {

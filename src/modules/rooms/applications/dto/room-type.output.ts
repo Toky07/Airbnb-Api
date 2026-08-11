@@ -1,4 +1,4 @@
-import type { RoomType } from '../../domain/entities/room-type.entity';
+import type { RoomType } from '@src/modules/rooms/domain/entities/room-type.entity';
 
 export class RoomTypeOutput {
   constructor(

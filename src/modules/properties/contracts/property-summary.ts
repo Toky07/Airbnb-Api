@@ -3,12 +3,12 @@
  * Rooms importe ce fichier (pas properties/contracts/index) pour éviter
  * le cycle RoomMapper ↔ PropertyMapper (voir aussi rooms/contracts/room-summary).
  */
-import type { CategorySummary } from '../../../shared/types/category-summary';
+import type { CategorySummary } from '@src/shared/types/category-summary';
 import {
   DEFAULT_CANCELLATION_POLICY,
   parseCancellationPolicy,
   type CancellationPolicy,
-} from '../../reservation/contracts/cancellation-policy';
+} from '@src/modules/reservation/contracts/cancellation-policy';
 
 export type PropertySummary = {
   name: string;

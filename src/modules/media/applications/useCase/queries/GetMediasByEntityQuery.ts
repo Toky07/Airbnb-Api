@@ -1,4 +1,4 @@
-import type { EntityType } from '../../../constant';
+import type { EntityType } from '@src/modules/media/constant';
 
 export class GetMediasByEntityQuery {
   constructor(

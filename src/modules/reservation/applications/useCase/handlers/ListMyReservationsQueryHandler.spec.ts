@@ -1,15 +1,15 @@
 import { UnauthorizedException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { buildPaginationMeta } from '../../../../../shared/pagination/pagination.types';
-import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
-import { User } from '../../../../user/contracts';
-import { UserNameVO } from '../../../../user/contracts';
-import { EmailVO } from '../../../../../shared/valueObject/email.vo';
-import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
-import { ReservationOutput } from '../../dto/reservation.output';
+import { buildPaginationMeta } from '@src/shared/pagination/pagination.types';
+import { RESERVATION_STATUS } from '@src/modules/reservation/domain/constants/reservation-status.constant';
+import { User } from '@src/modules/user/contracts';
+import { UserNameVO } from '@src/modules/user/contracts';
+import { EmailVO } from '@src/shared/valueObject/email.vo';
+import { PhoneNumberVO } from '@src/shared/valueObject/phone.vo';
+import { ReservationOutput } from '@src/modules/reservation/applications/dto/reservation.output';
 import { ListMyReservationsQueryHandler } from './ListMyReservationsQueryHandler';
-import { ListMyReservationsQuery } from '../queries/ListMyReservationsQuery';
-import { ListReservationsQuery } from '../queries/ListReservationsQuery';
+import { ListMyReservationsQuery } from '@src/modules/reservation/applications/useCase/queries/ListMyReservationsQuery';
+import { ListReservationsQuery } from '@src/modules/reservation/applications/useCase/queries/ListReservationsQuery';
 
 describe('ListMyReservationsQueryHandler', () => {
   const userRepository = { findByAuthId: vi.fn() };

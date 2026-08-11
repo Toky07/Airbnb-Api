@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ENTITY_TYPE, MEDIA_TYPE } from '../../../constant';
-import { Media } from '../../../domain/entities/media.entity';
-import type { IMediaRepository } from '../../../domain/repositories/media.repository';
-import type { ILocalStorageService } from '../../../services/localStorage.service';
-import type { UploadFile } from '../../../types/upload-file';
+import { ENTITY_TYPE, MEDIA_TYPE } from '@src/modules/media/constant';
+import { Media } from '@src/modules/media/domain/entities/media.entity';
+import type { IMediaRepository } from '@src/modules/media/domain/repositories/media.repository';
+import type { ILocalStorageService } from '@src/modules/media/services/localStorage.service';
+import type { UploadFile } from '@src/modules/media/types/upload-file';
 import { DeleteMediasByEntityCommandHandler } from './DeleteMediasByEntityCommandHandler';
 import { SaveEntityMediasCommandHandler } from './SaveEntityMediasCommandHandler';
-import { SaveEntityMediasCommand } from '../commands/SaveEntityMediasCommand';
-import { DeleteMediasByEntityCommand } from '../commands/DeleteMediasByEntityCommand';
+import { SaveEntityMediasCommand } from '@src/modules/media/applications/useCase/commands/SaveEntityMediasCommand';
+import { DeleteMediasByEntityCommand } from '@src/modules/media/applications/useCase/commands/DeleteMediasByEntityCommand';
 
 describe('SaveEntityMediasCommandHandler', () => {
   it('should save medias for any entity type', async () => {

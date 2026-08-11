@@ -1,5 +1,5 @@
-import type { JwtPayload } from '../../../../authentication/contracts';
-import type { CreateRoomRateOverrideDto } from '../../../../rooms/contracts';
+import type { JwtPayload } from '@src/modules/authentication/contracts';
+import type { CreateRoomRateOverrideDto } from '@src/modules/rooms/contracts';
 
 export class CreateHostRoomRateOverrideCommand {
   constructor(

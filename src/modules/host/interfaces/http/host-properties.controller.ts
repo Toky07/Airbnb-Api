@@ -11,25 +11,25 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
-import type { JwtPayload } from '../../../authentication/contracts';
-import { RequirePermissions } from '../../../authentication/contracts';
-import type { CreatePropertyDto } from '../../../properties/contracts';
-import { parsePropertyBody } from '../../../properties/contracts';
-import type { UploadFile } from '../../../media/contracts';
-import { ListPropertyTypeOptionsQuery } from '../../../properties/contracts';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { AMENITY_SCOPE } from '../../../amenity/contracts';
-import type { SyncAmenitiesDto } from '../../../amenity/contracts';
-import { ApiJwtAuth } from '../../../../shared/swagger/swagger.decorators';
-import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
-import { ListHostPropertiesQuery } from '../../applications/useCase/queries/ListHostPropertiesQuery';
-import { GetHostPropertyQuery } from '../../applications/useCase/queries/GetHostPropertyQuery';
-import { CreateHostPropertyCommand } from '../../applications/useCase/commands/CreateHostPropertyCommand';
-import { UpdateHostPropertyCommand } from '../../applications/useCase/commands/UpdateHostPropertyCommand';
-import { ListHostAmenityOptionsQuery } from '../../applications/useCase/queries/ListHostAmenityOptionsQuery';
-import { GetHostPropertyAmenitiesQuery } from '../../applications/useCase/queries/GetHostPropertyAmenitiesQuery';
-import { SyncHostPropertyAmenitiesCommand } from '../../applications/useCase/commands/SyncHostPropertyAmenitiesCommand';
+import type { JwtPayload } from '@src/modules/authentication/contracts';
+import { RequirePermissions } from '@src/modules/authentication/contracts';
+import type { CreatePropertyDto } from '@src/modules/properties/contracts';
+import { parsePropertyBody } from '@src/modules/properties/contracts';
+import type { UploadFile } from '@src/modules/media/contracts';
+import { ListPropertyTypeOptionsQuery } from '@src/modules/properties/contracts';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { AMENITY_SCOPE } from '@src/modules/amenity/contracts';
+import type { SyncAmenitiesDto } from '@src/modules/amenity/contracts';
+import { ApiJwtAuth } from '@src/shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
+import { ListHostPropertiesQuery } from '@src/modules/host/applications/useCase/queries/ListHostPropertiesQuery';
+import { GetHostPropertyQuery } from '@src/modules/host/applications/useCase/queries/GetHostPropertyQuery';
+import { CreateHostPropertyCommand } from '@src/modules/host/applications/useCase/commands/CreateHostPropertyCommand';
+import { UpdateHostPropertyCommand } from '@src/modules/host/applications/useCase/commands/UpdateHostPropertyCommand';
+import { ListHostAmenityOptionsQuery } from '@src/modules/host/applications/useCase/queries/ListHostAmenityOptionsQuery';
+import { GetHostPropertyAmenitiesQuery } from '@src/modules/host/applications/useCase/queries/GetHostPropertyAmenitiesQuery';
+import { SyncHostPropertyAmenitiesCommand } from '@src/modules/host/applications/useCase/commands/SyncHostPropertyAmenitiesCommand';
 
 @ApiTags(SWAGGER_TAGS.HOST)
 @ApiJwtAuth()

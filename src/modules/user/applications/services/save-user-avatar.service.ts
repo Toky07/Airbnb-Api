@@ -5,7 +5,7 @@ import {
   toSaveMediaContext,
   type ILocalStorageService,
   type UploadFile,
-} from '../../../media/contracts';
+} from '@src/modules/media/contracts';
 
 export type ResolveUserAvatarInput = {
   file?: UploadFile;

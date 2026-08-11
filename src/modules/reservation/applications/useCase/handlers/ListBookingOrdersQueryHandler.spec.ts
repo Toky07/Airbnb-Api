@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { buildPaginationMeta } from '../../../../../shared/pagination/pagination.types';
-import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
-import { BookingOrderItemOutput } from '../../dto/booking-order-item.output';
+import { buildPaginationMeta } from '@src/shared/pagination/pagination.types';
+import { RESERVATION_STATUS } from '@src/modules/reservation/domain/constants/reservation-status.constant';
+import { BookingOrderItemOutput } from '@src/modules/reservation/applications/dto/booking-order-item.output';
 import { ListBookingOrdersQueryHandler } from './ListBookingOrdersQueryHandler';
-import { ListBookingOrdersQuery } from '../queries/ListBookingOrdersQuery';
+import { ListBookingOrdersQuery } from '@src/modules/reservation/applications/useCase/queries/ListBookingOrdersQuery';
 
 describe('ListBookingOrdersQueryHandler', () => {
   const paymentRepository = { findPaginated: vi.fn() };

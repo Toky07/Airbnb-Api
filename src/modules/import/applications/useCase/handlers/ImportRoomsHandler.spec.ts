@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ImportRoomsHandler } from './ImportRoomsHandler';
 import { createImportBatchContext } from './import-test.helpers';
-import { CreateRoomCommand } from '../../../../rooms/contracts';
-import { commandBusExecuteMock } from '../../../../../test/command-bus.mock';
+import { CreateRoomCommand } from '@src/modules/rooms/contracts';
+import { commandBusExecuteMock } from '@src/test/command-bus.mock';
 
 describe('ImportRoomsHandler', () => {
   beforeEach(() => {

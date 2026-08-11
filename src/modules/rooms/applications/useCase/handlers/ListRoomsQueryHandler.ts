@@ -1,9 +1,9 @@
-import type { PaginatedResult } from '../../../../../shared/pagination/pagination.types';
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IRoomRepository } from '../../../domain/repositories/room.repository';
-import { RoomOutput } from '../../dto/room.output';
-import type { RoomMediaPresenter } from '../../presenters/room-media.presenter';
-import type { ListRoomsQuery } from '../queries/ListRoomsQuery';
+import type { PaginatedResult } from '@src/shared/pagination/pagination.types';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { IRoomRepository } from '@src/modules/rooms/domain/repositories/room.repository';
+import { RoomOutput } from '@src/modules/rooms/applications/dto/room.output';
+import type { RoomMediaPresenter } from '@src/modules/rooms/applications/presenters/room-media.presenter';
+import type { ListRoomsQuery } from '@src/modules/rooms/applications/useCase/queries/ListRoomsQuery';
 
 export class ListRoomsQueryHandler implements IQueryHandler<
   ListRoomsQuery,

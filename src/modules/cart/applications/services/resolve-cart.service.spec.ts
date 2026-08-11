@@ -4,7 +4,7 @@ import {
   createCartRepositoryMock,
   createCartUserPortMock,
   createSampleCart,
-} from '../cart-test.helpers';
+} from '@src/modules/cart/applications/cart-test.helpers';
 
 describe('ResolveCartService', () => {
   const cartRepository = createCartRepositoryMock();

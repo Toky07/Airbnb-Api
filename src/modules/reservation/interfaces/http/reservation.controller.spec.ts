@@ -5,38 +5,38 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { DataSource } from 'typeorm';
 import { vi } from 'vitest';
-import { AuthModule } from '../../../authentication/auth.module';
-import { UserModule } from '../../../user/user.module';
-import { RoomsModule } from '../../../rooms/room.module';
-import { PropertiesModule } from '../../../properties/properties.module';
-import { ReservationModule } from '../../reservation.module';
-import { PaymentModule } from '../../../payment/payment.module';
-import { PropertyEntity } from '../../../properties/infrastructure/entities/property-entity.entity';
-import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
-import { RESERVATION_STATUS } from '../../domain/constants/reservation-status.constant';
+import { AuthModule } from '@src/modules/authentication/auth.module';
+import { UserModule } from '@src/modules/user/user.module';
+import { RoomsModule } from '@src/modules/rooms/room.module';
+import { PropertiesModule } from '@src/modules/properties/properties.module';
+import { ReservationModule } from '@src/modules/reservation/reservation.module';
+import { PaymentModule } from '@src/modules/payment/payment.module';
+import { PropertyEntity } from '@src/modules/properties/infrastructure/entities/property-entity.entity';
+import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
+import { RESERVATION_STATUS } from '@src/modules/reservation/domain/constants/reservation-status.constant';
 import {
   AUTH_TEST_ENTITIES,
   DEFAULT_REGISTER,
   DOMAIN_TEST_ENTITIES,
   registerAndLoginAsSuperAdmin,
-} from '../../../../test/controller-test.helpers';
+} from '@src/test/controller-test.helpers';
 import {
   getIntegrationTestDatabaseConfig,
   prepareIntegrationTestDatabase,
-} from '../../../../test/test-database.config';
-import { ReservationOrmEntity } from '../../infrastructure/entities/reservation.orm-entity';
-import { PaymentOrmEntity } from '../../../payment/infrastructure/entities/payment.orm-entity';
-import { PAYMENT_GATEWAY } from '../../../payment/domain/ports/payment-gateway.port';
+} from '@src/test/test-database.config';
+import { ReservationOrmEntity } from '@src/modules/reservation/infrastructure/entities/reservation.orm-entity';
+import { PaymentOrmEntity } from '@src/modules/payment/infrastructure/entities/payment.orm-entity';
+import { PAYMENT_GATEWAY } from '@src/modules/payment/domain/ports/payment-gateway.port';
 import {
   createPaymentGatewayMock,
   createWebhookVerifierMock,
-} from '../../../payment/applications/useCase/payment-test.helpers';
-import { StripeWebhookVerifier } from '../../../payment/infrastructure/stripe/StripeWebhookVerifier';
-import { UserEntity } from '../../../user/infrastructure/entities/user.entity';
+} from '@src/modules/payment/applications/useCase/payment-test.helpers';
+import { StripeWebhookVerifier } from '@src/modules/payment/infrastructure/stripe/StripeWebhookVerifier';
+import { UserEntity } from '@src/modules/user/infrastructure/entities/user.entity';
 import {
   RESERVATION_REPOSITORY,
   type IReservationRepository,
-} from '../../domain/repositories/reservation.repository';
+} from '@src/modules/reservation/domain/repositories/reservation.repository';
 
 describe('ReservationController', () => {
   let app: INestApplication;

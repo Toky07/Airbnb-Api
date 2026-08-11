@@ -1,4 +1,4 @@
-import type { Favorite } from '../entities/favorite.entity';
+import type { Favorite } from '@src/modules/favorite/domain/entities/favorite.entity';
 
 export interface IFavoriteRepository {
   create(favorite: Favorite): Promise<Favorite>;

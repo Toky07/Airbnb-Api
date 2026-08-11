@@ -1,8 +1,8 @@
-import { EmailVO } from '../../../../shared/valueObject/email.vo';
-import { PhoneNumberVO } from '../../../../shared/valueObject/phone.vo';
-import { DomainValidationException } from '../../../../shared/exceptions/domain-validation.exception';
-import type { ValidationFieldError } from '../../../../shared/exceptions/validation-field.error';
-import { UserNameVO } from '../../domain/valueObject/username.vo';
+import { EmailVO } from '@src/shared/valueObject/email.vo';
+import { PhoneNumberVO } from '@src/shared/valueObject/phone.vo';
+import { DomainValidationException } from '@src/shared/exceptions/domain-validation.exception';
+import type { ValidationFieldError } from '@src/shared/exceptions/validation-field.error';
+import { UserNameVO } from '@src/modules/user/domain/valueObject/username.vo';
 
 export type UserFieldsToValidate = {
   firstName: string;

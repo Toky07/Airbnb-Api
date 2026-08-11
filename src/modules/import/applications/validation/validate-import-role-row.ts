@@ -1,5 +1,5 @@
-import { ALL_PERMISSION_KEYS } from '../../../authentication/contracts';
-import type { ImportRoleRowDto } from '../dto/import-batch.dto';
+import { ALL_PERMISSION_KEYS } from '@src/modules/authentication/contracts';
+import type { ImportRoleRowDto } from '@src/modules/import/applications/dto/import-batch.dto';
 import { ROLE_SLUG_PATTERN } from './import-validation.constants';
 import type { ImportRowValidationResult } from './import-row-validation.types';
 import { parseImportRolePermissionKeys } from './parse-import-role-permission-keys';

@@ -3,9 +3,9 @@ import {
   CART_USER_PORT,
   type CartUserSnapshot,
   type ICartUserPort,
-} from '../../../cart/contracts';
-import { USER_REPOSITORY } from '../../domain/repositories/user.repository';
-import type { IUserRepository } from '../../domain/repositories/user.repository';
+} from '@src/modules/cart/contracts';
+import { USER_REPOSITORY } from '@src/modules/user/domain/repositories/user.repository';
+import type { IUserRepository } from '@src/modules/user/domain/repositories/user.repository';
 
 @Injectable()
 export class CartUserAdapter implements ICartUserPort {

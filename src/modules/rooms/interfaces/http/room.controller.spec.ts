@@ -1,27 +1,27 @@
 import request from 'supertest';
 import { Test } from '@nestjs/testing';
-import { RoomsModule } from '../../room.module';
+import { RoomsModule } from '@src/modules/rooms/room.module';
 import { INestApplication } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { JwtModule } from '@nestjs/jwt';
-import { RoomEntity } from '../../infrastructure/entities/room.entity';
-import { RoomBlockedDateOrmEntity } from '../../infrastructure/entities/room-blocked-date.orm-entity';
-import { RoomTypeEntity } from '../../infrastructure/entities/room-type.entity';
-import { PropertyEntity } from '../../../properties/infrastructure/entities/property-entity.entity';
-import { PropertyTypeEntity } from '../../../properties/infrastructure/entities/property-type.entity';
-import { MediaOrmEntity } from '../../../media/infrastructure/entities/media-orm.entity';
-import { AuthModule } from '../../../authentication/auth.module';
-import { UserModule } from '../../../user/user.module';
+import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
+import { RoomBlockedDateOrmEntity } from '@src/modules/rooms/infrastructure/entities/room-blocked-date.orm-entity';
+import { RoomTypeEntity } from '@src/modules/rooms/infrastructure/entities/room-type.entity';
+import { PropertyEntity } from '@src/modules/properties/infrastructure/entities/property-entity.entity';
+import { PropertyTypeEntity } from '@src/modules/properties/infrastructure/entities/property-type.entity';
+import { MediaOrmEntity } from '@src/modules/media/infrastructure/entities/media-orm.entity';
+import { AuthModule } from '@src/modules/authentication/auth.module';
+import { UserModule } from '@src/modules/user/user.module';
 import {
   AUTH_TEST_ENTITIES,
   DOMAIN_TEST_ENTITIES,
   registerAndLoginAsSuperAdmin,
-} from '../../../../test/controller-test.helpers';
+} from '@src/test/controller-test.helpers';
 import {
   getIntegrationTestDatabaseConfig,
   prepareIntegrationTestDatabase,
-} from '../../../../test/test-database.config';
+} from '@src/test/test-database.config';
 
 describe('RoomController', () => {
   let app: INestApplication;

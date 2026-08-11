@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 import { ListMyInvoicesQueryHandler } from './ListMyInvoicesQueryHandler';
-import { ListMyInvoicesQuery } from '../queries/ListMyInvoicesQuery';
-import { createInvoiceRepositoryMock } from '../invoice-test.helpers';
-import type { IUserRepository } from '../../../../user/contracts';
+import { ListMyInvoicesQuery } from '@src/modules/invoice/applications/useCase/queries/ListMyInvoicesQuery';
+import { createInvoiceRepositoryMock } from '@src/modules/invoice/applications/useCase/invoice-test.helpers';
+import type { IUserRepository } from '@src/modules/user/contracts';
 
 describe('ListMyInvoicesQueryHandler', () => {
   it('retourne les factures du voyageur connecté', async () => {

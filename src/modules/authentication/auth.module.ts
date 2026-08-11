@@ -21,14 +21,14 @@ import { AuthGuard } from './interfaces/guard/auth.guard';
 import { PermissionsGuard } from './interfaces/guard/permissions.guard';
 import { EnsurePropertyOwnerHostRoleService } from './applications/services/ensure-property-owner-host-role.service';
 import { EnsureAuthHasRoleService } from './applications/services/ensure-auth-has-role.service';
-import { UserModule } from '../user/user.module';
-import { PropertiesModule } from '../properties/properties.module';
-import { MailModule } from '../mail/mail.module';
-import { USER_REPOSITORY } from '../user/contracts';
-import type { IUserRepository } from '../user/contracts';
-import { PROPERTY_REPOSITORY } from '../properties/contracts';
-import type { IPropertyRepository } from '../properties/contracts';
-import { UserEntity } from '../user/infrastructure/entities/user.entity';
+import { UserModule } from '@src/modules/user/user.module';
+import { PropertiesModule } from '@src/modules/properties/properties.module';
+import { MailModule } from '@src/modules/mail/mail.module';
+import { USER_REPOSITORY } from '@src/modules/user/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import { PROPERTY_REPOSITORY } from '@src/modules/properties/contracts';
+import type { IPropertyRepository } from '@src/modules/properties/contracts';
+import { UserEntity } from '@src/modules/user/infrastructure/entities/user.entity';
 import { PasswordSetupTokenOrmEntity } from './infrastructure/entities/password-setup-token.orm-entity';
 import { PasswordResetTokenOrmEntity } from './infrastructure/entities/password-reset-token.orm-entity';
 import { PASSWORD_SETUP_TOKEN_REPOSITORY } from './domain/repositories/password-setup-token.repository';
@@ -38,10 +38,10 @@ import { PASSWORD_RESET_TOKEN_REPOSITORY } from './domain/repositories/password-
 import type { IPasswordResetTokenRepository } from './domain/repositories/password-reset-token.repository';
 import { PasswordResetTokenRepository } from './infrastructure/repositories/password-reset-token.repository';
 import { AccountStatusSyncService } from './infrastructure/seed/account-status-sync.service';
-import { MailService } from '../mail/contracts';
+import { MailService } from '@src/modules/mail/contracts';
 import { AuthBootstrap } from './auth.bootstrap';
-import { CommandBus } from '../../shared/useCase/bus/bus';
-import { QueryBus } from '../../shared/useCase/bus/query-bus';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
 import { CreateCredentialsCommand } from './applications/useCase/commands/CreateCredentialsCommand';
 import { LoginCommand } from './applications/useCase/commands/LoginCommand';
 import { AssignRoleCommand } from './applications/useCase/commands/AssignRoleCommand';
@@ -59,8 +59,8 @@ import { ResetPasswordWithTokenCommand } from './applications/useCase/commands/R
 import { RequestPasswordResetCommand } from './applications/useCase/commands/RequestPasswordResetCommand';
 import { ValidatePasswordResetTokenQuery } from './applications/useCase/queries/ValidatePasswordResetTokenQuery';
 import { BecomeHostCommand } from './applications/useCase/commands/BecomeHostCommand';
-import { RateLimitModule } from '../../shared/rate-limit.module';
-import { getJwtExpiresIn, getJwtSecret } from '../../config/env.config';
+import { RateLimitModule } from '@src/shared/rate-limit.module';
+import { getJwtExpiresIn, getJwtSecret } from '@src/config/env.config';
 
 @Module({
   imports: [

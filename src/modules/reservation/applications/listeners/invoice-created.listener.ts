@@ -1,11 +1,11 @@
-import type { IPaymentRepository } from '../../../payment/contracts';
-import type { BuildCustomerInvoiceEmailBodyService } from '../services/build-customer-invoice-email-body.service';
-import type { BuildHostPaymentNotificationEmailBodyService } from '../services/build-host-payment-notification-email-body.service';
-import type { BuildReservationInvoicePayloadService } from '../services/build-reservation-invoice-payload.service';
-import { RESERVATION_NOTIFICATION_SOURCE } from '../../domain/constants/reservation-notification.constant';
-import type { InvoiceCreatedEvent } from '../../../invoice/contracts';
-import { EmailSendRequestedEvent } from '../../../mail/contracts';
-import { EventBus } from '../../../../shared/domain/event.bus';
+import type { IPaymentRepository } from '@src/modules/payment/contracts';
+import type { BuildCustomerInvoiceEmailBodyService } from '@src/modules/reservation/applications/services/build-customer-invoice-email-body.service';
+import type { BuildHostPaymentNotificationEmailBodyService } from '@src/modules/reservation/applications/services/build-host-payment-notification-email-body.service';
+import type { BuildReservationInvoicePayloadService } from '@src/modules/reservation/applications/services/build-reservation-invoice-payload.service';
+import { RESERVATION_NOTIFICATION_SOURCE } from '@src/modules/reservation/domain/constants/reservation-notification.constant';
+import type { InvoiceCreatedEvent } from '@src/modules/invoice/contracts';
+import { EmailSendRequestedEvent } from '@src/modules/mail/contracts';
+import { EventBus } from '@src/shared/domain/event.bus';
 
 export class InvoiceCreatedListener {
   constructor(

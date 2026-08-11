@@ -1,6 +1,6 @@
-import { UserNameVO } from '../../../user/contracts';
-import { RoleEntity } from '../../domain/entities/role.entity';
-import { Role } from '../entity/role.entity';
+import { UserNameVO } from '@src/modules/user/contracts';
+import { RoleEntity } from '@src/modules/authentication/domain/entities/role.entity';
+import { Role } from '@src/modules/authentication/infrastructure/entity/role.entity';
 
 export class RoleMapper {
   static toEntity(domain: RoleEntity): Partial<Role> {

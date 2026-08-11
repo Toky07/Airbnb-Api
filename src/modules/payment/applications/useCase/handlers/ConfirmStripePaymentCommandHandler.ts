@@ -1,14 +1,14 @@
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { ConfirmStripePaymentCommand } from '../commands/ConfirmStripePaymentCommand';
-import type { IPaymentRepository } from '../../../domain/repositories/payment.repository';
-import type { IWebhookVerifier } from '../../../domain/ports/webhook-verifier.port';
-import type { MapStripeStatusService } from '../../services/map-stripe-status.service';
-import type { PaymentStatus } from '../../../domain/constants/payment-status.constant';
-import { PAYMENT_STATUS } from '../../../domain/constants/payment-status.constant';
-import { EventBus } from '../../../../../shared/domain/event.bus';
-import { PaymentConfirmedEvent } from '../../../domain/events/payment-confirmed.event';
-import { Payment } from '../../../domain/entities/payment.entity';
-import { StripeWebhookPayloadValidator } from '../../services/stripe-webhook-payload.validator';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { ConfirmStripePaymentCommand } from '@src/modules/payment/applications/useCase/commands/ConfirmStripePaymentCommand';
+import type { IPaymentRepository } from '@src/modules/payment/domain/repositories/payment.repository';
+import type { IWebhookVerifier } from '@src/modules/payment/domain/ports/webhook-verifier.port';
+import type { MapStripeStatusService } from '@src/modules/payment/applications/services/map-stripe-status.service';
+import type { PaymentStatus } from '@src/modules/payment/domain/constants/payment-status.constant';
+import { PAYMENT_STATUS } from '@src/modules/payment/domain/constants/payment-status.constant';
+import { EventBus } from '@src/shared/domain/event.bus';
+import { PaymentConfirmedEvent } from '@src/modules/payment/domain/events/payment-confirmed.event';
+import { Payment } from '@src/modules/payment/domain/entities/payment.entity';
+import { StripeWebhookPayloadValidator } from '@src/modules/payment/applications/services/stripe-webhook-payload.validator';
 
 export class ConfirmStripePaymentCommandHandler implements ICommandHandler<
   ConfirmStripePaymentCommand,

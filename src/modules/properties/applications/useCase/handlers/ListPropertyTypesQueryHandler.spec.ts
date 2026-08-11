@@ -1,7 +1,7 @@
-import { PropertyType } from '../../../domain/entities/property-type.entity';
-import { PropertyTypeOutput } from '../../dto/property-type.output';
+import { PropertyType } from '@src/modules/properties/domain/entities/property-type.entity';
+import { PropertyTypeOutput } from '@src/modules/properties/applications/dto/property-type.output';
 import { ListPropertyTypesQueryHandler } from './ListPropertyTypesQueryHandler';
-import { ListPropertyTypesQuery } from '../queries/ListPropertyTypesQuery';
+import { ListPropertyTypesQuery } from '@src/modules/properties/applications/useCase/queries/ListPropertyTypesQuery';
 
 describe('ListPropertyTypesQueryHandler', () => {
   it('lists all property types', async () => {

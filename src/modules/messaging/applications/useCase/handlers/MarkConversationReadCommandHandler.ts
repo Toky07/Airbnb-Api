@@ -1,7 +1,7 @@
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IMessageRepository } from '../../../domain/repositories/message.repository';
-import type { AssertConversationAccessService } from '../../services/assert-conversation-access.service';
-import type { MarkConversationReadCommand } from '../commands/MarkConversationReadCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { IMessageRepository } from '@src/modules/messaging/domain/repositories/message.repository';
+import type { AssertConversationAccessService } from '@src/modules/messaging/applications/services/assert-conversation-access.service';
+import type { MarkConversationReadCommand } from '@src/modules/messaging/applications/useCase/commands/MarkConversationReadCommand';
 
 export class MarkConversationReadCommandHandler implements ICommandHandler<
   MarkConversationReadCommand,

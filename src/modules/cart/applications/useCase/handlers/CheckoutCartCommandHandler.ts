@@ -1,15 +1,15 @@
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { CheckoutCartCommand } from '../commands/CheckoutCartCommand';
-import { EventBus } from '../../../../../shared/domain/event.bus';
-import { CartCheckoutRequestedEvent } from '../../../domain/events/cart-checkout-requested.event';
-import type { CartCheckoutCompletedEvent } from '../../../domain/events/cart-checkout-completed.event';
-import { CreatePaymentIntentOutput } from '../../dto/create-payment-intent.output';
-import { PricingBreakdownOutput } from '../../../../../shared/pricing/pricing-breakdown.output';
-import type { BuildCartItemService } from '../../services/build-cart-item.service';
-import type { ResolveCartService } from '../../services/resolve-cart.service';
-import type { BuildCartPricingBreakdownService } from '../../services/build-cart-pricing-breakdown.service';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { CheckoutCartCommand } from '@src/modules/cart/applications/useCase/commands/CheckoutCartCommand';
+import { EventBus } from '@src/shared/domain/event.bus';
+import { CartCheckoutRequestedEvent } from '@src/modules/cart/domain/events/cart-checkout-requested.event';
+import type { CartCheckoutCompletedEvent } from '@src/modules/cart/domain/events/cart-checkout-completed.event';
+import { CreatePaymentIntentOutput } from '@src/modules/cart/applications/dto/create-payment-intent.output';
+import { PricingBreakdownOutput } from '@src/shared/pricing/pricing-breakdown.output';
+import type { BuildCartItemService } from '@src/modules/cart/applications/services/build-cart-item.service';
+import type { ResolveCartService } from '@src/modules/cart/applications/services/resolve-cart.service';
+import type { BuildCartPricingBreakdownService } from '@src/modules/cart/applications/services/build-cart-pricing-breakdown.service';
 
 export class CheckoutCartCommandHandler implements ICommandHandler<
   CheckoutCartCommand,

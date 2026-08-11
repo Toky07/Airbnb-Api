@@ -1,4 +1,4 @@
-import { PASSWORD_RESET_TOKEN_TTL_HOURS } from '../../domain/constants/account-status.constant';
+import { PASSWORD_RESET_TOKEN_TTL_HOURS } from '@src/modules/authentication/domain/constants/account-status.constant';
 
 export class PasswordResetLinkBuilder {
   build(rawToken: string): string {

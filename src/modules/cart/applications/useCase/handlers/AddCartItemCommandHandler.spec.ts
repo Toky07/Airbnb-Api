@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { BadRequestException } from '@nestjs/common';
-import { CART_ITEM_TYPE } from '../../../domain/constants/cart-item-type.constant';
+import { CART_ITEM_TYPE } from '@src/modules/cart/domain/constants/cart-item-type.constant';
 import { AddCartItemCommandHandler } from './AddCartItemCommandHandler';
-import { AddCartItemCommand } from '../commands/AddCartItemCommand';
+import { AddCartItemCommand } from '@src/modules/cart/applications/useCase/commands/AddCartItemCommand';
 import {
   createCartRepositoryMock,
   createSampleCart,
   createSampleCartItem,
-} from '../../cart-test.helpers';
+} from '@src/modules/cart/applications/cart-test.helpers';
 
 describe('AddCartItemCommandHandler', () => {
   const resolveCartService = { resolve: vi.fn() };

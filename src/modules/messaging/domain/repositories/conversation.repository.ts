@@ -1,4 +1,4 @@
-import type { Conversation } from '../entities/conversation.entity';
+import type { Conversation } from '@src/modules/messaging/domain/entities/conversation.entity';
 
 export const CONVERSATION_REPOSITORY = 'CONVERSATION_REPOSITORY';
 

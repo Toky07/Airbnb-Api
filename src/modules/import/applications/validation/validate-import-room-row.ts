@@ -1,4 +1,4 @@
-import type { ImportRoomRowDto } from '../dto/import-batch.dto';
+import type { ImportRoomRowDto } from '@src/modules/import/applications/dto/import-batch.dto';
 import { ROOM_STATUSES } from './import-validation.constants';
 import type { ImportRowValidationResult } from './import-row-validation.types';
 

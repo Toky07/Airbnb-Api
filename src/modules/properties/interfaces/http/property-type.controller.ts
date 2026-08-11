@@ -8,22 +8,22 @@ import {
   Put,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { RequirePermissions } from '../../../authentication/contracts';
-import { RequireSuperAdmin } from '../../../authentication/contracts';
-import { PropertyTypeOutput } from '../../applications/dto/property-type.output';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { CreatePropertyTypeCommand } from '../../applications/useCase/commands/CreatePropertyTypeCommand';
-import { UpdatePropertyTypeCommand } from '../../applications/useCase/commands/UpdatePropertyTypeCommand';
-import { DeletePropertyTypeCommand } from '../../applications/useCase/commands/DeletePropertyTypeCommand';
-import { ListPropertyTypesQuery } from '../../applications/useCase/queries/ListPropertyTypesQuery';
-import { ListPropertyTypeOptionsQuery } from '../../applications/useCase/queries/ListPropertyTypeOptionsQuery';
+import { RequirePermissions } from '@src/modules/authentication/contracts';
+import { RequireSuperAdmin } from '@src/modules/authentication/contracts';
+import { PropertyTypeOutput } from '@src/modules/properties/applications/dto/property-type.output';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { CreatePropertyTypeCommand } from '@src/modules/properties/applications/useCase/commands/CreatePropertyTypeCommand';
+import { UpdatePropertyTypeCommand } from '@src/modules/properties/applications/useCase/commands/UpdatePropertyTypeCommand';
+import { DeletePropertyTypeCommand } from '@src/modules/properties/applications/useCase/commands/DeletePropertyTypeCommand';
+import { ListPropertyTypesQuery } from '@src/modules/properties/applications/useCase/queries/ListPropertyTypesQuery';
+import { ListPropertyTypeOptionsQuery } from '@src/modules/properties/applications/useCase/queries/ListPropertyTypeOptionsQuery';
 import {
   CreatePropertyTypeSwaggerDto,
   UpdatePropertyTypeSwaggerDto,
-} from '../../../../shared/swagger/swagger-schemas.dto';
-import { ApiJwtAuth } from '../../../../shared/swagger/swagger.decorators';
-import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
+} from '@src/shared/swagger/swagger-schemas.dto';
+import { ApiJwtAuth } from '@src/shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 
 @ApiTags(SWAGGER_TAGS.PROPERTY_TYPES)
 @Controller('property-types')

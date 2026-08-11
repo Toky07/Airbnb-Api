@@ -1,5 +1,5 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import type { IUserRepository, User } from '../../modules/user/contracts';
+import type { IUserRepository, User } from '@src/modules/user/contracts';
 
 export type ResolveUserFailure = 'forbidden' | 'not-found';
 

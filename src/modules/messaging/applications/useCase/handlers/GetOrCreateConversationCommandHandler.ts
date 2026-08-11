@@ -1,8 +1,8 @@
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { ConversationOutput } from '../../dto/conversation.output';
-import type { GetOrCreateConversationService } from '../../services/get-or-create-conversation.service';
-import type { ResolveReservationParticipantsService } from '../../services/resolve-reservation-participants.service';
-import type { GetOrCreateConversationCommand } from '../commands/GetOrCreateConversationCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import { ConversationOutput } from '@src/modules/messaging/applications/dto/conversation.output';
+import type { GetOrCreateConversationService } from '@src/modules/messaging/applications/services/get-or-create-conversation.service';
+import type { ResolveReservationParticipantsService } from '@src/modules/messaging/applications/services/resolve-reservation-participants.service';
+import type { GetOrCreateConversationCommand } from '@src/modules/messaging/applications/useCase/commands/GetOrCreateConversationCommand';
 
 export class GetOrCreateConversationCommandHandler implements ICommandHandler<
   GetOrCreateConversationCommand,

@@ -1,8 +1,8 @@
-import { CreatePropertyDto } from '../../applications/dto/createProperty.dto';
-import type { CategorySummary } from '../../../../shared/types/category-summary';
-import type { CancellationPolicy } from '../../../reservation/contracts/cancellation-policy';
-import { DEFAULT_CANCELLATION_POLICY } from '../../../reservation/contracts/cancellation-policy';
-import type { Room } from '../../../rooms/domain/entities/room.entity';
+import { CreatePropertyDto } from '@src/modules/properties/applications/dto/createProperty.dto';
+import type { CategorySummary } from '@src/shared/types/category-summary';
+import type { CancellationPolicy } from '@src/modules/reservation/contracts/cancellation-policy';
+import { DEFAULT_CANCELLATION_POLICY } from '@src/modules/reservation/contracts/cancellation-policy';
+import type { Room } from '@src/modules/rooms/domain/entities/room.entity';
 
 export class Property {
   public name: string;

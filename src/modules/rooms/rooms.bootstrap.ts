@@ -1,5 +1,5 @@
 import type { Repository } from 'typeorm';
-import type { ReservationItemOrmEntity } from '../reservation/infrastructure/entities/reservation-item.orm-entity';
+import type { ReservationItemOrmEntity } from '@src/modules/reservation/infrastructure/entities/reservation-item.orm-entity';
 import type { IRoomRepository } from './domain/repositories/room.repository';
 import type { IRoomTypeRepository } from './domain/repositories/room-type.repository';
 import type { IRoomBlockedDateRepository } from './domain/repositories/room-blocked-date.repository';
@@ -25,7 +25,7 @@ import { DeleteRoomRateOverrideCommandHandler } from './applications/useCase/han
 import { ListRoomRateOverridesQueryHandler } from './applications/useCase/handlers/ListRoomRateOverridesQueryHandler';
 import { GetRoomPricingPreviewQueryHandler } from './applications/useCase/handlers/GetRoomPricingPreviewQueryHandler';
 import type { RoomStayPricingService } from './applications/services/room-stay-pricing.service';
-import type { ComputePricingBreakdownService } from '../../shared/pricing/compute-pricing-breakdown.service';
+import type { ComputePricingBreakdownService } from '@src/shared/pricing/compute-pricing-breakdown.service';
 
 export class RoomsBootstrap {
   static create(deps: {

@@ -1,7 +1,7 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { describe, expect, it, vi } from 'vitest';
 import { ResolveAuthenticatedUserService } from './resolve-authenticated-user.service';
-import type { IUserRepository } from '../../modules/user/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
 
 describe('ResolveAuthenticatedUserService', () => {
   it('returns user when auth account is linked', async () => {

@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { BadRequestException } from '@nestjs/common';
 import { UpdateUserStatusCommandHandler } from './UpdateUserStatusCommandHandler';
-import { UpdateUserStatusCommand } from '../commands/UpdateUserStatusCommand';
-import { ACCOUNT_STATUS } from '../../../../authentication/contracts';
+import { UpdateUserStatusCommand } from '@src/modules/user/applications/useCase/commands/UpdateUserStatusCommand';
+import { ACCOUNT_STATUS } from '@src/modules/authentication/contracts';
 
 describe('UpdateUserStatusCommandHandler', () => {
   const userRepository = {

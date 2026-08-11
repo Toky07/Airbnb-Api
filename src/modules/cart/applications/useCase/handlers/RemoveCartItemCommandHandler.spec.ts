@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { NotFoundException } from '@nestjs/common';
 import { RemoveCartItemCommandHandler } from './RemoveCartItemCommandHandler';
-import { RemoveCartItemCommand } from '../commands/RemoveCartItemCommand';
+import { RemoveCartItemCommand } from '@src/modules/cart/applications/useCase/commands/RemoveCartItemCommand';
 import {
   createCartRepositoryMock,
   createSampleCart,
-} from '../../cart-test.helpers';
+} from '@src/modules/cart/applications/cart-test.helpers';
 
 describe('RemoveCartItemCommandHandler', () => {
   const resolveCartService = { resolve: vi.fn() };

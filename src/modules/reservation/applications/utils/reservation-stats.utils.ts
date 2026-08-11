@@ -1,4 +1,4 @@
-import type { ReservationItemOutput } from '../dto/reservation-item.output';
+import type { ReservationItemOutput } from '@src/modules/reservation/applications/dto/reservation-item.output';
 
 export function computeOccupancyRate(
   confirmedNights: number,

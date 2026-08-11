@@ -1,8 +1,8 @@
 import { NotFoundException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IFavoriteRepository } from '../../../domain/repositories/favorite.repository';
-import type { RemoveFavoriteCommand } from '../commands/RemoveFavoriteCommand';
-import { ResolveAuthenticatedUserService } from '../../../../../shared/auth/resolve-authenticated-user.service';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { IFavoriteRepository } from '@src/modules/favorite/domain/repositories/favorite.repository';
+import type { RemoveFavoriteCommand } from '@src/modules/favorite/applications/useCase/commands/RemoveFavoriteCommand';
+import { ResolveAuthenticatedUserService } from '@src/shared/auth/resolve-authenticated-user.service';
 
 export class RemoveFavoriteCommandHandler implements ICommandHandler<
   RemoveFavoriteCommand,

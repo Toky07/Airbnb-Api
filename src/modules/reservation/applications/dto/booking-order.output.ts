@@ -2,9 +2,9 @@ import {
   PAYMENT_TYPE,
   type Payment,
   type PaymentStatus,
-} from '../../../payment/contracts';
-import type { User } from '../../../user/contracts';
-import type { ReservationStatus } from '../../domain/constants/reservation-status.constant';
+} from '@src/modules/payment/contracts';
+import type { User } from '@src/modules/user/contracts';
+import type { ReservationStatus } from '@src/modules/reservation/domain/constants/reservation-status.constant';
 import { BookingOrderItemOutput } from './booking-order-item.output';
 import type { ReservationItemOutput } from './reservation-item.output';
 

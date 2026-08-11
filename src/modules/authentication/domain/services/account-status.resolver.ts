@@ -1,8 +1,8 @@
-import type { AuthEntity } from '../../infrastructure/entity/auth.entity';
+import type { AuthEntity } from '@src/modules/authentication/infrastructure/entity/auth.entity';
 import {
   ACCOUNT_STATUS,
   type AccountStatus,
-} from '../constants/account-status.constant';
+} from '@src/modules/authentication/domain/constants/account-status.constant';
 
 export class AccountStatusResolver {
   /**

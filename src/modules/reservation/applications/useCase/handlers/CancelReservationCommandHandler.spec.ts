@@ -4,29 +4,29 @@ import {
   createPaymentGatewayMock,
   createPaymentRepositoryMock,
   createSamplePayment,
-} from '../../../../payment/applications/useCase/payment-test.helpers';
-import { PAYMENT_STATUS } from '../../../../payment/contracts';
-import { Property } from '../../../../properties/contracts';
-import { CANCELLATION_POLICY } from '../../../domain/constants/cancellation-policy.constant';
-import { UserNameVO } from '../../../../user/contracts';
-import { EmailVO } from '../../../../../shared/valueObject/email.vo';
-import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
-import { User } from '../../../../user/contracts';
-import type { IUserRepository } from '../../../../user/contracts';
-import type { IPropertyRepository } from '../../../../properties/contracts';
-import type { IRoomRepository } from '../../../../rooms/contracts';
-import { Room } from '../../../../rooms/contracts';
-import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
-import { AssertReservationAccessService } from '../../services/assert-reservation-access.service';
-import { ComputeCancellationRefundService } from '../../services/compute-cancellation-refund.service';
-import { ResolveReservationCancellationPolicyService } from '../../services/resolve-reservation-cancellation-policy.service';
+} from '@src/modules/payment/applications/useCase/payment-test.helpers';
+import { PAYMENT_STATUS } from '@src/modules/payment/contracts';
+import { Property } from '@src/modules/properties/contracts';
+import { CANCELLATION_POLICY } from '@src/modules/reservation/domain/constants/cancellation-policy.constant';
+import { UserNameVO } from '@src/modules/user/contracts';
+import { EmailVO } from '@src/shared/valueObject/email.vo';
+import { PhoneNumberVO } from '@src/shared/valueObject/phone.vo';
+import { User } from '@src/modules/user/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import type { IPropertyRepository } from '@src/modules/properties/contracts';
+import type { IRoomRepository } from '@src/modules/rooms/contracts';
+import { Room } from '@src/modules/rooms/contracts';
+import { RESERVATION_STATUS } from '@src/modules/reservation/domain/constants/reservation-status.constant';
+import { AssertReservationAccessService } from '@src/modules/reservation/applications/services/assert-reservation-access.service';
+import { ComputeCancellationRefundService } from '@src/modules/reservation/applications/services/compute-cancellation-refund.service';
+import { ResolveReservationCancellationPolicyService } from '@src/modules/reservation/applications/services/resolve-reservation-cancellation-policy.service';
 import { CancelReservationCommandHandler } from './CancelReservationCommandHandler';
-import { CancelReservationCommand } from '../commands/CancelReservationCommand';
+import { CancelReservationCommand } from '@src/modules/reservation/applications/useCase/commands/CancelReservationCommand';
 import {
   createReservationRepositoryMock,
   createSampleReservation,
   createSampleReservationItem,
-} from '../reservation-test.helpers';
+} from '@src/modules/reservation/applications/useCase/reservation-test.helpers';
 
 function createHandler(overrides: {
   reservationRepository?: ReturnType<typeof createReservationRepositoryMock>;

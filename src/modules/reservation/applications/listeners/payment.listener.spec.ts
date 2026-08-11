@@ -1,8 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { PaymentListener } from './payment.listener';
-import { PAYMENT_TYPE, PaymentCreatedEvent } from '../../../payment/contracts';
-import type { IReservationRepository } from '../../domain/repositories/reservation.repository';
-import { EventBus } from '../../../../shared/domain/event.bus';
+import {
+  PAYMENT_TYPE,
+  PaymentCreatedEvent,
+} from '@src/modules/payment/contracts';
+import type { IReservationRepository } from '@src/modules/reservation/domain/repositories/reservation.repository';
+import { EventBus } from '@src/shared/domain/event.bus';
 
 describe('PaymentListener', () => {
   beforeEach(() => {

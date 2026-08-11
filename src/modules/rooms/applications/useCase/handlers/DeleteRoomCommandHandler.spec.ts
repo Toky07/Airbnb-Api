@@ -1,6 +1,6 @@
-import { IRoomRepository } from '../../../domain/repositories/room.repository';
+import { IRoomRepository } from '@src/modules/rooms/domain/repositories/room.repository';
 import { DeleteRoomCommandHandler } from './DeleteRoomCommandHandler';
-import { DeleteRoomCommand } from '../commands/DeleteRoomCommand';
+import { DeleteRoomCommand } from '@src/modules/rooms/applications/useCase/commands/DeleteRoomCommand';
 
 const repository = {
   delete: async (): Promise<boolean> => true,

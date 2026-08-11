@@ -13,40 +13,40 @@ import {
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import type { JwtPayload } from '../../../authentication/contracts';
-import { RequirePermissions } from '../../../authentication/contracts';
-import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
+import type { JwtPayload } from '@src/modules/authentication/contracts';
+import { RequirePermissions } from '@src/modules/authentication/contracts';
+import { parsePaginationQuery } from '@src/shared/pagination/parse-pagination-query';
 import { parseRequiredPropertyId } from './parse-required-property-id';
-import { parseRoomBody } from '../../../rooms/contracts';
-import { parseKeptImages } from '../../../rooms/contracts';
-import type { CreateRoomDto } from '../../../rooms/contracts';
-import { ENTITY_MEDIA_LIMITS, ENTITY_TYPE } from '../../../media/contracts';
-import type { UploadFile } from '../../../media/contracts';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { ListRoomTypeOptionsQuery } from '../../../rooms/contracts';
-import { AMENITY_SCOPE } from '../../../amenity/contracts';
-import type { SyncAmenitiesDto } from '../../../amenity/contracts';
-import type { CreateRoomBlockedDateDto } from '../../../rooms/contracts';
-import type { CreateRoomRateOverrideDto } from '../../../rooms/contracts';
+import { parseRoomBody } from '@src/modules/rooms/contracts';
+import { parseKeptImages } from '@src/modules/rooms/contracts';
+import type { CreateRoomDto } from '@src/modules/rooms/contracts';
+import { ENTITY_MEDIA_LIMITS, ENTITY_TYPE } from '@src/modules/media/contracts';
+import type { UploadFile } from '@src/modules/media/contracts';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { ListRoomTypeOptionsQuery } from '@src/modules/rooms/contracts';
+import { AMENITY_SCOPE } from '@src/modules/amenity/contracts';
+import type { SyncAmenitiesDto } from '@src/modules/amenity/contracts';
+import type { CreateRoomBlockedDateDto } from '@src/modules/rooms/contracts';
+import type { CreateRoomRateOverrideDto } from '@src/modules/rooms/contracts';
 import {
   ApiJwtAuth,
   ApiPaginationQuery,
-} from '../../../../shared/swagger/swagger.decorators';
-import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
-import { ListHostRoomsQuery } from '../../applications/useCase/queries/ListHostRoomsQuery';
-import { CreateHostRoomCommand } from '../../applications/useCase/commands/CreateHostRoomCommand';
-import { UpdateHostRoomCommand } from '../../applications/useCase/commands/UpdateHostRoomCommand';
-import { DeleteHostRoomCommand } from '../../applications/useCase/commands/DeleteHostRoomCommand';
-import { ListHostAmenityOptionsQuery } from '../../applications/useCase/queries/ListHostAmenityOptionsQuery';
-import { GetHostRoomAmenitiesQuery } from '../../applications/useCase/queries/GetHostRoomAmenitiesQuery';
-import { SyncHostRoomAmenitiesCommand } from '../../applications/useCase/commands/SyncHostRoomAmenitiesCommand';
-import { ListHostRoomBlockedDatesQuery } from '../../applications/useCase/queries/ListHostRoomBlockedDatesQuery';
-import { CreateHostRoomBlockedDateCommand } from '../../applications/useCase/commands/CreateHostRoomBlockedDateCommand';
-import { DeleteHostRoomBlockedDateCommand } from '../../applications/useCase/commands/DeleteHostRoomBlockedDateCommand';
-import { ListHostRoomRateOverridesQuery } from '../../applications/useCase/queries/ListHostRoomRateOverridesQuery';
-import { CreateHostRoomRateOverrideCommand } from '../../applications/useCase/commands/CreateHostRoomRateOverrideCommand';
-import { DeleteHostRoomRateOverrideCommand } from '../../applications/useCase/commands/DeleteHostRoomRateOverrideCommand';
+} from '@src/shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
+import { ListHostRoomsQuery } from '@src/modules/host/applications/useCase/queries/ListHostRoomsQuery';
+import { CreateHostRoomCommand } from '@src/modules/host/applications/useCase/commands/CreateHostRoomCommand';
+import { UpdateHostRoomCommand } from '@src/modules/host/applications/useCase/commands/UpdateHostRoomCommand';
+import { DeleteHostRoomCommand } from '@src/modules/host/applications/useCase/commands/DeleteHostRoomCommand';
+import { ListHostAmenityOptionsQuery } from '@src/modules/host/applications/useCase/queries/ListHostAmenityOptionsQuery';
+import { GetHostRoomAmenitiesQuery } from '@src/modules/host/applications/useCase/queries/GetHostRoomAmenitiesQuery';
+import { SyncHostRoomAmenitiesCommand } from '@src/modules/host/applications/useCase/commands/SyncHostRoomAmenitiesCommand';
+import { ListHostRoomBlockedDatesQuery } from '@src/modules/host/applications/useCase/queries/ListHostRoomBlockedDatesQuery';
+import { CreateHostRoomBlockedDateCommand } from '@src/modules/host/applications/useCase/commands/CreateHostRoomBlockedDateCommand';
+import { DeleteHostRoomBlockedDateCommand } from '@src/modules/host/applications/useCase/commands/DeleteHostRoomBlockedDateCommand';
+import { ListHostRoomRateOverridesQuery } from '@src/modules/host/applications/useCase/queries/ListHostRoomRateOverridesQuery';
+import { CreateHostRoomRateOverrideCommand } from '@src/modules/host/applications/useCase/commands/CreateHostRoomRateOverrideCommand';
+import { DeleteHostRoomRateOverrideCommand } from '@src/modules/host/applications/useCase/commands/DeleteHostRoomRateOverrideCommand';
 
 @ApiTags(SWAGGER_TAGS.HOST)
 @ApiJwtAuth()

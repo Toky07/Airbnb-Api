@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { PAYMENT_STATUS } from '../../domain/constants/payment-status.constant';
-import type { PaymentStatus } from '../../domain/constants/payment-status.constant';
+import { PAYMENT_STATUS } from '@src/modules/payment/domain/constants/payment-status.constant';
+import type { PaymentStatus } from '@src/modules/payment/domain/constants/payment-status.constant';
 
 @Injectable()
 export class MapStripeStatusService {

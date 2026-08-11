@@ -4,26 +4,26 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { DataSource } from 'typeorm';
-import { AuthModule } from '../../../authentication/auth.module';
-import { UserModule } from '../../../user/user.module';
-import { PropertiesModule } from '../../../properties/properties.module';
-import { RoomsModule } from '../../../rooms/room.module';
-import { MediaModule } from '../../../media/media.module';
-import { FavoriteModule } from '../../favorite.module';
-import { PropertyEntity } from '../../../properties/infrastructure/entities/property-entity.entity';
-import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
-import { FavoriteOrmEntity } from '../../infrastructure/entities/favorite.orm-entity';
-import { UserEntity } from '../../../user/infrastructure/entities/user.entity';
+import { AuthModule } from '@src/modules/authentication/auth.module';
+import { UserModule } from '@src/modules/user/user.module';
+import { PropertiesModule } from '@src/modules/properties/properties.module';
+import { RoomsModule } from '@src/modules/rooms/room.module';
+import { MediaModule } from '@src/modules/media/media.module';
+import { FavoriteModule } from '@src/modules/favorite/favorite.module';
+import { PropertyEntity } from '@src/modules/properties/infrastructure/entities/property-entity.entity';
+import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
+import { FavoriteOrmEntity } from '@src/modules/favorite/infrastructure/entities/favorite.orm-entity';
+import { UserEntity } from '@src/modules/user/infrastructure/entities/user.entity';
 import {
   AUTH_TEST_ENTITIES,
   DEFAULT_REGISTER,
   DOMAIN_TEST_ENTITIES,
   registerAndLoginAsSuperAdmin,
-} from '../../../../test/controller-test.helpers';
+} from '@src/test/controller-test.helpers';
 import {
   getIntegrationTestDatabaseConfig,
   prepareIntegrationTestDatabase,
-} from '../../../../test/test-database.config';
+} from '@src/test/test-database.config';
 
 describe('FavoriteController', () => {
   let app: INestApplication;

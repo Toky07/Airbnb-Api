@@ -1,16 +1,16 @@
 import { describe, expect, it, vi } from 'vitest';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
+import { RESERVATION_STATUS } from '@src/modules/reservation/domain/constants/reservation-status.constant';
 import { ConfirmReservationCommandHandler } from './ConfirmReservationCommandHandler';
-import { ConfirmReservationCommand } from '../commands/ConfirmReservationCommand';
+import { ConfirmReservationCommand } from '@src/modules/reservation/applications/useCase/commands/ConfirmReservationCommand';
 import {
   createReservationRepositoryMock,
   createSampleReservation,
   createSampleReservationItem,
-} from '../reservation-test.helpers';
-import { Reservation } from '../../../domain/entities/reservation.entity';
-import { CheckRoomAvailabilityService } from '../../services/check-room-availability.service';
-import type { IRoomBlockedDateRepository } from '../../../../rooms/contracts';
+} from '@src/modules/reservation/applications/useCase/reservation-test.helpers';
+import { Reservation } from '@src/modules/reservation/domain/entities/reservation.entity';
+import { CheckRoomAvailabilityService } from '@src/modules/reservation/applications/services/check-room-availability.service';
+import type { IRoomBlockedDateRepository } from '@src/modules/rooms/contracts';
 
 function createBlockedDateRepositoryMock(): IRoomBlockedDateRepository {
   return {

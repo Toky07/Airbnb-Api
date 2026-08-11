@@ -1,7 +1,7 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IAmenityRepository } from '../../../domain/repositories/amenity.repository';
-import type { DeleteAmenityCommand } from '../commands/DeleteAmenityCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { IAmenityRepository } from '@src/modules/amenity/domain/repositories/amenity.repository';
+import type { DeleteAmenityCommand } from '@src/modules/amenity/applications/useCase/commands/DeleteAmenityCommand';
 
 export class DeleteAmenityCommandHandler implements ICommandHandler<
   DeleteAmenityCommand,

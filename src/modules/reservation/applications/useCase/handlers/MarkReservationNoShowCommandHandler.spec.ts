@@ -1,13 +1,13 @@
 import { describe, expect, it, vi } from 'vitest';
 import { BadRequestException } from '@nestjs/common';
-import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
+import { RESERVATION_STATUS } from '@src/modules/reservation/domain/constants/reservation-status.constant';
 import { MarkReservationNoShowCommandHandler } from './MarkReservationNoShowCommandHandler';
-import { MarkReservationNoShowCommand } from '../commands/MarkReservationNoShowCommand';
+import { MarkReservationNoShowCommand } from '@src/modules/reservation/applications/useCase/commands/MarkReservationNoShowCommand';
 import {
   createReservationRepositoryMock,
   createSampleReservation,
   createSampleReservationItem,
-} from '../reservation-test.helpers';
+} from '@src/modules/reservation/applications/useCase/reservation-test.helpers';
 
 describe('MarkReservationNoShowCommandHandler', () => {
   it('marque une réservation confirmée en no-show', async () => {

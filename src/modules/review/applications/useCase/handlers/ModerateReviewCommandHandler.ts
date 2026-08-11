@@ -1,14 +1,14 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
 import {
   REVIEW_STATUS,
   type ReviewStatus,
-} from '../../../domain/constants/review-status.constant';
-import { Review } from '../../../domain/entities/review.entity';
-import type { IReviewRepository } from '../../../domain/repositories/review.repository';
-import type { IUserRepository } from '../../../../user/contracts';
-import { ReviewOutput } from '../../dto/review.output';
-import type { ModerateReviewCommand } from '../commands/ModerateReviewCommand';
+} from '@src/modules/review/domain/constants/review-status.constant';
+import { Review } from '@src/modules/review/domain/entities/review.entity';
+import type { IReviewRepository } from '@src/modules/review/domain/repositories/review.repository';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import { ReviewOutput } from '@src/modules/review/applications/dto/review.output';
+import type { ModerateReviewCommand } from '@src/modules/review/applications/useCase/commands/ModerateReviewCommand';
 
 export class ModerateReviewCommandHandler implements ICommandHandler<
   ModerateReviewCommand,

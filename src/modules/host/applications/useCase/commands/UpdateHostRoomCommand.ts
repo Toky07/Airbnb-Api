@@ -1,6 +1,6 @@
-import type { JwtPayload } from '../../../../authentication/contracts';
-import type { CreateRoomDto } from '../../../../rooms/contracts';
-import type { UploadFile } from '../../../../media/contracts';
+import type { JwtPayload } from '@src/modules/authentication/contracts';
+import type { CreateRoomDto } from '@src/modules/rooms/contracts';
+import type { UploadFile } from '@src/modules/media/contracts';
 
 export class UpdateHostRoomCommand {
   constructor(

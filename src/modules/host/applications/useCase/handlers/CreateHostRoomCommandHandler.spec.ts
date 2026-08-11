@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { CreateHostRoomCommandHandler } from './CreateHostRoomCommandHandler';
-import { CreateHostRoomCommand } from '../commands/CreateHostRoomCommand';
-import { CreateRoomCommand } from '../../../../rooms/contracts';
+import { CreateHostRoomCommand } from '@src/modules/host/applications/useCase/commands/CreateHostRoomCommand';
+import { CreateRoomCommand } from '@src/modules/rooms/contracts';
 import {
   authUser,
   createResolveHostPropertyMock,
   hostProperty,
 } from './host-test.helpers';
-import { commandBusExecuteMock } from '../../../../../test/command-bus.mock';
+import { commandBusExecuteMock } from '@src/test/command-bus.mock';
 
 describe('CreateHostRoomCommandHandler', () => {
   beforeEach(() => {

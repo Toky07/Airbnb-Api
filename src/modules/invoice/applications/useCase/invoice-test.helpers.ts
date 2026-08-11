@@ -1,9 +1,9 @@
-import type { InvoiceData } from '../../domain/types/invoice-data.type';
-import { INVOICE_PAYMENT_TYPE } from '../../domain/constants/invoice-payment-type.constant';
-import { InvoiceGenerateRequestedEvent } from '../../domain/events/invoice-generate-requested.event';
+import type { InvoiceData } from '@src/modules/invoice/domain/types/invoice-data.type';
+import { INVOICE_PAYMENT_TYPE } from '@src/modules/invoice/domain/constants/invoice-payment-type.constant';
+import { InvoiceGenerateRequestedEvent } from '@src/modules/invoice/domain/events/invoice-generate-requested.event';
 
 import { vi } from 'vitest';
-import type { IInvoiceRepository } from '../../domain/repositories/invoice.repository';
+import type { IInvoiceRepository } from '@src/modules/invoice/domain/repositories/invoice.repository';
 
 export function createInvoiceRepositoryMock(
   overrides: Partial<IInvoiceRepository> = {},

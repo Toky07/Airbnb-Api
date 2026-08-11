@@ -3,7 +3,7 @@ import nodemailer from 'nodemailer';
 import type {
   IMailTransport,
   MailTransportMessage,
-} from '../../domain/ports/mail-transport.port';
+} from '@src/modules/mail/domain/ports/mail-transport.port';
 import {
   getSmtpFrom,
   getSmtpHost,
@@ -11,7 +11,7 @@ import {
   getSmtpPort,
   getSmtpUser,
   isSmtpSecure,
-} from '../../../../config/env.config';
+} from '@src/config/env.config';
 
 @Injectable()
 export class SmtpMailTransport implements IMailTransport {

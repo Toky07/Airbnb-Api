@@ -1,4 +1,4 @@
-import type { UpdateRoomTypeDto } from '../../dto/create-room-type.dto';
+import type { UpdateRoomTypeDto } from '@src/modules/rooms/applications/dto/create-room-type.dto';
 
 export class UpdateRoomTypeCommand {
   constructor(

@@ -5,13 +5,13 @@ import {
   buildPaginationMeta,
   type PaginatedResult,
   type PaginationParams,
-} from '../../../../shared/pagination/pagination.types';
-import type { InvoicePaymentType } from '../../domain/constants/invoice-payment-type.constant';
-import { Invoice } from '../../domain/entities/invoice.entity';
-import type { IInvoiceRepository } from '../../domain/repositories/invoice.repository';
-import type { InvoiceListRecord } from '../../domain/types/invoice-list-record.type';
-import { InvoiceOrmEntity } from '../entities/invoice.orm-entity';
-import { InvoiceMapper } from '../mappers/invoice.mapper';
+} from '@src/shared/pagination/pagination.types';
+import type { InvoicePaymentType } from '@src/modules/invoice/domain/constants/invoice-payment-type.constant';
+import { Invoice } from '@src/modules/invoice/domain/entities/invoice.entity';
+import type { IInvoiceRepository } from '@src/modules/invoice/domain/repositories/invoice.repository';
+import type { InvoiceListRecord } from '@src/modules/invoice/domain/types/invoice-list-record.type';
+import { InvoiceOrmEntity } from '@src/modules/invoice/infrastructure/entities/invoice.orm-entity';
+import { InvoiceMapper } from '@src/modules/invoice/infrastructure/mappers/invoice.mapper';
 
 type RawInvoiceListRow = {
   id: string | number;

@@ -1,4 +1,4 @@
-import type { RoomType } from '../entities/room-type.entity';
+import type { RoomType } from '@src/modules/rooms/domain/entities/room-type.entity';
 
 export interface IRoomTypeRepository {
   findAll(): Promise<RoomType[]>;

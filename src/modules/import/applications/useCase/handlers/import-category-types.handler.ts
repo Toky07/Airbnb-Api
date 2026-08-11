@@ -1,19 +1,19 @@
-import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { CreatePropertyTypeCommand } from '../../../../properties/contracts';
-import { CreateRoomTypeCommand } from '../../../../rooms/contracts';
-import { RoomTypeOutput } from '../../../../rooms/contracts';
-import { slugify } from '../../../../../shared/utils/slug.util';
-import type { ImportCategoryTypeRowDto } from '../../dto/import-batch.dto';
-import type { ImportEntityResult } from '../../dto/import-entity-result.dto';
-import { emptyImportEntityResult } from '../../dto/import-entity-result.dto';
-import type { ImportBatchContext } from '../../services/import-batch-context.service';
-import { validateImportCategoryTypeRow } from '../../validation/validate-import-category-type-row';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { CreatePropertyTypeCommand } from '@src/modules/properties/contracts';
+import { CreateRoomTypeCommand } from '@src/modules/rooms/contracts';
+import { RoomTypeOutput } from '@src/modules/rooms/contracts';
+import { slugify } from '@src/shared/utils/slug.util';
+import type { ImportCategoryTypeRowDto } from '@src/modules/import/applications/dto/import-batch.dto';
+import type { ImportEntityResult } from '@src/modules/import/applications/dto/import-entity-result.dto';
+import { emptyImportEntityResult } from '@src/modules/import/applications/dto/import-entity-result.dto';
+import type { ImportBatchContext } from '@src/modules/import/applications/services/import-batch-context.service';
+import { validateImportCategoryTypeRow } from '@src/modules/import/applications/validation/validate-import-category-type-row';
 import {
   pushImportRowError,
   pushImportValidationError,
   toImportErrorMessage,
-} from '../../utils/import-error.util';
-import type { ImportRowError } from '../../dto/import-batch.dto';
+} from '@src/modules/import/applications/utils/import-error.util';
+import type { ImportRowError } from '@src/modules/import/applications/dto/import-batch.dto';
 
 type CategoryTypeImportTarget = Extract<
   ImportRowError['entity'],

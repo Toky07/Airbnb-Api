@@ -4,10 +4,10 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import type { JwtPayload } from '../../../authentication/contracts';
-import type { Property } from '../../../properties/contracts';
-import { PROPERTY_REPOSITORY } from '../../../properties/contracts';
-import type { IPropertyRepository } from '../../../properties/contracts';
+import type { JwtPayload } from '@src/modules/authentication/contracts';
+import type { Property } from '@src/modules/properties/contracts';
+import { PROPERTY_REPOSITORY } from '@src/modules/properties/contracts';
+import type { IPropertyRepository } from '@src/modules/properties/contracts';
 import { ResolveHostUserService } from './resolve-host-user.service';
 
 @Injectable()

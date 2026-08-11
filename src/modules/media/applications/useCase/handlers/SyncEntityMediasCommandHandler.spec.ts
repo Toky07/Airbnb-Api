@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { ENTITY_TYPE } from '../../../constant';
-import { Media } from '../../../domain/entities/media.entity';
-import type { IMediaRepository } from '../../../domain/repositories/media.repository';
-import type { ILocalStorageService } from '../../../services/localStorage.service';
+import { ENTITY_TYPE } from '@src/modules/media/constant';
+import { Media } from '@src/modules/media/domain/entities/media.entity';
+import type { IMediaRepository } from '@src/modules/media/domain/repositories/media.repository';
+import type { ILocalStorageService } from '@src/modules/media/services/localStorage.service';
 import { SyncEntityMediasCommandHandler } from './SyncEntityMediasCommandHandler';
-import { SyncEntityMediasCommand } from '../commands/SyncEntityMediasCommand';
+import { SyncEntityMediasCommand } from '@src/modules/media/applications/useCase/commands/SyncEntityMediasCommand';
 
 describe('SyncEntityMediasCommandHandler', () => {
   it('should sync kept, deleted and new medias', async () => {

@@ -7,20 +7,20 @@ export {
   CART_USER_PORT,
   type ICartUserPort,
   type CartUserSnapshot,
-} from '../domain/ports/cart-user.port';
+} from '@src/modules/cart/domain/ports/cart-user.port';
 export {
   CART_ITEM_CATALOG_PORT,
   type ICartItemCatalogPort,
   type ReservationCartItemInput,
   type ReservationCartItemDetails,
-} from '../domain/ports/cart-item-catalog.port';
+} from '@src/modules/cart/domain/ports/cart-item-catalog.port';
 export {
   CART_PRODUCT_SUMMARY_PORT,
   type ICartProductSummaryPort,
   type CartProductSummary,
-} from '../domain/ports/cart-product-summary.port';
+} from '@src/modules/cart/domain/ports/cart-product-summary.port';
 export {
   CartCheckoutRequestedEvent,
   type CartCheckoutItemPayload,
-} from '../domain/events/cart-checkout-requested.event';
-export { CartCheckoutReservationCreatedEvent } from '../domain/events/cart-checkout-reservation-created.event';
+} from '@src/modules/cart/domain/events/cart-checkout-requested.event';
+export { CartCheckoutReservationCreatedEvent } from '@src/modules/cart/domain/events/cart-checkout-reservation-created.event';

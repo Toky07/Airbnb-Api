@@ -1,6 +1,6 @@
-import type { ReviewStatus } from '../../domain/constants/review-status.constant';
-import { Review } from '../../domain/entities/review.entity';
-import { ReviewOrmEntity } from '../entities/review.orm-entity';
+import type { ReviewStatus } from '@src/modules/review/domain/constants/review-status.constant';
+import { Review } from '@src/modules/review/domain/entities/review.entity';
+import { ReviewOrmEntity } from '@src/modules/review/infrastructure/entities/review.orm-entity';
 
 export class ReviewMapper {
   static toDomain(entity: ReviewOrmEntity): Review {

@@ -1,5 +1,5 @@
-import type { ReviewStatus } from '../../domain/constants/review-status.constant';
-import type { Review } from '../../domain/entities/review.entity';
+import type { ReviewStatus } from '@src/modules/review/domain/constants/review-status.constant';
+import type { Review } from '@src/modules/review/domain/entities/review.entity';
 
 export class ReviewOutput {
   constructor(

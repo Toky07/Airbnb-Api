@@ -1,13 +1,13 @@
 import type { IAuthRepository } from './domain/repositories/auth.repository';
 import type { IRoleRepository } from './domain/repositories/role.repository';
-import type { IUserRepository } from '../user/contracts';
-import type { IPropertyRepository } from '../properties/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import type { IPropertyRepository } from '@src/modules/properties/contracts';
 import type { IPasswordSetupTokenRepository } from './domain/repositories/password-setup-token.repository';
 import type { IPasswordResetTokenRepository } from './domain/repositories/password-reset-token.repository';
 import type { TokenGenerator } from './domain/generator/token.generator';
 import type { EnsurePropertyOwnerHostRoleService } from './applications/services/ensure-property-owner-host-role.service';
 import type { EnsureAuthHasRoleService } from './applications/services/ensure-auth-has-role.service';
-import type { MailService } from '../mail/contracts';
+import type { MailService } from '@src/modules/mail/contracts';
 import { PasswordSetupTokenService } from './domain/services/password-setup-token.service';
 import { PasswordSetupLinkBuilder } from './domain/services/password-setup-link.builder';
 import { CreateCredentialsCommandHandler } from './applications/useCase/handlers/CreateCredentialsCommandHandler';

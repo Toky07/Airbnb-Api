@@ -1,10 +1,10 @@
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { Message } from '../../../domain/entities/message.entity';
-import type { IConversationRepository } from '../../../domain/repositories/conversation.repository';
-import type { IMessageRepository } from '../../../domain/repositories/message.repository';
-import { MessageOutput } from '../../dto/message.output';
-import type { AssertConversationAccessService } from '../../services/assert-conversation-access.service';
-import type { SendMessageCommand } from '../commands/SendMessageCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import { Message } from '@src/modules/messaging/domain/entities/message.entity';
+import type { IConversationRepository } from '@src/modules/messaging/domain/repositories/conversation.repository';
+import type { IMessageRepository } from '@src/modules/messaging/domain/repositories/message.repository';
+import { MessageOutput } from '@src/modules/messaging/applications/dto/message.output';
+import type { AssertConversationAccessService } from '@src/modules/messaging/applications/services/assert-conversation-access.service';
+import type { SendMessageCommand } from '@src/modules/messaging/applications/useCase/commands/SendMessageCommand';
 
 export class SendMessageCommandHandler implements ICommandHandler<
   SendMessageCommand,

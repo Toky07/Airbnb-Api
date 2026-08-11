@@ -1,9 +1,9 @@
-import type { PaginatedResult } from '../../../../../shared/pagination/pagination.types';
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IPropertyRepository } from '../../../domain/repositories/property.repository';
-import { PropertyOutput } from '../../dto/property.output';
-import type { PropertyMediaPresenter } from '../../presenters/property-media.presenter';
-import type { ListPropertiesQuery } from '../queries/ListPropertiesQuery';
+import type { PaginatedResult } from '@src/shared/pagination/pagination.types';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { IPropertyRepository } from '@src/modules/properties/domain/repositories/property.repository';
+import { PropertyOutput } from '@src/modules/properties/applications/dto/property.output';
+import type { PropertyMediaPresenter } from '@src/modules/properties/applications/presenters/property-media.presenter';
+import type { ListPropertiesQuery } from '@src/modules/properties/applications/useCase/queries/ListPropertiesQuery';
 
 export class ListPropertiesQueryHandler implements IQueryHandler<
   ListPropertiesQuery,

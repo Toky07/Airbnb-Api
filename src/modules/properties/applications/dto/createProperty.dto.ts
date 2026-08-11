@@ -1,4 +1,4 @@
-import type { CancellationPolicy } from '../../../reservation/contracts/cancellation-policy';
+import type { CancellationPolicy } from '@src/modules/reservation/contracts/cancellation-policy';
 
 export type CreatePropertyDto = {
   name: string;

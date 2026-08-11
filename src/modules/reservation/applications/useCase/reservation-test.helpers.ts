@@ -1,9 +1,9 @@
 import { vi } from 'vitest';
-import { RESERVATION_STATUS } from '../../domain/constants/reservation-status.constant';
-import { ReservationItem } from '../../domain/entities/reservation-item.entity';
-import { Reservation } from '../../domain/entities/reservation.entity';
-import type { IReservationRepository } from '../../domain/repositories/reservation.repository';
-import { Payment } from '../../../payment/contracts';
+import { RESERVATION_STATUS } from '@src/modules/reservation/domain/constants/reservation-status.constant';
+import { ReservationItem } from '@src/modules/reservation/domain/entities/reservation-item.entity';
+import { Reservation } from '@src/modules/reservation/domain/entities/reservation.entity';
+import type { IReservationRepository } from '@src/modules/reservation/domain/repositories/reservation.repository';
+import { Payment } from '@src/modules/payment/contracts';
 
 export function createSampleReservationItem(
   overrides: Partial<{

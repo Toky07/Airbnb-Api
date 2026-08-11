@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import type {
   IMailTransport,
   MailTransportMessage,
-} from '../../domain/ports/mail-transport.port';
+} from '@src/modules/mail/domain/ports/mail-transport.port';
 
 @Injectable()
 export class ConsoleMailTransport implements IMailTransport {

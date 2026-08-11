@@ -1,11 +1,11 @@
 import { ForbiddenException } from '@nestjs/common';
 import { describe, expect, it, vi } from 'vitest';
 import { MarkConversationReadCommandHandler } from './MarkConversationReadCommandHandler';
-import { MarkConversationReadCommand } from '../commands/MarkConversationReadCommand';
+import { MarkConversationReadCommand } from '@src/modules/messaging/applications/useCase/commands/MarkConversationReadCommand';
 import {
   createMessageRepositoryMock,
   createSampleConversation,
-} from '../messaging-test.helpers';
+} from '@src/modules/messaging/applications/useCase/messaging-test.helpers';
 
 describe('MarkConversationReadCommandHandler', () => {
   it('marks unread messages as read for the current participant', async () => {

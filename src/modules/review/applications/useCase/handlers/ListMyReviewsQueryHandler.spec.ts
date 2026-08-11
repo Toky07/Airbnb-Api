@@ -1,10 +1,10 @@
 import { NotFoundException } from '@nestjs/common';
 import { describe, expect, it, vi } from 'vitest';
-import { REVIEW_STATUS } from '../../../domain/constants/review-status.constant';
-import { Review } from '../../../domain/entities/review.entity';
+import { REVIEW_STATUS } from '@src/modules/review/domain/constants/review-status.constant';
+import { Review } from '@src/modules/review/domain/entities/review.entity';
 import { ListMyReviewsQueryHandler } from './ListMyReviewsQueryHandler';
-import { ListMyReviewsQuery } from '../queries/ListMyReviewsQuery';
-import { ResolveAuthenticatedUserService } from '../../../../../shared/auth/resolve-authenticated-user.service';
+import { ListMyReviewsQuery } from '@src/modules/review/applications/useCase/queries/ListMyReviewsQuery';
+import { ResolveAuthenticatedUserService } from '@src/shared/auth/resolve-authenticated-user.service';
 
 describe('ListMyReviewsQueryHandler', () => {
   it('returns paginated reviews for the authenticated user', async () => {

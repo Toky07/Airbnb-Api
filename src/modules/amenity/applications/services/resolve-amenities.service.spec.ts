@@ -1,8 +1,8 @@
 import { BadRequestException } from '@nestjs/common';
-import { AMENITY_SCOPE } from '../../domain/constants/amenity-scope.constant';
-import { Amenity } from '../../domain/entities/amenity.entity';
+import { AMENITY_SCOPE } from '@src/modules/amenity/domain/constants/amenity-scope.constant';
+import { Amenity } from '@src/modules/amenity/domain/entities/amenity.entity';
 import { ResolveAmenitiesService } from './resolve-amenities.service';
-import type { IAmenityRepository } from '../../domain/repositories/amenity.repository';
+import type { IAmenityRepository } from '@src/modules/amenity/domain/repositories/amenity.repository';
 
 describe('ResolveAmenitiesService', () => {
   it('returns active amenities for valid ids', async () => {

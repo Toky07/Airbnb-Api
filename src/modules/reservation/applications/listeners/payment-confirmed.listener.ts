@@ -1,8 +1,8 @@
-import type { IReservationRepository } from '../../domain/repositories/reservation.repository';
-import { EventBus } from '../../../../shared/domain/event.bus';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import type { BuildReservationInvoicePayloadService } from '../services/build-reservation-invoice-payload.service';
-import { ConfirmReservationCommand } from '../useCase/commands/ConfirmReservationCommand';
+import type { IReservationRepository } from '@src/modules/reservation/domain/repositories/reservation.repository';
+import { EventBus } from '@src/shared/domain/event.bus';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import type { BuildReservationInvoicePayloadService } from '@src/modules/reservation/applications/services/build-reservation-invoice-payload.service';
+import { ConfirmReservationCommand } from '@src/modules/reservation/applications/useCase/commands/ConfirmReservationCommand';
 
 export class PaymentConfirmedListener {
   constructor(

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import type { IWebhookVerifier } from '../../domain/ports/webhook-verifier.port';
-import type { WebhookEventPayload } from '../../domain/ports/payment-gateway.port';
+import type { IWebhookVerifier } from '@src/modules/payment/domain/ports/webhook-verifier.port';
+import type { WebhookEventPayload } from '@src/modules/payment/domain/ports/payment-gateway.port';
 import { StripeClientProvider } from './StripeClientProvider';
 import { getStripeWebhookSecret } from './stripe.config';
 

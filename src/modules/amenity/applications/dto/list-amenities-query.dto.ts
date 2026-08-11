@@ -2,7 +2,7 @@ import { IsIn, IsOptional } from 'class-validator';
 import {
   AMENITY_SCOPE,
   type AmenityScope,
-} from '../../domain/constants/amenity-scope.constant';
+} from '@src/modules/amenity/domain/constants/amenity-scope.constant';
 
 export class ListAmenitiesQueryDto {
   @IsOptional()

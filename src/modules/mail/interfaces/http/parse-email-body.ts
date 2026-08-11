@@ -1,8 +1,8 @@
 import {
   toOptionalScalarString,
   toScalarString,
-} from '../../../../shared/http/to-scalar-string';
-import { SendEmailDto } from '../../applications/dto/send-email.dto';
+} from '@src/shared/http/to-scalar-string';
+import { SendEmailDto } from '@src/modules/mail/applications/dto/send-email.dto';
 
 export function parseEmailBody(body: Record<string, unknown>): SendEmailDto {
   return {

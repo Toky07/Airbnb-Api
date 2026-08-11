@@ -1,10 +1,10 @@
 import { NotFoundException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IUserRepository } from '../../../domain/repositories/user.repository';
-import { UserOutput } from '../../../domain/dtos/user.output';
-import { validateUserFields } from '../../validation/validate-user-fields';
-import type { SaveUserAvatarService } from '../../services/save-user-avatar.service';
-import type { UpdateUserCommand } from '../commands/UpdateUserCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { IUserRepository } from '@src/modules/user/domain/repositories/user.repository';
+import { UserOutput } from '@src/modules/user/domain/dtos/user.output';
+import { validateUserFields } from '@src/modules/user/applications/validation/validate-user-fields';
+import type { SaveUserAvatarService } from '@src/modules/user/applications/services/save-user-avatar.service';
+import type { UpdateUserCommand } from '@src/modules/user/applications/useCase/commands/UpdateUserCommand';
 
 export class UpdateUserCommandHandler implements ICommandHandler<
   UpdateUserCommand,

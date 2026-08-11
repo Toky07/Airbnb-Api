@@ -1,6 +1,6 @@
 import type { SelectQueryBuilder } from 'typeorm';
-import type { PaginationParams } from '../../../../shared/pagination/pagination.types';
-import { RoomEntity } from '../entities/room.entity';
+import type { PaginationParams } from '@src/shared/pagination/pagination.types';
+import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
 
 const EARTH_RADIUS_KM = 6371;
 

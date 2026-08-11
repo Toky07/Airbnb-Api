@@ -1,13 +1,13 @@
 import { vi } from 'vitest';
-import { IRoomRepository } from '../../../domain/repositories/room.repository';
-import { Room } from '../../../domain/entities/room.entity';
-import { Property } from '../../../../properties/contracts';
+import { IRoomRepository } from '@src/modules/rooms/domain/repositories/room.repository';
+import { Room } from '@src/modules/rooms/domain/entities/room.entity';
+import { Property } from '@src/modules/properties/contracts';
 import { UpdateRoomCommandHandler } from './UpdateRoomCommandHandler';
-import { UpdateRoomCommand } from '../commands/UpdateRoomCommand';
+import { UpdateRoomCommand } from '@src/modules/rooms/applications/useCase/commands/UpdateRoomCommand';
 import {
   mockGenerateRoomSlug,
   mockRoomMediaPresenter,
-} from '../test-helpers/room-usecase.mocks';
+} from '@src/modules/rooms/applications/useCase/test-helpers/room-usecase.mocks';
 
 const property = new Property({
   name: 'Room 2',

@@ -1,5 +1,5 @@
 import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
-import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
+import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
 import { AmenityOrmEntity } from './amenity.orm-entity';
 
 @Entity({ name: 'room_amenities' })

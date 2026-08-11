@@ -1,15 +1,15 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
-import { User } from '../../../domain/entities/user.entity';
+import { User } from '@src/modules/user/domain/entities/user.entity';
 import { CreateUserCommandHandler } from './CreateUserCommandHandler';
-import { CreateUserCommand } from '../commands/CreateUserCommand';
-import { SendAccountInvitationCommand } from '../../../../authentication/contracts';
-import type { IUserRepository } from '../../../domain/repositories/user.repository';
-import { UserOutput } from '../../../domain/dtos/user.output';
-import { UserNameVO } from '../../../domain/valueObject/username.vo';
-import { EmailVO } from '../../../../../shared/valueObject/email.vo';
-import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
-import type { SaveUserAvatarService } from '../../services/save-user-avatar.service';
-import { commandBusExecuteMock } from '../../../../../test/command-bus.mock';
+import { CreateUserCommand } from '@src/modules/user/applications/useCase/commands/CreateUserCommand';
+import { SendAccountInvitationCommand } from '@src/modules/authentication/contracts';
+import type { IUserRepository } from '@src/modules/user/domain/repositories/user.repository';
+import { UserOutput } from '@src/modules/user/domain/dtos/user.output';
+import { UserNameVO } from '@src/modules/user/domain/valueObject/username.vo';
+import { EmailVO } from '@src/shared/valueObject/email.vo';
+import { PhoneNumberVO } from '@src/shared/valueObject/phone.vo';
+import type { SaveUserAvatarService } from '@src/modules/user/applications/services/save-user-avatar.service';
+import { commandBusExecuteMock } from '@src/test/command-bus.mock';
 
 const createdUser = new User(
   new UserNameVO('John'),

@@ -4,9 +4,9 @@ import { IsNull, MoreThan, Repository } from 'typeorm';
 import type {
   IPasswordResetTokenRepository,
   PasswordResetTokenRecord,
-} from '../../domain/repositories/password-reset-token.repository';
-import { PasswordResetTokenOrmEntity } from '../entities/password-reset-token.orm-entity';
-import { AuthMapper } from '../mappers/auth.mappers';
+} from '@src/modules/authentication/domain/repositories/password-reset-token.repository';
+import { PasswordResetTokenOrmEntity } from '@src/modules/authentication/infrastructure/entities/password-reset-token.orm-entity';
+import { AuthMapper } from '@src/modules/authentication/infrastructure/mappers/auth.mappers';
 
 @Injectable()
 export class PasswordResetTokenRepository implements IPasswordResetTokenRepository {

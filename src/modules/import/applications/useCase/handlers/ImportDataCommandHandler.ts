@@ -1,9 +1,9 @@
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
 import type {
   ImportBatchDto,
   ImportBatchResult,
-} from '../../dto/import-batch.dto';
-import { ImportBatchContextService } from '../../services/import-batch-context.service';
+} from '@src/modules/import/applications/dto/import-batch.dto';
+import { ImportBatchContextService } from '@src/modules/import/applications/services/import-batch-context.service';
 import { ImportPropertiesHandler } from './ImportPropertiesHandler';
 import { ImportRolesHandler } from './ImportRolesHandler';
 import { ImportRoomsHandler } from './ImportRoomsHandler';
@@ -12,7 +12,7 @@ import {
   ImportPropertyTypesHandler,
   ImportRoomTypesHandler,
 } from './import-category-types.handler';
-import type { ImportDataCommand } from '../commands/ImportDataCommand';
+import type { ImportDataCommand } from '@src/modules/import/applications/useCase/commands/ImportDataCommand';
 
 export class ImportDataCommandHandler implements ICommandHandler<
   ImportDataCommand,

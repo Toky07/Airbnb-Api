@@ -4,22 +4,22 @@ import { INestApplication } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthModule } from '../../../authentication/auth.module';
-import { UserModule } from '../../../user/user.module';
-import { HostModule } from '../../host.module';
-import { PropertyEntity } from '../../../properties/infrastructure/entities/property-entity.entity';
-import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
-import { AmenityOrmEntity } from '../../../amenity/infrastructure/entities/amenity.orm-entity';
-import { AMENITY_SCOPE } from '../../../amenity/contracts';
+import { AuthModule } from '@src/modules/authentication/auth.module';
+import { UserModule } from '@src/modules/user/user.module';
+import { HostModule } from '@src/modules/host/host.module';
+import { PropertyEntity } from '@src/modules/properties/infrastructure/entities/property-entity.entity';
+import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
+import { AmenityOrmEntity } from '@src/modules/amenity/infrastructure/entities/amenity.orm-entity';
+import { AMENITY_SCOPE } from '@src/modules/amenity/contracts';
 import {
   AUTH_TEST_ENTITIES,
   DOMAIN_TEST_ENTITIES,
   registerAndLoginAsHost,
-} from '../../../../test/controller-test.helpers';
+} from '@src/test/controller-test.helpers';
 import {
   getIntegrationTestDatabaseConfig,
   prepareIntegrationTestDatabase,
-} from '../../../../test/test-database.config';
+} from '@src/test/test-database.config';
 
 describe('Host HTTP (/host)', () => {
   let app: INestApplication;

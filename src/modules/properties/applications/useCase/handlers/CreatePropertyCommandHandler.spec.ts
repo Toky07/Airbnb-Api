@@ -1,9 +1,9 @@
-import { Property } from '../../../domain/entities/property.entity';
-import type { IPropertyRepository } from '../../../domain/repositories/property.repository';
+import { Property } from '@src/modules/properties/domain/entities/property.entity';
+import type { IPropertyRepository } from '@src/modules/properties/domain/repositories/property.repository';
 import { CreatePropertyCommandHandler } from './CreatePropertyCommandHandler';
-import { CreatePropertyCommand } from '../commands/CreatePropertyCommand';
-import { PropertyOutput } from '../../dto/property.output';
-import { mockPropertyMediaPresenter } from '../test-helpers/property-usecase.mocks';
+import { CreatePropertyCommand } from '@src/modules/properties/applications/useCase/commands/CreatePropertyCommand';
+import { PropertyOutput } from '@src/modules/properties/applications/dto/property.output';
+import { mockPropertyMediaPresenter } from '@src/modules/properties/applications/useCase/test-helpers/property-usecase.mocks';
 
 const repository = {
   create: async (property: Property): Promise<Property> => ({

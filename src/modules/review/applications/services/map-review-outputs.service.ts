@@ -1,7 +1,7 @@
-import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
-import type { IUserRepository } from '../../../user/contracts';
-import type { Review } from '../../domain/entities/review.entity';
-import { ReviewOutput } from '../dto/review.output';
+import type { PaginatedResult } from '@src/shared/pagination/pagination.types';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import type { Review } from '@src/modules/review/domain/entities/review.entity';
+import { ReviewOutput } from '@src/modules/review/applications/dto/review.output';
 
 export class MapReviewOutputsService {
   constructor(private readonly userRepository: IUserRepository) {}

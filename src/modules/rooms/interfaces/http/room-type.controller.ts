@@ -8,22 +8,22 @@ import {
   Put,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Public } from '../../../authentication/contracts';
-import { RequireSuperAdmin } from '../../../authentication/contracts';
-import { RoomTypeOutput } from '../../applications/dto/room-type.output';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { CreateRoomTypeCommand } from '../../applications/useCase/commands/CreateRoomTypeCommand';
-import { UpdateRoomTypeCommand } from '../../applications/useCase/commands/UpdateRoomTypeCommand';
-import { DeleteRoomTypeCommand } from '../../applications/useCase/commands/DeleteRoomTypeCommand';
-import { ListRoomTypesQuery } from '../../applications/useCase/queries/ListRoomTypesQuery';
-import { ListRoomTypeOptionsQuery } from '../../applications/useCase/queries/ListRoomTypeOptionsQuery';
+import { Public } from '@src/modules/authentication/contracts';
+import { RequireSuperAdmin } from '@src/modules/authentication/contracts';
+import { RoomTypeOutput } from '@src/modules/rooms/applications/dto/room-type.output';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { CreateRoomTypeCommand } from '@src/modules/rooms/applications/useCase/commands/CreateRoomTypeCommand';
+import { UpdateRoomTypeCommand } from '@src/modules/rooms/applications/useCase/commands/UpdateRoomTypeCommand';
+import { DeleteRoomTypeCommand } from '@src/modules/rooms/applications/useCase/commands/DeleteRoomTypeCommand';
+import { ListRoomTypesQuery } from '@src/modules/rooms/applications/useCase/queries/ListRoomTypesQuery';
+import { ListRoomTypeOptionsQuery } from '@src/modules/rooms/applications/useCase/queries/ListRoomTypeOptionsQuery';
 import {
   CreateRoomTypeSwaggerDto,
   UpdateRoomTypeSwaggerDto,
-} from '../../../../shared/swagger/swagger-schemas.dto';
-import { ApiJwtAuth } from '../../../../shared/swagger/swagger.decorators';
-import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
+} from '@src/shared/swagger/swagger-schemas.dto';
+import { ApiJwtAuth } from '@src/shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 
 @ApiTags(SWAGGER_TAGS.ROOM_TYPES)
 @Controller('room-types')

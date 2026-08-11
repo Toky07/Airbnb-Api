@@ -1,8 +1,8 @@
 import { ForbiddenException } from '@nestjs/common';
 import { describe, expect, it, vi } from 'vitest';
 import { GetOrCreateConversationCommandHandler } from './GetOrCreateConversationCommandHandler';
-import { GetOrCreateConversationCommand } from '../commands/GetOrCreateConversationCommand';
-import { createSampleConversation } from '../messaging-test.helpers';
+import { GetOrCreateConversationCommand } from '@src/modules/messaging/applications/useCase/commands/GetOrCreateConversationCommand';
+import { createSampleConversation } from '@src/modules/messaging/applications/useCase/messaging-test.helpers';
 
 describe('GetOrCreateConversationCommandHandler', () => {
   it('returns an existing or newly created conversation', async () => {

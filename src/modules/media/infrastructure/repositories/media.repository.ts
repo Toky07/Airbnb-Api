@@ -1,10 +1,10 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import type { EntityType } from '../../constant';
-import { Media } from '../../domain/entities/media.entity';
-import type { IMediaRepository } from '../../domain/repositories/media.repository';
-import { MediaOrmEntity } from '../entities/media-orm.entity';
-import { MediaMapper } from '../mappers/media.mapper';
+import type { EntityType } from '@src/modules/media/constant';
+import { Media } from '@src/modules/media/domain/entities/media.entity';
+import type { IMediaRepository } from '@src/modules/media/domain/repositories/media.repository';
+import { MediaOrmEntity } from '@src/modules/media/infrastructure/entities/media-orm.entity';
+import { MediaMapper } from '@src/modules/media/infrastructure/mappers/media.mapper';
 
 export const MEDIA_REPOSITORY = 'MEDIA_REPOSITORY';
 

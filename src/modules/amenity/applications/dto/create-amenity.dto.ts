@@ -10,7 +10,7 @@ import {
 import {
   AMENITY_SCOPE,
   type AmenityScope,
-} from '../../domain/constants/amenity-scope.constant';
+} from '@src/modules/amenity/domain/constants/amenity-scope.constant';
 
 export class CreateAmenityDto {
   @IsString()

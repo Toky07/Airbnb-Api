@@ -1,4 +1,4 @@
-import type { PropertyType } from '../../domain/entities/property-type.entity';
+import type { PropertyType } from '@src/modules/properties/domain/entities/property-type.entity';
 
 export class PropertyTypeOutput {
   constructor(

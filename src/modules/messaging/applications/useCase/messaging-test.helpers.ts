@@ -1,8 +1,8 @@
 import { vi } from 'vitest';
-import { Conversation } from '../../domain/entities/conversation.entity';
-import { Message } from '../../domain/entities/message.entity';
-import type { IConversationRepository } from '../../domain/repositories/conversation.repository';
-import type { IMessageRepository } from '../../domain/repositories/message.repository';
+import { Conversation } from '@src/modules/messaging/domain/entities/conversation.entity';
+import { Message } from '@src/modules/messaging/domain/entities/message.entity';
+import type { IConversationRepository } from '@src/modules/messaging/domain/repositories/conversation.repository';
+import type { IMessageRepository } from '@src/modules/messaging/domain/repositories/message.repository';
 
 export function createSampleConversation(
   overrides: Partial<{

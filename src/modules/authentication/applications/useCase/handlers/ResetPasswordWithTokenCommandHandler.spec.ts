@@ -1,8 +1,8 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { ResetPasswordWithTokenCommandHandler } from './ResetPasswordWithTokenCommandHandler';
-import { ResetPasswordWithTokenCommand } from '../commands/ResetPasswordWithTokenCommand';
-import { Auth } from '../../../domain/entities/user.entity';
-import { EmailVO } from '../../../../../shared/valueObject/email.vo';
+import { ResetPasswordWithTokenCommand } from '@src/modules/authentication/applications/useCase/commands/ResetPasswordWithTokenCommand';
+import { Auth } from '@src/modules/authentication/domain/entities/user.entity';
+import { EmailVO } from '@src/shared/valueObject/email.vo';
 
 describe('ResetPasswordWithTokenCommandHandler', () => {
   const authRepository = { updatePassword: vi.fn() };

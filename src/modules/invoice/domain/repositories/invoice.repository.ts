@@ -1,10 +1,10 @@
-import type { Invoice } from '../entities/invoice.entity';
-import type { InvoicePaymentType } from '../constants/invoice-payment-type.constant';
-import type { InvoiceListRecord } from '../types/invoice-list-record.type';
+import type { Invoice } from '@src/modules/invoice/domain/entities/invoice.entity';
+import type { InvoicePaymentType } from '@src/modules/invoice/domain/constants/invoice-payment-type.constant';
+import type { InvoiceListRecord } from '@src/modules/invoice/domain/types/invoice-list-record.type';
 import type {
   PaginatedResult,
   PaginationParams,
-} from '../../../../shared/pagination/pagination.types';
+} from '@src/shared/pagination/pagination.types';
 
 export const INVOICE_REPOSITORY = 'INVOICE_REPOSITORY';
 

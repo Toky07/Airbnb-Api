@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { RoomProductSummaryService } from '../../../rooms/contracts';
-import { ReservationItemOutput } from '../dto/reservation-item.output';
-import { ReservationOutput } from '../dto/reservation.output';
+import { RoomProductSummaryService } from '@src/modules/rooms/contracts';
+import { ReservationItemOutput } from '@src/modules/reservation/applications/dto/reservation-item.output';
+import { ReservationOutput } from '@src/modules/reservation/applications/dto/reservation.output';
 
 @Injectable()
 export class EnrichReservationOutputsService {

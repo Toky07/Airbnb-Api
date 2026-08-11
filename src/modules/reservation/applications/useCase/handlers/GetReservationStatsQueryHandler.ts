@@ -1,21 +1,21 @@
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IUserRepository } from '../../../../user/contracts';
-import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
-import type { IReservationRepository } from '../../../domain/repositories/reservation.repository';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import { RESERVATION_STATUS } from '@src/modules/reservation/domain/constants/reservation-status.constant';
+import type { IReservationRepository } from '@src/modules/reservation/domain/repositories/reservation.repository';
 import {
   RecentCustomerOutput,
   ReservationActivityOutput,
   ReservationStatsOutput,
-} from '../../dto/reservation-stats.output';
-import { ReservationItemOutput } from '../../dto/reservation-item.output';
-import type { EnrichReservationOutputsService } from '../../services/enrich-reservation-outputs.service';
-import type { CountScopedRoomsService } from '../../services/count-scoped-rooms.service';
-import type { ResolveReservationStatsScopeService } from '../../services/resolve-reservation-stats-scope.service';
+} from '@src/modules/reservation/applications/dto/reservation-stats.output';
+import { ReservationItemOutput } from '@src/modules/reservation/applications/dto/reservation-item.output';
+import type { EnrichReservationOutputsService } from '@src/modules/reservation/applications/services/enrich-reservation-outputs.service';
+import type { CountScopedRoomsService } from '@src/modules/reservation/applications/services/count-scoped-rooms.service';
+import type { ResolveReservationStatsScopeService } from '@src/modules/reservation/applications/services/resolve-reservation-stats-scope.service';
 import {
   buildReservationActivityLabel,
   computeOccupancyRate,
-} from '../../utils/reservation-stats.utils';
-import type { GetReservationStatsQuery } from '../queries/GetReservationStatsQuery';
+} from '@src/modules/reservation/applications/utils/reservation-stats.utils';
+import type { GetReservationStatsQuery } from '@src/modules/reservation/applications/useCase/queries/GetReservationStatsQuery';
 
 export class GetReservationStatsQueryHandler implements IQueryHandler<
   GetReservationStatsQuery,

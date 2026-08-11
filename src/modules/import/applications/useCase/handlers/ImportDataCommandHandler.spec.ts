@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { ImportDataCommandHandler } from './ImportDataCommandHandler';
-import { ImportDataCommand } from '../commands/ImportDataCommand';
-import type { ImportBatchDto } from '../../dto/import-batch.dto';
+import { ImportDataCommand } from '@src/modules/import/applications/useCase/commands/ImportDataCommand';
+import type { ImportBatchDto } from '@src/modules/import/applications/dto/import-batch.dto';
 
 describe('ImportDataCommandHandler', () => {
   it('orchestre les imports et agrège les résultats', async () => {

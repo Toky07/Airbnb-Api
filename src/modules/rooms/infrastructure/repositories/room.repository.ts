@@ -5,12 +5,12 @@ import {
   buildPaginationMeta,
   type PaginatedResult,
   type PaginationParams,
-} from '../../../../shared/pagination/pagination.types';
-import { BLOCKING_RESERVATION_STATUSES } from '../../../reservation/contracts';
-import { Room } from '../../domain/entities/room.entity';
-import { RoomEntity } from '../entities/room.entity';
-import { IRoomRepository } from '../../domain/repositories/room.repository';
-import { RoomMapper } from '../mappers/room.mapper';
+} from '@src/shared/pagination/pagination.types';
+import { BLOCKING_RESERVATION_STATUSES } from '@src/modules/reservation/contracts';
+import { Room } from '@src/modules/rooms/domain/entities/room.entity';
+import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
+import { IRoomRepository } from '@src/modules/rooms/domain/repositories/room.repository';
+import { RoomMapper } from '@src/modules/rooms/infrastructure/mappers/room.mapper';
 import { applyRoomListFilters } from './apply-room-list-filters';
 
 @Injectable()

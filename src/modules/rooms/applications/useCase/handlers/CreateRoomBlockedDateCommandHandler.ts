@@ -1,11 +1,11 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { RoomBlockedDate } from '../../../domain/entities/room-blocked-date.entity';
-import type { IRoomBlockedDateRepository } from '../../../domain/repositories/room-blocked-date.repository';
-import type { IRoomRepository } from '../../../domain/repositories/room.repository';
-import { RoomBlockedDateOutput } from '../../dto/room-blocked-date.output';
-import { validateBlockedDateRange } from '../../utils/validate-blocked-date-range';
-import type { CreateRoomBlockedDateCommand } from '../commands/CreateRoomBlockedDateCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import { RoomBlockedDate } from '@src/modules/rooms/domain/entities/room-blocked-date.entity';
+import type { IRoomBlockedDateRepository } from '@src/modules/rooms/domain/repositories/room-blocked-date.repository';
+import type { IRoomRepository } from '@src/modules/rooms/domain/repositories/room.repository';
+import { RoomBlockedDateOutput } from '@src/modules/rooms/applications/dto/room-blocked-date.output';
+import { validateBlockedDateRange } from '@src/modules/rooms/applications/utils/validate-blocked-date-range';
+import type { CreateRoomBlockedDateCommand } from '@src/modules/rooms/applications/useCase/commands/CreateRoomBlockedDateCommand';
 
 export class CreateRoomBlockedDateCommandHandler implements ICommandHandler<
   CreateRoomBlockedDateCommand,

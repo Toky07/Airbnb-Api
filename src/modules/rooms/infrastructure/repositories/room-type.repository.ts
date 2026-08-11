@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { RoomType } from '../../domain/entities/room-type.entity';
-import type { IRoomTypeRepository } from '../../domain/repositories/room-type.repository';
-import { RoomTypeEntity } from '../entities/room-type.entity';
-import { RoomTypeMapper } from '../mappers/room-type.mapper';
+import { RoomType } from '@src/modules/rooms/domain/entities/room-type.entity';
+import type { IRoomTypeRepository } from '@src/modules/rooms/domain/repositories/room-type.repository';
+import { RoomTypeEntity } from '@src/modules/rooms/infrastructure/entities/room-type.entity';
+import { RoomTypeMapper } from '@src/modules/rooms/infrastructure/mappers/room-type.mapper';
 
 @Injectable()
 export class RoomTypeRepository implements IRoomTypeRepository {

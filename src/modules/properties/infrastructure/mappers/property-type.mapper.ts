@@ -1,5 +1,5 @@
-import { PropertyType } from '../../domain/entities/property-type.entity';
-import { PropertyTypeEntity } from '../entities/property-type.entity';
+import { PropertyType } from '@src/modules/properties/domain/entities/property-type.entity';
+import { PropertyTypeEntity } from '@src/modules/properties/infrastructure/entities/property-type.entity';
 
 export class PropertyTypeMapper {
   static toDomain(entity: PropertyTypeEntity): PropertyType {

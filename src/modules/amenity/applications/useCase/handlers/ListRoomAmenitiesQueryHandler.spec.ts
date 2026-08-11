@@ -1,11 +1,11 @@
 import { NotFoundException } from '@nestjs/common';
-import { Property } from '../../../../properties/contracts';
-import { Room } from '../../../../rooms/contracts';
-import { Amenity } from '../../../domain/entities/amenity.entity';
-import { AMENITY_SCOPE } from '../../../domain/constants/amenity-scope.constant';
+import { Property } from '@src/modules/properties/contracts';
+import { Room } from '@src/modules/rooms/contracts';
+import { Amenity } from '@src/modules/amenity/domain/entities/amenity.entity';
+import { AMENITY_SCOPE } from '@src/modules/amenity/domain/constants/amenity-scope.constant';
 import { ListRoomAmenitiesQueryHandler } from './ListRoomAmenitiesQueryHandler';
-import { ListRoomAmenitiesQuery } from '../queries/ListRoomAmenitiesQuery';
-import { ListEntityAmenitiesService } from '../../services/entity-amenities.service';
+import { ListRoomAmenitiesQuery } from '@src/modules/amenity/applications/useCase/queries/ListRoomAmenitiesQuery';
+import { ListEntityAmenitiesService } from '@src/modules/amenity/applications/services/entity-amenities.service';
 
 const property = new Property({
   name: 'Hôtel Test',

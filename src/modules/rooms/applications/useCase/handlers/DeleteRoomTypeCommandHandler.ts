@@ -1,7 +1,7 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IRoomTypeRepository } from '../../../domain/repositories/room-type.repository';
-import type { DeleteRoomTypeCommand } from '../commands/DeleteRoomTypeCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { IRoomTypeRepository } from '@src/modules/rooms/domain/repositories/room-type.repository';
+import type { DeleteRoomTypeCommand } from '@src/modules/rooms/applications/useCase/commands/DeleteRoomTypeCommand';
 
 export class DeleteRoomTypeCommandHandler implements ICommandHandler<
   DeleteRoomTypeCommand,

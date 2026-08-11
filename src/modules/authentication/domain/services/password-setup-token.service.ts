@@ -1,5 +1,5 @@
 import { createHash, randomBytes } from 'crypto';
-import { PASSWORD_SETUP_TOKEN_TTL_HOURS } from '../constants/account-status.constant';
+import { PASSWORD_SETUP_TOKEN_TTL_HOURS } from '@src/modules/authentication/domain/constants/account-status.constant';
 
 export type PasswordSetupToken = {
   raw: string;

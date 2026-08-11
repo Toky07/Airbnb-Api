@@ -1,16 +1,16 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { RoleEntity } from '../../domain/entities/role.entity';
-import { IRoleRepository } from '../../domain/repositories/role.repository';
+import { RoleEntity } from '@src/modules/authentication/domain/entities/role.entity';
+import { IRoleRepository } from '@src/modules/authentication/domain/repositories/role.repository';
 import { In, Repository } from 'typeorm';
-import { RoleMapper } from '../mappers/role.mappers';
-import { Role } from '../entity/role.entity';
+import { RoleMapper } from '@src/modules/authentication/infrastructure/mappers/role.mappers';
+import { Role } from '@src/modules/authentication/infrastructure/entity/role.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PermissionEntity } from '../entity/permission.entity';
+import { PermissionEntity } from '@src/modules/authentication/infrastructure/entity/permission.entity';
 import {
   buildPaginationMeta,
   type PaginatedResult,
   type PaginationParams,
-} from '../../../../shared/pagination/pagination.types';
+} from '@src/shared/pagination/pagination.types';
 
 @Injectable()
 export class RoleRepository implements IRoleRepository {

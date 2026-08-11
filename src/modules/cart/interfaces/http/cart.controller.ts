@@ -9,28 +9,28 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import type { JwtPayload } from '../../../authentication/contracts';
-import { Public } from '../../../authentication/contracts';
-import { CompleteCartCheckoutDto } from '../../applications/dto/complete-cart-checkout.dto';
+import type { JwtPayload } from '@src/modules/authentication/contracts';
+import { Public } from '@src/modules/authentication/contracts';
+import { CompleteCartCheckoutDto } from '@src/modules/cart/applications/dto/complete-cart-checkout.dto';
 import {
   AddCartItemDto,
   UpdateCartItemDto,
-} from '../../applications/dto/add-cart-item.dto';
+} from '@src/modules/cart/applications/dto/add-cart-item.dto';
 import { parseCartContext } from './parse-cart-context';
-import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { GetCartQuery } from '../../applications/useCase/queries/GetCartQuery';
-import { AddCartItemCommand } from '../../applications/useCase/commands/AddCartItemCommand';
-import { UpdateCartItemCommand } from '../../applications/useCase/commands/UpdateCartItemCommand';
-import { RemoveCartItemCommand } from '../../applications/useCase/commands/RemoveCartItemCommand';
-import { MergeCartCommand } from '../../applications/useCase/commands/MergeCartCommand';
-import { CheckoutCartCommand } from '../../applications/useCase/commands/CheckoutCartCommand';
-import { CompleteCartCheckoutCommand } from '../../applications/useCase/commands/CompleteCartCheckoutCommand';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { GetCartQuery } from '@src/modules/cart/applications/useCase/queries/GetCartQuery';
+import { AddCartItemCommand } from '@src/modules/cart/applications/useCase/commands/AddCartItemCommand';
+import { UpdateCartItemCommand } from '@src/modules/cart/applications/useCase/commands/UpdateCartItemCommand';
+import { RemoveCartItemCommand } from '@src/modules/cart/applications/useCase/commands/RemoveCartItemCommand';
+import { MergeCartCommand } from '@src/modules/cart/applications/useCase/commands/MergeCartCommand';
+import { CheckoutCartCommand } from '@src/modules/cart/applications/useCase/commands/CheckoutCartCommand';
+import { CompleteCartCheckoutCommand } from '@src/modules/cart/applications/useCase/commands/CompleteCartCheckoutCommand';
 import {
   ApiCartSessionHeader,
   ApiJwtAuth,
-} from '../../../../shared/swagger/swagger.decorators';
-import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
+} from '@src/shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 
 @ApiTags(SWAGGER_TAGS.CART)
 @Controller('cart')

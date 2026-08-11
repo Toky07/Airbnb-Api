@@ -7,19 +7,19 @@ export {
   buildInvoiceNumber,
   formatInvoiceAmount,
   formatInvoiceDate,
-} from '../applications/utils/format-invoice.util';
-export { InvoiceCreatedEvent } from '../domain/events/invoice-created.event';
-export { InvoiceGenerateRequestedEvent } from '../domain/events/invoice-generate-requested.event';
+} from '@src/modules/invoice/applications/utils/format-invoice.util';
+export { InvoiceCreatedEvent } from '@src/modules/invoice/domain/events/invoice-created.event';
+export { InvoiceGenerateRequestedEvent } from '@src/modules/invoice/domain/events/invoice-generate-requested.event';
 export {
   INVOICE_PAYMENT_TYPE,
   type InvoicePaymentType,
-} from '../domain/constants/invoice-payment-type.constant';
+} from '@src/modules/invoice/domain/constants/invoice-payment-type.constant';
 export {
   getInvoiceBrand,
   getInvoiceIssuer,
   type InvoiceBrandConfig,
   type InvoiceIssuerConfig,
-} from '../domain/constants/invoice-source.constant';
+} from '@src/modules/invoice/domain/constants/invoice-source.constant';
 export type {
   InvoiceData,
   InvoiceLineItem,
@@ -27,9 +27,9 @@ export type {
   InvoiceReference,
   InvoiceTotals,
   InvoiceIssuer,
-} from '../domain/types/invoice-data.type';
+} from '@src/modules/invoice/domain/types/invoice-data.type';
 export {
   INVOICE_REPOSITORY,
   type IInvoiceRepository,
-} from '../domain/repositories/invoice.repository';
-export { InvoiceNumberService } from '../applications/services/invoice-number.service';
+} from '@src/modules/invoice/domain/repositories/invoice.repository';
+export { InvoiceNumberService } from '@src/modules/invoice/applications/services/invoice-number.service';

@@ -1,9 +1,9 @@
 import { readFile } from 'fs/promises';
 import { Injectable } from '@nestjs/common';
-import { toDiskPath } from '../../../media/contracts';
-import { resolveUploadRoot } from '../../../media/contracts';
-import type { UploadFile } from '../../../media/contracts';
-import type { EmailSendAttachmentPayload } from '../../domain/events/email-send-requested.event';
+import { toDiskPath } from '@src/modules/media/contracts';
+import { resolveUploadRoot } from '@src/modules/media/contracts';
+import type { UploadFile } from '@src/modules/media/contracts';
+import type { EmailSendAttachmentPayload } from '@src/modules/mail/domain/events/email-send-requested.event';
 
 @Injectable()
 export class LoadEmailAttachmentsFromPathsService {

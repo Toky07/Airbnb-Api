@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PasswordSetupLinkBuilder } from '../../domain/services/password-setup-link.builder';
+import { PasswordSetupLinkBuilder } from '@src/modules/authentication/domain/services/password-setup-link.builder';
 
 describe('PasswordSetupLinkBuilder', () => {
   it('construit un lien avec le token encodé', () => {

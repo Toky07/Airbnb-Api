@@ -1,13 +1,13 @@
-import { EmailVO } from '../../../../../shared/valueObject/email.vo';
-import { User } from '../../../domain/entities/user.entity';
-import type { IUserRepository } from '../../../domain/repositories/user.repository';
-import { UserNameVO } from '../../../domain/valueObject/username.vo';
+import { EmailVO } from '@src/shared/valueObject/email.vo';
+import { User } from '@src/modules/user/domain/entities/user.entity';
+import type { IUserRepository } from '@src/modules/user/domain/repositories/user.repository';
+import { UserNameVO } from '@src/modules/user/domain/valueObject/username.vo';
 import { DeleteUserCommandHandler } from './DeleteUserCommandHandler';
-import { DeleteUserCommand } from '../commands/DeleteUserCommand';
-import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
-import type { IAuthRepository } from '../../../../authentication/contracts';
+import { DeleteUserCommand } from '@src/modules/user/applications/useCase/commands/DeleteUserCommand';
+import { PhoneNumberVO } from '@src/shared/valueObject/phone.vo';
+import type { IAuthRepository } from '@src/modules/authentication/contracts';
 import { describe, expect, it, vi } from 'vitest';
-import type { SaveUserAvatarService } from '../../services/save-user-avatar.service';
+import type { SaveUserAvatarService } from '@src/modules/user/applications/services/save-user-avatar.service';
 
 const repository = {
   findById: async () =>

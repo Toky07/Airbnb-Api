@@ -1,21 +1,21 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
 import {
   PAYMENT_STATUS,
   Payment,
   type IPaymentGateway,
   type IPaymentRepository,
-} from '../../../../payment/contracts';
-import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
-import { Reservation } from '../../../domain/entities/reservation.entity';
-import type { IReservationRepository } from '../../../domain/repositories/reservation.repository';
-import { CancelReservationOutput } from '../../dto/cancel-reservation.output';
-import { ReservationOutput } from '../../dto/reservation.output';
-import type { AssertReservationAccessService } from '../../services/assert-reservation-access.service';
-import type { ComputeCancellationRefundService } from '../../services/compute-cancellation-refund.service';
-import type { EnrichReservationOutputsService } from '../../services/enrich-reservation-outputs.service';
-import type { ResolveReservationCancellationPolicyService } from '../../services/resolve-reservation-cancellation-policy.service';
-import type { CancelReservationCommand } from '../commands/CancelReservationCommand';
+} from '@src/modules/payment/contracts';
+import { RESERVATION_STATUS } from '@src/modules/reservation/domain/constants/reservation-status.constant';
+import { Reservation } from '@src/modules/reservation/domain/entities/reservation.entity';
+import type { IReservationRepository } from '@src/modules/reservation/domain/repositories/reservation.repository';
+import { CancelReservationOutput } from '@src/modules/reservation/applications/dto/cancel-reservation.output';
+import { ReservationOutput } from '@src/modules/reservation/applications/dto/reservation.output';
+import type { AssertReservationAccessService } from '@src/modules/reservation/applications/services/assert-reservation-access.service';
+import type { ComputeCancellationRefundService } from '@src/modules/reservation/applications/services/compute-cancellation-refund.service';
+import type { EnrichReservationOutputsService } from '@src/modules/reservation/applications/services/enrich-reservation-outputs.service';
+import type { ResolveReservationCancellationPolicyService } from '@src/modules/reservation/applications/services/resolve-reservation-cancellation-policy.service';
+import type { CancelReservationCommand } from '@src/modules/reservation/applications/useCase/commands/CancelReservationCommand';
 
 export class CancelReservationCommandHandler implements ICommandHandler<
   CancelReservationCommand,

@@ -1,12 +1,12 @@
 import { VerifyPaymentCommandHandler } from './VerifyPaymentCommandHandler';
-import { VerifyPaymentCommand } from '../commands/VerifyPaymentCommand';
-import { MapStripeStatusService } from '../../services/map-stripe-status.service';
-import { PAYMENT_STATUS } from '../../../domain/constants/payment-status.constant';
+import { VerifyPaymentCommand } from '@src/modules/payment/applications/useCase/commands/VerifyPaymentCommand';
+import { MapStripeStatusService } from '@src/modules/payment/applications/services/map-stripe-status.service';
+import { PAYMENT_STATUS } from '@src/modules/payment/domain/constants/payment-status.constant';
 import {
   createPaymentGatewayMock,
   createPaymentRepositoryMock,
   createSamplePayment,
-} from '../payment-test.helpers';
+} from '@src/modules/payment/applications/useCase/payment-test.helpers';
 
 const mockPublish = vi.fn();
 vi.mock('../../../../../shared/domain/event.bus', () => ({

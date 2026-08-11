@@ -6,7 +6,7 @@ import {
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
-import type { AmenityScope } from '../../domain/constants/amenity-scope.constant';
+import type { AmenityScope } from '@src/modules/amenity/domain/constants/amenity-scope.constant';
 
 @Entity({ name: 'amenities' })
 @Unique(['name', 'scope'])

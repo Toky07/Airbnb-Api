@@ -1,9 +1,9 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { AMENITY_SCOPE } from '../../../domain/constants/amenity-scope.constant';
-import { Amenity } from '../../../domain/entities/amenity.entity';
+import { AMENITY_SCOPE } from '@src/modules/amenity/domain/constants/amenity-scope.constant';
+import { Amenity } from '@src/modules/amenity/domain/entities/amenity.entity';
 import { DeleteAmenityCommandHandler } from './DeleteAmenityCommandHandler';
-import { DeleteAmenityCommand } from '../commands/DeleteAmenityCommand';
-import type { IAmenityRepository } from '../../../domain/repositories/amenity.repository';
+import { DeleteAmenityCommand } from '@src/modules/amenity/applications/useCase/commands/DeleteAmenityCommand';
+import type { IAmenityRepository } from '@src/modules/amenity/domain/repositories/amenity.repository';
 
 describe('DeleteAmenityCommandHandler', () => {
   it('deletes an unused amenity', async () => {

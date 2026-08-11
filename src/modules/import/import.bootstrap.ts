@@ -1,5 +1,5 @@
-import type { IPropertyRepository } from '../properties/contracts';
-import type { IRoleRepository } from '../authentication/contracts';
+import type { IPropertyRepository } from '@src/modules/properties/contracts';
+import type { IRoleRepository } from '@src/modules/authentication/contracts';
 import { ImportBatchContextService } from './applications/services/import-batch-context.service';
 import { ImportDataCommandHandler } from './applications/useCase/handlers/ImportDataCommandHandler';
 import { ImportUsersHandler } from './applications/useCase/handlers/ImportUsersHandler';

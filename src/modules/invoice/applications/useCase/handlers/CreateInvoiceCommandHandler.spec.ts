@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { EventBus } from '../../../../../shared/domain/event.bus';
-import { INVOICE_PAYMENT_TYPE } from '../../../domain/constants/invoice-payment-type.constant';
-import { Invoice } from '../../../domain/entities/invoice.entity';
-import { InvoiceCreatedEvent } from '../../../domain/events/invoice-created.event';
-import { GenerateInvoicePdfService } from '../../services/generate-invoice-pdf.service';
+import { EventBus } from '@src/shared/domain/event.bus';
+import { INVOICE_PAYMENT_TYPE } from '@src/modules/invoice/domain/constants/invoice-payment-type.constant';
+import { Invoice } from '@src/modules/invoice/domain/entities/invoice.entity';
+import { InvoiceCreatedEvent } from '@src/modules/invoice/domain/events/invoice-created.event';
+import { GenerateInvoicePdfService } from '@src/modules/invoice/applications/services/generate-invoice-pdf.service';
 import { CreateInvoiceCommandHandler } from './CreateInvoiceCommandHandler';
-import { CreateInvoiceCommand } from '../commands/CreateInvoiceCommand';
-import { createSampleInvoiceData } from '../invoice-test.helpers';
+import { CreateInvoiceCommand } from '@src/modules/invoice/applications/useCase/commands/CreateInvoiceCommand';
+import { createSampleInvoiceData } from '@src/modules/invoice/applications/useCase/invoice-test.helpers';
 
 describe('CreateInvoiceCommandHandler', () => {
   const invoiceRepository = {

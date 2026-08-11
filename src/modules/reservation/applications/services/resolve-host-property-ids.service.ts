@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { PROPERTY_REPOSITORY } from '../../../properties/contracts';
-import type { IPropertyRepository } from '../../../properties/contracts';
-import { USER_REPOSITORY } from '../../../user/contracts';
-import type { IUserRepository } from '../../../user/contracts';
+import { PROPERTY_REPOSITORY } from '@src/modules/properties/contracts';
+import type { IPropertyRepository } from '@src/modules/properties/contracts';
+import { USER_REPOSITORY } from '@src/modules/user/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
 
 @Injectable()
 export class ResolveHostPropertyIdsService {

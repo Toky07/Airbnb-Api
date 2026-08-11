@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { BadRequestException } from '@nestjs/common';
-import { EventBus } from '../../../../../shared/domain/event.bus';
-import { CartCheckoutCompletedEvent } from '../../../domain/events/cart-checkout-completed.event';
+import { EventBus } from '@src/shared/domain/event.bus';
+import { CartCheckoutCompletedEvent } from '@src/modules/cart/domain/events/cart-checkout-completed.event';
 import { CheckoutCartCommandHandler } from './CheckoutCartCommandHandler';
-import { CheckoutCartCommand } from '../commands/CheckoutCartCommand';
-import { createSampleCart } from '../../cart-test.helpers';
+import { CheckoutCartCommand } from '@src/modules/cart/applications/useCase/commands/CheckoutCartCommand';
+import { createSampleCart } from '@src/modules/cart/applications/cart-test.helpers';
 import { samplePricingBreakdown } from './checkout-test.helpers';
 
 describe('CheckoutCartCommandHandler', () => {

@@ -1,10 +1,10 @@
-import type { AmenityOutput } from '../../../amenity/contracts';
+import type { AmenityOutput } from '@src/modules/amenity/contracts';
 import {
   toPropertySummary,
   type PropertySummary,
-} from '../../../properties/contracts/property-summary';
-import type { CategorySummary } from '../../../../shared/types/category-summary';
-import { Room } from '../../domain/entities/room.entity';
+} from '@src/modules/properties/contracts/property-summary';
+import type { CategorySummary } from '@src/shared/types/category-summary';
+import { Room } from '@src/modules/rooms/domain/entities/room.entity';
 
 export type UnavailableDateRange = {
   startDate: string;

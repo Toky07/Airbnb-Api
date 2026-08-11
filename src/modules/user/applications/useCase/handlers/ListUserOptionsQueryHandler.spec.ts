@@ -1,11 +1,11 @@
-import { UserNameVO } from '../../../domain/valueObject/username.vo';
-import { User } from '../../../domain/entities/user.entity';
-import { EmailVO } from '../../../../../shared/valueObject/email.vo';
-import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
-import type { IUserRepository } from '../../../domain/repositories/user.repository';
-import { UserOutput } from '../../../domain/dtos/user.output';
+import { UserNameVO } from '@src/modules/user/domain/valueObject/username.vo';
+import { User } from '@src/modules/user/domain/entities/user.entity';
+import { EmailVO } from '@src/shared/valueObject/email.vo';
+import { PhoneNumberVO } from '@src/shared/valueObject/phone.vo';
+import type { IUserRepository } from '@src/modules/user/domain/repositories/user.repository';
+import { UserOutput } from '@src/modules/user/domain/dtos/user.output';
 import { ListUserOptionsQueryHandler } from './ListUserOptionsQueryHandler';
-import { ListUserOptionsQuery } from '../queries/ListUserOptionsQuery';
+import { ListUserOptionsQuery } from '@src/modules/user/applications/useCase/queries/ListUserOptionsQuery';
 
 describe('ListUserOptionsQueryHandler', () => {
   it('should list all users as options', async () => {

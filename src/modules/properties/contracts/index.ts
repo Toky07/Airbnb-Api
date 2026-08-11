@@ -13,25 +13,25 @@ export {
 export {
   PROPERTY_REPOSITORY,
   type IPropertyRepository,
-} from '../domain/repositories/property.repository';
+} from '@src/modules/properties/domain/repositories/property.repository';
 export {
   PROPERTY_TYPE_REPOSITORY,
   type IPropertyTypeRepository,
-} from '../domain/repositories/property-type.repository';
-export { Property } from '../domain/entities/property.entity';
-export { PropertyOutput } from '../applications/dto/property.output';
-export { PropertyTypeOutput } from '../applications/dto/property-type.output';
-export type { CreatePropertyDto } from '../applications/dto/createProperty.dto';
-export { parsePropertyBody } from '../interfaces/http/parse-property-body';
-export { PropertyMediaPresenter } from '../applications/presenters/property-media.presenter';
-export { CreatePropertyCommand } from '../applications/useCase/commands/CreatePropertyCommand';
-export { UpdatePropertyCommand } from '../applications/useCase/commands/UpdatePropertyCommand';
-export { DeletePropertyCommand } from '../applications/useCase/commands/DeletePropertyCommand';
-export { CreatePropertyTypeCommand } from '../applications/useCase/commands/CreatePropertyTypeCommand';
-export { UpdatePropertyTypeCommand } from '../applications/useCase/commands/UpdatePropertyTypeCommand';
-export { DeletePropertyTypeCommand } from '../applications/useCase/commands/DeletePropertyTypeCommand';
-export { FindPropertyQuery } from '../applications/useCase/queries/FindPropertyQuery';
-export { ListPropertiesQuery } from '../applications/useCase/queries/ListPropertiesQuery';
-export { ListPropertyOptionsQuery } from '../applications/useCase/queries/ListPropertyOptionsQuery';
-export { ListPropertyTypesQuery } from '../applications/useCase/queries/ListPropertyTypesQuery';
-export { ListPropertyTypeOptionsQuery } from '../applications/useCase/queries/ListPropertyTypeOptionsQuery';
+} from '@src/modules/properties/domain/repositories/property-type.repository';
+export { Property } from '@src/modules/properties/domain/entities/property.entity';
+export { PropertyOutput } from '@src/modules/properties/applications/dto/property.output';
+export { PropertyTypeOutput } from '@src/modules/properties/applications/dto/property-type.output';
+export type { CreatePropertyDto } from '@src/modules/properties/applications/dto/createProperty.dto';
+export { parsePropertyBody } from '@src/modules/properties/interfaces/http/parse-property-body';
+export { PropertyMediaPresenter } from '@src/modules/properties/applications/presenters/property-media.presenter';
+export { CreatePropertyCommand } from '@src/modules/properties/applications/useCase/commands/CreatePropertyCommand';
+export { UpdatePropertyCommand } from '@src/modules/properties/applications/useCase/commands/UpdatePropertyCommand';
+export { DeletePropertyCommand } from '@src/modules/properties/applications/useCase/commands/DeletePropertyCommand';
+export { CreatePropertyTypeCommand } from '@src/modules/properties/applications/useCase/commands/CreatePropertyTypeCommand';
+export { UpdatePropertyTypeCommand } from '@src/modules/properties/applications/useCase/commands/UpdatePropertyTypeCommand';
+export { DeletePropertyTypeCommand } from '@src/modules/properties/applications/useCase/commands/DeletePropertyTypeCommand';
+export { FindPropertyQuery } from '@src/modules/properties/applications/useCase/queries/FindPropertyQuery';
+export { ListPropertiesQuery } from '@src/modules/properties/applications/useCase/queries/ListPropertiesQuery';
+export { ListPropertyOptionsQuery } from '@src/modules/properties/applications/useCase/queries/ListPropertyOptionsQuery';
+export { ListPropertyTypesQuery } from '@src/modules/properties/applications/useCase/queries/ListPropertyTypesQuery';
+export { ListPropertyTypeOptionsQuery } from '@src/modules/properties/applications/useCase/queries/ListPropertyTypeOptionsQuery';

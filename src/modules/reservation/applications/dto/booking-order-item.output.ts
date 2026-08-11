@@ -1,4 +1,4 @@
-import type { ReservationStatus } from '../../domain/constants/reservation-status.constant';
+import type { ReservationStatus } from '@src/modules/reservation/domain/constants/reservation-status.constant';
 import type { ReservationItemOutput } from './reservation-item.output';
 
 export class BookingOrderItemOutput {

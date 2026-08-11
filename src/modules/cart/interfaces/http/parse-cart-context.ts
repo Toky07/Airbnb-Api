@@ -1,6 +1,6 @@
-import type { JwtPayload } from '../../../authentication/contracts';
-import { CART_SESSION_HEADER } from '../../domain/constants/cart-item-type.constant';
-import type { CartRequestContext } from '../../applications/services/resolve-cart.service';
+import type { JwtPayload } from '@src/modules/authentication/contracts';
+import { CART_SESSION_HEADER } from '@src/modules/cart/domain/constants/cart-item-type.constant';
+import type { CartRequestContext } from '@src/modules/cart/applications/services/resolve-cart.service';
 
 type CartRequest = {
   user?: JwtPayload;

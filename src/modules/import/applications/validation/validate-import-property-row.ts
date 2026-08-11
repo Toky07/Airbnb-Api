@@ -1,4 +1,4 @@
-import type { ImportPropertyRowDto } from '../dto/import-batch.dto';
+import type { ImportPropertyRowDto } from '@src/modules/import/applications/dto/import-batch.dto';
 import { TIME_PATTERN } from './import-validation.constants';
 import type { ImportRowValidationResult } from './import-row-validation.types';
 

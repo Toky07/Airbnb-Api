@@ -13,8 +13,8 @@ import { MailTransportFactory } from './infrastructure/transport/mail-transport.
 import { MAIL_TRANSPORT } from './domain/ports/mail-transport.port';
 import type { IMailTransport } from './domain/ports/mail-transport.port';
 import { MailBootstrap } from './mail.bootstrap';
-import { CommandBus } from '../../shared/useCase/bus/bus';
-import { QueryBus } from '../../shared/useCase/bus/query-bus';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
 import { SendEmailCommand } from './applications/useCase/commands/SendEmailCommand';
 import { RetryEmailCommand } from './applications/useCase/commands/RetryEmailCommand';
 import { GetEmailQuery } from './applications/useCase/queries/GetEmailQuery';

@@ -1,4 +1,4 @@
-import { UserNameVO } from '../../../user/contracts';
+import { UserNameVO } from '@src/modules/user/contracts';
 
 export class RoleEntity {
   id: number | undefined;

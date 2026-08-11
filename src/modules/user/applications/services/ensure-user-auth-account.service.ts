@@ -4,10 +4,10 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { AUTH_REPOSITORY } from '../../../authentication/contracts';
-import type { IAuthRepository } from '../../../authentication/contracts';
-import { USER_REPOSITORY } from '../../domain/repositories/user.repository';
-import type { IUserRepository } from '../../domain/repositories/user.repository';
+import { AUTH_REPOSITORY } from '@src/modules/authentication/contracts';
+import type { IAuthRepository } from '@src/modules/authentication/contracts';
+import { USER_REPOSITORY } from '@src/modules/user/domain/repositories/user.repository';
+import type { IUserRepository } from '@src/modules/user/domain/repositories/user.repository';
 
 @Injectable()
 export class EnsureUserAuthAccountService {

@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
-import { BookingOrderItemOutput } from '../../dto/booking-order-item.output';
+import { RESERVATION_STATUS } from '@src/modules/reservation/domain/constants/reservation-status.constant';
+import { BookingOrderItemOutput } from '@src/modules/reservation/applications/dto/booking-order-item.output';
 import { GetBookingOrderQueryHandler } from './GetBookingOrderQueryHandler';
-import { GetBookingOrderQuery } from '../queries/GetBookingOrderQuery';
+import { GetBookingOrderQuery } from '@src/modules/reservation/applications/useCase/queries/GetBookingOrderQuery';
 
 describe('GetBookingOrderQueryHandler', () => {
   const paymentRepository = { findById: vi.fn() };

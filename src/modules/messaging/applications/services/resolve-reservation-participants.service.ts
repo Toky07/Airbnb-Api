@@ -5,14 +5,14 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
-import type { IPropertyRepository } from '../../../properties/contracts';
-import { PROPERTY_REPOSITORY } from '../../../properties/contracts';
-import type { IRoomRepository } from '../../../rooms/contracts';
-import { ROOM_REPOSITORY } from '../../../rooms/contracts';
-import type { IUserRepository } from '../../../user/contracts';
-import { USER_REPOSITORY } from '../../../user/contracts';
-import type { IReservationByIdReader } from '../../../reservation/contracts';
-import { RESERVATION_REPOSITORY } from '../../../reservation/contracts';
+import type { IPropertyRepository } from '@src/modules/properties/contracts';
+import { PROPERTY_REPOSITORY } from '@src/modules/properties/contracts';
+import type { IRoomRepository } from '@src/modules/rooms/contracts';
+import { ROOM_REPOSITORY } from '@src/modules/rooms/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import { USER_REPOSITORY } from '@src/modules/user/contracts';
+import type { IReservationByIdReader } from '@src/modules/reservation/contracts';
+import { RESERVATION_REPOSITORY } from '@src/modules/reservation/contracts';
 
 export type ReservationParticipants = {
   guestId: number;

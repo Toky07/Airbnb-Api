@@ -1,10 +1,10 @@
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IRoomRepository } from '../../../../rooms/contracts';
-import type { IFavoriteRepository } from '../../../domain/repositories/favorite.repository';
-import { FavoriteOutput } from '../../dto/favorite.output';
-import type { RoomMediaPresenter } from '../../../../rooms/contracts';
-import type { ListMyFavoritesQuery } from '../queries/ListMyFavoritesQuery';
-import { ResolveAuthenticatedUserService } from '../../../../../shared/auth/resolve-authenticated-user.service';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { IRoomRepository } from '@src/modules/rooms/contracts';
+import type { IFavoriteRepository } from '@src/modules/favorite/domain/repositories/favorite.repository';
+import { FavoriteOutput } from '@src/modules/favorite/applications/dto/favorite.output';
+import type { RoomMediaPresenter } from '@src/modules/rooms/contracts';
+import type { ListMyFavoritesQuery } from '@src/modules/favorite/applications/useCase/queries/ListMyFavoritesQuery';
+import { ResolveAuthenticatedUserService } from '@src/shared/auth/resolve-authenticated-user.service';
 
 export class ListMyFavoritesQueryHandler implements IQueryHandler<
   ListMyFavoritesQuery,

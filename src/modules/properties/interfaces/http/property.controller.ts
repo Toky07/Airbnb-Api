@@ -12,26 +12,26 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
-import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
-import { PropertyOutput } from '../../applications/dto/property.output';
-import type { CreatePropertyDto } from '../../applications/dto/createProperty.dto';
+import { parsePaginationQuery } from '@src/shared/pagination/parse-pagination-query';
+import type { PaginatedResult } from '@src/shared/pagination/pagination.types';
+import { PropertyOutput } from '@src/modules/properties/applications/dto/property.output';
+import type { CreatePropertyDto } from '@src/modules/properties/applications/dto/createProperty.dto';
 import { parsePropertyBody } from './parse-property-body';
-import type { UploadFile } from '../../../media/contracts';
-import { RequirePermissions } from '../../../authentication/contracts';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { CreatePropertyCommand } from '../../applications/useCase/commands/CreatePropertyCommand';
-import { UpdatePropertyCommand } from '../../applications/useCase/commands/UpdatePropertyCommand';
-import { DeletePropertyCommand } from '../../applications/useCase/commands/DeletePropertyCommand';
-import { FindPropertyQuery } from '../../applications/useCase/queries/FindPropertyQuery';
-import { ListPropertiesQuery } from '../../applications/useCase/queries/ListPropertiesQuery';
-import { ListPropertyOptionsQuery } from '../../applications/useCase/queries/ListPropertyOptionsQuery';
+import type { UploadFile } from '@src/modules/media/contracts';
+import { RequirePermissions } from '@src/modules/authentication/contracts';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { CreatePropertyCommand } from '@src/modules/properties/applications/useCase/commands/CreatePropertyCommand';
+import { UpdatePropertyCommand } from '@src/modules/properties/applications/useCase/commands/UpdatePropertyCommand';
+import { DeletePropertyCommand } from '@src/modules/properties/applications/useCase/commands/DeletePropertyCommand';
+import { FindPropertyQuery } from '@src/modules/properties/applications/useCase/queries/FindPropertyQuery';
+import { ListPropertiesQuery } from '@src/modules/properties/applications/useCase/queries/ListPropertiesQuery';
+import { ListPropertyOptionsQuery } from '@src/modules/properties/applications/useCase/queries/ListPropertyOptionsQuery';
 import {
   ApiJwtAuth,
   ApiPaginationQuery,
-} from '../../../../shared/swagger/swagger.decorators';
-import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
+} from '@src/shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 
 @ApiTags(SWAGGER_TAGS.PROPERTIES)
 @ApiJwtAuth()

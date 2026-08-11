@@ -10,29 +10,29 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import type { JwtPayload } from '../../../authentication/contracts';
-import { hasPermission } from '../../../authentication/contracts';
-import { RequirePermissions } from '../../../authentication/contracts';
-import { CreateReservationDto } from '../../applications/dto/create-reservation.dto';
+import type { JwtPayload } from '@src/modules/authentication/contracts';
+import { hasPermission } from '@src/modules/authentication/contracts';
+import { RequirePermissions } from '@src/modules/authentication/contracts';
+import { CreateReservationDto } from '@src/modules/reservation/applications/dto/create-reservation.dto';
 import { parseReservationQuery } from './parse-reservation-query';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { CreateReservationCommand } from '../../applications/useCase/commands/CreateReservationCommand';
-import { CancelReservationCommand } from '../../applications/useCase/commands/CancelReservationCommand';
-import { GetReservationQuery } from '../../applications/useCase/queries/GetReservationQuery';
-import { ListMyReservationsQuery } from '../../applications/useCase/queries/ListMyReservationsQuery';
-import { ListHostBookingOrdersQuery } from '../../applications/useCase/queries/ListHostBookingOrdersQuery';
-import { ListHostReservationsQuery } from '../../applications/useCase/queries/ListHostReservationsQuery';
-import { GetReservationStatsQuery } from '../../applications/useCase/queries/GetReservationStatsQuery';
-import { ListBookingOrdersQuery } from '../../applications/useCase/queries/ListBookingOrdersQuery';
-import { GetBookingOrderQuery } from '../../applications/useCase/queries/GetBookingOrderQuery';
-import { GetCancellationPreviewQuery } from '../../applications/useCase/queries/GetCancellationPreviewQuery';
-import { ListReservationsQuery } from '../../applications/useCase/queries/ListReservationsQuery';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { CreateReservationCommand } from '@src/modules/reservation/applications/useCase/commands/CreateReservationCommand';
+import { CancelReservationCommand } from '@src/modules/reservation/applications/useCase/commands/CancelReservationCommand';
+import { GetReservationQuery } from '@src/modules/reservation/applications/useCase/queries/GetReservationQuery';
+import { ListMyReservationsQuery } from '@src/modules/reservation/applications/useCase/queries/ListMyReservationsQuery';
+import { ListHostBookingOrdersQuery } from '@src/modules/reservation/applications/useCase/queries/ListHostBookingOrdersQuery';
+import { ListHostReservationsQuery } from '@src/modules/reservation/applications/useCase/queries/ListHostReservationsQuery';
+import { GetReservationStatsQuery } from '@src/modules/reservation/applications/useCase/queries/GetReservationStatsQuery';
+import { ListBookingOrdersQuery } from '@src/modules/reservation/applications/useCase/queries/ListBookingOrdersQuery';
+import { GetBookingOrderQuery } from '@src/modules/reservation/applications/useCase/queries/GetBookingOrderQuery';
+import { GetCancellationPreviewQuery } from '@src/modules/reservation/applications/useCase/queries/GetCancellationPreviewQuery';
+import { ListReservationsQuery } from '@src/modules/reservation/applications/useCase/queries/ListReservationsQuery';
 import {
   ApiJwtAuth,
   ApiPaginationQuery,
-} from '../../../../shared/swagger/swagger.decorators';
-import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
+} from '@src/shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 
 @ApiTags(SWAGGER_TAGS.RESERVATIONS)
 @ApiJwtAuth()

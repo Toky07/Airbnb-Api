@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ForbiddenException } from '@nestjs/common';
 import { CheckFavoritesQueryHandler } from './CheckFavoritesQueryHandler';
-import { CheckFavoritesQuery } from '../queries/CheckFavoritesQuery';
+import { CheckFavoritesQuery } from '@src/modules/favorite/applications/useCase/queries/CheckFavoritesQuery';
 import {
   createFavoriteRepositoryMock,
   createResolveAuthenticatedUserServiceMock,
-} from '../favorite-test.helpers';
-import { ResolveAuthenticatedUserService } from '../../../../../shared/auth/resolve-authenticated-user.service';
+} from '@src/modules/favorite/applications/useCase/favorite-test.helpers';
+import { ResolveAuthenticatedUserService } from '@src/shared/auth/resolve-authenticated-user.service';
 
 describe('CheckFavoritesQueryHandler', () => {
   const favoriteRepository = createFavoriteRepositoryMock();

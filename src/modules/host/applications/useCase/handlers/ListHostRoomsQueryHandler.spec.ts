@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { buildPaginationMeta } from '../../../../../shared/pagination/pagination.types';
+import { buildPaginationMeta } from '@src/shared/pagination/pagination.types';
 import { ListHostRoomsQueryHandler } from './ListHostRoomsQueryHandler';
-import { ListHostRoomsQuery } from '../queries/ListHostRoomsQuery';
-import { ListRoomsQuery } from '../../../../rooms/contracts';
+import { ListHostRoomsQuery } from '@src/modules/host/applications/useCase/queries/ListHostRoomsQuery';
+import { ListRoomsQuery } from '@src/modules/rooms/contracts';
 import { authUser, createResolveHostPropertyMock } from './host-test.helpers';
 
 const mockQueryExecute = vi.fn();

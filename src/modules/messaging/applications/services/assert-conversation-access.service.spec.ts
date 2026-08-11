@@ -1,8 +1,8 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { describe, expect, it, vi } from 'vitest';
 import { AssertConversationAccessService } from './assert-conversation-access.service';
-import type { IConversationRepository } from '../../domain/repositories/conversation.repository';
-import type { IUserRepository } from '../../../user/contracts';
+import type { IConversationRepository } from '@src/modules/messaging/domain/repositories/conversation.repository';
+import type { IUserRepository } from '@src/modules/user/contracts';
 
 describe('AssertConversationAccessService', () => {
   it('returns conversation when it exists', async () => {

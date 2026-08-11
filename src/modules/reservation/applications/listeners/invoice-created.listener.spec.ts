@@ -1,17 +1,17 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { EventBus } from '../../../../shared/domain/event.bus';
-import { INVOICE_PAYMENT_TYPE } from '../../../invoice/contracts';
-import { InvoiceCreatedEvent } from '../../../invoice/contracts';
-import { EmailSendRequestedEvent } from '../../../mail/contracts';
+import { EventBus } from '@src/shared/domain/event.bus';
+import { INVOICE_PAYMENT_TYPE } from '@src/modules/invoice/contracts';
+import { InvoiceCreatedEvent } from '@src/modules/invoice/contracts';
+import { EmailSendRequestedEvent } from '@src/modules/mail/contracts';
 import {
   PAYMENT_PROVIDER,
   PAYMENT_STATUS,
   PAYMENT_TYPE,
   Payment,
-} from '../../../payment/contracts';
-import { RESERVATION_NOTIFICATION_SOURCE } from '../../domain/constants/reservation-notification.constant';
-import { InvoiceCreatedListener } from '../listeners/invoice-created.listener';
-import { createSampleReservationInvoiceContext } from '../reservation-invoice-test.helpers';
+} from '@src/modules/payment/contracts';
+import { RESERVATION_NOTIFICATION_SOURCE } from '@src/modules/reservation/domain/constants/reservation-notification.constant';
+import { InvoiceCreatedListener } from '@src/modules/reservation/applications/listeners/invoice-created.listener';
+import { createSampleReservationInvoiceContext } from '@src/modules/reservation/applications/reservation-invoice-test.helpers';
 
 describe('InvoiceCreatedListener', () => {
   const paymentRepository = {

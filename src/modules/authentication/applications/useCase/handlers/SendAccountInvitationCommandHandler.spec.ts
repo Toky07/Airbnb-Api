@@ -1,11 +1,11 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { SendAccountInvitationCommandHandler } from './SendAccountInvitationCommandHandler';
-import { SendAccountInvitationCommand } from '../commands/SendAccountInvitationCommand';
-import { EmailVO } from '../../../../../shared/valueObject/email.vo';
-import { User } from '../../../../user/contracts';
-import { UserNameVO } from '../../../../user/contracts';
-import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
-import { Auth } from '../../../domain/entities/user.entity';
+import { SendAccountInvitationCommand } from '@src/modules/authentication/applications/useCase/commands/SendAccountInvitationCommand';
+import { EmailVO } from '@src/shared/valueObject/email.vo';
+import { User } from '@src/modules/user/contracts';
+import { UserNameVO } from '@src/modules/user/contracts';
+import { PhoneNumberVO } from '@src/shared/valueObject/phone.vo';
+import { Auth } from '@src/modules/authentication/domain/entities/user.entity';
 
 describe('SendAccountInvitationCommandHandler', () => {
   const userRepository = {

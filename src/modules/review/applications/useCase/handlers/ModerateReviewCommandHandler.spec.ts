@@ -1,9 +1,9 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { REVIEW_STATUS } from '../../../domain/constants/review-status.constant';
-import { Review } from '../../../domain/entities/review.entity';
-import type { IReviewRepository } from '../../../domain/repositories/review.repository';
-import type { IUserRepository } from '../../../../user/contracts';
-import { ModerateReviewCommand } from '../commands/ModerateReviewCommand';
+import { REVIEW_STATUS } from '@src/modules/review/domain/constants/review-status.constant';
+import { Review } from '@src/modules/review/domain/entities/review.entity';
+import type { IReviewRepository } from '@src/modules/review/domain/repositories/review.repository';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import { ModerateReviewCommand } from '@src/modules/review/applications/useCase/commands/ModerateReviewCommand';
 import { ModerateReviewCommandHandler } from './ModerateReviewCommandHandler';
 
 describe('ModerateReviewCommandHandler', () => {

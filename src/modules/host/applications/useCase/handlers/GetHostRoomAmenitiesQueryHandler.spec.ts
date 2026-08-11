@@ -1,7 +1,7 @@
 import { ForbiddenException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { GetHostRoomAmenitiesQueryHandler } from './GetHostRoomAmenitiesQueryHandler';
-import { GetHostRoomAmenitiesQuery } from '../queries/GetHostRoomAmenitiesQuery';
+import { GetHostRoomAmenitiesQuery } from '@src/modules/host/applications/useCase/queries/GetHostRoomAmenitiesQuery';
 import {
   authUser,
   createAssertHostRoomOwnershipMock,

@@ -7,11 +7,11 @@ export {
   AMENITY_SCOPE,
   AMENITY_SCOPES,
   type AmenityScope,
-} from '../domain/constants/amenity-scope.constant';
-export { AmenityOutput } from '../applications/dto/amenity.output';
-export { SyncAmenitiesDto } from '../applications/dto/create-amenity.dto';
-export { ListAmenityOptionsQuery } from '../applications/useCase/queries/ListAmenityOptionsQuery';
-export { ListPropertyAmenitiesQuery } from '../applications/useCase/queries/ListPropertyAmenitiesQuery';
-export { ListRoomAmenitiesQuery } from '../applications/useCase/queries/ListRoomAmenitiesQuery';
-export { SyncPropertyAmenitiesCommand } from '../applications/useCase/commands/SyncPropertyAmenitiesCommand';
-export { SyncRoomAmenitiesCommand } from '../applications/useCase/commands/SyncRoomAmenitiesCommand';
+} from '@src/modules/amenity/domain/constants/amenity-scope.constant';
+export { AmenityOutput } from '@src/modules/amenity/applications/dto/amenity.output';
+export { SyncAmenitiesDto } from '@src/modules/amenity/applications/dto/create-amenity.dto';
+export { ListAmenityOptionsQuery } from '@src/modules/amenity/applications/useCase/queries/ListAmenityOptionsQuery';
+export { ListPropertyAmenitiesQuery } from '@src/modules/amenity/applications/useCase/queries/ListPropertyAmenitiesQuery';
+export { ListRoomAmenitiesQuery } from '@src/modules/amenity/applications/useCase/queries/ListRoomAmenitiesQuery';
+export { SyncPropertyAmenitiesCommand } from '@src/modules/amenity/applications/useCase/commands/SyncPropertyAmenitiesCommand';
+export { SyncRoomAmenitiesCommand } from '@src/modules/amenity/applications/useCase/commands/SyncRoomAmenitiesCommand';

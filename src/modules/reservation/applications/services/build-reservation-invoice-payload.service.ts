@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
-import type { Payment } from '../../../payment/contracts';
+import type { Payment } from '@src/modules/payment/contracts';
 import {
   ROOM_REPOSITORY,
   type IRoomRepository,
-} from '../../../rooms/contracts';
-import type { IUserRepository } from '../../../user/contracts';
-import { USER_REPOSITORY } from '../../../user/contracts';
+} from '@src/modules/rooms/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import { USER_REPOSITORY } from '@src/modules/user/contracts';
 import {
   INVOICE_PAYMENT_TYPE,
   InvoiceGenerateRequestedEvent,
@@ -15,14 +15,14 @@ import {
   type InvoiceData,
   type InvoiceLineItem,
   type InvoiceTotals,
-} from '../../../invoice/contracts';
+} from '@src/modules/invoice/contracts';
 import type {
   HostPaymentNotificationGroup,
   ReservationInvoiceContext,
   ReservationInvoiceLineItem,
-} from '../../domain/types/reservation-invoice-context.type';
+} from '@src/modules/reservation/domain/types/reservation-invoice-context.type';
 import { ResolvePaymentReservationsService } from './resolve-payment-reservations.service';
-import { ReservationItemOutput } from '../dto/reservation-item.output';
+import { ReservationItemOutput } from '@src/modules/reservation/applications/dto/reservation-item.output';
 
 @Injectable()
 export class BuildReservationInvoicePayloadService {

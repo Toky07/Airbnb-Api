@@ -1,6 +1,6 @@
-import { PaymentProvider } from '../../../domain/constants/payment-provider.constant';
-import { PaymentType } from '../../../domain/types/payment.type';
-import type { PricingBreakdown } from '../../../../../shared/pricing/pricing-breakdown.types';
+import { PaymentProvider } from '@src/modules/payment/domain/constants/payment-provider.constant';
+import { PaymentType } from '@src/modules/payment/domain/types/payment.type';
+import type { PricingBreakdown } from '@src/shared/pricing/pricing-breakdown.types';
 
 export class CreatePaymentCommand {
   constructor(

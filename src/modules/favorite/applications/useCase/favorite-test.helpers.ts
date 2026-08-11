@@ -1,5 +1,5 @@
 import { vi } from 'vitest';
-import { Favorite } from '../../domain/entities/favorite.entity';
+import { Favorite } from '@src/modules/favorite/domain/entities/favorite.entity';
 
 export function createSampleFavorite(
   overrides: Partial<{

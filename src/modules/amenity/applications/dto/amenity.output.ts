@@ -1,5 +1,5 @@
-import type { AmenityScope } from '../../domain/constants/amenity-scope.constant';
-import type { Amenity } from '../../domain/entities/amenity.entity';
+import type { AmenityScope } from '@src/modules/amenity/domain/constants/amenity-scope.constant';
+import type { Amenity } from '@src/modules/amenity/domain/entities/amenity.entity';
 
 export class AmenityOutput {
   constructor(

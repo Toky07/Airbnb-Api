@@ -1,8 +1,8 @@
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IAuthRepository } from '../../../../authentication/contracts';
-import type { IUserRepository } from '../../../domain/repositories/user.repository';
-import type { SaveUserAvatarService } from '../../services/save-user-avatar.service';
-import type { DeleteUserCommand } from '../commands/DeleteUserCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { IAuthRepository } from '@src/modules/authentication/contracts';
+import type { IUserRepository } from '@src/modules/user/domain/repositories/user.repository';
+import type { SaveUserAvatarService } from '@src/modules/user/applications/services/save-user-avatar.service';
+import type { DeleteUserCommand } from '@src/modules/user/applications/useCase/commands/DeleteUserCommand';
 
 export class DeleteUserCommandHandler implements ICommandHandler<
   DeleteUserCommand,

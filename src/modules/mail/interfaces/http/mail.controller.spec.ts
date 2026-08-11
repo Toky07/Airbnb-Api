@@ -4,28 +4,28 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { DataSource } from 'typeorm';
-import { AuthModule } from '../../../authentication/auth.module';
-import { UserModule } from '../../../user/user.module';
-import { MailModule } from '../../mail.module';
-import { EmailOrmEntity } from '../../infrastructure/entities/email.orm-entity';
-import { AuthEntity } from '../../../authentication/infrastructure/entity/auth.entity';
-import { Role } from '../../../authentication/infrastructure/entity/role.entity';
-import { PermissionEntity } from '../../../authentication/infrastructure/entity/permission.entity';
-import { UserEntity } from '../../../user/infrastructure/entities/user.entity';
-import { HOST_ROLE_SLUG } from '../../../authentication/contracts';
-import { MediaOrmEntity } from '../../../media/infrastructure/entities/media-orm.entity';
-import { MediaModule } from '../../../media/media.module';
+import { AuthModule } from '@src/modules/authentication/auth.module';
+import { UserModule } from '@src/modules/user/user.module';
+import { MailModule } from '@src/modules/mail/mail.module';
+import { EmailOrmEntity } from '@src/modules/mail/infrastructure/entities/email.orm-entity';
+import { AuthEntity } from '@src/modules/authentication/infrastructure/entity/auth.entity';
+import { Role } from '@src/modules/authentication/infrastructure/entity/role.entity';
+import { PermissionEntity } from '@src/modules/authentication/infrastructure/entity/permission.entity';
+import { UserEntity } from '@src/modules/user/infrastructure/entities/user.entity';
+import { HOST_ROLE_SLUG } from '@src/modules/authentication/contracts';
+import { MediaOrmEntity } from '@src/modules/media/infrastructure/entities/media-orm.entity';
+import { MediaModule } from '@src/modules/media/media.module';
 import {
   AUTH_TEST_ENTITIES,
   assignHostRole,
   clearEntitiesForTests,
   DOMAIN_TEST_ENTITIES,
   activateAuthAccountForTests,
-} from '../../../../test/controller-test.helpers';
+} from '@src/test/controller-test.helpers';
 import {
   getIntegrationTestDatabaseConfig,
   prepareIntegrationTestDatabase,
-} from '../../../../test/test-database.config';
+} from '@src/test/test-database.config';
 
 describe('MailController', () => {
   let app: INestApplication;

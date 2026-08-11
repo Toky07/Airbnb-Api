@@ -3,7 +3,7 @@ import { CartPresenter } from './cart.presenter';
 import {
   createCartProductSummaryPortMock,
   createSampleCart,
-} from '../cart-test.helpers';
+} from '@src/modules/cart/applications/cart-test.helpers';
 
 describe('CartPresenter', () => {
   const productSummaryPort = createCartProductSummaryPortMock();

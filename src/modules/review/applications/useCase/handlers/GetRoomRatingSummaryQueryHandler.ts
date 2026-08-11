@@ -1,9 +1,9 @@
 import { NotFoundException } from '@nestjs/common';
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IRoomRepository } from '../../../../rooms/contracts';
-import type { IReviewRepository } from '../../../domain/repositories/review.repository';
-import { RoomRatingSummaryOutput } from '../../dto/room-rating-summary.output';
-import type { GetRoomRatingSummaryQuery } from '../queries/GetRoomRatingSummaryQuery';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { IRoomRepository } from '@src/modules/rooms/contracts';
+import type { IReviewRepository } from '@src/modules/review/domain/repositories/review.repository';
+import { RoomRatingSummaryOutput } from '@src/modules/review/applications/dto/room-rating-summary.output';
+import type { GetRoomRatingSummaryQuery } from '@src/modules/review/applications/useCase/queries/GetRoomRatingSummaryQuery';
 
 export class GetRoomRatingSummaryQueryHandler implements IQueryHandler<
   GetRoomRatingSummaryQuery,

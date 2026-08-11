@@ -1,11 +1,11 @@
 import { UnauthorizedException } from '@nestjs/common';
-import type { PaginatedResult } from '../../../../../shared/pagination/pagination.types';
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IUserRepository } from '../../../../user/contracts';
-import { ReservationOutput } from '../../dto/reservation.output';
-import type { ListMyReservationsQuery } from '../queries/ListMyReservationsQuery';
+import type { PaginatedResult } from '@src/shared/pagination/pagination.types';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import { ReservationOutput } from '@src/modules/reservation/applications/dto/reservation.output';
+import type { ListMyReservationsQuery } from '@src/modules/reservation/applications/useCase/queries/ListMyReservationsQuery';
 import type { ListReservationsQueryHandler } from './ListReservationsQueryHandler';
-import { ListReservationsQuery } from '../queries/ListReservationsQuery';
+import { ListReservationsQuery } from '@src/modules/reservation/applications/useCase/queries/ListReservationsQuery';
 
 export class ListMyReservationsQueryHandler implements IQueryHandler<
   ListMyReservationsQuery,

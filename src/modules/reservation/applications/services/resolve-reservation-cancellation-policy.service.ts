@@ -1,14 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
-import type { IPropertyRepository } from '../../../properties/contracts';
-import { PROPERTY_REPOSITORY } from '../../../properties/contracts';
-import type { IRoomRepository } from '../../../rooms/contracts';
-import { ROOM_REPOSITORY } from '../../../rooms/contracts';
+import type { IPropertyRepository } from '@src/modules/properties/contracts';
+import { PROPERTY_REPOSITORY } from '@src/modules/properties/contracts';
+import type { IRoomRepository } from '@src/modules/rooms/contracts';
+import { ROOM_REPOSITORY } from '@src/modules/rooms/contracts';
 import {
   DEFAULT_CANCELLATION_POLICY,
   type CancellationPolicy,
-} from '../../domain/constants/cancellation-policy.constant';
-import type { Reservation } from '../../domain/entities/reservation.entity';
+} from '@src/modules/reservation/domain/constants/cancellation-policy.constant';
+import type { Reservation } from '@src/modules/reservation/domain/entities/reservation.entity';
 
 @Injectable()
 export class ResolveReservationCancellationPolicyService {

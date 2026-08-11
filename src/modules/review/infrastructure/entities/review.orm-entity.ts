@@ -6,10 +6,10 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { REVIEW_STATUS } from '../../domain/constants/review-status.constant';
-import { UserEntity } from '../../../user/infrastructure/entities/user.entity';
-import { ReservationOrmEntity } from '../../../reservation/infrastructure/entities/reservation.orm-entity';
-import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
+import { REVIEW_STATUS } from '@src/modules/review/domain/constants/review-status.constant';
+import { UserEntity } from '@src/modules/user/infrastructure/entities/user.entity';
+import { ReservationOrmEntity } from '@src/modules/reservation/infrastructure/entities/reservation.orm-entity';
+import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
 
 @Entity({ name: 'reviews' })
 export class ReviewOrmEntity {

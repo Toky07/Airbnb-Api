@@ -1,7 +1,7 @@
-import { EmailVO } from '../../../../shared/valueObject/email.vo';
+import { EmailVO } from '@src/shared/valueObject/email.vo';
 import { RoleEntity } from './role.entity';
-import type { AccountStatus } from '../constants/account-status.constant';
-import { ACCOUNT_STATUS } from '../constants/account-status.constant';
+import type { AccountStatus } from '@src/modules/authentication/domain/constants/account-status.constant';
+import { ACCOUNT_STATUS } from '@src/modules/authentication/domain/constants/account-status.constant';
 
 export class Auth {
   constructor(

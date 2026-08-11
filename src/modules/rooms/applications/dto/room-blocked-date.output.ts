@@ -1,4 +1,4 @@
-import type { RoomBlockedDate } from '../../domain/entities/room-blocked-date.entity';
+import type { RoomBlockedDate } from '@src/modules/rooms/domain/entities/room-blocked-date.entity';
 
 export class RoomBlockedDateOutput {
   constructor(

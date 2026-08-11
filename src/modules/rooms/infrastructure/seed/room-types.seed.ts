@@ -1,8 +1,8 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { slugify } from '../../../../shared/utils/slug.util';
-import { RoomTypeEntity } from '../entities/room-type.entity';
+import { slugify } from '@src/shared/utils/slug.util';
+import { RoomTypeEntity } from '@src/modules/rooms/infrastructure/entities/room-type.entity';
 
 const DEFAULT_ROOM_TYPES = [
   'Standard',

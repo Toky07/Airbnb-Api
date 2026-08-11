@@ -1,8 +1,8 @@
 import type {
   PaginatedResult,
   PaginationParams,
-} from '../../../../shared/pagination/pagination.types';
-import type { Payment } from '../entities/payment.entity';
+} from '@src/shared/pagination/pagination.types';
+import type { Payment } from '@src/modules/payment/domain/entities/payment.entity';
 
 export const PAYMENT_REPOSITORY = 'PAYMENT_REPOSITORY';
 

@@ -1,5 +1,5 @@
-import { Amenity } from '../../domain/entities/amenity.entity';
-import { AmenityOrmEntity } from '../entities/amenity.orm-entity';
+import { Amenity } from '@src/modules/amenity/domain/entities/amenity.entity';
+import { AmenityOrmEntity } from '@src/modules/amenity/infrastructure/entities/amenity.orm-entity';
 
 export class AmenityMapper {
   static toDomain(entity: AmenityOrmEntity): Amenity {

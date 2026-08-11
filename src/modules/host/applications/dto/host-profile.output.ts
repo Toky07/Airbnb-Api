@@ -1,4 +1,4 @@
-import { PropertyOutput } from '../../../properties/contracts';
+import { PropertyOutput } from '@src/modules/properties/contracts';
 
 export class HostProfileOutput {
   constructor(

@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import {
   type IReservationRepository,
   RESERVATION_REPOSITORY,
-} from '../../domain/repositories/reservation.repository';
+} from '@src/modules/reservation/domain/repositories/reservation.repository';
 import { Interval } from '@nestjs/schedule';
 
 @Injectable()

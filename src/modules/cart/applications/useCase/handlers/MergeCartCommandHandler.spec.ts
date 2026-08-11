@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MergeCartCommandHandler } from './MergeCartCommandHandler';
-import { MergeCartCommand } from '../commands/MergeCartCommand';
+import { MergeCartCommand } from '@src/modules/cart/applications/useCase/commands/MergeCartCommand';
 import {
   createCartRepositoryMock,
   createCartUserPortMock,
   createSampleCart,
-} from '../../cart-test.helpers';
+} from '@src/modules/cart/applications/cart-test.helpers';
 
 describe('MergeCartCommandHandler', () => {
   const cartRepository = createCartRepositoryMock();

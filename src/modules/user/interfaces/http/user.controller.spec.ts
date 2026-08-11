@@ -1,23 +1,23 @@
 import request from 'supertest';
 import { Test } from '@nestjs/testing';
-import { UserModule } from '../../user.module';
+import { UserModule } from '@src/modules/user/user.module';
 import { INestApplication } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from '../../infrastructure/entities/user.entity';
+import { UserEntity } from '@src/modules/user/infrastructure/entities/user.entity';
 import { DataSource } from 'typeorm';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthEntity } from '../../../authentication/infrastructure/entity/auth.entity';
-import { AuthModule } from '../../../authentication/auth.module';
+import { AuthEntity } from '@src/modules/authentication/infrastructure/entity/auth.entity';
+import { AuthModule } from '@src/modules/authentication/auth.module';
 import {
   AUTH_TEST_ENTITIES,
   clearEntitiesForTests,
   DOMAIN_TEST_ENTITIES,
   registerAndLoginAsSuperAdmin,
-} from '../../../../test/controller-test.helpers';
+} from '@src/test/controller-test.helpers';
 import {
   getIntegrationTestDatabaseConfig,
   prepareIntegrationTestDatabase,
-} from '../../../../test/test-database.config';
+} from '@src/test/test-database.config';
 
 describe('UserController', () => {
   let app: INestApplication;

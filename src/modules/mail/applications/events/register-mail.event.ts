@@ -1,9 +1,9 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { EventBus } from '../../../../shared/domain/event.bus';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import type { EmailSendRequestedEvent } from '../../domain/events/email-send-requested.event';
-import { LoadEmailAttachmentsFromPathsService } from '../services/load-email-attachments-from-paths.service';
-import { SendEmailCommand } from '../useCase/commands/SendEmailCommand';
+import { EventBus } from '@src/shared/domain/event.bus';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import type { EmailSendRequestedEvent } from '@src/modules/mail/domain/events/email-send-requested.event';
+import { LoadEmailAttachmentsFromPathsService } from '@src/modules/mail/applications/services/load-email-attachments-from-paths.service';
+import { SendEmailCommand } from '@src/modules/mail/applications/useCase/commands/SendEmailCommand';
 
 @Injectable()
 export class MailEvent implements OnModuleInit {

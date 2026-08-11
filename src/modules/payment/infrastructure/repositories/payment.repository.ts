@@ -5,13 +5,13 @@ import {
   buildPaginationMeta,
   type PaginatedResult,
   type PaginationParams,
-} from '../../../../shared/pagination/pagination.types';
-import { PAYMENT_STATUS } from '../../domain/constants/payment-status.constant';
-import { Payment } from '../../domain/entities/payment.entity';
-import type { IPaymentRepository } from '../../domain/repositories/payment.repository';
-import { PAYMENT_TYPE } from '../../domain/types/payment.type';
-import { PaymentOrmEntity } from '../entities/payment.orm-entity';
-import { PaymentMapper } from '../mappers/payment.mapper';
+} from '@src/shared/pagination/pagination.types';
+import { PAYMENT_STATUS } from '@src/modules/payment/domain/constants/payment-status.constant';
+import { Payment } from '@src/modules/payment/domain/entities/payment.entity';
+import type { IPaymentRepository } from '@src/modules/payment/domain/repositories/payment.repository';
+import { PAYMENT_TYPE } from '@src/modules/payment/domain/types/payment.type';
+import { PaymentOrmEntity } from '@src/modules/payment/infrastructure/entities/payment.orm-entity';
+import { PaymentMapper } from '@src/modules/payment/infrastructure/mappers/payment.mapper';
 
 @Injectable()
 export class PaymentRepository implements IPaymentRepository {

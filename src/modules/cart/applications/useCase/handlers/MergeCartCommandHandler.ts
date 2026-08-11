@@ -1,12 +1,12 @@
 import { UnauthorizedException } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { MergeCartCommand } from '../commands/MergeCartCommand';
-import type { CartOutput } from '../../dto/cart.output';
-import { Cart } from '../../../domain/entities/cart.entity';
-import type { ICartUserPort } from '../../../domain/ports/cart-user.port';
-import type { ICartRepository } from '../../../domain/repositories/cart.repository';
-import type { CartPresenter } from '../../presenters/cart.presenter';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { MergeCartCommand } from '@src/modules/cart/applications/useCase/commands/MergeCartCommand';
+import type { CartOutput } from '@src/modules/cart/applications/dto/cart.output';
+import { Cart } from '@src/modules/cart/domain/entities/cart.entity';
+import type { ICartUserPort } from '@src/modules/cart/domain/ports/cart-user.port';
+import type { ICartRepository } from '@src/modules/cart/domain/repositories/cart.repository';
+import type { CartPresenter } from '@src/modules/cart/applications/presenters/cart.presenter';
 
 export class MergeCartCommandHandler implements ICommandHandler<
   MergeCartCommand,

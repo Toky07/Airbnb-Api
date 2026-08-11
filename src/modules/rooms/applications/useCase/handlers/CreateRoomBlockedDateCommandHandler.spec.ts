@@ -1,16 +1,16 @@
 import { describe, expect, it, vi } from 'vitest';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { Room } from '../../../domain/entities/room.entity';
-import { RoomBlockedDate } from '../../../domain/entities/room-blocked-date.entity';
-import type { IRoomRepository } from '../../../domain/repositories/room.repository';
-import type { IRoomBlockedDateRepository } from '../../../domain/repositories/room-blocked-date.repository';
-import { Property } from '../../../../properties/contracts';
+import { Room } from '@src/modules/rooms/domain/entities/room.entity';
+import { RoomBlockedDate } from '@src/modules/rooms/domain/entities/room-blocked-date.entity';
+import type { IRoomRepository } from '@src/modules/rooms/domain/repositories/room.repository';
+import type { IRoomBlockedDateRepository } from '@src/modules/rooms/domain/repositories/room-blocked-date.repository';
+import { Property } from '@src/modules/properties/contracts';
 import { CreateRoomBlockedDateCommandHandler } from './CreateRoomBlockedDateCommandHandler';
-import { CreateRoomBlockedDateCommand } from '../commands/CreateRoomBlockedDateCommand';
+import { CreateRoomBlockedDateCommand } from '@src/modules/rooms/applications/useCase/commands/CreateRoomBlockedDateCommand';
 import { DeleteRoomBlockedDateCommandHandler } from './DeleteRoomBlockedDateCommandHandler';
-import { DeleteRoomBlockedDateCommand } from '../commands/DeleteRoomBlockedDateCommand';
+import { DeleteRoomBlockedDateCommand } from '@src/modules/rooms/applications/useCase/commands/DeleteRoomBlockedDateCommand';
 import { ListRoomBlockedDatesQueryHandler } from './ListRoomBlockedDatesQueryHandler';
-import { ListRoomBlockedDatesQuery } from '../queries/ListRoomBlockedDatesQuery';
+import { ListRoomBlockedDatesQuery } from '@src/modules/rooms/applications/useCase/queries/ListRoomBlockedDatesQuery';
 
 const sampleRoom = new Room({
   id: 10,

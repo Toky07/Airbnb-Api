@@ -1,17 +1,17 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
 import {
   INVOICE_PAYMENT_TYPE,
   type IInvoiceRepository,
-} from '../../../../invoice/contracts';
-import type { IPropertyRepository } from '../../../../properties/contracts';
-import type { IPaymentRepository } from '../../../../payment/contracts';
-import type { IUserRepository } from '../../../../user/contracts';
-import { BookingOrderDetailOutput } from '../../dto/booking-order.output';
-import type { BookingOrderItemOutput } from '../../dto/booking-order-item.output';
-import type { ResolvePaymentReservationsService } from '../../services/resolve-payment-reservations.service';
-import { filterItemsByPropertyIds } from '../../services/scope-booking-order-items.service';
-import type { GetBookingOrderQuery } from '../queries/GetBookingOrderQuery';
+} from '@src/modules/invoice/contracts';
+import type { IPropertyRepository } from '@src/modules/properties/contracts';
+import type { IPaymentRepository } from '@src/modules/payment/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import { BookingOrderDetailOutput } from '@src/modules/reservation/applications/dto/booking-order.output';
+import type { BookingOrderItemOutput } from '@src/modules/reservation/applications/dto/booking-order-item.output';
+import type { ResolvePaymentReservationsService } from '@src/modules/reservation/applications/services/resolve-payment-reservations.service';
+import { filterItemsByPropertyIds } from '@src/modules/reservation/applications/services/scope-booking-order-items.service';
+import type { GetBookingOrderQuery } from '@src/modules/reservation/applications/useCase/queries/GetBookingOrderQuery';
 
 export class GetBookingOrderQueryHandler implements IQueryHandler<
   GetBookingOrderQuery,

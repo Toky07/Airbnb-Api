@@ -3,4 +3,4 @@ export {
   getStripePublishableKey,
   getStripeSecretKey,
   getStripeWebhookSecret,
-} from '../../../../config/env.config';
+} from '@src/config/env.config';

@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { SetUserPasswordCommandHandler } from './SetUserPasswordCommandHandler';
-import { SetUserPasswordCommand } from '../commands/SetUserPasswordCommand';
-import { ACCOUNT_STATUS } from '../../../../authentication/contracts';
+import { SetUserPasswordCommand } from '@src/modules/user/applications/useCase/commands/SetUserPasswordCommand';
+import { ACCOUNT_STATUS } from '@src/modules/authentication/contracts';
 
 vi.mock('bcrypt', () => ({
   hash: vi.fn(async (value: string) => `hash:${value}`),

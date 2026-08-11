@@ -4,9 +4,9 @@ import { IsNull, MoreThan, Repository } from 'typeorm';
 import type {
   IPasswordSetupTokenRepository,
   PasswordSetupTokenRecord,
-} from '../../domain/repositories/password-setup-token.repository';
-import { PasswordSetupTokenOrmEntity } from '../entities/password-setup-token.orm-entity';
-import { AuthMapper } from '../mappers/auth.mappers';
+} from '@src/modules/authentication/domain/repositories/password-setup-token.repository';
+import { PasswordSetupTokenOrmEntity } from '@src/modules/authentication/infrastructure/entities/password-setup-token.orm-entity';
+import { AuthMapper } from '@src/modules/authentication/infrastructure/mappers/auth.mappers';
 
 @Injectable()
 export class PasswordSetupTokenRepository implements IPasswordSetupTokenRepository {

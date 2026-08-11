@@ -1,6 +1,6 @@
-import type { EntityType, MediaType } from '../../constant';
-import { Media } from '../../domain/entities/media.entity';
-import { MediaOrmEntity } from '../entities/media-orm.entity';
+import type { EntityType, MediaType } from '@src/modules/media/constant';
+import { Media } from '@src/modules/media/domain/entities/media.entity';
+import { MediaOrmEntity } from '@src/modules/media/infrastructure/entities/media-orm.entity';
 
 export class MediaMapper {
   static toDomain(entity: MediaOrmEntity): Media {

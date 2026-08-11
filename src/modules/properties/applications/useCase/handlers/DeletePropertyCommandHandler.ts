@@ -1,9 +1,9 @@
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import type { IPropertyRepository } from '../../../domain/repositories/property.repository';
-import { ENTITY_TYPE } from '../../../../media/contracts';
-import { DeleteMediasByEntityCommand } from '../../../../media/contracts';
-import type { DeletePropertyCommand } from '../commands/DeletePropertyCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import type { IPropertyRepository } from '@src/modules/properties/domain/repositories/property.repository';
+import { ENTITY_TYPE } from '@src/modules/media/contracts';
+import { DeleteMediasByEntityCommand } from '@src/modules/media/contracts';
+import type { DeletePropertyCommand } from '@src/modules/properties/applications/useCase/commands/DeletePropertyCommand';
 
 export class DeletePropertyCommandHandler implements ICommandHandler<
   DeletePropertyCommand,

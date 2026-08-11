@@ -1,11 +1,11 @@
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import type { IPropertyRepository } from '../../../domain/repositories/property.repository';
-import { PropertyOutput } from '../../dto/property.output';
-import { ENTITY_TYPE } from '../../../../media/contracts';
-import { SaveEntityMediasCommand } from '../../../../media/contracts';
-import type { PropertyMediaPresenter } from '../../presenters/property-media.presenter';
-import type { UpdatePropertyCommand } from '../commands/UpdatePropertyCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import type { IPropertyRepository } from '@src/modules/properties/domain/repositories/property.repository';
+import { PropertyOutput } from '@src/modules/properties/applications/dto/property.output';
+import { ENTITY_TYPE } from '@src/modules/media/contracts';
+import { SaveEntityMediasCommand } from '@src/modules/media/contracts';
+import type { PropertyMediaPresenter } from '@src/modules/properties/applications/presenters/property-media.presenter';
+import type { UpdatePropertyCommand } from '@src/modules/properties/applications/useCase/commands/UpdatePropertyCommand';
 
 export class UpdatePropertyCommandHandler implements ICommandHandler<
   UpdatePropertyCommand,

@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
 import { NotFoundException } from '@nestjs/common';
-import { EMAIL_STATUS } from '../../../domain/constants/email-status.constant';
-import { Email } from '../../../domain/entities/email.entity';
+import { EMAIL_STATUS } from '@src/modules/mail/domain/constants/email-status.constant';
+import { Email } from '@src/modules/mail/domain/entities/email.entity';
 import { GetEmailQueryHandler } from './GetEmailQueryHandler';
-import { GetEmailQuery } from '../queries/GetEmailQuery';
-import { createEmailRepositoryMock } from '../email-test.helpers';
+import { GetEmailQuery } from '@src/modules/mail/applications/useCase/queries/GetEmailQuery';
+import { createEmailRepositoryMock } from '@src/modules/mail/applications/useCase/email-test.helpers';
 
 describe('GetEmailQueryHandler', () => {
   it('retourne un email existant', async () => {

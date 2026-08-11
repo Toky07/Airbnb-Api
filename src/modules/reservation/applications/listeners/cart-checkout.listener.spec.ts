@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { EventBus } from '../../../../shared/domain/event.bus';
+import { EventBus } from '@src/shared/domain/event.bus';
 import {
   CartCheckoutRequestedEvent,
   CartCheckoutReservationCreatedEvent,
-} from '../../../cart/contracts';
+} from '@src/modules/cart/contracts';
 import { CartCheckoutListener } from './cart-checkout.listener';
-import { commandBusExecuteMock } from '../../../../test/command-bus.mock';
-import { samplePricingBreakdown } from '../../../cart/applications/useCase/handlers/checkout-test.helpers';
+import { commandBusExecuteMock } from '@src/test/command-bus.mock';
+import { samplePricingBreakdown } from '@src/modules/cart/applications/useCase/handlers/checkout-test.helpers';
 
 describe('CartCheckoutListener', () => {
   beforeEach(() => {

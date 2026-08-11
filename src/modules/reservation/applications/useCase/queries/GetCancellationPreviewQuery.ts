@@ -1,4 +1,4 @@
-import type { ReservationAccess } from '../../services/assert-reservation-access.service';
+import type { ReservationAccess } from '@src/modules/reservation/applications/services/assert-reservation-access.service';
 
 export class GetCancellationPreviewQuery {
   constructor(

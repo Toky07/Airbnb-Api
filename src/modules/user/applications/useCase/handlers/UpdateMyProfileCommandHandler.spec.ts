@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
 import { UpdateMyProfileCommandHandler } from './UpdateMyProfileCommandHandler';
-import { UpdateMyProfileCommand } from '../commands/UpdateMyProfileCommand';
-import { User } from '../../../domain/entities/user.entity';
-import { UserNameVO } from '../../../domain/valueObject/username.vo';
-import { EmailVO } from '../../../../../shared/valueObject/email.vo';
-import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
+import { UpdateMyProfileCommand } from '@src/modules/user/applications/useCase/commands/UpdateMyProfileCommand';
+import { User } from '@src/modules/user/domain/entities/user.entity';
+import { UserNameVO } from '@src/modules/user/domain/valueObject/username.vo';
+import { EmailVO } from '@src/shared/valueObject/email.vo';
+import { PhoneNumberVO } from '@src/shared/valueObject/phone.vo';
 
 describe('UpdateMyProfileCommandHandler', () => {
   it('met à jour le profil de l’utilisateur connecté', async () => {

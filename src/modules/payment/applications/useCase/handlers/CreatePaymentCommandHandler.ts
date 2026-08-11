@@ -1,12 +1,12 @@
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IPaymentRepository } from '../../../domain/repositories/payment.repository';
-import type { CreatePaymentCommand } from '../commands/CreatePaymentCommand';
-import type { IPaymentGateway } from '../../../domain/ports/payment-gateway.port';
-import type { IPaymentPublicConfig } from '../../../domain/ports/payment-public-config.port';
-import type { CreatePaymentResult } from '../../dto/create-payment.result';
-import { Payment } from '../../../domain/entities/payment.entity';
-import { EventBus } from '../../../../../shared/domain/event.bus';
-import { PaymentCreatedEvent } from '../../../domain/events/payment-created.event';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { IPaymentRepository } from '@src/modules/payment/domain/repositories/payment.repository';
+import type { CreatePaymentCommand } from '@src/modules/payment/applications/useCase/commands/CreatePaymentCommand';
+import type { IPaymentGateway } from '@src/modules/payment/domain/ports/payment-gateway.port';
+import type { IPaymentPublicConfig } from '@src/modules/payment/domain/ports/payment-public-config.port';
+import type { CreatePaymentResult } from '@src/modules/payment/applications/dto/create-payment.result';
+import { Payment } from '@src/modules/payment/domain/entities/payment.entity';
+import { EventBus } from '@src/shared/domain/event.bus';
+import { PaymentCreatedEvent } from '@src/modules/payment/domain/events/payment-created.event';
 
 export type { CreatePaymentResult };
 

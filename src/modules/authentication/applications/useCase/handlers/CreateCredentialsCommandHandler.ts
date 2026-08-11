@@ -1,10 +1,10 @@
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IAuthRepository } from '../../../domain/repositories/auth.repository';
-import { EmailVO } from '../../../../../shared/valueObject/email.vo';
-import { Auth } from '../../../domain/entities/user.entity';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { IAuthRepository } from '@src/modules/authentication/domain/repositories/auth.repository';
+import { EmailVO } from '@src/shared/valueObject/email.vo';
+import { Auth } from '@src/modules/authentication/domain/entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { ACCOUNT_STATUS } from '../../../domain/constants/account-status.constant';
-import type { CreateCredentialsCommand } from '../commands/CreateCredentialsCommand';
+import { ACCOUNT_STATUS } from '@src/modules/authentication/domain/constants/account-status.constant';
+import type { CreateCredentialsCommand } from '@src/modules/authentication/applications/useCase/commands/CreateCredentialsCommand';
 
 export class CreateCredentialsCommandHandler implements ICommandHandler<
   CreateCredentialsCommand,

@@ -3,7 +3,7 @@ import type {
   CreatePaymentIntentParams,
   IPaymentGateway,
   PaymentIntentSnapshot,
-} from '../../domain/ports/payment-gateway.port';
+} from '@src/modules/payment/domain/ports/payment-gateway.port';
 import { StripeClientProvider } from './StripeClientProvider';
 
 @Injectable()

@@ -1,4 +1,4 @@
-import type { UpdateAmenityDto } from '../../dto/create-amenity.dto';
+import type { UpdateAmenityDto } from '@src/modules/amenity/applications/dto/create-amenity.dto';
 
 export class UpdateAmenityCommand {
   constructor(

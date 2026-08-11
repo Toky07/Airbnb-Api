@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ImportUsersHandler } from './ImportUsersHandler';
 import { createImportBatchContext } from './import-test.helpers';
-import { commandBusExecuteMock } from '../../../../../test/command-bus.mock';
+import { commandBusExecuteMock } from '@src/test/command-bus.mock';
 
 describe('ImportUsersHandler', () => {
   beforeEach(() => {

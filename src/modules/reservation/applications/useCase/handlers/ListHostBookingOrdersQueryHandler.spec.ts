@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ListHostBookingOrdersQueryHandler } from './ListHostBookingOrdersQueryHandler';
-import { ListHostBookingOrdersQuery } from '../queries/ListHostBookingOrdersQuery';
+import { ListHostBookingOrdersQuery } from '@src/modules/reservation/applications/useCase/queries/ListHostBookingOrdersQuery';
 
 describe('ListHostBookingOrdersQueryHandler', () => {
   const paymentRepository = { findPaginatedForReservationIds: vi.fn() };

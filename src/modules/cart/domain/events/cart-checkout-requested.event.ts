@@ -1,6 +1,6 @@
-import { DomainEvent } from '../../../../shared/domain/domain.event';
+import { DomainEvent } from '@src/shared/domain/domain.event';
 
-import type { PricingBreakdown } from '../../../../shared/pricing/pricing-breakdown.types';
+import type { PricingBreakdown } from '@src/shared/pricing/pricing-breakdown.types';
 
 export type CartCheckoutItemPayload = {
   itemType: string;

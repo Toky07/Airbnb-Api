@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { USER_REPOSITORY } from '../../../user/contracts';
-import type { IUserRepository } from '../../../user/contracts';
-import type { User } from '../../../user/contracts';
-import { ResolveAuthenticatedUserService } from '../../../../shared/auth/resolve-authenticated-user.service';
+import { USER_REPOSITORY } from '@src/modules/user/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import type { User } from '@src/modules/user/contracts';
+import { ResolveAuthenticatedUserService } from '@src/shared/auth/resolve-authenticated-user.service';
 
 @Injectable()
 export class ResolveHostUserService {

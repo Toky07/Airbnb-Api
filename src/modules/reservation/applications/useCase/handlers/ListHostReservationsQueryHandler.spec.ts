@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { buildPaginationMeta } from '../../../../../shared/pagination/pagination.types';
-import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
-import { ReservationOutput } from '../../dto/reservation.output';
+import { buildPaginationMeta } from '@src/shared/pagination/pagination.types';
+import { RESERVATION_STATUS } from '@src/modules/reservation/domain/constants/reservation-status.constant';
+import { ReservationOutput } from '@src/modules/reservation/applications/dto/reservation.output';
 import { ListHostReservationsQueryHandler } from './ListHostReservationsQueryHandler';
-import { ListHostReservationsQuery } from '../queries/ListHostReservationsQuery';
-import { ListReservationsQuery } from '../queries/ListReservationsQuery';
+import { ListHostReservationsQuery } from '@src/modules/reservation/applications/useCase/queries/ListHostReservationsQuery';
+import { ListReservationsQuery } from '@src/modules/reservation/applications/useCase/queries/ListReservationsQuery';
 
 describe('ListHostReservationsQueryHandler', () => {
   const resolveHostPropertyIds = { resolve: vi.fn() };

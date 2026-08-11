@@ -1,8 +1,8 @@
-import type { PaginatedResult } from '../../../../../shared/pagination/pagination.types';
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IInvoiceRepository } from '../../../domain/repositories/invoice.repository';
-import { InvoiceAdminListOutput } from '../../dto/invoice-admin-list.output';
-import type { ListInvoicesQuery } from '../queries/ListInvoicesQuery';
+import type { PaginatedResult } from '@src/shared/pagination/pagination.types';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { IInvoiceRepository } from '@src/modules/invoice/domain/repositories/invoice.repository';
+import { InvoiceAdminListOutput } from '@src/modules/invoice/applications/dto/invoice-admin-list.output';
+import type { ListInvoicesQuery } from '@src/modules/invoice/applications/useCase/queries/ListInvoicesQuery';
 
 export class ListInvoicesQueryHandler implements IQueryHandler<
   ListInvoicesQuery,

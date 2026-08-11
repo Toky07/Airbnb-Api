@@ -1,6 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { getThrottlerModuleOptions } from '../config/throttle.config';
+import { getThrottlerModuleOptions } from '@src/config/throttle.config';
 
 @Global()
 @Module({

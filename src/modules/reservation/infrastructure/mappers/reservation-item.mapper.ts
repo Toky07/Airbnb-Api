@@ -1,5 +1,5 @@
-import { ReservationItem } from '../../domain/entities/reservation-item.entity';
-import { ReservationItemOrmEntity } from '../entities/reservation-item.orm-entity';
+import { ReservationItem } from '@src/modules/reservation/domain/entities/reservation-item.entity';
+import { ReservationItemOrmEntity } from '@src/modules/reservation/infrastructure/entities/reservation-item.orm-entity';
 
 export class ReservationItemMapper {
   static toDomain(entity: ReservationItemOrmEntity): ReservationItem {

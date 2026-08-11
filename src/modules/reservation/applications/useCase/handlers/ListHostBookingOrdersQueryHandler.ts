@@ -1,10 +1,10 @@
-import type { PaginatedResult } from '../../../../../shared/pagination/pagination.types';
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IPaymentRepository } from '../../../../payment/contracts';
-import type { IReservationRepository } from '../../../domain/repositories/reservation.repository';
-import { BookingOrderListItemOutput } from '../../dto/booking-order.output';
-import type { ResolveHostPropertyIdsService } from '../../services/resolve-host-property-ids.service';
-import type { ListHostBookingOrdersQuery } from '../queries/ListHostBookingOrdersQuery';
+import type { PaginatedResult } from '@src/shared/pagination/pagination.types';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { IPaymentRepository } from '@src/modules/payment/contracts';
+import type { IReservationRepository } from '@src/modules/reservation/domain/repositories/reservation.repository';
+import { BookingOrderListItemOutput } from '@src/modules/reservation/applications/dto/booking-order.output';
+import type { ResolveHostPropertyIdsService } from '@src/modules/reservation/applications/services/resolve-host-property-ids.service';
+import type { ListHostBookingOrdersQuery } from '@src/modules/reservation/applications/useCase/queries/ListHostBookingOrdersQuery';
 import type { ListBookingOrdersQueryHandler } from './ListBookingOrdersQueryHandler';
 
 export class ListHostBookingOrdersQueryHandler implements IQueryHandler<

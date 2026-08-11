@@ -2,11 +2,11 @@ import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import {
   RESERVATION_REPOSITORY,
   type IReservationRepository,
-} from '../../domain/repositories/reservation.repository';
+} from '@src/modules/reservation/domain/repositories/reservation.repository';
 import {
   ROOM_BLOCKED_DATE_REPOSITORY,
   type IRoomBlockedDateRepository,
-} from '../../../rooms/contracts';
+} from '@src/modules/rooms/contracts';
 
 @Injectable()
 export class CheckRoomAvailabilityService {

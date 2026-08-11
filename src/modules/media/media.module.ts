@@ -12,8 +12,8 @@ import {
 } from './services/localStorage.service';
 import type { ILocalStorageService } from './services/localStorage.service';
 import { MediaBootstrap } from './media.bootstrap';
-import { CommandBus } from '../../shared/useCase/bus/bus';
-import { QueryBus } from '../../shared/useCase/bus/query-bus';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
 import { SaveEntityMediasCommand } from './applications/useCase/commands/SaveEntityMediasCommand';
 import { SyncEntityMediasCommand } from './applications/useCase/commands/SyncEntityMediasCommand';
 import { DeleteMediasByEntityCommand } from './applications/useCase/commands/DeleteMediasByEntityCommand';

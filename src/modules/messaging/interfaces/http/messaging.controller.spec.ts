@@ -4,31 +4,31 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { DataSource } from 'typeorm';
-import { AuthModule } from '../../../authentication/auth.module';
-import { UserModule } from '../../../user/user.module';
-import { RoomsModule } from '../../../rooms/room.module';
-import { PropertiesModule } from '../../../properties/properties.module';
-import { ReservationModule } from '../../../reservation/reservation.module';
-import { MessagingModule } from '../../messaging.module';
-import { PropertyEntity } from '../../../properties/infrastructure/entities/property-entity.entity';
-import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
-import { UserEntity } from '../../../user/infrastructure/entities/user.entity';
-import { ReservationOrmEntity } from '../../../reservation/infrastructure/entities/reservation.orm-entity';
-import { ReservationItemOrmEntity } from '../../../reservation/infrastructure/entities/reservation-item.orm-entity';
-import { ConversationOrmEntity } from '../../infrastructure/entities/conversation.orm-entity';
-import { MessageOrmEntity } from '../../infrastructure/entities/message.orm-entity';
-import { RESERVATION_STATUS } from '../../../reservation/contracts';
+import { AuthModule } from '@src/modules/authentication/auth.module';
+import { UserModule } from '@src/modules/user/user.module';
+import { RoomsModule } from '@src/modules/rooms/room.module';
+import { PropertiesModule } from '@src/modules/properties/properties.module';
+import { ReservationModule } from '@src/modules/reservation/reservation.module';
+import { MessagingModule } from '@src/modules/messaging/messaging.module';
+import { PropertyEntity } from '@src/modules/properties/infrastructure/entities/property-entity.entity';
+import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
+import { UserEntity } from '@src/modules/user/infrastructure/entities/user.entity';
+import { ReservationOrmEntity } from '@src/modules/reservation/infrastructure/entities/reservation.orm-entity';
+import { ReservationItemOrmEntity } from '@src/modules/reservation/infrastructure/entities/reservation-item.orm-entity';
+import { ConversationOrmEntity } from '@src/modules/messaging/infrastructure/entities/conversation.orm-entity';
+import { MessageOrmEntity } from '@src/modules/messaging/infrastructure/entities/message.orm-entity';
+import { RESERVATION_STATUS } from '@src/modules/reservation/contracts';
 import {
   AUTH_TEST_ENTITIES,
   DEFAULT_REGISTER,
   DOMAIN_TEST_ENTITIES,
   registerAndLoginAsHost,
   registerAndLoginAsSuperAdmin,
-} from '../../../../test/controller-test.helpers';
+} from '@src/test/controller-test.helpers';
 import {
   getIntegrationTestDatabaseConfig,
   prepareIntegrationTestDatabase,
-} from '../../../../test/test-database.config';
+} from '@src/test/test-database.config';
 
 describe('MessagingController', () => {
   let app: INestApplication;

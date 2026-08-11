@@ -1,14 +1,14 @@
 import { NotFoundException } from '@nestjs/common';
-import { User } from '../../../domain/entities/user.entity';
-import type { IUserRepository } from '../../../domain/repositories/user.repository';
-import { UserMapper } from '../../../infrastructure/mappers/user.mapper';
+import { User } from '@src/modules/user/domain/entities/user.entity';
+import type { IUserRepository } from '@src/modules/user/domain/repositories/user.repository';
+import { UserMapper } from '@src/modules/user/infrastructure/mappers/user.mapper';
 import { UpdateUserCommandHandler } from './UpdateUserCommandHandler';
-import { UpdateUserCommand } from '../commands/UpdateUserCommand';
-import { EmailVO } from '../../../../../shared/valueObject/email.vo';
-import { UserOutput } from '../../../domain/dtos/user.output';
-import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
-import { UserNameVO } from '../../../domain/valueObject/username.vo';
-import type { SaveUserAvatarService } from '../../services/save-user-avatar.service';
+import { UpdateUserCommand } from '@src/modules/user/applications/useCase/commands/UpdateUserCommand';
+import { EmailVO } from '@src/shared/valueObject/email.vo';
+import { UserOutput } from '@src/modules/user/domain/dtos/user.output';
+import { PhoneNumberVO } from '@src/shared/valueObject/phone.vo';
+import { UserNameVO } from '@src/modules/user/domain/valueObject/username.vo';
+import type { SaveUserAvatarService } from '@src/modules/user/applications/services/save-user-avatar.service';
 
 const saveUserAvatar = {
   resolve: async (_userId: number, current: string) => current,

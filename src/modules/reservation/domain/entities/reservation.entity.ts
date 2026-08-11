@@ -1,4 +1,4 @@
-import { ReservationStatus } from '../constants/reservation-status.constant';
+import { ReservationStatus } from '@src/modules/reservation/domain/constants/reservation-status.constant';
 import type { ReservationItem } from './reservation-item.entity';
 
 export class Reservation {

@@ -3,11 +3,11 @@ import {
   ConflictException,
   NotFoundException,
 } from '@nestjs/common';
-import { PropertyType } from '../../../domain/entities/property-type.entity';
+import { PropertyType } from '@src/modules/properties/domain/entities/property-type.entity';
 import { UpdatePropertyTypeCommandHandler } from './UpdatePropertyTypeCommandHandler';
 import { DeletePropertyTypeCommandHandler } from './DeletePropertyTypeCommandHandler';
-import { UpdatePropertyTypeCommand } from '../commands/UpdatePropertyTypeCommand';
-import { DeletePropertyTypeCommand } from '../commands/DeletePropertyTypeCommand';
+import { UpdatePropertyTypeCommand } from '@src/modules/properties/applications/useCase/commands/UpdatePropertyTypeCommand';
+import { DeletePropertyTypeCommand } from '@src/modules/properties/applications/useCase/commands/DeletePropertyTypeCommand';
 
 const existingType = new PropertyType(
   'Villa',

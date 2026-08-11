@@ -1,9 +1,9 @@
-import { PAYMENT_PROVIDER } from '../../domain/constants/payment-provider.constant';
-import type { PaymentStatus } from '../../domain/constants/payment-status.constant';
-import { Payment } from '../../domain/entities/payment.entity';
-import { PaymentOrmEntity } from '../entities/payment.orm-entity';
-import { PaymentType } from '../../domain/types/payment.type';
-import type { PricingBreakdown } from '../../../../shared/pricing/pricing-breakdown.types';
+import { PAYMENT_PROVIDER } from '@src/modules/payment/domain/constants/payment-provider.constant';
+import type { PaymentStatus } from '@src/modules/payment/domain/constants/payment-status.constant';
+import { Payment } from '@src/modules/payment/domain/entities/payment.entity';
+import { PaymentOrmEntity } from '@src/modules/payment/infrastructure/entities/payment.orm-entity';
+import { PaymentType } from '@src/modules/payment/domain/types/payment.type';
+import type { PricingBreakdown } from '@src/shared/pricing/pricing-breakdown.types';
 
 function parsePricingBreakdown(
   value: Record<string, unknown> | null | undefined,

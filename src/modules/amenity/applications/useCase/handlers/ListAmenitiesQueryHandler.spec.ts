@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { AMENITY_SCOPE } from '../../../domain/constants/amenity-scope.constant';
+import { AMENITY_SCOPE } from '@src/modules/amenity/domain/constants/amenity-scope.constant';
 import { ListAmenitiesQueryHandler } from './ListAmenitiesQueryHandler';
-import { ListAmenitiesQuery } from '../queries/ListAmenitiesQuery';
+import { ListAmenitiesQuery } from '@src/modules/amenity/applications/useCase/queries/ListAmenitiesQuery';
 
 describe('ListAmenitiesQueryHandler', () => {
   it('liste les amenities par scope', async () => {

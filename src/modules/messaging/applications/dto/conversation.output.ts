@@ -1,4 +1,4 @@
-import type { Conversation } from '../../domain/entities/conversation.entity';
+import type { Conversation } from '@src/modules/messaging/domain/entities/conversation.entity';
 
 export class ConversationOutput {
   constructor(

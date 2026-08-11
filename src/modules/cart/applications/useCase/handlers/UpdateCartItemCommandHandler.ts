@@ -1,14 +1,14 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { UpdateCartItemCommand } from '../commands/UpdateCartItemCommand';
-import type { CartOutput } from '../../dto/cart.output';
-import { CART_ITEM_TYPE } from '../../../domain/constants/cart-item-type.constant';
-import { CartItem } from '../../../domain/entities/cart-item.entity';
-import type { ICartItemCatalogPort } from '../../../domain/ports/cart-item-catalog.port';
-import type { ICartRepository } from '../../../domain/repositories/cart.repository';
-import type { UpdateCartItemDto } from '../../dto/add-cart-item.dto';
-import type { CartPresenter } from '../../presenters/cart.presenter';
-import type { ResolveCartService } from '../../services/resolve-cart.service';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { UpdateCartItemCommand } from '@src/modules/cart/applications/useCase/commands/UpdateCartItemCommand';
+import type { CartOutput } from '@src/modules/cart/applications/dto/cart.output';
+import { CART_ITEM_TYPE } from '@src/modules/cart/domain/constants/cart-item-type.constant';
+import { CartItem } from '@src/modules/cart/domain/entities/cart-item.entity';
+import type { ICartItemCatalogPort } from '@src/modules/cart/domain/ports/cart-item-catalog.port';
+import type { ICartRepository } from '@src/modules/cart/domain/repositories/cart.repository';
+import type { UpdateCartItemDto } from '@src/modules/cart/applications/dto/add-cart-item.dto';
+import type { CartPresenter } from '@src/modules/cart/applications/presenters/cart.presenter';
+import type { ResolveCartService } from '@src/modules/cart/applications/services/resolve-cart.service';
 
 export class UpdateCartItemCommandHandler implements ICommandHandler<
   UpdateCartItemCommand,

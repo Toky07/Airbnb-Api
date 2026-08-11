@@ -1,7 +1,7 @@
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { AmenityOutput } from '../../dto/amenity.output';
-import type { SyncRoomAmenitiesCommand } from '../commands/SyncRoomAmenitiesCommand';
-import type { SyncEntityAmenitiesService } from '../../services/entity-amenities.service';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import { AmenityOutput } from '@src/modules/amenity/applications/dto/amenity.output';
+import type { SyncRoomAmenitiesCommand } from '@src/modules/amenity/applications/useCase/commands/SyncRoomAmenitiesCommand';
+import type { SyncEntityAmenitiesService } from '@src/modules/amenity/applications/services/entity-amenities.service';
 
 export class SyncRoomAmenitiesCommandHandler implements ICommandHandler<
   SyncRoomAmenitiesCommand,

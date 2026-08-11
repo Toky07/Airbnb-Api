@@ -1,4 +1,4 @@
-import type { ReviewStatus } from '../constants/review-status.constant';
+import type { ReviewStatus } from '@src/modules/review/domain/constants/review-status.constant';
 
 export class Review {
   constructor(

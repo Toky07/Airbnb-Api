@@ -2,7 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 import {
   AMENITY_SCOPE,
   type AmenityScope,
-} from '../../domain/constants/amenity-scope.constant';
+} from '@src/modules/amenity/domain/constants/amenity-scope.constant';
 
 export function parseAmenityScope(value: unknown): AmenityScope | undefined {
   if (value == null || value === '') {

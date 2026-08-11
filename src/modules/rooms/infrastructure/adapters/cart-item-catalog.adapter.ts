@@ -1,17 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CalculateStayAmountService } from '../../../../shared/pricing/calculate-stay-amount.service';
+import { CalculateStayAmountService } from '@src/shared/pricing/calculate-stay-amount.service';
 import {
   CART_ITEM_CATALOG_PORT,
   type ICartItemCatalogPort,
   type ReservationCartItemDetails,
   type ReservationCartItemInput,
-} from '../../../cart/contracts';
+} from '@src/modules/cart/contracts';
 import {
   ROOM_REPOSITORY,
   type IRoomRepository,
-} from '../../domain/repositories/room.repository';
+} from '@src/modules/rooms/domain/repositories/room.repository';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { RoomStayPricingService } from '../../applications/services/room-stay-pricing.service';
+import { RoomStayPricingService } from '@src/modules/rooms/applications/services/room-stay-pricing.service';
 
 @Injectable()
 export class CartItemCatalogAdapter implements ICartItemCatalogPort {

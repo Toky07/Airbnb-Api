@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { slugify } from '../../../../shared/utils/slug.util';
+import { slugify } from '@src/shared/utils/slug.util';
 import {
   ROOM_REPOSITORY,
   type IRoomRepository,
-} from '../../domain/repositories/room.repository';
+} from '@src/modules/rooms/domain/repositories/room.repository';
 
 @Injectable()
 export class GenerateRoomSlugService {

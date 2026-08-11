@@ -1,21 +1,21 @@
 import { describe, expect, it, vi } from 'vitest';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import { Property } from '../../../../properties/contracts';
-import type { IPropertyRepository } from '../../../../properties/contracts';
-import { Room } from '../../../../rooms/contracts';
-import type { IRoomRepository } from '../../../../rooms/contracts';
-import { UserNameVO } from '../../../../user/contracts';
-import { EmailVO } from '../../../../../shared/valueObject/email.vo';
-import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
-import { User } from '../../../../user/contracts';
-import type { IUserRepository } from '../../../../user/contracts';
+import { Property } from '@src/modules/properties/contracts';
+import type { IPropertyRepository } from '@src/modules/properties/contracts';
+import { Room } from '@src/modules/rooms/contracts';
+import type { IRoomRepository } from '@src/modules/rooms/contracts';
+import { UserNameVO } from '@src/modules/user/contracts';
+import { EmailVO } from '@src/shared/valueObject/email.vo';
+import { PhoneNumberVO } from '@src/shared/valueObject/phone.vo';
+import { User } from '@src/modules/user/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
 import { GetReservationQueryHandler } from './GetReservationQueryHandler';
-import { GetReservationQuery } from '../queries/GetReservationQuery';
+import { GetReservationQuery } from '@src/modules/reservation/applications/useCase/queries/GetReservationQuery';
 import {
   createReservationRepositoryMock,
   createSampleReservation,
   createSampleReservationItem,
-} from '../reservation-test.helpers';
+} from '@src/modules/reservation/applications/useCase/reservation-test.helpers';
 
 function createEnrichReservationOutputsMock() {
   return {

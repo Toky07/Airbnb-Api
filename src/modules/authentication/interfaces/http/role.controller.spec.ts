@@ -3,25 +3,25 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthModule } from '../../auth.module';
-import { MailModule } from '../../../mail/mail.module';
-import { UserModule } from '../../../user/user.module';
-import { AuthEntity } from '../../infrastructure/entity/auth.entity';
-import { Role } from '../../infrastructure/entity/role.entity';
+import { AuthModule } from '@src/modules/authentication/auth.module';
+import { MailModule } from '@src/modules/mail/mail.module';
+import { UserModule } from '@src/modules/user/user.module';
+import { AuthEntity } from '@src/modules/authentication/infrastructure/entity/auth.entity';
+import { Role } from '@src/modules/authentication/infrastructure/entity/role.entity';
 import { DataSource } from 'typeorm';
-import { UserNameVO } from '../../../user/contracts';
-import { RoleEntity } from '../../domain/entities/role.entity';
-import { RoleMapper } from '../../infrastructure/mappers/role.mappers';
-import { PermissionEntity } from '../../infrastructure/entity/permission.entity';
+import { UserNameVO } from '@src/modules/user/contracts';
+import { RoleEntity } from '@src/modules/authentication/domain/entities/role.entity';
+import { RoleMapper } from '@src/modules/authentication/infrastructure/mappers/role.mappers';
+import { PermissionEntity } from '@src/modules/authentication/infrastructure/entity/permission.entity';
 import {
   AUTH_TEST_ENTITIES,
   DOMAIN_TEST_ENTITIES,
   registerAndLoginAsSuperAdmin,
-} from '../../../../test/controller-test.helpers';
+} from '@src/test/controller-test.helpers';
 import {
   getIntegrationTestDatabaseConfig,
   prepareIntegrationTestDatabase,
-} from '../../../../test/test-database.config';
+} from '@src/test/test-database.config';
 
 describe('Roles', () => {
   let app: INestApplication;

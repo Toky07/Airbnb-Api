@@ -1,5 +1,5 @@
-import type { AccountStatus } from '../constants/account-status.constant';
-import { Auth } from '../entities/user.entity';
+import type { AccountStatus } from '@src/modules/authentication/domain/constants/account-status.constant';
+import { Auth } from '@src/modules/authentication/domain/entities/user.entity';
 
 export interface IAuthRepository {
   create(credentials: Auth): Promise<boolean>;

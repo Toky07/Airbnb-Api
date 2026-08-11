@@ -1,8 +1,8 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AMENITY_SCOPE } from '../../domain/constants/amenity-scope.constant';
-import { AmenityOrmEntity } from '../entities/amenity.orm-entity';
+import { AMENITY_SCOPE } from '@src/modules/amenity/domain/constants/amenity-scope.constant';
+import { AmenityOrmEntity } from '@src/modules/amenity/infrastructure/entities/amenity.orm-entity';
 
 const DEFAULT_PROPERTY_AMENITIES = [
   { name: 'Parking', icon: 'square-parking' },

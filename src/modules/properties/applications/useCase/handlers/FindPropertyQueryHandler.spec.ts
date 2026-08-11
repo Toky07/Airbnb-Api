@@ -1,9 +1,9 @@
-import { Property } from '../../../domain/entities/property.entity';
-import type { IPropertyRepository } from '../../../domain/repositories/property.repository';
+import { Property } from '@src/modules/properties/domain/entities/property.entity';
+import type { IPropertyRepository } from '@src/modules/properties/domain/repositories/property.repository';
 import { FindPropertyQueryHandler } from './FindPropertyQueryHandler';
-import { FindPropertyQuery } from '../queries/FindPropertyQuery';
-import { PropertyOutput } from '../../dto/property.output';
-import { mockPropertyMediaPresenter } from '../test-helpers/property-usecase.mocks';
+import { FindPropertyQuery } from '@src/modules/properties/applications/useCase/queries/FindPropertyQuery';
+import { PropertyOutput } from '@src/modules/properties/applications/dto/property.output';
+import { mockPropertyMediaPresenter } from '@src/modules/properties/applications/useCase/test-helpers/property-usecase.mocks';
 
 const repository = {
   findById: async (): Promise<Property> =>

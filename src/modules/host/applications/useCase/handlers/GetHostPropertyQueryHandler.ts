@@ -1,8 +1,8 @@
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import { PropertyMediaPresenter } from '../../../../properties/contracts';
-import { PropertyOutput } from '../../../../properties/contracts';
-import { ResolveHostPropertyService } from '../../services/resolve-host-property.service';
-import type { GetHostPropertyQuery } from '../queries/GetHostPropertyQuery';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import { PropertyMediaPresenter } from '@src/modules/properties/contracts';
+import { PropertyOutput } from '@src/modules/properties/contracts';
+import { ResolveHostPropertyService } from '@src/modules/host/applications/services/resolve-host-property.service';
+import type { GetHostPropertyQuery } from '@src/modules/host/applications/useCase/queries/GetHostPropertyQuery';
 
 export class GetHostPropertyQueryHandler implements IQueryHandler<
   GetHostPropertyQuery,

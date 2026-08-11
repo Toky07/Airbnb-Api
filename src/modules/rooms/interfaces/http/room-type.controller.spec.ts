@@ -4,20 +4,20 @@ import { INestApplication } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { JwtModule } from '@nestjs/jwt';
-import { RoomsModule } from '../../room.module';
-import { AuthModule } from '../../../authentication/auth.module';
-import { UserModule } from '../../../user/user.module';
-import { RoomTypeEntity } from '../../infrastructure/entities/room-type.entity';
+import { RoomsModule } from '@src/modules/rooms/room.module';
+import { AuthModule } from '@src/modules/authentication/auth.module';
+import { UserModule } from '@src/modules/user/user.module';
+import { RoomTypeEntity } from '@src/modules/rooms/infrastructure/entities/room-type.entity';
 import {
   AUTH_TEST_ENTITIES,
   DOMAIN_TEST_ENTITIES,
   registerAndLoginAsHost,
   registerAndLoginAsSuperAdmin,
-} from '../../../../test/controller-test.helpers';
+} from '@src/test/controller-test.helpers';
 import {
   getIntegrationTestDatabaseConfig,
   prepareIntegrationTestDatabase,
-} from '../../../../test/test-database.config';
+} from '@src/test/test-database.config';
 
 describe('RoomTypeController', () => {
   let app: INestApplication;

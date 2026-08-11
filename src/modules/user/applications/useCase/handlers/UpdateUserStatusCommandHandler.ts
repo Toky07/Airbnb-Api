@@ -1,14 +1,14 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IAuthRepository } from '../../../../authentication/contracts';
-import type { IUserRepository } from '../../../domain/repositories/user.repository';
-import { UserOutput } from '../../../domain/dtos/user.output';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { IAuthRepository } from '@src/modules/authentication/contracts';
+import type { IUserRepository } from '@src/modules/user/domain/repositories/user.repository';
+import { UserOutput } from '@src/modules/user/domain/dtos/user.output';
 import {
   ACCOUNT_STATUS,
   type AdminManageableAccountStatus,
-} from '../../../../authentication/contracts';
-import type { EnsureUserAuthAccountService } from '../../services/ensure-user-auth-account.service';
-import type { UpdateUserStatusCommand } from '../commands/UpdateUserStatusCommand';
+} from '@src/modules/authentication/contracts';
+import type { EnsureUserAuthAccountService } from '@src/modules/user/applications/services/ensure-user-auth-account.service';
+import type { UpdateUserStatusCommand } from '@src/modules/user/applications/useCase/commands/UpdateUserStatusCommand';
 
 export class UpdateUserStatusCommandHandler implements ICommandHandler<
   UpdateUserStatusCommand,

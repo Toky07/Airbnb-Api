@@ -1,9 +1,9 @@
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import { QueryBus } from '../../../../../shared/useCase/bus/query-bus';
-import { ListRoomBlockedDatesQuery } from '../../../../rooms/contracts';
-import { RoomBlockedDateOutput } from '../../../../rooms/contracts';
-import { AssertHostRoomOwnershipService } from '../../services/assert-host-room-ownership.service';
-import type { ListHostRoomBlockedDatesQuery } from '../queries/ListHostRoomBlockedDatesQuery';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { ListRoomBlockedDatesQuery } from '@src/modules/rooms/contracts';
+import { RoomBlockedDateOutput } from '@src/modules/rooms/contracts';
+import { AssertHostRoomOwnershipService } from '@src/modules/host/applications/services/assert-host-room-ownership.service';
+import type { ListHostRoomBlockedDatesQuery } from '@src/modules/host/applications/useCase/queries/ListHostRoomBlockedDatesQuery';
 
 export class ListHostRoomBlockedDatesQueryHandler implements IQueryHandler<
   ListHostRoomBlockedDatesQuery,

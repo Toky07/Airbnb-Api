@@ -1,14 +1,14 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
 import {
   PAYMENT_STATUS,
   type IPaymentRepository,
-} from '../../../../payment/contracts';
-import { CancellationPreviewOutput } from '../../dto/cancellation-preview.output';
-import type { AssertReservationAccessService } from '../../services/assert-reservation-access.service';
-import type { ComputeCancellationRefundService } from '../../services/compute-cancellation-refund.service';
-import type { ResolveReservationCancellationPolicyService } from '../../services/resolve-reservation-cancellation-policy.service';
-import type { GetCancellationPreviewQuery } from '../queries/GetCancellationPreviewQuery';
+} from '@src/modules/payment/contracts';
+import { CancellationPreviewOutput } from '@src/modules/reservation/applications/dto/cancellation-preview.output';
+import type { AssertReservationAccessService } from '@src/modules/reservation/applications/services/assert-reservation-access.service';
+import type { ComputeCancellationRefundService } from '@src/modules/reservation/applications/services/compute-cancellation-refund.service';
+import type { ResolveReservationCancellationPolicyService } from '@src/modules/reservation/applications/services/resolve-reservation-cancellation-policy.service';
+import type { GetCancellationPreviewQuery } from '@src/modules/reservation/applications/useCase/queries/GetCancellationPreviewQuery';
 
 export class GetCancellationPreviewQueryHandler implements IQueryHandler<
   GetCancellationPreviewQuery,

@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { ENTITY_TYPE } from '../../../media/contracts';
-import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { GetMediasByEntityQuery } from '../../../media/contracts';
-import { Media } from '../../../media/contracts';
+import { ENTITY_TYPE } from '@src/modules/media/contracts';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { GetMediasByEntityQuery } from '@src/modules/media/contracts';
+import { Media } from '@src/modules/media/contracts';
 import {
   toRoomSummary,
   type RoomSummary,
-} from '../../../rooms/contracts/room-summary';
-import type { Room } from '../../../rooms/domain/entities/room.entity';
-import { Property } from '../../domain/entities/property.entity';
-import { PropertyOutput } from '../dto/property.output';
+} from '@src/modules/rooms/contracts/room-summary';
+import type { Room } from '@src/modules/rooms/domain/entities/room.entity';
+import { Property } from '@src/modules/properties/domain/entities/property.entity';
+import { PropertyOutput } from '@src/modules/properties/applications/dto/property.output';
 
 @Injectable()
 export class PropertyMediaPresenter {

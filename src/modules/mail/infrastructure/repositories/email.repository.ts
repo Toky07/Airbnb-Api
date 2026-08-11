@@ -5,11 +5,11 @@ import {
   buildPaginationMeta,
   type PaginatedResult,
   type PaginationParams,
-} from '../../../../shared/pagination/pagination.types';
-import { Email } from '../../domain/entities/email.entity';
-import type { IEmailRepository } from '../../domain/repositories/email.repository';
-import { EmailOrmEntity } from '../entities/email.orm-entity';
-import { EmailMapper } from '../mappers/email.mapper';
+} from '@src/shared/pagination/pagination.types';
+import { Email } from '@src/modules/mail/domain/entities/email.entity';
+import type { IEmailRepository } from '@src/modules/mail/domain/repositories/email.repository';
+import { EmailOrmEntity } from '@src/modules/mail/infrastructure/entities/email.orm-entity';
+import { EmailMapper } from '@src/modules/mail/infrastructure/mappers/email.mapper';
 
 @Injectable()
 export class EmailRepository implements IEmailRepository {

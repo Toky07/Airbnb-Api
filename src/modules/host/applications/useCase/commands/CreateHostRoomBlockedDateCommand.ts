@@ -1,5 +1,5 @@
-import type { JwtPayload } from '../../../../authentication/contracts';
-import type { CreateRoomBlockedDateDto } from '../../../../rooms/contracts';
+import type { JwtPayload } from '@src/modules/authentication/contracts';
+import type { CreateRoomBlockedDateDto } from '@src/modules/rooms/contracts';
 
 export class CreateHostRoomBlockedDateCommand {
   constructor(

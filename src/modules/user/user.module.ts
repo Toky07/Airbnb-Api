@@ -1,16 +1,16 @@
 import { Inject, Module, OnModuleInit, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from '../authentication/auth.module';
+import { AuthModule } from '@src/modules/authentication/auth.module';
 import {
   AUTH_REPOSITORY,
   ROLE_REPOSITORY,
   type IAuthRepository,
   type IRoleRepository,
-} from '../authentication/contracts';
+} from '@src/modules/authentication/contracts';
 import {
   LOCAL_STORAGE_SERVICE,
   type ILocalStorageService,
-} from '../media/contracts';
+} from '@src/modules/media/contracts';
 import { UserController } from './interfaces/http/user.controller';
 import { UserRepository } from './infrastructure/repositories/user.repository';
 import {
@@ -19,11 +19,11 @@ import {
 } from './domain/repositories/user.repository';
 import { cartUserProvider } from './infrastructure/adapters/cart-user.adapter';
 import { UserEntity } from './infrastructure/entities/user.entity';
-import { AuthEntity } from '../authentication/infrastructure/entity/auth.entity';
-import { MediaModule } from '../media/media.module';
+import { AuthEntity } from '@src/modules/authentication/infrastructure/entity/auth.entity';
+import { MediaModule } from '@src/modules/media/media.module';
 import { UserBootstrap } from './user.bootstrap';
-import { CommandBus } from '../../shared/useCase/bus/bus';
-import { QueryBus } from '../../shared/useCase/bus/query-bus';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
 import { CreateUserCommand } from './applications/useCase/commands/CreateUserCommand';
 import { UpdateUserCommand } from './applications/useCase/commands/UpdateUserCommand';
 import { DeleteUserCommand } from './applications/useCase/commands/DeleteUserCommand';

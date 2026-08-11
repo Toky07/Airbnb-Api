@@ -1,15 +1,15 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ForbiddenException } from '@nestjs/common';
 import { ListMyFavoritesQueryHandler } from './ListMyFavoritesQueryHandler';
-import { ListMyFavoritesQuery } from '../queries/ListMyFavoritesQuery';
+import { ListMyFavoritesQuery } from '@src/modules/favorite/applications/useCase/queries/ListMyFavoritesQuery';
 import {
   createFavoriteRepositoryMock,
   createResolveAuthenticatedUserServiceMock,
   createSampleFavorite,
-} from '../favorite-test.helpers';
-import { Room } from '../../../../rooms/contracts';
-import { Property } from '../../../../properties/contracts';
-import { ResolveAuthenticatedUserService } from '../../../../../shared/auth/resolve-authenticated-user.service';
+} from '@src/modules/favorite/applications/useCase/favorite-test.helpers';
+import { Room } from '@src/modules/rooms/contracts';
+import { Property } from '@src/modules/properties/contracts';
+import { ResolveAuthenticatedUserService } from '@src/shared/auth/resolve-authenticated-user.service';
 
 function createSampleRoom() {
   return new Room({

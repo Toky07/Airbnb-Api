@@ -1,5 +1,5 @@
-import type { RoomProductSummary } from '../../../rooms/contracts';
-import type { ReservationItem } from '../../domain/entities/reservation-item.entity';
+import type { RoomProductSummary } from '@src/modules/rooms/contracts';
+import type { ReservationItem } from '@src/modules/reservation/domain/entities/reservation-item.entity';
 
 export class ReservationItemOutput {
   constructor(

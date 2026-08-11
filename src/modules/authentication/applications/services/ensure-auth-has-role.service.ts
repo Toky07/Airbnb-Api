@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { AUTH_REPOSITORY } from '../../domain/repositories/auth.repository';
-import type { IAuthRepository } from '../../domain/repositories/auth.repository';
-import { ROLE_REPOSITORY } from '../../domain/repositories/role.repository';
-import type { IRoleRepository } from '../../domain/repositories/role.repository';
+import { AUTH_REPOSITORY } from '@src/modules/authentication/domain/repositories/auth.repository';
+import type { IAuthRepository } from '@src/modules/authentication/domain/repositories/auth.repository';
+import { ROLE_REPOSITORY } from '@src/modules/authentication/domain/repositories/role.repository';
+import type { IRoleRepository } from '@src/modules/authentication/domain/repositories/role.repository';
 
 @Injectable()
 export class EnsureAuthHasRoleService {

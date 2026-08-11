@@ -1,9 +1,9 @@
-import type { PaginatedResult } from '../../../../../shared/pagination/pagination.types';
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IRoleRepository } from '../../../domain/repositories/role.repository';
-import { RoleEntity } from '../../../domain/entities/role.entity';
-import { RoleOutput } from '../../dto/role.output';
-import type { ListRolesQuery } from '../queries/ListRolesQuery';
+import type { PaginatedResult } from '@src/shared/pagination/pagination.types';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { IRoleRepository } from '@src/modules/authentication/domain/repositories/role.repository';
+import { RoleEntity } from '@src/modules/authentication/domain/entities/role.entity';
+import { RoleOutput } from '@src/modules/authentication/applications/dto/role.output';
+import type { ListRolesQuery } from '@src/modules/authentication/applications/useCase/queries/ListRolesQuery';
 
 export class ListRolesQueryHandler implements IQueryHandler<
   ListRolesQuery,

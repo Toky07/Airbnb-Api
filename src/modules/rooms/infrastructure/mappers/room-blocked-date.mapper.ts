@@ -1,5 +1,5 @@
-import { RoomBlockedDate } from '../../domain/entities/room-blocked-date.entity';
-import { RoomBlockedDateOrmEntity } from '../entities/room-blocked-date.orm-entity';
+import { RoomBlockedDate } from '@src/modules/rooms/domain/entities/room-blocked-date.entity';
+import { RoomBlockedDateOrmEntity } from '@src/modules/rooms/infrastructure/entities/room-blocked-date.orm-entity';
 
 export class RoomBlockedDateMapper {
   static toDomain(entity: RoomBlockedDateOrmEntity): RoomBlockedDate {

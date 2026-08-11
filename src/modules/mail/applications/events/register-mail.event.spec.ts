@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { EventBus } from '../../../../shared/domain/event.bus';
-import { EmailSendRequestedEvent } from '../../domain/events/email-send-requested.event';
-import { MailEvent } from '../events/register-mail.event';
-import { SendEmailCommand } from '../useCase/commands/SendEmailCommand';
-import { commandBusExecuteMock } from '../../../../test/command-bus.mock';
+import { EventBus } from '@src/shared/domain/event.bus';
+import { EmailSendRequestedEvent } from '@src/modules/mail/domain/events/email-send-requested.event';
+import { MailEvent } from '@src/modules/mail/applications/events/register-mail.event';
+import { SendEmailCommand } from '@src/modules/mail/applications/useCase/commands/SendEmailCommand';
+import { commandBusExecuteMock } from '@src/test/command-bus.mock';
 
 describe('MailEvent', () => {
   const loadAttachments = {

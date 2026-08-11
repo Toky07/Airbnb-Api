@@ -1,13 +1,13 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { EventBus } from '../../../../../shared/domain/event.bus';
-import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
-import { ReservationConfirmedEvent } from '../../../domain/events/reservation-confirmed.event';
-import { Reservation } from '../../../domain/entities/reservation.entity';
-import type { IReservationRepository } from '../../../domain/repositories/reservation.repository';
-import { ReservationOutput } from '../../dto/reservation.output';
-import type { CheckRoomAvailabilityService } from '../../services/check-room-availability.service';
-import type { ConfirmReservationCommand } from '../commands/ConfirmReservationCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import { EventBus } from '@src/shared/domain/event.bus';
+import { RESERVATION_STATUS } from '@src/modules/reservation/domain/constants/reservation-status.constant';
+import { ReservationConfirmedEvent } from '@src/modules/reservation/domain/events/reservation-confirmed.event';
+import { Reservation } from '@src/modules/reservation/domain/entities/reservation.entity';
+import type { IReservationRepository } from '@src/modules/reservation/domain/repositories/reservation.repository';
+import { ReservationOutput } from '@src/modules/reservation/applications/dto/reservation.output';
+import type { CheckRoomAvailabilityService } from '@src/modules/reservation/applications/services/check-room-availability.service';
+import type { ConfirmReservationCommand } from '@src/modules/reservation/applications/useCase/commands/ConfirmReservationCommand';
 
 export class ConfirmReservationCommandHandler implements ICommandHandler<
   ConfirmReservationCommand,

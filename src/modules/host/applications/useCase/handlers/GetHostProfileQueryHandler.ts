@@ -1,9 +1,9 @@
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import { PropertyMediaPresenter } from '../../../../properties/contracts';
-import { HostProfileOutput } from '../../dto/host-profile.output';
-import { ResolveHostUserService } from '../../services/resolve-host-user.service';
-import { ResolveHostPropertyService } from '../../services/resolve-host-property.service';
-import type { GetHostProfileQuery } from '../queries/GetHostProfileQuery';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import { PropertyMediaPresenter } from '@src/modules/properties/contracts';
+import { HostProfileOutput } from '@src/modules/host/applications/dto/host-profile.output';
+import { ResolveHostUserService } from '@src/modules/host/applications/services/resolve-host-user.service';
+import { ResolveHostPropertyService } from '@src/modules/host/applications/services/resolve-host-property.service';
+import type { GetHostProfileQuery } from '@src/modules/host/applications/useCase/queries/GetHostProfileQuery';
 
 export class GetHostProfileQueryHandler implements IQueryHandler<
   GetHostProfileQuery,

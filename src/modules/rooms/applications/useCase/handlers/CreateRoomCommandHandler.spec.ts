@@ -1,13 +1,13 @@
-import { Room } from '../../../domain/entities/room.entity';
-import { IRoomRepository } from '../../../domain/repositories/room.repository';
-import { RoomOutput } from '../../dto/room.output';
-import { Property } from '../../../../properties/contracts';
+import { Room } from '@src/modules/rooms/domain/entities/room.entity';
+import { IRoomRepository } from '@src/modules/rooms/domain/repositories/room.repository';
+import { RoomOutput } from '@src/modules/rooms/applications/dto/room.output';
+import { Property } from '@src/modules/properties/contracts';
 import { CreateRoomCommandHandler } from './CreateRoomCommandHandler';
-import { CreateRoomCommand } from '../commands/CreateRoomCommand';
+import { CreateRoomCommand } from '@src/modules/rooms/applications/useCase/commands/CreateRoomCommand';
 import {
   mockGenerateRoomSlug,
   mockRoomMediaPresenter,
-} from '../test-helpers/room-usecase.mocks';
+} from '@src/modules/rooms/applications/useCase/test-helpers/room-usecase.mocks';
 
 const property = new Property({
   name: 'Room 1',

@@ -3,8 +3,8 @@ import {
   CART_PRODUCT_SUMMARY_PORT,
   type CartProductSummary,
   type ICartProductSummaryPort,
-} from '../../../cart/contracts';
-import { RoomProductSummaryService } from '../../applications/services/room-product-summary.service';
+} from '@src/modules/cart/contracts';
+import { RoomProductSummaryService } from '@src/modules/rooms/applications/services/room-product-summary.service';
 
 @Injectable()
 export class CartProductSummaryAdapter implements ICartProductSummaryPort {

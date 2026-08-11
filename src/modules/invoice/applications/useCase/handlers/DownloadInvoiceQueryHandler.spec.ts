@@ -1,8 +1,8 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { describe, expect, it, vi } from 'vitest';
-import type { IUserRepository } from '../../../../user/contracts';
-import type { IInvoiceRepository } from '../../../domain/repositories/invoice.repository';
-import { DownloadInvoiceQuery } from '../queries/DownloadInvoiceQuery';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import type { IInvoiceRepository } from '@src/modules/invoice/domain/repositories/invoice.repository';
+import { DownloadInvoiceQuery } from '@src/modules/invoice/applications/useCase/queries/DownloadInvoiceQuery';
 import { DownloadInvoiceQueryHandler } from './DownloadInvoiceQueryHandler';
 
 describe('DownloadInvoiceQueryHandler', () => {

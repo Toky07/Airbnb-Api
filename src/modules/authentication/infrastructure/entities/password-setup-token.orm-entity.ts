@@ -6,7 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { AuthEntity } from '../entity/auth.entity';
+import { AuthEntity } from '@src/modules/authentication/infrastructure/entity/auth.entity';
 
 @Entity({ name: 'password_setup_tokens' })
 export class PasswordSetupTokenOrmEntity {

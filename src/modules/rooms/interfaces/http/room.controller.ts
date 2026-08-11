@@ -12,35 +12,35 @@ import {
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { ENTITY_MEDIA_LIMITS, ENTITY_TYPE } from '../../../media/contracts';
-import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
-import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
-import { RoomOutput } from '../../applications/dto/room.output';
-import type { CreateRoomDto } from '../../applications/dto/createRoom.dto';
+import { ENTITY_MEDIA_LIMITS, ENTITY_TYPE } from '@src/modules/media/contracts';
+import { parsePaginationQuery } from '@src/shared/pagination/parse-pagination-query';
+import type { PaginatedResult } from '@src/shared/pagination/pagination.types';
+import { RoomOutput } from '@src/modules/rooms/applications/dto/room.output';
+import type { CreateRoomDto } from '@src/modules/rooms/applications/dto/createRoom.dto';
 import { parseKeptImages } from './parse-kept-images';
 import { parseRoomBody } from './parse-room-body';
-import type { UploadFile } from '../../../media/contracts';
-import { RequirePermissions } from '../../../authentication/contracts';
-import { Public } from '../../../authentication/contracts';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { CreateRoomCommand } from '../../applications/useCase/commands/CreateRoomCommand';
-import { UpdateRoomCommand } from '../../applications/useCase/commands/UpdateRoomCommand';
-import { DeleteRoomCommand } from '../../applications/useCase/commands/DeleteRoomCommand';
-import { FindRoomQuery } from '../../applications/useCase/queries/FindRoomQuery';
-import { ListRoomsQuery } from '../../applications/useCase/queries/ListRoomsQuery';
-import { GetRoomPricingPreviewQuery } from '../../applications/useCase/queries/GetRoomPricingPreviewQuery';
+import type { UploadFile } from '@src/modules/media/contracts';
+import { RequirePermissions } from '@src/modules/authentication/contracts';
+import { Public } from '@src/modules/authentication/contracts';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { CreateRoomCommand } from '@src/modules/rooms/applications/useCase/commands/CreateRoomCommand';
+import { UpdateRoomCommand } from '@src/modules/rooms/applications/useCase/commands/UpdateRoomCommand';
+import { DeleteRoomCommand } from '@src/modules/rooms/applications/useCase/commands/DeleteRoomCommand';
+import { FindRoomQuery } from '@src/modules/rooms/applications/useCase/queries/FindRoomQuery';
+import { ListRoomsQuery } from '@src/modules/rooms/applications/useCase/queries/ListRoomsQuery';
+import { GetRoomPricingPreviewQuery } from '@src/modules/rooms/applications/useCase/queries/GetRoomPricingPreviewQuery';
 import {
   GetRoomRatingSummaryQuery,
   ListRoomReviewsQuery,
   ReviewOutput,
   RoomRatingSummaryOutput,
-} from '../../../review/contracts';
+} from '@src/modules/review/contracts';
 import {
   ApiJwtAuth,
   ApiPaginationQuery,
-} from '../../../../shared/swagger/swagger.decorators';
-import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
+} from '@src/shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 
 @ApiTags(SWAGGER_TAGS.ROOMS)
 @Controller('rooms')

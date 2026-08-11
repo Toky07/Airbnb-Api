@@ -1,11 +1,11 @@
 import { ConfirmStripePaymentCommandHandler } from './ConfirmStripePaymentCommandHandler';
-import { ConfirmStripePaymentCommand } from '../commands/ConfirmStripePaymentCommand';
-import { MapStripeStatusService } from '../../services/map-stripe-status.service';
-import { Payment } from '../../../domain/entities/payment.entity';
-import { PAYMENT_STATUS } from '../../../domain/constants/payment-status.constant';
-import { PAYMENT_TYPE } from '../../../domain/types/payment.type';
-import type { IPaymentRepository } from '../../../domain/repositories/payment.repository';
-import type { IWebhookVerifier } from '../../../domain/ports/webhook-verifier.port';
+import { ConfirmStripePaymentCommand } from '@src/modules/payment/applications/useCase/commands/ConfirmStripePaymentCommand';
+import { MapStripeStatusService } from '@src/modules/payment/applications/services/map-stripe-status.service';
+import { Payment } from '@src/modules/payment/domain/entities/payment.entity';
+import { PAYMENT_STATUS } from '@src/modules/payment/domain/constants/payment-status.constant';
+import { PAYMENT_TYPE } from '@src/modules/payment/domain/types/payment.type';
+import type { IPaymentRepository } from '@src/modules/payment/domain/repositories/payment.repository';
+import type { IWebhookVerifier } from '@src/modules/payment/domain/ports/webhook-verifier.port';
 
 const mockPublish = vi.fn();
 vi.mock('../../../../../shared/domain/event.bus', () => ({

@@ -1,17 +1,17 @@
 import { BadRequestException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IAuthRepository } from '../../../../authentication/contracts';
-import type { IRoleRepository } from '../../../../authentication/contracts';
-import type { IUserRepository } from '../../../domain/repositories/user.repository';
-import { EmailVO } from '../../../../../shared/valueObject/email.vo';
-import { TRAVELER_ROLE_SLUG } from '../../../../authentication/contracts';
-import { User } from '../../../domain/entities/user.entity';
-import { UserNameVO } from '../../../domain/valueObject/username.vo';
-import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
-import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { SendAccountInvitationCommand } from '../../../../authentication/contracts';
-import { ACCOUNT_STATUS } from '../../../../authentication/contracts';
-import type { RegisterHostCommand } from '../commands/RegisterHostCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { IAuthRepository } from '@src/modules/authentication/contracts';
+import type { IRoleRepository } from '@src/modules/authentication/contracts';
+import type { IUserRepository } from '@src/modules/user/domain/repositories/user.repository';
+import { EmailVO } from '@src/shared/valueObject/email.vo';
+import { TRAVELER_ROLE_SLUG } from '@src/modules/authentication/contracts';
+import { User } from '@src/modules/user/domain/entities/user.entity';
+import { UserNameVO } from '@src/modules/user/domain/valueObject/username.vo';
+import { PhoneNumberVO } from '@src/shared/valueObject/phone.vo';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { SendAccountInvitationCommand } from '@src/modules/authentication/contracts';
+import { ACCOUNT_STATUS } from '@src/modules/authentication/contracts';
+import type { RegisterHostCommand } from '@src/modules/user/applications/useCase/commands/RegisterHostCommand';
 
 export class RegisterHostCommandHandler implements ICommandHandler<
   RegisterHostCommand,

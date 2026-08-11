@@ -3,13 +3,13 @@ import {
   ConflictException,
   NotFoundException,
 } from '@nestjs/common';
-import { RoomType } from '../../../domain/entities/room-type.entity';
+import { RoomType } from '@src/modules/rooms/domain/entities/room-type.entity';
 import { CreateRoomTypeCommandHandler } from './CreateRoomTypeCommandHandler';
 import { UpdateRoomTypeCommandHandler } from './UpdateRoomTypeCommandHandler';
 import { DeleteRoomTypeCommandHandler } from './DeleteRoomTypeCommandHandler';
-import { CreateRoomTypeCommand } from '../commands/CreateRoomTypeCommand';
-import { UpdateRoomTypeCommand } from '../commands/UpdateRoomTypeCommand';
-import { DeleteRoomTypeCommand } from '../commands/DeleteRoomTypeCommand';
+import { CreateRoomTypeCommand } from '@src/modules/rooms/applications/useCase/commands/CreateRoomTypeCommand';
+import { UpdateRoomTypeCommand } from '@src/modules/rooms/applications/useCase/commands/UpdateRoomTypeCommand';
+import { DeleteRoomTypeCommand } from '@src/modules/rooms/applications/useCase/commands/DeleteRoomTypeCommand';
 
 const existingType = new RoomType(
   'Standard',

@@ -5,7 +5,7 @@ import {
   SWAGGER_CART_SESSION,
   SWAGGER_JWT,
   SWAGGER_TAGS,
-} from '../shared/swagger/swagger.constants';
+} from '@src/shared/swagger/swagger.constants';
 
 type EnvSource = NodeJS.ProcessEnv;
 

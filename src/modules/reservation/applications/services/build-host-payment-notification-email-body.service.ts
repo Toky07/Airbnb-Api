@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { RESERVATION_NOTIFICATION_BRAND } from '../../domain/constants/reservation-notification.constant';
+import { RESERVATION_NOTIFICATION_BRAND } from '@src/modules/reservation/domain/constants/reservation-notification.constant';
 import type {
   HostPaymentNotificationGroup,
   ReservationInvoiceContext,
-} from '../../domain/types/reservation-invoice-context.type';
+} from '@src/modules/reservation/domain/types/reservation-invoice-context.type';
 import {
   formatInvoiceAmount,
   formatInvoiceDate,
-} from '../../../invoice/contracts';
+} from '@src/modules/invoice/contracts';
 
 @Injectable()
 export class BuildHostPaymentNotificationEmailBodyService {

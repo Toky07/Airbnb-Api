@@ -1,7 +1,7 @@
-import type { PaymentProvider } from '../../domain/constants/payment-provider.constant';
-import type { PaymentStatus } from '../../domain/constants/payment-status.constant';
-import type { Payment } from '../../domain/entities/payment.entity';
-import type { PaymentType } from '../../domain/types/payment.type';
+import type { PaymentProvider } from '@src/modules/payment/domain/constants/payment-provider.constant';
+import type { PaymentStatus } from '@src/modules/payment/domain/constants/payment-status.constant';
+import type { Payment } from '@src/modules/payment/domain/entities/payment.entity';
+import type { PaymentType } from '@src/modules/payment/domain/types/payment.type';
 
 export class PaymentOutput {
   constructor(

@@ -1,5 +1,5 @@
-import type { CartItemType } from '../../domain/constants/cart-item-type.constant';
-import type { CartItem } from '../../domain/entities/cart-item.entity';
+import type { CartItemType } from '@src/modules/cart/domain/constants/cart-item-type.constant';
+import type { CartItem } from '@src/modules/cart/domain/entities/cart-item.entity';
 
 export class CartItemOutput {
   constructor(

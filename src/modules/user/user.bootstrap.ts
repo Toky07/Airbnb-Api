@@ -1,6 +1,6 @@
-import type { IAuthRepository } from '../authentication/contracts';
-import type { IRoleRepository } from '../authentication/contracts';
-import type { ILocalStorageService } from '../media/contracts';
+import type { IAuthRepository } from '@src/modules/authentication/contracts';
+import type { IRoleRepository } from '@src/modules/authentication/contracts';
+import type { ILocalStorageService } from '@src/modules/media/contracts';
 import type { IUserRepository } from './domain/repositories/user.repository';
 import { SaveUserAvatarService } from './applications/services/save-user-avatar.service';
 import { CreateUserCommandHandler } from './applications/useCase/handlers/CreateUserCommandHandler';

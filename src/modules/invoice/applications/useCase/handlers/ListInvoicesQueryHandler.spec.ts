@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { ListInvoicesQueryHandler } from './ListInvoicesQueryHandler';
-import { ListInvoicesQuery } from '../queries/ListInvoicesQuery';
-import { createInvoiceRepositoryMock } from '../invoice-test.helpers';
+import { ListInvoicesQuery } from '@src/modules/invoice/applications/useCase/queries/ListInvoicesQuery';
+import { createInvoiceRepositoryMock } from '@src/modules/invoice/applications/useCase/invoice-test.helpers';
 
 describe('ListInvoicesQueryHandler', () => {
   it('retourne les factures paginées pour l’admin', async () => {

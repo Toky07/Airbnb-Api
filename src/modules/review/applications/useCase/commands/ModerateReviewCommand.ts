@@ -1,4 +1,4 @@
-import type { ModerateReviewDto } from '../../dto/create-review.dto';
+import type { ModerateReviewDto } from '@src/modules/review/applications/dto/create-review.dto';
 
 export class ModerateReviewCommand {
   constructor(

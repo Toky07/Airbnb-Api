@@ -1,7 +1,7 @@
 import { readFile } from 'fs/promises';
 import { join } from 'path';
-import type { Email } from '../../domain/entities/email.entity';
-import type { MailTransportAttachment } from '../../domain/ports/mail-transport.port';
+import type { Email } from '@src/modules/mail/domain/entities/email.entity';
+import type { MailTransportAttachment } from '@src/modules/mail/domain/ports/mail-transport.port';
 
 export async function loadTransportAttachments(
   attachments: Email['attachments'],

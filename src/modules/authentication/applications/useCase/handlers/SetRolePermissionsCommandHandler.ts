@@ -1,9 +1,9 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IRoleRepository } from '../../../domain/repositories/role.repository';
-import { RoleOutput } from '../../dto/role.output';
-import { isPermissionLockedRoleSlug } from '../../../domain/constants/system-roles.constant';
-import type { SetRolePermissionsCommand } from '../commands/SetRolePermissionsCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { IRoleRepository } from '@src/modules/authentication/domain/repositories/role.repository';
+import { RoleOutput } from '@src/modules/authentication/applications/dto/role.output';
+import { isPermissionLockedRoleSlug } from '@src/modules/authentication/domain/constants/system-roles.constant';
+import type { SetRolePermissionsCommand } from '@src/modules/authentication/applications/useCase/commands/SetRolePermissionsCommand';
 
 export class SetRolePermissionsCommandHandler implements ICommandHandler<
   SetRolePermissionsCommand,

@@ -1,4 +1,4 @@
-import type { RoomRateOverride } from '../entities/room-rate-override.entity';
+import type { RoomRateOverride } from '@src/modules/rooms/domain/entities/room-rate-override.entity';
 
 export const ROOM_RATE_OVERRIDE_REPOSITORY = 'ROOM_RATE_OVERRIDE_REPOSITORY';
 

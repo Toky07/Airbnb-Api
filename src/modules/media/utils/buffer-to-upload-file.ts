@@ -1,4 +1,4 @@
-import type { UploadFile } from '../types/upload-file';
+import type { UploadFile } from '@src/modules/media/types/upload-file';
 
 export function bufferToUploadFile(
   buffer: Buffer,

@@ -1,8 +1,8 @@
 import { BadRequestException } from '@nestjs/common';
-import type { AmenityScope } from '../../domain/constants/amenity-scope.constant';
-import { Amenity } from '../../domain/entities/amenity.entity';
-import type { IAmenityRepository } from '../../domain/repositories/amenity.repository';
-import { AmenityOutput } from '../dto/amenity.output';
+import type { AmenityScope } from '@src/modules/amenity/domain/constants/amenity-scope.constant';
+import { Amenity } from '@src/modules/amenity/domain/entities/amenity.entity';
+import type { IAmenityRepository } from '@src/modules/amenity/domain/repositories/amenity.repository';
+import { AmenityOutput } from '@src/modules/amenity/applications/dto/amenity.output';
 
 export class ResolveAmenitiesService {
   constructor(private readonly amenityRepository: IAmenityRepository) {}

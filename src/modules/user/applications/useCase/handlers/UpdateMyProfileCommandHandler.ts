@@ -1,10 +1,10 @@
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { ResolveAuthenticatedUserService } from '../../../../../shared/auth/resolve-authenticated-user.service';
-import type { IUserRepository } from '../../../domain/repositories/user.repository';
-import { UserOutput } from '../../../domain/dtos/user.output';
-import { validateUserFields } from '../../validation/validate-user-fields';
-import type { SaveUserAvatarService } from '../../services/save-user-avatar.service';
-import type { UpdateMyProfileCommand } from '../commands/UpdateMyProfileCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import { ResolveAuthenticatedUserService } from '@src/shared/auth/resolve-authenticated-user.service';
+import type { IUserRepository } from '@src/modules/user/domain/repositories/user.repository';
+import { UserOutput } from '@src/modules/user/domain/dtos/user.output';
+import { validateUserFields } from '@src/modules/user/applications/validation/validate-user-fields';
+import type { SaveUserAvatarService } from '@src/modules/user/applications/services/save-user-avatar.service';
+import type { UpdateMyProfileCommand } from '@src/modules/user/applications/useCase/commands/UpdateMyProfileCommand';
 
 export class UpdateMyProfileCommandHandler implements ICommandHandler<
   UpdateMyProfileCommand,

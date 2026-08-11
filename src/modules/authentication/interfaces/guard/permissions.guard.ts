@@ -5,11 +5,11 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { hasPermission } from '../../domain/utils/build-jwt-payload';
-import type { JwtPayload } from '../../domain/types/jwt-payload';
-import { PERMISSIONS_KEY } from '../decorators/require-permissions.decorator';
-import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
-import { SUPER_ADMIN_ONLY_KEY } from '../decorators/require-superadmin.decorator';
+import { hasPermission } from '@src/modules/authentication/domain/utils/build-jwt-payload';
+import type { JwtPayload } from '@src/modules/authentication/domain/types/jwt-payload';
+import { PERMISSIONS_KEY } from '@src/modules/authentication/interfaces/decorators/require-permissions.decorator';
+import { IS_PUBLIC_KEY } from '@src/modules/authentication/interfaces/decorators/public.decorator';
+import { SUPER_ADMIN_ONLY_KEY } from '@src/modules/authentication/interfaces/decorators/require-superadmin.decorator';
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {

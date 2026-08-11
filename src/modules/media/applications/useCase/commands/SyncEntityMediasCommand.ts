@@ -1,6 +1,6 @@
-import type { EntityType, MediaType } from '../../../constant';
-import { MEDIA_TYPE } from '../../../constant';
-import type { UploadFile } from '../../../types/upload-file';
+import type { EntityType, MediaType } from '@src/modules/media/constant';
+import { MEDIA_TYPE } from '@src/modules/media/constant';
+import type { UploadFile } from '@src/modules/media/types/upload-file';
 
 export type SyncEntityMediasPayload = {
   keptPaths: string[];

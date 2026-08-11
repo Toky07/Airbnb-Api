@@ -1,4 +1,4 @@
-import { toScalarString } from '../http/to-scalar-string';
+import { toScalarString } from '@src/shared/http/to-scalar-string';
 
 function parsePositiveInt(value: unknown): number | undefined {
   if (value === undefined || value === '') {

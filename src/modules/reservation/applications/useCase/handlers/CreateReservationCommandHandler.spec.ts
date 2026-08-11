@@ -4,20 +4,20 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ResolveDynamicStayAmountService } from '../../../../../shared/pricing/resolve-dynamic-stay-amount.service';
-import { RoomStayPricingService } from '../../../../rooms/contracts';
-import { Property } from '../../../../properties/contracts';
-import { Room } from '../../../../rooms/contracts';
-import type { IRoomRepository } from '../../../../rooms/contracts';
-import { UserNameVO } from '../../../../user/contracts';
-import { EmailVO } from '../../../../../shared/valueObject/email.vo';
-import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
-import { User } from '../../../../user/contracts';
-import type { IUserRepository } from '../../../../user/contracts';
-import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
+import { ResolveDynamicStayAmountService } from '@src/shared/pricing/resolve-dynamic-stay-amount.service';
+import { RoomStayPricingService } from '@src/modules/rooms/contracts';
+import { Property } from '@src/modules/properties/contracts';
+import { Room } from '@src/modules/rooms/contracts';
+import type { IRoomRepository } from '@src/modules/rooms/contracts';
+import { UserNameVO } from '@src/modules/user/contracts';
+import { EmailVO } from '@src/shared/valueObject/email.vo';
+import { PhoneNumberVO } from '@src/shared/valueObject/phone.vo';
+import { User } from '@src/modules/user/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import { RESERVATION_STATUS } from '@src/modules/reservation/domain/constants/reservation-status.constant';
 import { CreateReservationCommandHandler } from './CreateReservationCommandHandler';
-import { CreateReservationCommand } from '../commands/CreateReservationCommand';
-import { createReservationRepositoryMock } from '../reservation-test.helpers';
+import { CreateReservationCommand } from '@src/modules/reservation/applications/useCase/commands/CreateReservationCommand';
+import { createReservationRepositoryMock } from '@src/modules/reservation/applications/useCase/reservation-test.helpers';
 
 function createEnrichMock() {
   return {

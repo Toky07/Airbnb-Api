@@ -1,6 +1,6 @@
 import { CreatePropertyTypeCommandHandler } from './CreatePropertyTypeCommandHandler';
-import { CreatePropertyTypeCommand } from '../commands/CreatePropertyTypeCommand';
-import type { IPropertyTypeRepository } from '../../../domain/repositories/property-type.repository';
+import { CreatePropertyTypeCommand } from '@src/modules/properties/applications/useCase/commands/CreatePropertyTypeCommand';
+import type { IPropertyTypeRepository } from '@src/modules/properties/domain/repositories/property-type.repository';
 
 describe('CreatePropertyTypeCommandHandler', () => {
   it('creates a property type', async () => {

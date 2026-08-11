@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Role } from './role.entity';
-import { ACCOUNT_STATUS } from '../../domain/constants/account-status.constant';
+import { ACCOUNT_STATUS } from '@src/modules/authentication/domain/constants/account-status.constant';
 
 @Entity({ name: 'auth' })
 export class AuthEntity {

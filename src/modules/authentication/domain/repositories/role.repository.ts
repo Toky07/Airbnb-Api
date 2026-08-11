@@ -1,8 +1,8 @@
 import type {
   PaginatedResult,
   PaginationParams,
-} from '../../../../shared/pagination/pagination.types';
-import { RoleEntity } from '../entities/role.entity';
+} from '@src/shared/pagination/pagination.types';
+import { RoleEntity } from '@src/modules/authentication/domain/entities/role.entity';
 
 export interface IRoleRepository {
   create(role: RoleEntity): Promise<RoleEntity>;

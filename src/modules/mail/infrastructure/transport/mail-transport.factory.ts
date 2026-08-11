@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ConsoleMailTransport } from './console-mail.transport';
 import { ResendMailTransport } from './resend-mail.transport';
 import { SmtpMailTransport } from './smtp-mail.transport';
-import type { IMailTransport } from '../../domain/ports/mail-transport.port';
-import { getMailTransport } from '../../../../config/env.config';
+import type { IMailTransport } from '@src/modules/mail/domain/ports/mail-transport.port';
+import { getMailTransport } from '@src/config/env.config';
 
 @Injectable()
 export class MailTransportFactory {

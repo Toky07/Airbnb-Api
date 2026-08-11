@@ -1,8 +1,8 @@
 import { vi } from 'vitest';
-import { Email } from '../../domain/entities/email.entity';
-import type { IEmailRepository } from '../../domain/repositories/email.repository';
-import type { IMailTransport } from '../../domain/ports/mail-transport.port';
-import { EmailAttachmentStorageService } from '../../infrastructure/storage/email-attachment-storage.service';
+import { Email } from '@src/modules/mail/domain/entities/email.entity';
+import type { IEmailRepository } from '@src/modules/mail/domain/repositories/email.repository';
+import type { IMailTransport } from '@src/modules/mail/domain/ports/mail-transport.port';
+import { EmailAttachmentStorageService } from '@src/modules/mail/infrastructure/storage/email-attachment-storage.service';
 
 export function createPersistedEmail(email: Email, id = 1): Email {
   return new Email(

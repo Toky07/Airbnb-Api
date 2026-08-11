@@ -1,9 +1,9 @@
-import type { CartCheckoutRequestedEvent } from '../../../cart/contracts';
-import { CartCheckoutReservationCreatedEvent } from '../../../cart/contracts';
-import { EventBus } from '../../../../shared/domain/event.bus';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { CreateReservationCommand } from '../useCase/commands/CreateReservationCommand';
-import type { ReservationOutput } from '../dto/reservation.output';
+import type { CartCheckoutRequestedEvent } from '@src/modules/cart/contracts';
+import { CartCheckoutReservationCreatedEvent } from '@src/modules/cart/contracts';
+import { EventBus } from '@src/shared/domain/event.bus';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { CreateReservationCommand } from '@src/modules/reservation/applications/useCase/commands/CreateReservationCommand';
+import type { ReservationOutput } from '@src/modules/reservation/applications/dto/reservation.output';
 
 export class CartCheckoutListener {
   async listen(): Promise<void> {

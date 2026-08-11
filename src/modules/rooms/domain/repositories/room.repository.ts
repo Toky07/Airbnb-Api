@@ -1,8 +1,8 @@
 import type {
   PaginatedResult,
   PaginationParams,
-} from '../../../../shared/pagination/pagination.types';
-import { Room } from '../entities/room.entity';
+} from '@src/shared/pagination/pagination.types';
+import { Room } from '@src/modules/rooms/domain/entities/room.entity';
 
 export interface IRoomRepository {
   create(room: Room): Promise<Room>;

@@ -1,14 +1,14 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { ComputePricingBreakdownService } from '../../../../shared/pricing/compute-pricing-breakdown.service';
-import type { PricingBreakdown } from '../../../../shared/pricing/pricing-breakdown.types';
-import type { PricingLineInput } from '../../../../shared/pricing/pricing-breakdown.types';
-import { CART_ITEM_TYPE } from '../../domain/constants/cart-item-type.constant';
-import type { Cart } from '../../domain/entities/cart.entity';
+import { ComputePricingBreakdownService } from '@src/shared/pricing/compute-pricing-breakdown.service';
+import type { PricingBreakdown } from '@src/shared/pricing/pricing-breakdown.types';
+import type { PricingLineInput } from '@src/shared/pricing/pricing-breakdown.types';
+import { CART_ITEM_TYPE } from '@src/modules/cart/domain/constants/cart-item-type.constant';
+import type { Cart } from '@src/modules/cart/domain/entities/cart.entity';
 import {
   ROOM_REPOSITORY,
   type IRoomRepository,
-} from '../../../rooms/contracts';
-import { RoomStayPricingService } from '../../../rooms/contracts';
+} from '@src/modules/rooms/contracts';
+import { RoomStayPricingService } from '@src/modules/rooms/contracts';
 
 @Injectable()
 export class BuildCartPricingBreakdownService {

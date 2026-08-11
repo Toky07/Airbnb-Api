@@ -1,7 +1,7 @@
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IPropertyTypeRepository } from '../../../domain/repositories/property-type.repository';
-import { PropertyTypeOutput } from '../../dto/property-type.output';
-import type { ListPropertyTypeOptionsQuery } from '../queries/ListPropertyTypeOptionsQuery';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { IPropertyTypeRepository } from '@src/modules/properties/domain/repositories/property-type.repository';
+import { PropertyTypeOutput } from '@src/modules/properties/applications/dto/property-type.output';
+import type { ListPropertyTypeOptionsQuery } from '@src/modules/properties/applications/useCase/queries/ListPropertyTypeOptionsQuery';
 
 export class ListPropertyTypeOptionsQueryHandler implements IQueryHandler<
   ListPropertyTypeOptionsQuery,

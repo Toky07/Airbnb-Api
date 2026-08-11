@@ -1,6 +1,6 @@
-import type { JwtPayload } from '../../../../authentication/contracts';
-import type { CreatePropertyDto } from '../../../../properties/contracts';
-import type { UploadFile } from '../../../../media/contracts';
+import type { JwtPayload } from '@src/modules/authentication/contracts';
+import type { CreatePropertyDto } from '@src/modules/properties/contracts';
+import type { UploadFile } from '@src/modules/media/contracts';
 
 export class CreateHostPropertyCommand {
   constructor(

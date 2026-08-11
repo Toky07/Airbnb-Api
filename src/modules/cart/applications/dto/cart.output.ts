@@ -1,5 +1,5 @@
 import type { CartItemOutput } from './cart-item.output';
-import type { PricingBreakdownOutput } from '../../../../shared/pricing/pricing-breakdown.output';
+import type { PricingBreakdownOutput } from '@src/shared/pricing/pricing-breakdown.output';
 
 export class CartOutput {
   constructor(

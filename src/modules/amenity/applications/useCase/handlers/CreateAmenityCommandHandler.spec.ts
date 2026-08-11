@@ -1,8 +1,8 @@
 import { ConflictException } from '@nestjs/common';
-import { AMENITY_SCOPE } from '../../../domain/constants/amenity-scope.constant';
+import { AMENITY_SCOPE } from '@src/modules/amenity/domain/constants/amenity-scope.constant';
 import { CreateAmenityCommandHandler } from './CreateAmenityCommandHandler';
-import { CreateAmenityCommand } from '../commands/CreateAmenityCommand';
-import type { IAmenityRepository } from '../../../domain/repositories/amenity.repository';
+import { CreateAmenityCommand } from '@src/modules/amenity/applications/useCase/commands/CreateAmenityCommand';
+import type { IAmenityRepository } from '@src/modules/amenity/domain/repositories/amenity.repository';
 
 describe('CreateAmenityCommandHandler', () => {
   it('creates an amenity', async () => {

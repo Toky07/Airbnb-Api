@@ -1,13 +1,13 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IPropertyRepository } from '../../../../properties/contracts';
-import type { IRoomRepository } from '../../../../rooms/contracts';
-import type { IUserRepository } from '../../../../user/contracts';
-import type { Reservation } from '../../../domain/entities/reservation.entity';
-import type { IReservationRepository } from '../../../domain/repositories/reservation.repository';
-import { ReservationOutput } from '../../dto/reservation.output';
-import type { EnrichReservationOutputsService } from '../../services/enrich-reservation-outputs.service';
-import type { GetReservationQuery } from '../queries/GetReservationQuery';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { IPropertyRepository } from '@src/modules/properties/contracts';
+import type { IRoomRepository } from '@src/modules/rooms/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import type { Reservation } from '@src/modules/reservation/domain/entities/reservation.entity';
+import type { IReservationRepository } from '@src/modules/reservation/domain/repositories/reservation.repository';
+import { ReservationOutput } from '@src/modules/reservation/applications/dto/reservation.output';
+import type { EnrichReservationOutputsService } from '@src/modules/reservation/applications/services/enrich-reservation-outputs.service';
+import type { GetReservationQuery } from '@src/modules/reservation/applications/useCase/queries/GetReservationQuery';
 
 export class GetReservationQueryHandler implements IQueryHandler<
   GetReservationQuery,

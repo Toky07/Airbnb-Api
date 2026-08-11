@@ -1,4 +1,4 @@
-import { ALL_PERMISSION_KEYS } from '../../../authentication/contracts';
+import { ALL_PERMISSION_KEYS } from '@src/modules/authentication/contracts';
 
 export function parseImportRolePermissionKeys(raw?: string): string[] {
   const trimmed = raw?.trim() ?? '';

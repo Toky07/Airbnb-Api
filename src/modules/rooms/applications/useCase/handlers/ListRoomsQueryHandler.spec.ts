@@ -1,11 +1,11 @@
-import { Property } from '../../../../properties/contracts';
-import { Room } from '../../../domain/entities/room.entity';
-import type { IRoomRepository } from '../../../domain/repositories/room.repository';
-import { RoomOutput } from '../../dto/room.output';
+import { Property } from '@src/modules/properties/contracts';
+import { Room } from '@src/modules/rooms/domain/entities/room.entity';
+import type { IRoomRepository } from '@src/modules/rooms/domain/repositories/room.repository';
+import { RoomOutput } from '@src/modules/rooms/applications/dto/room.output';
 import { ListRoomsQueryHandler } from './ListRoomsQueryHandler';
-import { ListRoomsQuery } from '../queries/ListRoomsQuery';
-import { mockRoomMediaPresenter } from '../test-helpers/room-usecase.mocks';
-import { buildPaginationMeta } from '../../../../../shared/pagination/pagination.types';
+import { ListRoomsQuery } from '@src/modules/rooms/applications/useCase/queries/ListRoomsQuery';
+import { mockRoomMediaPresenter } from '@src/modules/rooms/applications/useCase/test-helpers/room-usecase.mocks';
+import { buildPaginationMeta } from '@src/shared/pagination/pagination.types';
 
 const property = new Property({
   name: 'Room 1',

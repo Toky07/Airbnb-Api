@@ -1,8 +1,8 @@
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { GetCartQuery } from '../queries/GetCartQuery';
-import type { CartOutput } from '../../dto/cart.output';
-import type { CartPresenter } from '../../presenters/cart.presenter';
-import type { ResolveCartService } from '../../services/resolve-cart.service';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { GetCartQuery } from '@src/modules/cart/applications/useCase/queries/GetCartQuery';
+import type { CartOutput } from '@src/modules/cart/applications/dto/cart.output';
+import type { CartPresenter } from '@src/modules/cart/applications/presenters/cart.presenter';
+import type { ResolveCartService } from '@src/modules/cart/applications/services/resolve-cart.service';
 
 export class GetCartQueryHandler implements IQueryHandler<
   GetCartQuery,

@@ -1,7 +1,7 @@
-import { AMENITY_SCOPE } from '../../../domain/constants/amenity-scope.constant';
-import { Amenity } from '../../../domain/entities/amenity.entity';
+import { AMENITY_SCOPE } from '@src/modules/amenity/domain/constants/amenity-scope.constant';
+import { Amenity } from '@src/modules/amenity/domain/entities/amenity.entity';
 import { ListAmenityOptionsQueryHandler } from './ListAmenityOptionsQueryHandler';
-import { ListAmenityOptionsQuery } from '../queries/ListAmenityOptionsQuery';
+import { ListAmenityOptionsQuery } from '@src/modules/amenity/applications/useCase/queries/ListAmenityOptionsQuery';
 
 describe('ListAmenityOptionsQueryHandler', () => {
   it('lists active amenities for a scope', async () => {

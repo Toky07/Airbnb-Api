@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Conversation } from '../../domain/entities/conversation.entity';
-import type { IConversationRepository } from '../../domain/repositories/conversation.repository';
-import { ConversationOrmEntity } from '../entities/conversation.orm-entity';
-import { ConversationMapper } from '../mappers/conversation.mapper';
+import { Conversation } from '@src/modules/messaging/domain/entities/conversation.entity';
+import type { IConversationRepository } from '@src/modules/messaging/domain/repositories/conversation.repository';
+import { ConversationOrmEntity } from '@src/modules/messaging/infrastructure/entities/conversation.orm-entity';
+import { ConversationMapper } from '@src/modules/messaging/infrastructure/mappers/conversation.mapper';
 
 @Injectable()
 export class ConversationRepository implements IConversationRepository {

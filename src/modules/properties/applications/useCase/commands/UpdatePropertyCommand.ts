@@ -1,5 +1,5 @@
-import type { CreatePropertyDto } from '../../dto/createProperty.dto';
-import type { UploadFile } from '../../../../media/contracts';
+import type { CreatePropertyDto } from '@src/modules/properties/applications/dto/createProperty.dto';
+import type { UploadFile } from '@src/modules/media/contracts';
 
 export class UpdatePropertyCommand {
   constructor(

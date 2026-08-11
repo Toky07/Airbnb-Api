@@ -1,9 +1,9 @@
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import { QueryBus } from '../../../../../shared/useCase/bus/query-bus';
-import { ListRoomRateOverridesQuery } from '../../../../rooms/contracts';
-import { RoomRateOverrideOutput } from '../../../../rooms/contracts';
-import { AssertHostRoomOwnershipService } from '../../services/assert-host-room-ownership.service';
-import type { ListHostRoomRateOverridesQuery } from '../queries/ListHostRoomRateOverridesQuery';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { ListRoomRateOverridesQuery } from '@src/modules/rooms/contracts';
+import { RoomRateOverrideOutput } from '@src/modules/rooms/contracts';
+import { AssertHostRoomOwnershipService } from '@src/modules/host/applications/services/assert-host-room-ownership.service';
+import type { ListHostRoomRateOverridesQuery } from '@src/modules/host/applications/useCase/queries/ListHostRoomRateOverridesQuery';
 
 export class ListHostRoomRateOverridesQueryHandler implements IQueryHandler<
   ListHostRoomRateOverridesQuery,

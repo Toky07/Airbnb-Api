@@ -1,9 +1,9 @@
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { PaginatedResult } from '../../../../../shared/pagination/pagination.types';
-import type { IReviewRepository } from '../../../domain/repositories/review.repository';
-import { ReviewOutput } from '../../dto/review.output';
-import type { ListMyReviewsQuery } from '../queries/ListMyReviewsQuery';
-import { ResolveAuthenticatedUserService } from '../../../../../shared/auth/resolve-authenticated-user.service';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { PaginatedResult } from '@src/shared/pagination/pagination.types';
+import type { IReviewRepository } from '@src/modules/review/domain/repositories/review.repository';
+import { ReviewOutput } from '@src/modules/review/applications/dto/review.output';
+import type { ListMyReviewsQuery } from '@src/modules/review/applications/useCase/queries/ListMyReviewsQuery';
+import { ResolveAuthenticatedUserService } from '@src/shared/auth/resolve-authenticated-user.service';
 
 export class ListMyReviewsQueryHandler implements IQueryHandler<
   ListMyReviewsQuery,

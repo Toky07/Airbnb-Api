@@ -1,7 +1,7 @@
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IAmenityRepository } from '../../../domain/repositories/amenity.repository';
-import { AmenityOutput } from '../../dto/amenity.output';
-import type { ListAmenitiesQuery } from '../queries/ListAmenitiesQuery';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { IAmenityRepository } from '@src/modules/amenity/domain/repositories/amenity.repository';
+import { AmenityOutput } from '@src/modules/amenity/applications/dto/amenity.output';
+import type { ListAmenitiesQuery } from '@src/modules/amenity/applications/useCase/queries/ListAmenitiesQuery';
 
 export class ListAmenitiesQueryHandler implements IQueryHandler<
   ListAmenitiesQuery,

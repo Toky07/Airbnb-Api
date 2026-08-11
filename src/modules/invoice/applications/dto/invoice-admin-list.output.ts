@@ -1,4 +1,4 @@
-import type { InvoiceListRecord } from '../../domain/types/invoice-list-record.type';
+import type { InvoiceListRecord } from '@src/modules/invoice/domain/types/invoice-list-record.type';
 
 export class InvoiceAdminListOutput {
   constructor(

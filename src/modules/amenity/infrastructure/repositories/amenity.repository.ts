@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import type { AmenityScope } from '../../domain/constants/amenity-scope.constant';
-import { Amenity } from '../../domain/entities/amenity.entity';
-import type { IAmenityRepository } from '../../domain/repositories/amenity.repository';
-import { AmenityOrmEntity } from '../entities/amenity.orm-entity';
-import { PropertyAmenityOrmEntity } from '../entities/property-amenity.orm-entity';
-import { RoomAmenityOrmEntity } from '../entities/room-amenity.orm-entity';
-import { AmenityMapper } from '../mappers/amenity.mapper';
+import type { AmenityScope } from '@src/modules/amenity/domain/constants/amenity-scope.constant';
+import { Amenity } from '@src/modules/amenity/domain/entities/amenity.entity';
+import type { IAmenityRepository } from '@src/modules/amenity/domain/repositories/amenity.repository';
+import { AmenityOrmEntity } from '@src/modules/amenity/infrastructure/entities/amenity.orm-entity';
+import { PropertyAmenityOrmEntity } from '@src/modules/amenity/infrastructure/entities/property-amenity.orm-entity';
+import { RoomAmenityOrmEntity } from '@src/modules/amenity/infrastructure/entities/room-amenity.orm-entity';
+import { AmenityMapper } from '@src/modules/amenity/infrastructure/mappers/amenity.mapper';
 
 @Injectable()
 export class AmenityRepository implements IAmenityRepository {

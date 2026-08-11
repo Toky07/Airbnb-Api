@@ -1,4 +1,4 @@
-import type { RoomBlockedDate } from '../entities/room-blocked-date.entity';
+import type { RoomBlockedDate } from '@src/modules/rooms/domain/entities/room-blocked-date.entity';
 
 export const ROOM_BLOCKED_DATE_REPOSITORY = 'ROOM_BLOCKED_DATE_REPOSITORY';
 

@@ -1,15 +1,15 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import type { IAuthRepository } from '../../domain/repositories/auth.repository';
-import { AuthEntity } from '../entity/auth.entity';
-import { AuthMapper } from '../mappers/auth.mappers';
-import { Auth } from '../../domain/entities/user.entity';
+import type { IAuthRepository } from '@src/modules/authentication/domain/repositories/auth.repository';
+import { AuthEntity } from '@src/modules/authentication/infrastructure/entity/auth.entity';
+import { AuthMapper } from '@src/modules/authentication/infrastructure/mappers/auth.mappers';
+import { Auth } from '@src/modules/authentication/domain/entities/user.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Role } from '../entity/role.entity';
+import { Role } from '@src/modules/authentication/infrastructure/entity/role.entity';
 import {
   ACCOUNT_STATUS,
   type AccountStatus,
-} from '../../domain/constants/account-status.constant';
+} from '@src/modules/authentication/domain/constants/account-status.constant';
 
 @Injectable()
 export class AuthRepository implements IAuthRepository {

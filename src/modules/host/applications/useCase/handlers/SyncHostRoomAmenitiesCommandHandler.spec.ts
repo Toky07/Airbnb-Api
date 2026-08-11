@@ -1,7 +1,7 @@
 import { ForbiddenException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SyncHostRoomAmenitiesCommandHandler } from './SyncHostRoomAmenitiesCommandHandler';
-import { SyncHostRoomAmenitiesCommand } from '../commands/SyncHostRoomAmenitiesCommand';
+import { SyncHostRoomAmenitiesCommand } from '@src/modules/host/applications/useCase/commands/SyncHostRoomAmenitiesCommand';
 import {
   authUser,
   createAssertHostRoomOwnershipMock,

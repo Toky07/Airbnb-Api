@@ -1,9 +1,9 @@
 import type {
   PaginatedResult,
   PaginationParams,
-} from '../../../../shared/pagination/pagination.types';
-import type { ReviewStatus } from '../constants/review-status.constant';
-import type { Review } from '../entities/review.entity';
+} from '@src/shared/pagination/pagination.types';
+import type { ReviewStatus } from '@src/modules/review/domain/constants/review-status.constant';
+import type { Review } from '@src/modules/review/domain/entities/review.entity';
 
 export const REVIEW_REPOSITORY = 'REVIEW_REPOSITORY';
 

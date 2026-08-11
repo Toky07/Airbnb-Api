@@ -1,14 +1,14 @@
 import { NotFoundException } from '@nestjs/common';
 import type { Repository } from 'typeorm';
-import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { ListPropertyAmenitiesQuery } from '../../../amenity/contracts';
-import { ListRoomAmenitiesQuery } from '../../../amenity/contracts';
-import type { IRoomRepository } from '../../domain/repositories/room.repository';
-import type { IRoomBlockedDateRepository } from '../../domain/repositories/room-blocked-date.repository';
-import type { ReservationItemOrmEntity } from '../../../reservation/infrastructure/entities/reservation-item.orm-entity';
-import { BLOCKING_RESERVATION_STATUSES } from '../../../reservation/contracts';
-import type { UnavailableDateRange } from '../dto/room.output';
-import type { RoomMediaPresenter } from '../presenters/room-media.presenter';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { ListPropertyAmenitiesQuery } from '@src/modules/amenity/contracts';
+import { ListRoomAmenitiesQuery } from '@src/modules/amenity/contracts';
+import type { IRoomRepository } from '@src/modules/rooms/domain/repositories/room.repository';
+import type { IRoomBlockedDateRepository } from '@src/modules/rooms/domain/repositories/room-blocked-date.repository';
+import type { ReservationItemOrmEntity } from '@src/modules/reservation/infrastructure/entities/reservation-item.orm-entity';
+import { BLOCKING_RESERVATION_STATUSES } from '@src/modules/reservation/contracts';
+import type { UnavailableDateRange } from '@src/modules/rooms/applications/dto/room.output';
+import type { RoomMediaPresenter } from '@src/modules/rooms/applications/presenters/room-media.presenter';
 
 export class RoomDetailResolver {
   constructor(

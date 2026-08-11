@@ -1,4 +1,4 @@
-import type { EntityType, MediaType } from '../../constant';
+import type { EntityType, MediaType } from '@src/modules/media/constant';
 
 export class Media {
   constructor(

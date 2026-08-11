@@ -1,16 +1,16 @@
-import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { CreateUserCommand } from '../../../../user/contracts';
-import { fetchImageFromUrl } from '../../../../media/contracts';
-import type { ImportUserRowDto } from '../../dto/import-batch.dto';
-import type { ImportEntityResult } from '../../dto/import-entity-result.dto';
-import { emptyImportEntityResult } from '../../dto/import-entity-result.dto';
-import type { ImportBatchContext } from '../../services/import-batch-context.service';
-import { validateImportUserRow } from '../../validation/validate-import-user-row';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { CreateUserCommand } from '@src/modules/user/contracts';
+import { fetchImageFromUrl } from '@src/modules/media/contracts';
+import type { ImportUserRowDto } from '@src/modules/import/applications/dto/import-batch.dto';
+import type { ImportEntityResult } from '@src/modules/import/applications/dto/import-entity-result.dto';
+import { emptyImportEntityResult } from '@src/modules/import/applications/dto/import-entity-result.dto';
+import type { ImportBatchContext } from '@src/modules/import/applications/services/import-batch-context.service';
+import { validateImportUserRow } from '@src/modules/import/applications/validation/validate-import-user-row';
 import {
   pushImportRowError,
   pushImportValidationError,
   toImportErrorMessage,
-} from '../../utils/import-error.util';
+} from '@src/modules/import/applications/utils/import-error.util';
 
 export class ImportUsersHandler {
   async execute(

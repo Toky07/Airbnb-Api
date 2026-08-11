@@ -1,11 +1,11 @@
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
 import {
   VerifyPaymentCommand,
   type VerifyPaymentResult,
-} from '../../../payment/contracts';
-import type { CartCheckoutCompleteRequestedEvent } from '../../domain/events/cart-checkout-complete-requested.event';
-import { CartCheckoutCompleteVerifiedEvent } from '../../domain/events/cart-checkout-complete-verified.event';
-import { EventBus } from '../../../../shared/domain/event.bus';
+} from '@src/modules/payment/contracts';
+import type { CartCheckoutCompleteRequestedEvent } from '@src/modules/cart/domain/events/cart-checkout-complete-requested.event';
+import { CartCheckoutCompleteVerifiedEvent } from '@src/modules/cart/domain/events/cart-checkout-complete-verified.event';
+import { EventBus } from '@src/shared/domain/event.bus';
 
 export class CartCheckoutCompleteListener {
   async listen(): Promise<void> {

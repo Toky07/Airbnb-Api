@@ -1,4 +1,4 @@
-import type { UploadFile } from '../types/upload-file';
+import type { UploadFile } from '@src/modules/media/types/upload-file';
 import { bufferToUploadFile } from './buffer-to-upload-file';
 
 const DATA_URL_PATTERN = /^data:([^;]+);base64,(.+)$/;

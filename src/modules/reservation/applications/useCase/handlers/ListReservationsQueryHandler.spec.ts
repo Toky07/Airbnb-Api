@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
 import { ListReservationsQueryHandler } from './ListReservationsQueryHandler';
-import { ListReservationsQuery } from '../queries/ListReservationsQuery';
+import { ListReservationsQuery } from '@src/modules/reservation/applications/useCase/queries/ListReservationsQuery';
 import {
   createReservationRepositoryMock,
   createSampleReservation,
-} from '../reservation-test.helpers';
+} from '@src/modules/reservation/applications/useCase/reservation-test.helpers';
 
 describe('ListReservationsQueryHandler', () => {
   it('retourne une liste paginée de réservations', async () => {

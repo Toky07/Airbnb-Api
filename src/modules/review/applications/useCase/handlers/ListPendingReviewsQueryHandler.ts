@@ -1,10 +1,10 @@
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { PaginatedResult } from '../../../../../shared/pagination/pagination.types';
-import { REVIEW_STATUS } from '../../../domain/constants/review-status.constant';
-import type { IReviewRepository } from '../../../domain/repositories/review.repository';
-import { ReviewOutput } from '../../dto/review.output';
-import type { ListPendingReviewsQuery } from '../queries/ListPendingReviewsQuery';
-import { MapReviewOutputsService } from '../../services/map-review-outputs.service';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { PaginatedResult } from '@src/shared/pagination/pagination.types';
+import { REVIEW_STATUS } from '@src/modules/review/domain/constants/review-status.constant';
+import type { IReviewRepository } from '@src/modules/review/domain/repositories/review.repository';
+import { ReviewOutput } from '@src/modules/review/applications/dto/review.output';
+import type { ListPendingReviewsQuery } from '@src/modules/review/applications/useCase/queries/ListPendingReviewsQuery';
+import { MapReviewOutputsService } from '@src/modules/review/applications/services/map-review-outputs.service';
 
 export class ListPendingReviewsQueryHandler implements IQueryHandler<
   ListPendingReviewsQuery,

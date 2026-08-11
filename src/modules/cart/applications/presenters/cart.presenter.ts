@@ -3,13 +3,13 @@ import {
   CART_PRODUCT_SUMMARY_PORT,
   type CartProductSummary,
   type ICartProductSummaryPort,
-} from '../../domain/ports/cart-product-summary.port';
-import { Cart } from '../../domain/entities/cart.entity';
-import type { CartItem } from '../../domain/entities/cart-item.entity';
-import { CartItemOutput } from '../dto/cart-item.output';
-import { CartOutput } from '../dto/cart.output';
-import { PricingBreakdownOutput } from '../../../../shared/pricing/pricing-breakdown.output';
-import { BuildCartPricingBreakdownService } from '../services/build-cart-pricing-breakdown.service';
+} from '@src/modules/cart/domain/ports/cart-product-summary.port';
+import { Cart } from '@src/modules/cart/domain/entities/cart.entity';
+import type { CartItem } from '@src/modules/cart/domain/entities/cart-item.entity';
+import { CartItemOutput } from '@src/modules/cart/applications/dto/cart-item.output';
+import { CartOutput } from '@src/modules/cart/applications/dto/cart.output';
+import { PricingBreakdownOutput } from '@src/shared/pricing/pricing-breakdown.output';
+import { BuildCartPricingBreakdownService } from '@src/modules/cart/applications/services/build-cart-pricing-breakdown.service';
 
 @Injectable()
 export class CartPresenter {

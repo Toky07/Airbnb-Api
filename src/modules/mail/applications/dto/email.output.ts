@@ -1,5 +1,5 @@
-import type { EmailAttachment } from '../../domain/entities/email-attachment.entity';
-import type { EmailStatus } from '../../domain/constants/email-status.constant';
+import type { EmailAttachment } from '@src/modules/mail/domain/entities/email-attachment.entity';
+import type { EmailStatus } from '@src/modules/mail/domain/constants/email-status.constant';
 
 export class EmailOutput {
   constructor(

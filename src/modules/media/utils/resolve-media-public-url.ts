@@ -1,4 +1,4 @@
-import { getApiPublicUrl } from '../../../config/env.config';
+import { getApiPublicUrl } from '@src/config/env.config';
 import { isStoredUploadPath } from './is-stored-upload-path';
 
 /**

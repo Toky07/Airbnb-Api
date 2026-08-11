@@ -1,6 +1,6 @@
-import type { InvoicePaymentType } from '../../domain/constants/invoice-payment-type.constant';
-import { Invoice } from '../../domain/entities/invoice.entity';
-import { InvoiceOrmEntity } from '../entities/invoice.orm-entity';
+import type { InvoicePaymentType } from '@src/modules/invoice/domain/constants/invoice-payment-type.constant';
+import { Invoice } from '@src/modules/invoice/domain/entities/invoice.entity';
+import { InvoiceOrmEntity } from '@src/modules/invoice/infrastructure/entities/invoice.orm-entity';
 
 export class InvoiceMapper {
   static toDomain(entity: InvoiceOrmEntity): Invoice {

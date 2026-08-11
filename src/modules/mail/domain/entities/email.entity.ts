@@ -1,4 +1,4 @@
-import type { EmailStatus } from '../constants/email-status.constant';
+import type { EmailStatus } from '@src/modules/mail/domain/constants/email-status.constant';
 import type { EmailAttachment } from './email-attachment.entity';
 
 export class Email {

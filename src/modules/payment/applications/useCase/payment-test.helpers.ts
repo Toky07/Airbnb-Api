@@ -1,11 +1,11 @@
 import { vi } from 'vitest';
-import { PAYMENT_PROVIDER } from '../../domain/constants/payment-provider.constant';
-import { PAYMENT_STATUS } from '../../domain/constants/payment-status.constant';
-import { Payment } from '../../domain/entities/payment.entity';
-import type { IPaymentGateway } from '../../domain/ports/payment-gateway.port';
-import type { IPaymentRepository } from '../../domain/repositories/payment.repository';
-import type { IWebhookVerifier } from '../../domain/ports/webhook-verifier.port';
-import { PAYMENT_TYPE } from '../../domain/types/payment.type';
+import { PAYMENT_PROVIDER } from '@src/modules/payment/domain/constants/payment-provider.constant';
+import { PAYMENT_STATUS } from '@src/modules/payment/domain/constants/payment-status.constant';
+import { Payment } from '@src/modules/payment/domain/entities/payment.entity';
+import type { IPaymentGateway } from '@src/modules/payment/domain/ports/payment-gateway.port';
+import type { IPaymentRepository } from '@src/modules/payment/domain/repositories/payment.repository';
+import type { IWebhookVerifier } from '@src/modules/payment/domain/ports/webhook-verifier.port';
+import { PAYMENT_TYPE } from '@src/modules/payment/domain/types/payment.type';
 
 export function createSamplePayment(
   overrides: Partial<{

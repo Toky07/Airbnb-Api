@@ -1,8 +1,8 @@
 import type { IAmenityRepository } from './domain/repositories/amenity.repository';
 import type { IPropertyAmenityRepository } from './domain/repositories/property-amenity.repository';
 import type { IRoomAmenityRepository } from './domain/repositories/room-amenity.repository';
-import type { IPropertyRepository } from '../properties/contracts';
-import type { IRoomRepository } from '../rooms/contracts';
+import type { IPropertyRepository } from '@src/modules/properties/contracts';
+import type { IRoomRepository } from '@src/modules/rooms/contracts';
 import { ResolveAmenitiesService } from './applications/services/resolve-amenities.service';
 import {
   ListEntityAmenitiesService,

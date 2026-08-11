@@ -1,10 +1,10 @@
 import { Inject } from '@nestjs/common';
-import { EventBus } from '../../../../shared/domain/event.bus';
-import { PaymentCreatedEvent } from '../../../payment/contracts';
+import { EventBus } from '@src/shared/domain/event.bus';
+import { PaymentCreatedEvent } from '@src/modules/payment/contracts';
 import {
   type IReservationRepository,
   RESERVATION_REPOSITORY,
-} from '../../domain/repositories/reservation.repository';
+} from '@src/modules/reservation/domain/repositories/reservation.repository';
 
 export class PaymentListener {
   constructor(

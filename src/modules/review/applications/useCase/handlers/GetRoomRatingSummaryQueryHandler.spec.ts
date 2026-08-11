@@ -1,7 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
 import { describe, expect, it, vi } from 'vitest';
 import { GetRoomRatingSummaryQueryHandler } from './GetRoomRatingSummaryQueryHandler';
-import { GetRoomRatingSummaryQuery } from '../queries/GetRoomRatingSummaryQuery';
+import { GetRoomRatingSummaryQuery } from '@src/modules/review/applications/useCase/queries/GetRoomRatingSummaryQuery';
 
 describe('GetRoomRatingSummaryQueryHandler', () => {
   it('returns rating summary for a room slug', async () => {

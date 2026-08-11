@@ -1,10 +1,10 @@
 import { NotFoundException } from '@nestjs/common';
-import { AMENITY_SCOPE } from '../../../domain/constants/amenity-scope.constant';
-import { Amenity } from '../../../domain/entities/amenity.entity';
+import { AMENITY_SCOPE } from '@src/modules/amenity/domain/constants/amenity-scope.constant';
+import { Amenity } from '@src/modules/amenity/domain/entities/amenity.entity';
 import { SyncPropertyAmenitiesCommandHandler } from './SyncPropertyAmenitiesCommandHandler';
-import { SyncPropertyAmenitiesCommand } from '../commands/SyncPropertyAmenitiesCommand';
-import { SyncEntityAmenitiesService } from '../../services/entity-amenities.service';
-import { ResolveAmenitiesService } from '../../services/resolve-amenities.service';
+import { SyncPropertyAmenitiesCommand } from '@src/modules/amenity/applications/useCase/commands/SyncPropertyAmenitiesCommand';
+import { SyncEntityAmenitiesService } from '@src/modules/amenity/applications/services/entity-amenities.service';
+import { ResolveAmenitiesService } from '@src/modules/amenity/applications/services/resolve-amenities.service';
 
 describe('SyncPropertyAmenitiesCommandHandler', () => {
   it('syncs amenities for an existing property', async () => {

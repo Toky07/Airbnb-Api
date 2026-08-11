@@ -1,5 +1,5 @@
-import type { CreateUserDto } from '../../../domain/dtos/createUser.dto';
-import type { UploadFile } from '../../../../media/contracts';
+import type { CreateUserDto } from '@src/modules/user/domain/dtos/createUser.dto';
+import type { UploadFile } from '@src/modules/media/contracts';
 
 export class CreateUserCommand {
   constructor(

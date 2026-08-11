@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
-import { CART_ITEM_TYPE } from '../domain/constants/cart-item-type.constant';
-import { Cart } from '../domain/entities/cart.entity';
-import { CartItem } from '../domain/entities/cart-item.entity';
+import { CART_ITEM_TYPE } from '@src/modules/cart/domain/constants/cart-item-type.constant';
+import { Cart } from '@src/modules/cart/domain/entities/cart.entity';
+import { CartItem } from '@src/modules/cart/domain/entities/cart-item.entity';
 
 export function createSampleCartItem(
   overrides: Partial<{

@@ -1,9 +1,9 @@
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { TokenGenerator } from '../../../domain/generator/token.generator';
-import { HOST_ROLE_SLUG } from '../../../domain/constants/permissions.constant';
-import type { EnsureAuthHasRoleService } from '../../services/ensure-auth-has-role.service';
-import type { BecomeHostCommand } from '../commands/BecomeHostCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { TokenGenerator } from '@src/modules/authentication/domain/generator/token.generator';
+import { HOST_ROLE_SLUG } from '@src/modules/authentication/domain/constants/permissions.constant';
+import type { EnsureAuthHasRoleService } from '@src/modules/authentication/applications/services/ensure-auth-has-role.service';
+import type { BecomeHostCommand } from '@src/modules/authentication/applications/useCase/commands/BecomeHostCommand';
 
 export class BecomeHostCommandHandler implements ICommandHandler<
   BecomeHostCommand,

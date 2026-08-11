@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MoreThan, Repository } from 'typeorm';
-import { Message } from '../../domain/entities/message.entity';
-import type { IMessageRepository } from '../../domain/repositories/message.repository';
-import { MessageOrmEntity } from '../entities/message.orm-entity';
-import { MessageMapper } from '../mappers/message.mapper';
+import { Message } from '@src/modules/messaging/domain/entities/message.entity';
+import type { IMessageRepository } from '@src/modules/messaging/domain/repositories/message.repository';
+import { MessageOrmEntity } from '@src/modules/messaging/infrastructure/entities/message.orm-entity';
+import { MessageMapper } from '@src/modules/messaging/infrastructure/mappers/message.mapper';
 
 @Injectable()
 export class MessageRepository implements IMessageRepository {

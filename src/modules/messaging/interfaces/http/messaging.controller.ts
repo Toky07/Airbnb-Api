@@ -10,17 +10,17 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import type { JwtPayload } from '../../../authentication/contracts';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { SendMessageDto } from '../../applications/dto/send-message.dto';
-import { SendMessageCommand } from '../../applications/useCase/commands/SendMessageCommand';
-import { MarkConversationReadCommand } from '../../applications/useCase/commands/MarkConversationReadCommand';
-import { GetOrCreateConversationCommand } from '../../applications/useCase/commands/GetOrCreateConversationCommand';
-import { ListMyConversationsQuery } from '../../applications/useCase/queries/ListMyConversationsQuery';
-import { ListMessagesQuery } from '../../applications/useCase/queries/ListMessagesQuery';
-import { ApiJwtAuth } from '../../../../shared/swagger/swagger.decorators';
-import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
+import type { JwtPayload } from '@src/modules/authentication/contracts';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { SendMessageDto } from '@src/modules/messaging/applications/dto/send-message.dto';
+import { SendMessageCommand } from '@src/modules/messaging/applications/useCase/commands/SendMessageCommand';
+import { MarkConversationReadCommand } from '@src/modules/messaging/applications/useCase/commands/MarkConversationReadCommand';
+import { GetOrCreateConversationCommand } from '@src/modules/messaging/applications/useCase/commands/GetOrCreateConversationCommand';
+import { ListMyConversationsQuery } from '@src/modules/messaging/applications/useCase/queries/ListMyConversationsQuery';
+import { ListMessagesQuery } from '@src/modules/messaging/applications/useCase/queries/ListMessagesQuery';
+import { ApiJwtAuth } from '@src/shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 
 @ApiTags(SWAGGER_TAGS.MESSAGING)
 @ApiJwtAuth()

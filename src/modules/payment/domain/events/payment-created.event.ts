@@ -1,5 +1,5 @@
-import { DomainEvent } from '../../../../shared/domain/domain.event';
-import { PAYMENT_TYPE } from '../types/payment.type';
+import { DomainEvent } from '@src/shared/domain/domain.event';
+import { PAYMENT_TYPE } from '@src/modules/payment/domain/types/payment.type';
 
 export class PaymentCreatedEvent implements DomainEvent {
   eventName = 'payment.created';

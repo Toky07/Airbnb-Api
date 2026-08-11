@@ -1,8 +1,8 @@
-import { Property } from '../../../properties/domain/entities/property.entity';
-import { toPropertySummary } from '../../../properties/contracts/property-summary';
-import type { CategorySummary } from '../../../../shared/types/category-summary';
-import { Room } from '../../domain/entities/room.entity';
-import { RoomEntity } from '../entities/room.entity';
+import { Property } from '@src/modules/properties/domain/entities/property.entity';
+import { toPropertySummary } from '@src/modules/properties/contracts/property-summary';
+import type { CategorySummary } from '@src/shared/types/category-summary';
+import { Room } from '@src/modules/rooms/domain/entities/room.entity';
+import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
 
 function mapRoomType(entity: RoomEntity): CategorySummary | null {
   if (!entity.roomType) {

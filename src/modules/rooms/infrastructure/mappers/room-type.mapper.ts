@@ -1,5 +1,5 @@
-import { RoomType } from '../../domain/entities/room-type.entity';
-import { RoomTypeEntity } from '../entities/room-type.entity';
+import { RoomType } from '@src/modules/rooms/domain/entities/room-type.entity';
+import { RoomTypeEntity } from '@src/modules/rooms/infrastructure/entities/room-type.entity';
 
 export class RoomTypeMapper {
   static toDomain(entity: RoomTypeEntity): RoomType {

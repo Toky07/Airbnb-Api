@@ -1,8 +1,8 @@
 import {
   DEFAULT_CANCELLATION_POLICY,
   parseCancellationPolicy,
-} from '../../../reservation/contracts/cancellation-policy';
-import type { CreatePropertyDto } from '../../applications/dto/createProperty.dto';
+} from '@src/modules/reservation/contracts/cancellation-policy';
+import type { CreatePropertyDto } from '@src/modules/properties/applications/dto/createProperty.dto';
 
 export function parsePropertyBody(
   body: Record<string, unknown>,

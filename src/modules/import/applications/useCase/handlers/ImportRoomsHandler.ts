@@ -1,13 +1,13 @@
-import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { CreateRoomCommand } from '../../../../rooms/contracts';
-import type { IPropertyRepository } from '../../../../properties/contracts';
-import { fetchImageFromUrl } from '../../../../media/contracts';
-import type { ImportRoomRowDto } from '../../dto/import-batch.dto';
-import type { ImportEntityResult } from '../../dto/import-entity-result.dto';
-import { emptyImportEntityResult } from '../../dto/import-entity-result.dto';
-import type { ImportBatchContext } from '../../services/import-batch-context.service';
-import { parseImportRoomImageUrls } from '../../validation/parse-import-room-image-urls';
-import { validateImportRoomRow } from '../../validation/validate-import-room-row';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { CreateRoomCommand } from '@src/modules/rooms/contracts';
+import type { IPropertyRepository } from '@src/modules/properties/contracts';
+import { fetchImageFromUrl } from '@src/modules/media/contracts';
+import type { ImportRoomRowDto } from '@src/modules/import/applications/dto/import-batch.dto';
+import type { ImportEntityResult } from '@src/modules/import/applications/dto/import-entity-result.dto';
+import { emptyImportEntityResult } from '@src/modules/import/applications/dto/import-entity-result.dto';
+import type { ImportBatchContext } from '@src/modules/import/applications/services/import-batch-context.service';
+import { parseImportRoomImageUrls } from '@src/modules/import/applications/validation/parse-import-room-image-urls';
+import { validateImportRoomRow } from '@src/modules/import/applications/validation/validate-import-room-row';
 
 export class ImportRoomsHandler {
   constructor(private readonly propertyRepository: IPropertyRepository) {}

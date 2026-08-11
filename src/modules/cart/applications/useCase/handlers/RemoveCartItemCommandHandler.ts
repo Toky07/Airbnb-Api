@@ -1,10 +1,10 @@
 import { NotFoundException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { RemoveCartItemCommand } from '../commands/RemoveCartItemCommand';
-import type { CartOutput } from '../../dto/cart.output';
-import type { ICartRepository } from '../../../domain/repositories/cart.repository';
-import type { CartPresenter } from '../../presenters/cart.presenter';
-import type { ResolveCartService } from '../../services/resolve-cart.service';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { RemoveCartItemCommand } from '@src/modules/cart/applications/useCase/commands/RemoveCartItemCommand';
+import type { CartOutput } from '@src/modules/cart/applications/dto/cart.output';
+import type { ICartRepository } from '@src/modules/cart/domain/repositories/cart.repository';
+import type { CartPresenter } from '@src/modules/cart/applications/presenters/cart.presenter';
+import type { ResolveCartService } from '@src/modules/cart/applications/services/resolve-cart.service';
 
 export class RemoveCartItemCommandHandler implements ICommandHandler<
   RemoveCartItemCommand,

@@ -1,13 +1,13 @@
 import { ConflictException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { Amenity } from '../../../domain/entities/amenity.entity';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import { Amenity } from '@src/modules/amenity/domain/entities/amenity.entity';
 import {
   AMENITY_SCOPE,
   type AmenityScope,
-} from '../../../domain/constants/amenity-scope.constant';
-import type { IAmenityRepository } from '../../../domain/repositories/amenity.repository';
-import { AmenityOutput } from '../../dto/amenity.output';
-import type { CreateAmenityCommand } from '../commands/CreateAmenityCommand';
+} from '@src/modules/amenity/domain/constants/amenity-scope.constant';
+import type { IAmenityRepository } from '@src/modules/amenity/domain/repositories/amenity.repository';
+import { AmenityOutput } from '@src/modules/amenity/applications/dto/amenity.output';
+import type { CreateAmenityCommand } from '@src/modules/amenity/applications/useCase/commands/CreateAmenityCommand';
 
 export class CreateAmenityCommandHandler implements ICommandHandler<
   CreateAmenityCommand,

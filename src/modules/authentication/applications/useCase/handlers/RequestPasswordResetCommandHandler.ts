@@ -1,12 +1,12 @@
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IAuthRepository } from '../../../domain/repositories/auth.repository';
-import type { IPasswordResetTokenRepository } from '../../../domain/repositories/password-reset-token.repository';
-import type { MailService } from '../../../../mail/contracts';
-import { PasswordSetupTokenService } from '../../../domain/services/password-setup-token.service';
-import { PasswordResetLinkBuilder } from '../../../domain/services/password-reset-link.builder';
-import { PASSWORD_RESET_TOKEN_TTL_HOURS } from '../../../domain/constants/account-status.constant';
-import { ACCOUNT_STATUS } from '../../../domain/constants/account-status.constant';
-import type { RequestPasswordResetCommand } from '../commands/RequestPasswordResetCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { IAuthRepository } from '@src/modules/authentication/domain/repositories/auth.repository';
+import type { IPasswordResetTokenRepository } from '@src/modules/authentication/domain/repositories/password-reset-token.repository';
+import type { MailService } from '@src/modules/mail/contracts';
+import { PasswordSetupTokenService } from '@src/modules/authentication/domain/services/password-setup-token.service';
+import { PasswordResetLinkBuilder } from '@src/modules/authentication/domain/services/password-reset-link.builder';
+import { PASSWORD_RESET_TOKEN_TTL_HOURS } from '@src/modules/authentication/domain/constants/account-status.constant';
+import { ACCOUNT_STATUS } from '@src/modules/authentication/domain/constants/account-status.constant';
+import type { RequestPasswordResetCommand } from '@src/modules/authentication/applications/useCase/commands/RequestPasswordResetCommand';
 
 export class RequestPasswordResetCommandHandler implements ICommandHandler<
   RequestPasswordResetCommand,

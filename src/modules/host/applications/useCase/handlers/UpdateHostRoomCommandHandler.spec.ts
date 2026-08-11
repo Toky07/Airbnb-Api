@@ -1,7 +1,7 @@
 import { ForbiddenException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { UpdateHostRoomCommandHandler } from './UpdateHostRoomCommandHandler';
-import { UpdateHostRoomCommand } from '../commands/UpdateHostRoomCommand';
+import { UpdateHostRoomCommand } from '@src/modules/host/applications/useCase/commands/UpdateHostRoomCommand';
 import {
   authUser,
   createAssertHostRoomOwnershipMock,

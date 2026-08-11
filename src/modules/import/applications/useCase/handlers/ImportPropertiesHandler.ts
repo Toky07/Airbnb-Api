@@ -1,14 +1,14 @@
-import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { CreatePropertyCommand } from '../../../../properties/contracts';
-import { fetchImageFromUrl } from '../../../../media/contracts';
-import type { ImportPropertyRowDto } from '../../dto/import-batch.dto';
-import type { ImportEntityResult } from '../../dto/import-entity-result.dto';
-import { emptyImportEntityResult } from '../../dto/import-entity-result.dto';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { CreatePropertyCommand } from '@src/modules/properties/contracts';
+import { fetchImageFromUrl } from '@src/modules/media/contracts';
+import type { ImportPropertyRowDto } from '@src/modules/import/applications/dto/import-batch.dto';
+import type { ImportEntityResult } from '@src/modules/import/applications/dto/import-entity-result.dto';
+import { emptyImportEntityResult } from '@src/modules/import/applications/dto/import-entity-result.dto';
 import {
   buildPropertyKey,
   type ImportBatchContext,
-} from '../../services/import-batch-context.service';
-import { validateImportPropertyRow } from '../../validation/validate-import-property-row';
+} from '@src/modules/import/applications/services/import-batch-context.service';
+import { validateImportPropertyRow } from '@src/modules/import/applications/validation/validate-import-property-row';
 
 export class ImportPropertiesHandler {
   async execute(

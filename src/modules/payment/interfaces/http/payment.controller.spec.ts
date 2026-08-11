@@ -4,27 +4,27 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { DataSource } from 'typeorm';
-import { PaymentModule } from '../../payment.module';
-import { PaymentOrmEntity } from '../../infrastructure/entities/payment.orm-entity';
-import { PAYMENT_GATEWAY } from '../../domain/ports/payment-gateway.port';
-import { PAYMENT_STATUS } from '../../domain/constants/payment-status.constant';
+import { PaymentModule } from '@src/modules/payment/payment.module';
+import { PaymentOrmEntity } from '@src/modules/payment/infrastructure/entities/payment.orm-entity';
+import { PAYMENT_GATEWAY } from '@src/modules/payment/domain/ports/payment-gateway.port';
+import { PAYMENT_STATUS } from '@src/modules/payment/domain/constants/payment-status.constant';
 import {
   AUTH_TEST_ENTITIES,
   DOMAIN_TEST_ENTITIES,
-} from '../../../../test/controller-test.helpers';
+} from '@src/test/controller-test.helpers';
 import {
   getIntegrationTestDatabaseConfig,
   prepareIntegrationTestDatabase,
-} from '../../../../test/test-database.config';
+} from '@src/test/test-database.config';
 import {
   createPaymentGatewayMock,
   createWebhookVerifierMock,
-} from '../../applications/useCase/payment-test.helpers';
-import { StripeWebhookVerifier } from '../../infrastructure/stripe/StripeWebhookVerifier';
-import { ReservationOrmEntity } from '../../../reservation/infrastructure/entities/reservation.orm-entity';
-import { RESERVATION_STATUS } from '../../../reservation/contracts';
-import { PropertyEntity } from '../../../properties/infrastructure/entities/property-entity.entity';
-import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
+} from '@src/modules/payment/applications/useCase/payment-test.helpers';
+import { StripeWebhookVerifier } from '@src/modules/payment/infrastructure/stripe/StripeWebhookVerifier';
+import { ReservationOrmEntity } from '@src/modules/reservation/infrastructure/entities/reservation.orm-entity';
+import { RESERVATION_STATUS } from '@src/modules/reservation/contracts';
+import { PropertyEntity } from '@src/modules/properties/infrastructure/entities/property-entity.entity';
+import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
 
 describe('PaymentController', () => {
   let app: INestApplication;

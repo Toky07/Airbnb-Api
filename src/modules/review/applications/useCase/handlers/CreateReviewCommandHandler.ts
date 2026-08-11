@@ -1,12 +1,12 @@
 import { BadRequestException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { REVIEW_STATUS } from '../../../domain/constants/review-status.constant';
-import { Review } from '../../../domain/entities/review.entity';
-import type { IReviewRepository } from '../../../domain/repositories/review.repository';
-import { isValidRating } from '../../dto/create-review.dto';
-import { ReviewOutput } from '../../dto/review.output';
-import type { ReviewEligibilityService } from '../../services/review-eligibility.service';
-import type { CreateReviewCommand } from '../commands/CreateReviewCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import { REVIEW_STATUS } from '@src/modules/review/domain/constants/review-status.constant';
+import { Review } from '@src/modules/review/domain/entities/review.entity';
+import type { IReviewRepository } from '@src/modules/review/domain/repositories/review.repository';
+import { isValidRating } from '@src/modules/review/applications/dto/create-review.dto';
+import { ReviewOutput } from '@src/modules/review/applications/dto/review.output';
+import type { ReviewEligibilityService } from '@src/modules/review/applications/services/review-eligibility.service';
+import type { CreateReviewCommand } from '@src/modules/review/applications/useCase/commands/CreateReviewCommand';
 
 export class CreateReviewCommandHandler implements ICommandHandler<
   CreateReviewCommand,

@@ -1,11 +1,11 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { RoomRateOverride } from '../../../domain/entities/room-rate-override.entity';
-import type { IRoomRateOverrideRepository } from '../../../domain/repositories/room-rate-override.repository';
-import type { IRoomRepository } from '../../../domain/repositories/room.repository';
-import { RoomRateOverrideOutput } from '../../dto/room-rate-override.output';
-import { validateBlockedDateRange } from '../../utils/validate-blocked-date-range';
-import type { CreateRoomRateOverrideCommand } from '../commands/CreateRoomRateOverrideCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import { RoomRateOverride } from '@src/modules/rooms/domain/entities/room-rate-override.entity';
+import type { IRoomRateOverrideRepository } from '@src/modules/rooms/domain/repositories/room-rate-override.repository';
+import type { IRoomRepository } from '@src/modules/rooms/domain/repositories/room.repository';
+import { RoomRateOverrideOutput } from '@src/modules/rooms/applications/dto/room-rate-override.output';
+import { validateBlockedDateRange } from '@src/modules/rooms/applications/utils/validate-blocked-date-range';
+import type { CreateRoomRateOverrideCommand } from '@src/modules/rooms/applications/useCase/commands/CreateRoomRateOverrideCommand';
 
 export class CreateRoomRateOverrideCommandHandler implements ICommandHandler<
   CreateRoomRateOverrideCommand,

@@ -1,9 +1,9 @@
 import { NotFoundException } from '@nestjs/common';
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IPasswordResetTokenRepository } from '../../../domain/repositories/password-reset-token.repository';
-import type { IUserRepository } from '../../../../user/contracts';
-import { PasswordSetupTokenService } from '../../../domain/services/password-setup-token.service';
-import type { ValidatePasswordResetTokenQuery } from '../queries/ValidatePasswordResetTokenQuery';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { IPasswordResetTokenRepository } from '@src/modules/authentication/domain/repositories/password-reset-token.repository';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import { PasswordSetupTokenService } from '@src/modules/authentication/domain/services/password-setup-token.service';
+import type { ValidatePasswordResetTokenQuery } from '@src/modules/authentication/applications/useCase/queries/ValidatePasswordResetTokenQuery';
 
 export class ValidatePasswordResetTokenQueryHandler implements IQueryHandler<
   ValidatePasswordResetTokenQuery,

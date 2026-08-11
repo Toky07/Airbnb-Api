@@ -1,9 +1,9 @@
-import { RoomType } from '../../../domain/entities/room-type.entity';
-import { RoomTypeOutput } from '../../dto/room-type.output';
+import { RoomType } from '@src/modules/rooms/domain/entities/room-type.entity';
+import { RoomTypeOutput } from '@src/modules/rooms/applications/dto/room-type.output';
 import { ListRoomTypesQueryHandler } from './ListRoomTypesQueryHandler';
 import { ListRoomTypeOptionsQueryHandler } from './ListRoomTypeOptionsQueryHandler';
-import { ListRoomTypesQuery } from '../queries/ListRoomTypesQuery';
-import { ListRoomTypeOptionsQuery } from '../queries/ListRoomTypeOptionsQuery';
+import { ListRoomTypesQuery } from '@src/modules/rooms/applications/useCase/queries/ListRoomTypesQuery';
+import { ListRoomTypeOptionsQuery } from '@src/modules/rooms/applications/useCase/queries/ListRoomTypeOptionsQuery';
 
 describe('ListRoomTypesQueryHandler', () => {
   it('lists all room types', async () => {

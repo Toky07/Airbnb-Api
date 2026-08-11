@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { BuildHostPaymentNotificationEmailBodyService } from './build-host-payment-notification-email-body.service';
-import { createSampleReservationInvoiceContext } from '../reservation-invoice-test.helpers';
+import { createSampleReservationInvoiceContext } from '@src/modules/reservation/applications/reservation-invoice-test.helpers';
 
 describe('BuildHostPaymentNotificationEmailBodyService', () => {
   it('génère un email HTML pour le propriétaire', () => {

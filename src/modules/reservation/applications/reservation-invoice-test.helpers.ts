@@ -1,4 +1,4 @@
-import type { ReservationInvoiceContext } from '../domain/types/reservation-invoice-context.type';
+import type { ReservationInvoiceContext } from '@src/modules/reservation/domain/types/reservation-invoice-context.type';
 
 export function createSampleReservationInvoiceContext(
   overrides: Partial<ReservationInvoiceContext> = {},

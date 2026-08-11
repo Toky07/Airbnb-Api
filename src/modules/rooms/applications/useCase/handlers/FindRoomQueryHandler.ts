@@ -1,7 +1,7 @@
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IRoomRepository } from '../../../domain/repositories/room.repository';
-import type { RoomDetailResolver } from '../../services/room-detail.resolver';
-import type { FindRoomQuery } from '../queries/FindRoomQuery';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { IRoomRepository } from '@src/modules/rooms/domain/repositories/room.repository';
+import type { RoomDetailResolver } from '@src/modules/rooms/applications/services/room-detail.resolver';
+import type { FindRoomQuery } from '@src/modules/rooms/applications/useCase/queries/FindRoomQuery';
 
 export class FindRoomQueryHandler implements IQueryHandler<
   FindRoomQuery,

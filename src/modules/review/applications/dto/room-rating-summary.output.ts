@@ -1,4 +1,4 @@
-import type { RoomRatingSummary } from '../../domain/repositories/review.repository';
+import type { RoomRatingSummary } from '@src/modules/review/domain/repositories/review.repository';
 
 export class RoomRatingSummaryOutput {
   constructor(

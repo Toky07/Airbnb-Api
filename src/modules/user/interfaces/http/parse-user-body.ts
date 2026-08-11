@@ -1,5 +1,5 @@
-import { toOptionalScalarString } from '../../../../shared/http/to-scalar-string';
-import type { CreateUserDto } from '../../domain/dtos/createUser.dto';
+import { toOptionalScalarString } from '@src/shared/http/to-scalar-string';
+import type { CreateUserDto } from '@src/modules/user/domain/dtos/createUser.dto';
 
 export function parseUserBody(body: Record<string, unknown>): CreateUserDto {
   const dto: CreateUserDto = {

@@ -1,12 +1,12 @@
 import { ForbiddenException } from '@nestjs/common';
 import { describe, expect, it, vi } from 'vitest';
 import { ListMessagesQueryHandler } from './ListMessagesQueryHandler';
-import { ListMessagesQuery } from '../queries/ListMessagesQuery';
+import { ListMessagesQuery } from '@src/modules/messaging/applications/useCase/queries/ListMessagesQuery';
 import {
   createMessageRepositoryMock,
   createSampleConversation,
   createSampleMessage,
-} from '../messaging-test.helpers';
+} from '@src/modules/messaging/applications/useCase/messaging-test.helpers';
 
 describe('ListMessagesQueryHandler', () => {
   it('returns messages for an authorized participant', async () => {

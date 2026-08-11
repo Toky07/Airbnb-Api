@@ -1,5 +1,5 @@
-import type { JwtPayload } from '../../../../authentication/contracts';
-import type { SyncAmenitiesDto } from '../../../../amenity/contracts';
+import type { JwtPayload } from '@src/modules/authentication/contracts';
+import type { SyncAmenitiesDto } from '@src/modules/amenity/contracts';
 
 export class SyncHostPropertyAmenitiesCommand {
   constructor(

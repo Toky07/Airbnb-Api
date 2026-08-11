@@ -4,17 +4,17 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
-import type { IPropertyRepository } from '../../../properties/contracts';
-import { PROPERTY_REPOSITORY } from '../../../properties/contracts';
-import type { IRoomRepository } from '../../../rooms/contracts';
-import { ROOM_REPOSITORY } from '../../../rooms/contracts';
-import type { IUserRepository } from '../../../user/contracts';
-import { USER_REPOSITORY } from '../../../user/contracts';
-import type { Reservation } from '../../domain/entities/reservation.entity';
+import type { IPropertyRepository } from '@src/modules/properties/contracts';
+import { PROPERTY_REPOSITORY } from '@src/modules/properties/contracts';
+import type { IRoomRepository } from '@src/modules/rooms/contracts';
+import { ROOM_REPOSITORY } from '@src/modules/rooms/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import { USER_REPOSITORY } from '@src/modules/user/contracts';
+import type { Reservation } from '@src/modules/reservation/domain/entities/reservation.entity';
 import {
   RESERVATION_REPOSITORY,
   type IReservationRepository,
-} from '../../domain/repositories/reservation.repository';
+} from '@src/modules/reservation/domain/repositories/reservation.repository';
 
 export type ReservationAccess = {
   authId: number;

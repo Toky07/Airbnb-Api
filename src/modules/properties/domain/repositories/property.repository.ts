@@ -1,8 +1,8 @@
 import type {
   PaginatedResult,
   PaginationParams,
-} from '../../../../shared/pagination/pagination.types';
-import { Property } from '../entities/property.entity';
+} from '@src/shared/pagination/pagination.types';
+import { Property } from '@src/modules/properties/domain/entities/property.entity';
 
 export const PROPERTY_REPOSITORY = 'PROPERTY_REPOSITORY';
 

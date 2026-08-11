@@ -1,10 +1,10 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IAuthRepository } from '../../../domain/repositories/auth.repository';
-import type { IPasswordResetTokenRepository } from '../../../domain/repositories/password-reset-token.repository';
-import { PasswordSetupTokenService } from '../../../domain/services/password-setup-token.service';
-import type { ResetPasswordWithTokenCommand } from '../commands/ResetPasswordWithTokenCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { IAuthRepository } from '@src/modules/authentication/domain/repositories/auth.repository';
+import type { IPasswordResetTokenRepository } from '@src/modules/authentication/domain/repositories/password-reset-token.repository';
+import { PasswordSetupTokenService } from '@src/modules/authentication/domain/services/password-setup-token.service';
+import type { ResetPasswordWithTokenCommand } from '@src/modules/authentication/applications/useCase/commands/ResetPasswordWithTokenCommand';
 
 export class ResetPasswordWithTokenCommandHandler implements ICommandHandler<
   ResetPasswordWithTokenCommand,

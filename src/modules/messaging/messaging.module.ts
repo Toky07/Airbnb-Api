@@ -1,13 +1,13 @@
 import { Inject, Module, OnModuleInit } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PropertiesModule } from '../properties/properties.module';
-import { ReservationModule } from '../reservation/reservation.module';
-import { RoomsModule } from '../rooms/room.module';
-import { USER_REPOSITORY } from '../user/contracts';
-import type { IUserRepository } from '../user/contracts';
-import { UserModule } from '../user/user.module';
-import { CommandBus } from '../../shared/useCase/bus/bus';
-import { QueryBus } from '../../shared/useCase/bus/query-bus';
+import { PropertiesModule } from '@src/modules/properties/properties.module';
+import { ReservationModule } from '@src/modules/reservation/reservation.module';
+import { RoomsModule } from '@src/modules/rooms/room.module';
+import { USER_REPOSITORY } from '@src/modules/user/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import { UserModule } from '@src/modules/user/user.module';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
 import {
   CONVERSATION_REPOSITORY,
   type IConversationRepository,

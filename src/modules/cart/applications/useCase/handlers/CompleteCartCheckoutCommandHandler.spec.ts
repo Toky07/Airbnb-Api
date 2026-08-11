@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { EventBus } from '../../../../../shared/domain/event.bus';
-import { CartCheckoutCompleteVerifiedEvent } from '../../../domain/events/cart-checkout-complete-verified.event';
+import { EventBus } from '@src/shared/domain/event.bus';
+import { CartCheckoutCompleteVerifiedEvent } from '@src/modules/cart/domain/events/cart-checkout-complete-verified.event';
 import { CompleteCartCheckoutCommandHandler } from './CompleteCartCheckoutCommandHandler';
-import { CompleteCartCheckoutCommand } from '../commands/CompleteCartCheckoutCommand';
+import { CompleteCartCheckoutCommand } from '@src/modules/cart/applications/useCase/commands/CompleteCartCheckoutCommand';
 import {
   createCartRepositoryMock,
   createCartUserPortMock,
   createSampleCart,
-} from '../../cart-test.helpers';
+} from '@src/modules/cart/applications/cart-test.helpers';
 
 describe('CompleteCartCheckoutCommandHandler', () => {
   const cartRepository = createCartRepositoryMock();

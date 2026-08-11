@@ -1,8 +1,8 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IRoleRepository } from '../../../domain/repositories/role.repository';
-import { isSystemRoleSlug } from '../../../domain/constants/system-roles.constant';
-import type { DeleteRoleCommand } from '../commands/DeleteRoleCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { IRoleRepository } from '@src/modules/authentication/domain/repositories/role.repository';
+import { isSystemRoleSlug } from '@src/modules/authentication/domain/constants/system-roles.constant';
+import type { DeleteRoleCommand } from '@src/modules/authentication/applications/useCase/commands/DeleteRoleCommand';
 
 export class DeleteRoleCommandHandler implements ICommandHandler<
   DeleteRoleCommand,

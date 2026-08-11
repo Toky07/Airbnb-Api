@@ -13,11 +13,11 @@ import { PropertyTypeRepository } from './infrastructure/repositories/property-t
 import { PropertyEntity } from './infrastructure/entities/property-entity.entity';
 import { PropertyTypeEntity } from './infrastructure/entities/property-type.entity';
 import { PropertyTypesSeedService } from './infrastructure/seed/property-types.seed';
-import { MediaModule } from '../media/media.module';
+import { MediaModule } from '@src/modules/media/media.module';
 import { PropertyMediaPresenter } from './applications/presenters/property-media.presenter';
 import { PropertiesBootstrap } from './properties.bootstrap';
-import { CommandBus } from '../../shared/useCase/bus/bus';
-import { QueryBus } from '../../shared/useCase/bus/query-bus';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
 import { CreatePropertyCommand } from './applications/useCase/commands/CreatePropertyCommand';
 import { UpdatePropertyCommand } from './applications/useCase/commands/UpdatePropertyCommand';
 import { DeletePropertyCommand } from './applications/useCase/commands/DeletePropertyCommand';

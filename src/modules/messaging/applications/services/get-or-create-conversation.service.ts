@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
-import { Conversation } from '../../domain/entities/conversation.entity';
+import { Conversation } from '@src/modules/messaging/domain/entities/conversation.entity';
 import {
   CONVERSATION_REPOSITORY,
   type IConversationRepository,
-} from '../../domain/repositories/conversation.repository';
+} from '@src/modules/messaging/domain/repositories/conversation.repository';
 import { ResolveReservationParticipantsService } from './resolve-reservation-participants.service';
 
 @Injectable()

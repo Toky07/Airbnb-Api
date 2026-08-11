@@ -1,9 +1,9 @@
 import { NotFoundException } from '@nestjs/common';
-import { AMENITY_SCOPE } from '../../../domain/constants/amenity-scope.constant';
-import { Amenity } from '../../../domain/entities/amenity.entity';
+import { AMENITY_SCOPE } from '@src/modules/amenity/domain/constants/amenity-scope.constant';
+import { Amenity } from '@src/modules/amenity/domain/entities/amenity.entity';
 import { UpdateAmenityCommandHandler } from './UpdateAmenityCommandHandler';
-import { UpdateAmenityCommand } from '../commands/UpdateAmenityCommand';
-import type { IAmenityRepository } from '../../../domain/repositories/amenity.repository';
+import { UpdateAmenityCommand } from '@src/modules/amenity/applications/useCase/commands/UpdateAmenityCommand';
+import type { IAmenityRepository } from '@src/modules/amenity/domain/repositories/amenity.repository';
 
 describe('UpdateAmenityCommandHandler', () => {
   it('updates an amenity', async () => {

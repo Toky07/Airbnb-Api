@@ -6,10 +6,10 @@ import {
   HOST_ROLE_SLUG,
   PERMISSION_DEFINITIONS,
   SUPERADMIN_ROLE_SLUG,
-} from '../../domain/constants/permissions.constant';
-import { TRAVELER_ROLE_SLUG } from '../../domain/constants/system-roles.constant';
-import { PermissionEntity } from '../entity/permission.entity';
-import { Role } from '../entity/role.entity';
+} from '@src/modules/authentication/domain/constants/permissions.constant';
+import { TRAVELER_ROLE_SLUG } from '@src/modules/authentication/domain/constants/system-roles.constant';
+import { PermissionEntity } from '@src/modules/authentication/infrastructure/entity/permission.entity';
+import { Role } from '@src/modules/authentication/infrastructure/entity/role.entity';
 
 @Injectable()
 export class AuthRbacSeedService implements OnModuleInit {

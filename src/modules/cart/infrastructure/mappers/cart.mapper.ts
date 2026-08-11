@@ -1,8 +1,8 @@
-import type { CartItemType } from '../../domain/constants/cart-item-type.constant';
-import { Cart } from '../../domain/entities/cart.entity';
-import { CartItem } from '../../domain/entities/cart-item.entity';
-import { CartItemOrmEntity } from '../entities/cart-item.orm-entity';
-import { CartOrmEntity } from '../entities/cart.orm-entity';
+import type { CartItemType } from '@src/modules/cart/domain/constants/cart-item-type.constant';
+import { Cart } from '@src/modules/cart/domain/entities/cart.entity';
+import { CartItem } from '@src/modules/cart/domain/entities/cart-item.entity';
+import { CartItemOrmEntity } from '@src/modules/cart/infrastructure/entities/cart-item.orm-entity';
+import { CartOrmEntity } from '@src/modules/cart/infrastructure/entities/cart.orm-entity';
 
 export class CartMapper {
   static toDomain(entity: CartOrmEntity): Cart {

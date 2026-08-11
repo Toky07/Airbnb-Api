@@ -1,12 +1,12 @@
 import { Logger } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { EventBus } from '../../../../../shared/domain/event.bus';
-import { InvoiceCreatedEvent } from '../../../domain/events/invoice-created.event';
-import { Invoice } from '../../../domain/entities/invoice.entity';
-import type { IInvoiceRepository } from '../../../domain/repositories/invoice.repository';
-import type { GenerateInvoicePdfService } from '../../services/generate-invoice-pdf.service';
-import type { InvoiceStorageService } from '../../../infrastructure/storage/invoice-storage.service';
-import type { CreateInvoiceCommand } from '../commands/CreateInvoiceCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import { EventBus } from '@src/shared/domain/event.bus';
+import { InvoiceCreatedEvent } from '@src/modules/invoice/domain/events/invoice-created.event';
+import { Invoice } from '@src/modules/invoice/domain/entities/invoice.entity';
+import type { IInvoiceRepository } from '@src/modules/invoice/domain/repositories/invoice.repository';
+import type { GenerateInvoicePdfService } from '@src/modules/invoice/applications/services/generate-invoice-pdf.service';
+import type { InvoiceStorageService } from '@src/modules/invoice/infrastructure/storage/invoice-storage.service';
+import type { CreateInvoiceCommand } from '@src/modules/invoice/applications/useCase/commands/CreateInvoiceCommand';
 
 export class CreateInvoiceCommandHandler implements ICommandHandler<
   CreateInvoiceCommand,

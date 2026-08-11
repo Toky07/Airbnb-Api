@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
-import { REVIEW_STATUS } from '../../../domain/constants/review-status.constant';
+import { REVIEW_STATUS } from '@src/modules/review/domain/constants/review-status.constant';
 import { ListPendingReviewsQueryHandler } from './ListPendingReviewsQueryHandler';
-import { ListPendingReviewsQuery } from '../queries/ListPendingReviewsQuery';
-import { MapReviewOutputsService } from '../../services/map-review-outputs.service';
+import { ListPendingReviewsQuery } from '@src/modules/review/applications/useCase/queries/ListPendingReviewsQuery';
+import { MapReviewOutputsService } from '@src/modules/review/applications/services/map-review-outputs.service';
 
 describe('ListPendingReviewsQueryHandler', () => {
   it('lists pending reviews for moderation', async () => {

@@ -1,6 +1,6 @@
 import { UnauthorizedException } from '@nestjs/common';
-import type { ReservationStatsScope } from '../../domain/repositories/reservation.repository';
-import type { GetReservationStatsQuery } from '../useCase/queries/GetReservationStatsQuery';
+import type { ReservationStatsScope } from '@src/modules/reservation/domain/repositories/reservation.repository';
+import type { GetReservationStatsQuery } from '@src/modules/reservation/applications/useCase/queries/GetReservationStatsQuery';
 import { ResolveHostPropertyIdsService } from './resolve-host-property-ids.service';
 
 export class ResolveReservationStatsScopeService {

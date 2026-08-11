@@ -1,4 +1,4 @@
-import type { RoomRateOverride } from '../../domain/entities/room-rate-override.entity';
+import type { RoomRateOverride } from '@src/modules/rooms/domain/entities/room-rate-override.entity';
 
 export class RoomRateOverrideOutput {
   constructor(

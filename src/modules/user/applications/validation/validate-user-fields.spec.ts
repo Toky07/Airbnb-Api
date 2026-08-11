@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DomainValidationException } from '../../../../shared/exceptions/domain-validation.exception';
+import { DomainValidationException } from '@src/shared/exceptions/domain-validation.exception';
 import { validateUserFields } from './validate-user-fields';
 
 describe('validateUserFields', () => {

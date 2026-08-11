@@ -4,20 +4,20 @@ import { INestApplication } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { JwtModule } from '@nestjs/jwt';
-import { PropertiesModule } from '../../properties.module';
-import { AuthModule } from '../../../authentication/auth.module';
-import { UserModule } from '../../../user/user.module';
-import { PropertyTypeEntity } from '../../infrastructure/entities/property-type.entity';
+import { PropertiesModule } from '@src/modules/properties/properties.module';
+import { AuthModule } from '@src/modules/authentication/auth.module';
+import { UserModule } from '@src/modules/user/user.module';
+import { PropertyTypeEntity } from '@src/modules/properties/infrastructure/entities/property-type.entity';
 import {
   AUTH_TEST_ENTITIES,
   DOMAIN_TEST_ENTITIES,
   registerAndLoginAsHost,
   registerAndLoginAsSuperAdmin,
-} from '../../../../test/controller-test.helpers';
+} from '@src/test/controller-test.helpers';
 import {
   getIntegrationTestDatabaseConfig,
   prepareIntegrationTestDatabase,
-} from '../../../../test/test-database.config';
+} from '@src/test/test-database.config';
 
 describe('PropertyTypeController', () => {
   let app: INestApplication;

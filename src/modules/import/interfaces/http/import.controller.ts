@@ -3,14 +3,14 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import type {
   ImportBatchDto,
   ImportBatchResult,
-} from '../../applications/dto/import-batch.dto';
-import { RequirePermissions } from '../../../authentication/contracts';
-import { IMPORT_THROTTLE } from '../../../../config/throttle.config';
-import { SensitiveRouteThrottle } from '../../../../shared/decorators/sensitive-route-throttle.decorator';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { ImportDataCommand } from '../../applications/useCase/commands/ImportDataCommand';
-import { ApiJwtAuth } from '../../../../shared/swagger/swagger.decorators';
-import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
+} from '@src/modules/import/applications/dto/import-batch.dto';
+import { RequirePermissions } from '@src/modules/authentication/contracts';
+import { IMPORT_THROTTLE } from '@src/config/throttle.config';
+import { SensitiveRouteThrottle } from '@src/shared/decorators/sensitive-route-throttle.decorator';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { ImportDataCommand } from '@src/modules/import/applications/useCase/commands/ImportDataCommand';
+import { ApiJwtAuth } from '@src/shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 
 @ApiTags(SWAGGER_TAGS.IMPORT)
 @ApiJwtAuth()

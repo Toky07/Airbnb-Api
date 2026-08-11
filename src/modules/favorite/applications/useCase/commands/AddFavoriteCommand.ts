@@ -1,4 +1,4 @@
-import type { AddFavoriteDto } from '../../dto/add-favorite.dto';
+import type { AddFavoriteDto } from '@src/modules/favorite/applications/dto/add-favorite.dto';
 
 export class AddFavoriteCommand {
   constructor(

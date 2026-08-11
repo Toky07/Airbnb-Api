@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { CART_ITEM_TYPE } from '../../domain/constants/cart-item-type.constant';
+import { CART_ITEM_TYPE } from '@src/modules/cart/domain/constants/cart-item-type.constant';
 import { BuildCartItemService } from './build-cart-item.service';
 import {
   createCartItemCatalogPortMock,
   createSampleCart,
-} from '../cart-test.helpers';
+} from '@src/modules/cart/applications/cart-test.helpers';
 
 describe('BuildCartItemService', () => {
   const cartItemCatalog = createCartItemCatalogPortMock();

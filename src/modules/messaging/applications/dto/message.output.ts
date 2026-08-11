@@ -1,4 +1,4 @@
-import type { Message } from '../../domain/entities/message.entity';
+import type { Message } from '@src/modules/messaging/domain/entities/message.entity';
 
 export class MessageOutput {
   constructor(

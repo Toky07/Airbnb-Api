@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ListHostPropertiesQueryHandler } from './ListHostPropertiesQueryHandler';
-import { ListHostPropertiesQuery } from '../queries/ListHostPropertiesQuery';
+import { ListHostPropertiesQuery } from '@src/modules/host/applications/useCase/queries/ListHostPropertiesQuery';
 import {
   authUser,
   createPropertyPresenterMock,

@@ -4,14 +4,14 @@ import {
   buildPaginationMeta,
   type PaginatedResult,
   type PaginationParams,
-} from '../../../../shared/pagination/pagination.types';
+} from '@src/shared/pagination/pagination.types';
 import {
   PROPERTY_REPOSITORY,
   type IPropertyRepository,
-} from '../../domain/repositories/property.repository';
-import { Property } from '../../domain/entities/property.entity';
-import { PropertyEntity } from '../entities/property-entity.entity';
-import { PropertyMapper } from '../mappers/property.mapper';
+} from '@src/modules/properties/domain/repositories/property.repository';
+import { Property } from '@src/modules/properties/domain/entities/property.entity';
+import { PropertyEntity } from '@src/modules/properties/infrastructure/entities/property-entity.entity';
+import { PropertyMapper } from '@src/modules/properties/infrastructure/mappers/property.mapper';
 
 export { PROPERTY_REPOSITORY };
 

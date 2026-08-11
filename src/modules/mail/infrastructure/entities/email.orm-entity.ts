@@ -5,7 +5,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import type { EmailAttachment } from '../../domain/entities/email-attachment.entity';
+import type { EmailAttachment } from '@src/modules/mail/domain/entities/email-attachment.entity';
 
 @Entity({ name: 'emails' })
 export class EmailOrmEntity {

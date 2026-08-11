@@ -1,10 +1,10 @@
-import { toScalarString } from '../../../../shared/http/to-scalar-string';
+import { toScalarString } from '@src/shared/http/to-scalar-string';
 import {
   DEFAULT_PAGE_SIZE,
   PAGE_SIZE_OPTIONS,
   type PageSizeOption,
-} from '../../../../shared/pagination/pagination.types';
-import type { ReservationListParams } from '../../domain/repositories/reservation.repository';
+} from '@src/shared/pagination/pagination.types';
+import type { ReservationListParams } from '@src/modules/reservation/domain/repositories/reservation.repository';
 
 export function parseReservationQuery(
   query: Record<string, unknown>,

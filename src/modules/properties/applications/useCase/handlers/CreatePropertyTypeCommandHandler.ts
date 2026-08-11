@@ -1,10 +1,10 @@
 import { ConflictException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { slugify } from '../../../../../shared/utils/slug.util';
-import { PropertyType } from '../../../domain/entities/property-type.entity';
-import type { IPropertyTypeRepository } from '../../../domain/repositories/property-type.repository';
-import { PropertyTypeOutput } from '../../dto/property-type.output';
-import type { CreatePropertyTypeCommand } from '../commands/CreatePropertyTypeCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import { slugify } from '@src/shared/utils/slug.util';
+import { PropertyType } from '@src/modules/properties/domain/entities/property-type.entity';
+import type { IPropertyTypeRepository } from '@src/modules/properties/domain/repositories/property-type.repository';
+import { PropertyTypeOutput } from '@src/modules/properties/applications/dto/property-type.output';
+import type { CreatePropertyTypeCommand } from '@src/modules/properties/applications/useCase/commands/CreatePropertyTypeCommand';
 
 export class CreatePropertyTypeCommandHandler implements ICommandHandler<
   CreatePropertyTypeCommand,

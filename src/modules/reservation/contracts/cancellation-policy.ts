@@ -10,4 +10,4 @@ export {
   isCancellationPolicy,
   parseCancellationPolicy,
   type CancellationPolicy,
-} from '../domain/constants/cancellation-policy.constant';
+} from '@src/modules/reservation/domain/constants/cancellation-policy.constant';

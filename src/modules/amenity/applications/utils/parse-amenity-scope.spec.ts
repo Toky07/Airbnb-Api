@@ -1,6 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
 import { describe, expect, it } from 'vitest';
-import { AMENITY_SCOPE } from '../../domain/constants/amenity-scope.constant';
+import { AMENITY_SCOPE } from '@src/modules/amenity/domain/constants/amenity-scope.constant';
 import { parseAmenityScope } from './parse-amenity-scope';
 
 describe('parseAmenityScope', () => {

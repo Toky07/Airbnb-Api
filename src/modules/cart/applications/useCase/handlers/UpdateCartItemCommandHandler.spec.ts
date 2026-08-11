@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { UpdateCartItemCommandHandler } from './UpdateCartItemCommandHandler';
-import { UpdateCartItemCommand } from '../commands/UpdateCartItemCommand';
+import { UpdateCartItemCommand } from '@src/modules/cart/applications/useCase/commands/UpdateCartItemCommand';
 import {
   createCartItemCatalogPortMock,
   createCartRepositoryMock,
   createSampleCart,
-} from '../../cart-test.helpers';
+} from '@src/modules/cart/applications/cart-test.helpers';
 
 describe('UpdateCartItemCommandHandler', () => {
   const resolveCartService = { resolve: vi.fn() };

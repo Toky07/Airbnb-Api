@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CANCELLATION_POLICY } from '../../domain/constants/cancellation-policy.constant';
+import { CANCELLATION_POLICY } from '@src/modules/reservation/domain/constants/cancellation-policy.constant';
 import { ComputeCancellationRefundService } from './compute-cancellation-refund.service';
 
 describe('ComputeCancellationRefundService', () => {

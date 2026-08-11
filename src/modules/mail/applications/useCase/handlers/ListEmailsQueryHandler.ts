@@ -1,8 +1,8 @@
-import type { PaginatedResult } from '../../../../../shared/pagination/pagination.types';
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IEmailRepository } from '../../../domain/repositories/email.repository';
-import { EmailOutput } from '../../dto/email.output';
-import type { ListEmailsQuery } from '../queries/ListEmailsQuery';
+import type { PaginatedResult } from '@src/shared/pagination/pagination.types';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { IEmailRepository } from '@src/modules/mail/domain/repositories/email.repository';
+import { EmailOutput } from '@src/modules/mail/applications/dto/email.output';
+import type { ListEmailsQuery } from '@src/modules/mail/applications/useCase/queries/ListEmailsQuery';
 
 export class ListEmailsQueryHandler implements IQueryHandler<
   ListEmailsQuery,

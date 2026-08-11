@@ -5,15 +5,15 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { AddFavoriteCommandHandler } from './AddFavoriteCommandHandler';
-import { AddFavoriteCommand } from '../commands/AddFavoriteCommand';
+import { AddFavoriteCommand } from '@src/modules/favorite/applications/useCase/commands/AddFavoriteCommand';
 import {
   createFavoriteRepositoryMock,
   createResolveAuthenticatedUserServiceMock,
   createSampleFavorite,
-} from '../favorite-test.helpers';
-import { Room } from '../../../../rooms/contracts';
-import { Property } from '../../../../properties/contracts';
-import { ResolveAuthenticatedUserService } from '../../../../../shared/auth/resolve-authenticated-user.service';
+} from '@src/modules/favorite/applications/useCase/favorite-test.helpers';
+import { Room } from '@src/modules/rooms/contracts';
+import { Property } from '@src/modules/properties/contracts';
+import { ResolveAuthenticatedUserService } from '@src/shared/auth/resolve-authenticated-user.service';
 
 function createSampleRoom() {
   return new Room({

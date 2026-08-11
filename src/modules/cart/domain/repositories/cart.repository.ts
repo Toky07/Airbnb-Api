@@ -1,5 +1,5 @@
-import type { Cart } from '../entities/cart.entity';
-import type { CartItem } from '../entities/cart-item.entity';
+import type { Cart } from '@src/modules/cart/domain/entities/cart.entity';
+import type { CartItem } from '@src/modules/cart/domain/entities/cart-item.entity';
 
 export const CART_REPOSITORY = 'CART_REPOSITORY';
 

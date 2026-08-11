@@ -1,10 +1,10 @@
 import { BadRequestException } from '@nestjs/common';
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import { PricingBreakdownOutput } from '../../../../../shared/pricing/pricing-breakdown.output';
-import type { ComputePricingBreakdownService } from '../../../../../shared/pricing/compute-pricing-breakdown.service';
-import type { IRoomRepository } from '../../../domain/repositories/room.repository';
-import type { RoomStayPricingService } from '../../services/room-stay-pricing.service';
-import type { GetRoomPricingPreviewQuery } from '../queries/GetRoomPricingPreviewQuery';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import { PricingBreakdownOutput } from '@src/shared/pricing/pricing-breakdown.output';
+import type { ComputePricingBreakdownService } from '@src/shared/pricing/compute-pricing-breakdown.service';
+import type { IRoomRepository } from '@src/modules/rooms/domain/repositories/room.repository';
+import type { RoomStayPricingService } from '@src/modules/rooms/applications/services/room-stay-pricing.service';
+import type { GetRoomPricingPreviewQuery } from '@src/modules/rooms/applications/useCase/queries/GetRoomPricingPreviewQuery';
 
 export class GetRoomPricingPreviewQueryHandler implements IQueryHandler<
   GetRoomPricingPreviewQuery,

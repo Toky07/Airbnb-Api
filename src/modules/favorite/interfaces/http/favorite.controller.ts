@@ -10,17 +10,17 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import type { AuthenticatedRequest } from '../../../../shared/http/authenticated-request.type';
-import { parseCommaSeparatedIds } from '../../../../shared/http/parse-comma-separated-ids';
-import { AddFavoriteDto } from '../../applications/dto/add-favorite.dto';
-import { AddFavoriteCommand } from '../../applications/useCase/commands/AddFavoriteCommand';
-import { RemoveFavoriteCommand } from '../../applications/useCase/commands/RemoveFavoriteCommand';
-import { ListMyFavoritesQuery } from '../../applications/useCase/queries/ListMyFavoritesQuery';
-import { CheckFavoritesQuery } from '../../applications/useCase/queries/CheckFavoritesQuery';
-import { ApiJwtAuth } from '../../../../shared/swagger/swagger.decorators';
-import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import type { AuthenticatedRequest } from '@src/shared/http/authenticated-request.type';
+import { parseCommaSeparatedIds } from '@src/shared/http/parse-comma-separated-ids';
+import { AddFavoriteDto } from '@src/modules/favorite/applications/dto/add-favorite.dto';
+import { AddFavoriteCommand } from '@src/modules/favorite/applications/useCase/commands/AddFavoriteCommand';
+import { RemoveFavoriteCommand } from '@src/modules/favorite/applications/useCase/commands/RemoveFavoriteCommand';
+import { ListMyFavoritesQuery } from '@src/modules/favorite/applications/useCase/queries/ListMyFavoritesQuery';
+import { CheckFavoritesQuery } from '@src/modules/favorite/applications/useCase/queries/CheckFavoritesQuery';
+import { ApiJwtAuth } from '@src/shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 
 @ApiTags(SWAGGER_TAGS.FAVORITES)
 @ApiJwtAuth()

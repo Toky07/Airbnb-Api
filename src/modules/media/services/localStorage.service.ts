@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { mkdir, unlink, writeFile } from 'fs/promises';
 import { dirname } from 'path';
 import { randomUUID } from 'crypto';
-import type { UploadFile } from '../types/upload-file';
+import type { UploadFile } from '@src/modules/media/types/upload-file';
 import {
   buildUploadRelativePath,
   toDiskPath,
   type SaveMediaContext,
-} from '../utils/build-upload-path';
-import { resolveUploadRoot } from '../utils/resolve-upload-root';
+} from '@src/modules/media/utils/build-upload-path';
+import { resolveUploadRoot } from '@src/modules/media/utils/resolve-upload-root';
 
 export const LOCAL_STORAGE_SERVICE = 'LOCAL_STORAGE_SERVICE';
 

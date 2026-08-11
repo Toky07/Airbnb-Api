@@ -1,7 +1,7 @@
-import { Room } from '../../../domain/entities/room.entity';
-import { RoomOutput } from '../../dto/room.output';
-import { RoomMediaPresenter } from '../../presenters/room-media.presenter';
-import { GenerateRoomSlugService } from '../../services/generate-room-slug.service';
+import { Room } from '@src/modules/rooms/domain/entities/room.entity';
+import { RoomOutput } from '@src/modules/rooms/applications/dto/room.output';
+import { RoomMediaPresenter } from '@src/modules/rooms/applications/presenters/room-media.presenter';
+import { GenerateRoomSlugService } from '@src/modules/rooms/applications/services/generate-room-slug.service';
 
 export const mockRoomMediaPresenter = {
   toOutput: async (room: Room) => RoomOutput.fromDomain(room),

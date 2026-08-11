@@ -11,7 +11,7 @@ import {
   REVIEW_RATING_MAX,
   REVIEW_RATING_MIN,
   REVIEW_STATUS,
-} from '../../domain/constants/review-status.constant';
+} from '@src/modules/review/domain/constants/review-status.constant';
 
 export class CreateReviewDto {
   @IsInt()

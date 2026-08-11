@@ -1,11 +1,11 @@
-import { TokenGenerator } from '../../domain/generator/token.generator';
+import { TokenGenerator } from '@src/modules/authentication/domain/generator/token.generator';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import type { IAuthRepository } from '../../domain/repositories/auth.repository';
-import { AUTH_REPOSITORY } from '../../domain/repositories/auth.repository';
-import { buildJwtPayload } from '../../domain/utils/build-jwt-payload';
-import { ACCOUNT_STATUS } from '../../domain/constants/account-status.constant';
+import type { IAuthRepository } from '@src/modules/authentication/domain/repositories/auth.repository';
+import { AUTH_REPOSITORY } from '@src/modules/authentication/domain/repositories/auth.repository';
+import { buildJwtPayload } from '@src/modules/authentication/domain/utils/build-jwt-payload';
+import { ACCOUNT_STATUS } from '@src/modules/authentication/domain/constants/account-status.constant';
 
 @Injectable()
 export class JwtTokenGenerator implements TokenGenerator {

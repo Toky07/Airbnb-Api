@@ -1,24 +1,24 @@
 import { Inject, Module, OnModuleInit, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ScheduleModule } from '@nestjs/schedule';
-import { CalculateStayAmountService } from '../../shared/pricing/calculate-stay-amount.service';
-import { PaymentModule } from '../payment/payment.module';
-import { PropertiesModule } from '../properties/properties.module';
-import { RoomsModule } from '../rooms/room.module';
-import { RoomStayPricingService } from '../rooms/contracts';
-import { UserModule } from '../user/user.module';
-import { PROPERTY_REPOSITORY } from '../properties/contracts';
-import type { IPropertyRepository } from '../properties/contracts';
-import { ROOM_REPOSITORY } from '../rooms/contracts';
-import type { IRoomRepository } from '../rooms/contracts';
-import { USER_REPOSITORY } from '../user/contracts';
-import type { IUserRepository } from '../user/contracts';
+import { CalculateStayAmountService } from '@src/shared/pricing/calculate-stay-amount.service';
+import { PaymentModule } from '@src/modules/payment/payment.module';
+import { PropertiesModule } from '@src/modules/properties/properties.module';
+import { RoomsModule } from '@src/modules/rooms/room.module';
+import { RoomStayPricingService } from '@src/modules/rooms/contracts';
+import { UserModule } from '@src/modules/user/user.module';
+import { PROPERTY_REPOSITORY } from '@src/modules/properties/contracts';
+import type { IPropertyRepository } from '@src/modules/properties/contracts';
+import { ROOM_REPOSITORY } from '@src/modules/rooms/contracts';
+import type { IRoomRepository } from '@src/modules/rooms/contracts';
+import { USER_REPOSITORY } from '@src/modules/user/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
 import {
   PAYMENT_GATEWAY,
   PAYMENT_REPOSITORY,
   type IPaymentGateway,
   type IPaymentRepository,
-} from '../payment/contracts';
+} from '@src/modules/payment/contracts';
 import { CheckRoomAvailabilityService } from './applications/services/check-room-availability.service';
 import { EnrichReservationOutputsService } from './applications/services/enrich-reservation-outputs.service';
 import { ResolvePaymentReservationsService } from './applications/services/resolve-payment-reservations.service';
@@ -42,8 +42,8 @@ import { ReservationRepository } from './infrastructure/repositories/reservation
 import { ReservationController } from './interfaces/http/reservation.controller';
 import { ReservationEvent } from './applications/events/register-reservation.event';
 import { ReservationBootstrap } from './reservation.bootstrap';
-import { CommandBus } from '../../shared/useCase/bus/bus';
-import { QueryBus } from '../../shared/useCase/bus/query-bus';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
 import { CreateReservationCommand } from './applications/useCase/commands/CreateReservationCommand';
 import { ConfirmReservationCommand } from './applications/useCase/commands/ConfirmReservationCommand';
 import { CancelReservationCommand } from './applications/useCase/commands/CancelReservationCommand';
@@ -57,11 +57,11 @@ import { ListHostBookingOrdersQuery } from './applications/useCase/queries/ListH
 import { GetBookingOrderQuery } from './applications/useCase/queries/GetBookingOrderQuery';
 import { GetCancellationPreviewQuery } from './applications/useCase/queries/GetCancellationPreviewQuery';
 import { MarkReservationNoShowCommand } from './applications/useCase/commands/MarkReservationNoShowCommand';
-import { InvoiceModule } from '../invoice/invoice.module';
+import { InvoiceModule } from '@src/modules/invoice/invoice.module';
 import {
   INVOICE_REPOSITORY,
   type IInvoiceRepository,
-} from '../invoice/contracts';
+} from '@src/modules/invoice/contracts';
 
 @Module({
   imports: [

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { GetHostProfileQueryHandler } from './GetHostProfileQueryHandler';
-import { GetHostProfileQuery } from '../queries/GetHostProfileQuery';
+import { GetHostProfileQuery } from '@src/modules/host/applications/useCase/queries/GetHostProfileQuery';
 import {
   authUser,
   createPropertyPresenterMock,

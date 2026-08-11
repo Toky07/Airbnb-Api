@@ -1,5 +1,5 @@
-import type { AmenityScope } from '../constants/amenity-scope.constant';
-import type { Amenity } from '../entities/amenity.entity';
+import type { AmenityScope } from '@src/modules/amenity/domain/constants/amenity-scope.constant';
+import type { Amenity } from '@src/modules/amenity/domain/entities/amenity.entity';
 
 export interface IAmenityRepository {
   findAll(scope?: AmenityScope): Promise<Amenity[]>;

@@ -1,9 +1,9 @@
-import { UserNameVO } from '../valueObject/username.vo';
-import { EmailVO } from '../../../../shared/valueObject/email.vo';
-import { PhoneNumberVO } from '../../../../shared/valueObject/phone.vo';
-import type { UserRoleSummary } from '../dtos/user.output';
-import type { AccountStatus } from '../../../authentication/contracts';
-import { ACCOUNT_STATUS } from '../../../authentication/contracts';
+import { UserNameVO } from '@src/modules/user/domain/valueObject/username.vo';
+import { EmailVO } from '@src/shared/valueObject/email.vo';
+import { PhoneNumberVO } from '@src/shared/valueObject/phone.vo';
+import type { UserRoleSummary } from '@src/modules/user/domain/dtos/user.output';
+import type { AccountStatus } from '@src/modules/authentication/contracts';
+import { ACCOUNT_STATUS } from '@src/modules/authentication/contracts';
 
 export class User {
   constructor(

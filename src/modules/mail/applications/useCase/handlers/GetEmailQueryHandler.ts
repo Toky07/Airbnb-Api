@@ -1,8 +1,8 @@
 import { NotFoundException } from '@nestjs/common';
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IEmailRepository } from '../../../domain/repositories/email.repository';
-import { EmailOutput } from '../../dto/email.output';
-import type { GetEmailQuery } from '../queries/GetEmailQuery';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { IEmailRepository } from '@src/modules/mail/domain/repositories/email.repository';
+import { EmailOutput } from '@src/modules/mail/applications/dto/email.output';
+import type { GetEmailQuery } from '@src/modules/mail/applications/useCase/queries/GetEmailQuery';
 
 export class GetEmailQueryHandler implements IQueryHandler<
   GetEmailQuery,

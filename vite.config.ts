@@ -1,3 +1,4 @@
+import path from 'node:path';
 import { defineConfig } from 'vitest/config';
 
 const usesPostgres = process.env.DB_TYPE !== 'sqlite';
@@ -17,6 +18,11 @@ const shared = {
 
 export default defineConfig({
   plugins: [],
+  resolve: {
+    alias: {
+      '@src': path.resolve(__dirname, 'src'),
+    },
+  },
   test: {
     coverage: {
       provider: 'v8',

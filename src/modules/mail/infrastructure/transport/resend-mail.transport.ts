@@ -3,8 +3,8 @@ import { Resend, type CreateEmailOptions } from 'resend';
 import type {
   IMailTransport,
   MailTransportMessage,
-} from '../../domain/ports/mail-transport.port';
-import { getResendApiKey, getResendFrom } from '../../../../config/env.config';
+} from '@src/modules/mail/domain/ports/mail-transport.port';
+import { getResendApiKey, getResendFrom } from '@src/config/env.config';
 
 @Injectable()
 export class ResendMailTransport implements IMailTransport {

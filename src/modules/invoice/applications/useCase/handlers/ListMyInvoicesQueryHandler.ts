@@ -1,9 +1,9 @@
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import { ResolveAuthenticatedUserService } from '../../../../../shared/auth/resolve-authenticated-user.service';
-import type { IUserRepository } from '../../../../user/contracts';
-import { InvoiceOutput } from '../../dto/invoice.output';
-import type { IInvoiceRepository } from '../../../domain/repositories/invoice.repository';
-import type { ListMyInvoicesQuery } from '../queries/ListMyInvoicesQuery';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import { ResolveAuthenticatedUserService } from '@src/shared/auth/resolve-authenticated-user.service';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import { InvoiceOutput } from '@src/modules/invoice/applications/dto/invoice.output';
+import type { IInvoiceRepository } from '@src/modules/invoice/domain/repositories/invoice.repository';
+import type { ListMyInvoicesQuery } from '@src/modules/invoice/applications/useCase/queries/ListMyInvoicesQuery';
 
 export class ListMyInvoicesQueryHandler implements IQueryHandler<
   ListMyInvoicesQuery,

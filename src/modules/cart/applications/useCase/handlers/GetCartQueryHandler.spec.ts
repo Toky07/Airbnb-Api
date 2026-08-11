@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { GetCartQueryHandler } from './GetCartQueryHandler';
-import { GetCartQuery } from '../queries/GetCartQuery';
-import { createSampleCart } from '../../cart-test.helpers';
+import { GetCartQuery } from '@src/modules/cart/applications/useCase/queries/GetCartQuery';
+import { createSampleCart } from '@src/modules/cart/applications/cart-test.helpers';
 
 describe('GetCartQueryHandler', () => {
   const resolveCartService = { resolve: vi.fn() };

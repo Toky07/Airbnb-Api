@@ -1,5 +1,5 @@
-import { Message } from '../../domain/entities/message.entity';
-import { MessageOrmEntity } from '../entities/message.orm-entity';
+import { Message } from '@src/modules/messaging/domain/entities/message.entity';
+import { MessageOrmEntity } from '@src/modules/messaging/infrastructure/entities/message.orm-entity';
 
 export class MessageMapper {
   static toDomain(entity: MessageOrmEntity): Message {

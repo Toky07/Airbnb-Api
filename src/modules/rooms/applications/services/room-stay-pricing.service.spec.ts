@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 import { RoomStayPricingService } from './room-stay-pricing.service';
-import { Room } from '../../domain/entities/room.entity';
-import type { IRoomRateOverrideRepository } from '../../domain/repositories/room-rate-override.repository';
-import { ResolveDynamicStayAmountService } from '../../../../shared/pricing/resolve-dynamic-stay-amount.service';
+import { Room } from '@src/modules/rooms/domain/entities/room.entity';
+import type { IRoomRateOverrideRepository } from '@src/modules/rooms/domain/repositories/room-rate-override.repository';
+import { ResolveDynamicStayAmountService } from '@src/shared/pricing/resolve-dynamic-stay-amount.service';
 
 describe('RoomStayPricingService', () => {
   const room = new Room({

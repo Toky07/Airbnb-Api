@@ -21,7 +21,7 @@ import { StripeWebhookVerifier } from './infrastructure/stripe/StripeWebhookVeri
 import { MapStripeStatusService } from './applications/services/map-stripe-status.service';
 import { PaymentController } from './interfaces/http/payment.controller';
 import { PaymentBootstrap } from './payment.bootstrap';
-import { CommandBus } from '../../shared/useCase/bus/bus';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
 import {
   ConfirmStripePaymentCommand,
   CreatePaymentCommand,

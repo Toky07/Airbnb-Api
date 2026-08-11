@@ -1,8 +1,8 @@
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IPropertyRepository } from '../../../domain/repositories/property.repository';
-import { PropertyOutput } from '../../dto/property.output';
-import type { PropertyMediaPresenter } from '../../presenters/property-media.presenter';
-import type { FindPropertyQuery } from '../queries/FindPropertyQuery';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { IPropertyRepository } from '@src/modules/properties/domain/repositories/property.repository';
+import { PropertyOutput } from '@src/modules/properties/applications/dto/property.output';
+import type { PropertyMediaPresenter } from '@src/modules/properties/applications/presenters/property-media.presenter';
+import type { FindPropertyQuery } from '@src/modules/properties/applications/useCase/queries/FindPropertyQuery';
 
 export class FindPropertyQueryHandler implements IQueryHandler<
   FindPropertyQuery,

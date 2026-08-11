@@ -1,5 +1,5 @@
-import { RoleEntity } from '../../domain/entities/role.entity';
-import { isSystemRoleSlug } from '../../domain/constants/system-roles.constant';
+import { RoleEntity } from '@src/modules/authentication/domain/entities/role.entity';
+import { isSystemRoleSlug } from '@src/modules/authentication/domain/constants/system-roles.constant';
 
 export class RoleOutput {
   constructor(

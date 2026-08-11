@@ -3,19 +3,19 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { RoomStayPricingService } from '../../../../rooms/contracts';
-import type { IRoomRepository } from '../../../../rooms/contracts';
-import type { IUserRepository } from '../../../../user/contracts';
-import type { Room } from '../../../../rooms/contracts';
-import { computeReservationHoldUntil } from '../../../domain/constants/reservation-hold.constant';
-import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
-import { ReservationItem } from '../../../domain/entities/reservation-item.entity';
-import { Reservation } from '../../../domain/entities/reservation.entity';
-import type { IReservationRepository } from '../../../domain/repositories/reservation.repository';
-import { ReservationOutput } from '../../dto/reservation.output';
-import type { EnrichReservationOutputsService } from '../../services/enrich-reservation-outputs.service';
-import type { CreateReservationCommand } from '../commands/CreateReservationCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { RoomStayPricingService } from '@src/modules/rooms/contracts';
+import type { IRoomRepository } from '@src/modules/rooms/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import type { Room } from '@src/modules/rooms/contracts';
+import { computeReservationHoldUntil } from '@src/modules/reservation/domain/constants/reservation-hold.constant';
+import { RESERVATION_STATUS } from '@src/modules/reservation/domain/constants/reservation-status.constant';
+import { ReservationItem } from '@src/modules/reservation/domain/entities/reservation-item.entity';
+import { Reservation } from '@src/modules/reservation/domain/entities/reservation.entity';
+import type { IReservationRepository } from '@src/modules/reservation/domain/repositories/reservation.repository';
+import { ReservationOutput } from '@src/modules/reservation/applications/dto/reservation.output';
+import type { EnrichReservationOutputsService } from '@src/modules/reservation/applications/services/enrich-reservation-outputs.service';
+import type { CreateReservationCommand } from '@src/modules/reservation/applications/useCase/commands/CreateReservationCommand';
 
 export class CreateReservationCommandHandler implements ICommandHandler<
   CreateReservationCommand,

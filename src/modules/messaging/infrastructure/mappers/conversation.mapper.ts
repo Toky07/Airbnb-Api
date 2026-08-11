@@ -1,5 +1,5 @@
-import { Conversation } from '../../domain/entities/conversation.entity';
-import { ConversationOrmEntity } from '../entities/conversation.orm-entity';
+import { Conversation } from '@src/modules/messaging/domain/entities/conversation.entity';
+import { ConversationOrmEntity } from '@src/modules/messaging/infrastructure/entities/conversation.orm-entity';
 
 export class ConversationMapper {
   static toDomain(entity: ConversationOrmEntity): Conversation {

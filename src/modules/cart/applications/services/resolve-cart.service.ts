@@ -1,14 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import { Cart } from '../../domain/entities/cart.entity';
+import { Cart } from '@src/modules/cart/domain/entities/cart.entity';
 import {
   CART_REPOSITORY,
   type ICartRepository,
-} from '../../domain/repositories/cart.repository';
+} from '@src/modules/cart/domain/repositories/cart.repository';
 import {
   CART_USER_PORT,
   type ICartUserPort,
-} from '../../domain/ports/cart-user.port';
+} from '@src/modules/cart/domain/ports/cart-user.port';
 
 export type CartRequestContext = {
   sessionId?: string | null;

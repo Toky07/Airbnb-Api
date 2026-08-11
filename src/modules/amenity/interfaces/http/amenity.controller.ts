@@ -9,30 +9,30 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Public } from '../../../authentication/contracts';
-import { RequirePermissions } from '../../../authentication/contracts';
-import { RequireSuperAdmin } from '../../../authentication/contracts';
-import { AmenityOutput } from '../../applications/dto/amenity.output';
+import { Public } from '@src/modules/authentication/contracts';
+import { RequirePermissions } from '@src/modules/authentication/contracts';
+import { RequireSuperAdmin } from '@src/modules/authentication/contracts';
+import { AmenityOutput } from '@src/modules/amenity/applications/dto/amenity.output';
 import {
   CreateAmenityDto,
   SyncAmenitiesDto,
   UpdateAmenityDto,
-} from '../../applications/dto/create-amenity.dto';
-import { ListAmenitiesQueryDto } from '../../applications/dto/list-amenities-query.dto';
-import { parseAmenityScope } from '../../applications/utils/parse-amenity-scope';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { CreateAmenityCommand } from '../../applications/useCase/commands/CreateAmenityCommand';
-import { UpdateAmenityCommand } from '../../applications/useCase/commands/UpdateAmenityCommand';
-import { DeleteAmenityCommand } from '../../applications/useCase/commands/DeleteAmenityCommand';
-import { SyncPropertyAmenitiesCommand } from '../../applications/useCase/commands/SyncPropertyAmenitiesCommand';
-import { SyncRoomAmenitiesCommand } from '../../applications/useCase/commands/SyncRoomAmenitiesCommand';
-import { ListAmenitiesQuery } from '../../applications/useCase/queries/ListAmenitiesQuery';
-import { ListAmenityOptionsQuery } from '../../applications/useCase/queries/ListAmenityOptionsQuery';
-import { ListPropertyAmenitiesQuery } from '../../applications/useCase/queries/ListPropertyAmenitiesQuery';
-import { ListRoomAmenitiesQuery } from '../../applications/useCase/queries/ListRoomAmenitiesQuery';
-import { ApiJwtAuth } from '../../../../shared/swagger/swagger.decorators';
-import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
+} from '@src/modules/amenity/applications/dto/create-amenity.dto';
+import { ListAmenitiesQueryDto } from '@src/modules/amenity/applications/dto/list-amenities-query.dto';
+import { parseAmenityScope } from '@src/modules/amenity/applications/utils/parse-amenity-scope';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { CreateAmenityCommand } from '@src/modules/amenity/applications/useCase/commands/CreateAmenityCommand';
+import { UpdateAmenityCommand } from '@src/modules/amenity/applications/useCase/commands/UpdateAmenityCommand';
+import { DeleteAmenityCommand } from '@src/modules/amenity/applications/useCase/commands/DeleteAmenityCommand';
+import { SyncPropertyAmenitiesCommand } from '@src/modules/amenity/applications/useCase/commands/SyncPropertyAmenitiesCommand';
+import { SyncRoomAmenitiesCommand } from '@src/modules/amenity/applications/useCase/commands/SyncRoomAmenitiesCommand';
+import { ListAmenitiesQuery } from '@src/modules/amenity/applications/useCase/queries/ListAmenitiesQuery';
+import { ListAmenityOptionsQuery } from '@src/modules/amenity/applications/useCase/queries/ListAmenityOptionsQuery';
+import { ListPropertyAmenitiesQuery } from '@src/modules/amenity/applications/useCase/queries/ListPropertyAmenitiesQuery';
+import { ListRoomAmenitiesQuery } from '@src/modules/amenity/applications/useCase/queries/ListRoomAmenitiesQuery';
+import { ApiJwtAuth } from '@src/shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 
 @ApiTags(SWAGGER_TAGS.AMENITIES)
 @Controller('amenities')

@@ -1,4 +1,4 @@
-import type { CreateRoomBlockedDateDto } from '../../dto/create-room-blocked-date.dto';
+import type { CreateRoomBlockedDateDto } from '@src/modules/rooms/applications/dto/create-room-blocked-date.dto';
 
 export class CreateRoomBlockedDateCommand {
   constructor(

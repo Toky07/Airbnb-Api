@@ -1,5 +1,5 @@
-import type { UploadFile } from '../../../../media/contracts';
-import type { SendEmailDto } from '../../dto/send-email.dto';
+import type { UploadFile } from '@src/modules/media/contracts';
+import type { SendEmailDto } from '@src/modules/mail/applications/dto/send-email.dto';
 
 export type SendEmailCommandPayload = SendEmailDto & {
   sentByAuthId?: number | null;

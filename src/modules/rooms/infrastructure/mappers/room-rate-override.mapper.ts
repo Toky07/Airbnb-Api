@@ -1,5 +1,5 @@
-import { RoomRateOverride } from '../../domain/entities/room-rate-override.entity';
-import type { RoomRateOverrideOrmEntity } from '../entities/room-rate-override.orm-entity';
+import { RoomRateOverride } from '@src/modules/rooms/domain/entities/room-rate-override.entity';
+import type { RoomRateOverrideOrmEntity } from '@src/modules/rooms/infrastructure/entities/room-rate-override.orm-entity';
 
 export class RoomRateOverrideMapper {
   static toDomain(entity: RoomRateOverrideOrmEntity): RoomRateOverride {

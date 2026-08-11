@@ -3,7 +3,7 @@ import {
   CANCELLATION_POLICY,
   CANCELLATION_POLICY_LABELS,
   type CancellationPolicy,
-} from '../../domain/constants/cancellation-policy.constant';
+} from '@src/modules/reservation/domain/constants/cancellation-policy.constant';
 
 export type CancellationRefundResult = {
   refundAmount: number;

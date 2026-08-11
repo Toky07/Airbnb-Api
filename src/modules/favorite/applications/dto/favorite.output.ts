@@ -1,5 +1,5 @@
-import type { RoomOutput } from '../../../rooms/contracts';
-import type { Favorite } from '../../domain/entities/favorite.entity';
+import type { RoomOutput } from '@src/modules/rooms/contracts';
+import type { Favorite } from '@src/modules/favorite/domain/entities/favorite.entity';
 
 export class FavoriteOutput {
   constructor(

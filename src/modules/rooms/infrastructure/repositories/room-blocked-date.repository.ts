@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { RoomBlockedDate } from '../../domain/entities/room-blocked-date.entity';
-import type { IRoomBlockedDateRepository } from '../../domain/repositories/room-blocked-date.repository';
-import { RoomBlockedDateOrmEntity } from '../entities/room-blocked-date.orm-entity';
-import { RoomBlockedDateMapper } from '../mappers/room-blocked-date.mapper';
+import { RoomBlockedDate } from '@src/modules/rooms/domain/entities/room-blocked-date.entity';
+import type { IRoomBlockedDateRepository } from '@src/modules/rooms/domain/repositories/room-blocked-date.repository';
+import { RoomBlockedDateOrmEntity } from '@src/modules/rooms/infrastructure/entities/room-blocked-date.orm-entity';
+import { RoomBlockedDateMapper } from '@src/modules/rooms/infrastructure/mappers/room-blocked-date.mapper';
 
 @Injectable()
 export class RoomBlockedDateRepository implements IRoomBlockedDateRepository {

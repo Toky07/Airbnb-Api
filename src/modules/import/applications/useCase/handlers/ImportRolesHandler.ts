@@ -1,18 +1,18 @@
-import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { CreateRoleCommand } from '../../../../authentication/contracts';
-import { RoleOutput } from '../../../../authentication/contracts';
-import { UpdateRoleCommand } from '../../../../authentication/contracts';
-import { SetRolePermissionsCommand } from '../../../../authentication/contracts';
-import type { IRoleRepository } from '../../../../authentication/contracts';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { CreateRoleCommand } from '@src/modules/authentication/contracts';
+import { RoleOutput } from '@src/modules/authentication/contracts';
+import { UpdateRoleCommand } from '@src/modules/authentication/contracts';
+import { SetRolePermissionsCommand } from '@src/modules/authentication/contracts';
+import type { IRoleRepository } from '@src/modules/authentication/contracts';
 import {
   isPermissionLockedRoleSlug,
   isSystemRoleSlug,
-} from '../../../../authentication/contracts';
-import type { ImportRoleRowDto } from '../../dto/import-batch.dto';
-import type { ImportEntityResult } from '../../dto/import-entity-result.dto';
-import { emptyImportEntityResult } from '../../dto/import-entity-result.dto';
-import { parseImportRolePermissionKeys } from '../../validation/parse-import-role-permission-keys';
-import { validateImportRoleRow } from '../../validation/validate-import-role-row';
+} from '@src/modules/authentication/contracts';
+import type { ImportRoleRowDto } from '@src/modules/import/applications/dto/import-batch.dto';
+import type { ImportEntityResult } from '@src/modules/import/applications/dto/import-entity-result.dto';
+import { emptyImportEntityResult } from '@src/modules/import/applications/dto/import-entity-result.dto';
+import { parseImportRolePermissionKeys } from '@src/modules/import/applications/validation/parse-import-role-permission-keys';
+import { validateImportRoleRow } from '@src/modules/import/applications/validation/validate-import-role-row';
 
 export class ImportRolesHandler {
   constructor(private readonly roleRepository: IRoleRepository) {}

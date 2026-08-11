@@ -4,25 +4,25 @@ import { In, LessThan, Repository } from 'typeorm';
 import {
   buildPaginationMeta,
   type PaginatedResult,
-} from '../../../../shared/pagination/pagination.types';
+} from '@src/shared/pagination/pagination.types';
 import {
   RESERVATION_STATUS,
   BLOCKING_RESERVATION_STATUSES,
-} from '../../domain/constants/reservation-status.constant';
-import { Reservation } from '../../domain/entities/reservation.entity';
-import type { ReservationItem } from '../../domain/entities/reservation-item.entity';
+} from '@src/modules/reservation/domain/constants/reservation-status.constant';
+import { Reservation } from '@src/modules/reservation/domain/entities/reservation.entity';
+import type { ReservationItem } from '@src/modules/reservation/domain/entities/reservation-item.entity';
 import type {
   IReservationRepository,
   ReservationListParams,
   ReservationStatsScope,
-} from '../../domain/repositories/reservation.repository';
-import { ReservationItemOrmEntity } from '../entities/reservation-item.orm-entity';
-import { ReservationOrmEntity } from '../entities/reservation.orm-entity';
-import { ReservationItemMapper } from '../mappers/reservation-item.mapper';
-import { ReservationMapper } from '../mappers/reservation.mapper';
-import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
-import { RoomBlockedDateOrmEntity } from '../../../rooms/infrastructure/entities/room-blocked-date.orm-entity';
-import type { ReservationStatus } from '../../domain/constants/reservation-status.constant';
+} from '@src/modules/reservation/domain/repositories/reservation.repository';
+import { ReservationItemOrmEntity } from '@src/modules/reservation/infrastructure/entities/reservation-item.orm-entity';
+import { ReservationOrmEntity } from '@src/modules/reservation/infrastructure/entities/reservation.orm-entity';
+import { ReservationItemMapper } from '@src/modules/reservation/infrastructure/mappers/reservation-item.mapper';
+import { ReservationMapper } from '@src/modules/reservation/infrastructure/mappers/reservation.mapper';
+import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
+import { RoomBlockedDateOrmEntity } from '@src/modules/rooms/infrastructure/entities/room-blocked-date.orm-entity';
+import type { ReservationStatus } from '@src/modules/reservation/domain/constants/reservation-status.constant';
 
 @Injectable()
 export class ReservationRepository implements IReservationRepository {

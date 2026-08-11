@@ -1,12 +1,12 @@
 import { Inject, Module, OnModuleInit } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from '../user/user.module';
-import { RoomsModule } from '../rooms/room.module';
-import { USER_REPOSITORY } from '../user/contracts';
-import type { IUserRepository } from '../user/contracts';
-import { ROOM_REPOSITORY } from '../rooms/contracts';
-import type { IRoomRepository } from '../rooms/contracts';
-import { RoomMediaPresenter } from '../rooms/contracts';
+import { UserModule } from '@src/modules/user/user.module';
+import { RoomsModule } from '@src/modules/rooms/room.module';
+import { USER_REPOSITORY } from '@src/modules/user/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import { ROOM_REPOSITORY } from '@src/modules/rooms/contracts';
+import type { IRoomRepository } from '@src/modules/rooms/contracts';
+import { RoomMediaPresenter } from '@src/modules/rooms/contracts';
 import {
   FAVORITE_REPOSITORY,
   type IFavoriteRepository,
@@ -15,8 +15,8 @@ import { FavoriteOrmEntity } from './infrastructure/entities/favorite.orm-entity
 import { FavoriteRepository } from './infrastructure/repositories/favorite.repository';
 import { FavoriteController } from './interfaces/http/favorite.controller';
 import { FavoriteBootstrap } from './favorite.bootstrap';
-import { CommandBus } from '../../shared/useCase/bus/bus';
-import { QueryBus } from '../../shared/useCase/bus/query-bus';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
 import { AddFavoriteCommand } from './applications/useCase/commands/AddFavoriteCommand';
 import { RemoveFavoriteCommand } from './applications/useCase/commands/RemoveFavoriteCommand';
 import { ListMyFavoritesQuery } from './applications/useCase/queries/ListMyFavoritesQuery';

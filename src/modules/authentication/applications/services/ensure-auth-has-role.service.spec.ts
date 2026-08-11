@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { EnsureAuthHasRoleService } from './ensure-auth-has-role.service';
-import { HOST_ROLE_SLUG } from '../../domain/constants/permissions.constant';
-import { TRAVELER_ROLE_SLUG } from '../../domain/constants/system-roles.constant';
+import { HOST_ROLE_SLUG } from '@src/modules/authentication/domain/constants/permissions.constant';
+import { TRAVELER_ROLE_SLUG } from '@src/modules/authentication/domain/constants/system-roles.constant';
 
 describe('EnsureAuthHasRoleService', () => {
   const authRepository = {

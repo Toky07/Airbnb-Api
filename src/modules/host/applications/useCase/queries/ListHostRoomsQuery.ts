@@ -1,5 +1,5 @@
-import type { JwtPayload } from '../../../../authentication/contracts';
-import type { PaginationParams } from '../../../../../shared/pagination/pagination.types';
+import type { JwtPayload } from '@src/modules/authentication/contracts';
+import type { PaginationParams } from '@src/shared/pagination/pagination.types';
 
 export class ListHostRoomsQuery {
   constructor(

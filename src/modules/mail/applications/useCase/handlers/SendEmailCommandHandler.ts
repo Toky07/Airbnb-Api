@@ -1,13 +1,13 @@
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { EMAIL_STATUS } from '../../../domain/constants/email-status.constant';
-import { Email } from '../../../domain/entities/email.entity';
-import type { IEmailRepository } from '../../../domain/repositories/email.repository';
-import type { IMailTransport } from '../../../domain/ports/mail-transport.port';
-import type { EmailAttachmentStorageService } from '../../../infrastructure/storage/email-attachment-storage.service';
-import { EmailOutput } from '../../dto/email.output';
-import { parseRecipientList } from '../../dto/send-email.dto';
-import { deliverEmail } from '../../services/deliver-email';
-import type { SendEmailCommand } from '../commands/SendEmailCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import { EMAIL_STATUS } from '@src/modules/mail/domain/constants/email-status.constant';
+import { Email } from '@src/modules/mail/domain/entities/email.entity';
+import type { IEmailRepository } from '@src/modules/mail/domain/repositories/email.repository';
+import type { IMailTransport } from '@src/modules/mail/domain/ports/mail-transport.port';
+import type { EmailAttachmentStorageService } from '@src/modules/mail/infrastructure/storage/email-attachment-storage.service';
+import { EmailOutput } from '@src/modules/mail/applications/dto/email.output';
+import { parseRecipientList } from '@src/modules/mail/applications/dto/send-email.dto';
+import { deliverEmail } from '@src/modules/mail/applications/services/deliver-email';
+import type { SendEmailCommand } from '@src/modules/mail/applications/useCase/commands/SendEmailCommand';
 
 export class SendEmailCommandHandler implements ICommandHandler<
   SendEmailCommand,

@@ -1,4 +1,4 @@
-import type { JwtPayload } from '../../../../authentication/contracts';
+import type { JwtPayload } from '@src/modules/authentication/contracts';
 
 export class ListHostPropertiesQuery {
   constructor(public readonly authUser: JwtPayload) {}

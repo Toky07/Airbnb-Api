@@ -1,4 +1,4 @@
-import { toScalarString } from '../http/to-scalar-string';
+import { toScalarString } from '@src/shared/http/to-scalar-string';
 import { parseAdvancedFilterFields } from './parse-advanced-filter-query';
 import {
   DEFAULT_PAGE_SIZE,

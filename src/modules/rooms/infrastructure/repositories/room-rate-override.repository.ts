@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { RoomRateOverride } from '../../domain/entities/room-rate-override.entity';
-import type { IRoomRateOverrideRepository } from '../../domain/repositories/room-rate-override.repository';
-import { RoomRateOverrideOrmEntity } from '../entities/room-rate-override.orm-entity';
-import { RoomRateOverrideMapper } from '../mappers/room-rate-override.mapper';
+import { RoomRateOverride } from '@src/modules/rooms/domain/entities/room-rate-override.entity';
+import type { IRoomRateOverrideRepository } from '@src/modules/rooms/domain/repositories/room-rate-override.repository';
+import { RoomRateOverrideOrmEntity } from '@src/modules/rooms/infrastructure/entities/room-rate-override.orm-entity';
+import { RoomRateOverrideMapper } from '@src/modules/rooms/infrastructure/mappers/room-rate-override.mapper';
 
 @Injectable()
 export class RoomRateOverrideRepository implements IRoomRateOverrideRepository {

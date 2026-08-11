@@ -1,4 +1,4 @@
-import type { CartItemType } from '../constants/cart-item-type.constant';
+import type { CartItemType } from '@src/modules/cart/domain/constants/cart-item-type.constant';
 
 export class CartItem {
   constructor(

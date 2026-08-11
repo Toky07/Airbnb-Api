@@ -1,8 +1,8 @@
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IUserRepository } from '../../../../user/contracts';
-import type { IConversationRepository } from '../../../domain/repositories/conversation.repository';
-import { ConversationOutput } from '../../dto/conversation.output';
-import type { ListMyConversationsQuery } from '../queries/ListMyConversationsQuery';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import type { IConversationRepository } from '@src/modules/messaging/domain/repositories/conversation.repository';
+import { ConversationOutput } from '@src/modules/messaging/applications/dto/conversation.output';
+import type { ListMyConversationsQuery } from '@src/modules/messaging/applications/useCase/queries/ListMyConversationsQuery';
 
 export class ListMyConversationsQueryHandler implements IQueryHandler<
   ListMyConversationsQuery,

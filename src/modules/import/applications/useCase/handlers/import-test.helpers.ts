@@ -1,4 +1,4 @@
-import type { ImportBatchContext } from '../../services/import-batch-context.service';
+import type { ImportBatchContext } from '@src/modules/import/applications/services/import-batch-context.service';
 
 export function createImportBatchContext(
   overrides: Partial<ImportBatchContext> = {},

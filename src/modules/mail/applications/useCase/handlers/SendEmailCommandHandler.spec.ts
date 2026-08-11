@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from 'vitest';
-import { EMAIL_STATUS } from '../../../domain/constants/email-status.constant';
+import { EMAIL_STATUS } from '@src/modules/mail/domain/constants/email-status.constant';
 import { SendEmailCommandHandler } from './SendEmailCommandHandler';
-import { SendEmailCommand } from '../commands/SendEmailCommand';
+import { SendEmailCommand } from '@src/modules/mail/applications/useCase/commands/SendEmailCommand';
 import {
   createAttachmentStorageMock,
   createEmailRepositoryMock,
   createMailTransportMock,
-} from '../email-test.helpers';
+} from '@src/modules/mail/applications/useCase/email-test.helpers';
 
 describe('SendEmailCommandHandler', () => {
   it('enregistre un email envoyé avec succès', async () => {

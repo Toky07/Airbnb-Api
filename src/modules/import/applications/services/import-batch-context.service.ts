@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { PROPERTY_REPOSITORY } from '../../../properties/contracts';
-import type { IPropertyRepository } from '../../../properties/contracts';
-import { PROPERTY_TYPE_REPOSITORY } from '../../../properties/contracts';
-import type { IPropertyTypeRepository } from '../../../properties/contracts';
-import { ROOM_TYPE_REPOSITORY } from '../../../rooms/contracts';
-import type { IRoomTypeRepository } from '../../../rooms/contracts';
-import { USER_REPOSITORY } from '../../../user/contracts';
-import type { IUserRepository } from '../../../user/contracts';
+import { PROPERTY_REPOSITORY } from '@src/modules/properties/contracts';
+import type { IPropertyRepository } from '@src/modules/properties/contracts';
+import { PROPERTY_TYPE_REPOSITORY } from '@src/modules/properties/contracts';
+import type { IPropertyTypeRepository } from '@src/modules/properties/contracts';
+import { ROOM_TYPE_REPOSITORY } from '@src/modules/rooms/contracts';
+import type { IRoomTypeRepository } from '@src/modules/rooms/contracts';
+import { USER_REPOSITORY } from '@src/modules/user/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
 
 export type ImportBatchContext = {
   emailToUserId: Map<string, number>;

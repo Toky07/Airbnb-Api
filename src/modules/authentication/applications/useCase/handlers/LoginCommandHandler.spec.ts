@@ -1,6 +1,6 @@
-import { TokenGenerator } from '../../../domain/generator/token.generator';
+import { TokenGenerator } from '@src/modules/authentication/domain/generator/token.generator';
 import { LoginCommandHandler } from './LoginCommandHandler';
-import { LoginCommand } from '../commands/LoginCommand';
+import { LoginCommand } from '@src/modules/authentication/applications/useCase/commands/LoginCommand';
 
 const tokenGenerator = {
   generate: async ({

@@ -9,8 +9,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { UserEntity } from '../../../user/infrastructure/entities/user.entity';
-import { ReservationOrmEntity } from '../../../reservation/infrastructure/entities/reservation.orm-entity';
+import { UserEntity } from '@src/modules/user/infrastructure/entities/user.entity';
+import { ReservationOrmEntity } from '@src/modules/reservation/infrastructure/entities/reservation.orm-entity';
 import { MessageOrmEntity } from './message.orm-entity';
 
 @Entity({ name: 'conversations' })

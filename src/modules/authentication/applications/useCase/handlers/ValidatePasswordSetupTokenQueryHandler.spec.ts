@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { Auth } from '../../../domain/entities/user.entity';
-import { EmailVO } from '../../../../../shared/valueObject/email.vo';
-import { User } from '../../../../user/contracts';
-import { UserNameVO } from '../../../../user/contracts';
-import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
+import { Auth } from '@src/modules/authentication/domain/entities/user.entity';
+import { EmailVO } from '@src/shared/valueObject/email.vo';
+import { User } from '@src/modules/user/contracts';
+import { UserNameVO } from '@src/modules/user/contracts';
+import { PhoneNumberVO } from '@src/shared/valueObject/phone.vo';
 import { ValidatePasswordSetupTokenQueryHandler } from './ValidatePasswordSetupTokenQueryHandler';
-import { ValidatePasswordSetupTokenQuery } from '../queries/ValidatePasswordSetupTokenQuery';
+import { ValidatePasswordSetupTokenQuery } from '@src/modules/authentication/applications/useCase/queries/ValidatePasswordSetupTokenQuery';
 
 describe('ValidatePasswordSetupTokenQueryHandler', () => {
   const tokenRepository = { findValidByHash: vi.fn() };

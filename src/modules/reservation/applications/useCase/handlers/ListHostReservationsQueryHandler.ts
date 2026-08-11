@@ -1,10 +1,10 @@
-import type { PaginatedResult } from '../../../../../shared/pagination/pagination.types';
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import { ReservationOutput } from '../../dto/reservation.output';
-import type { ResolveHostPropertyIdsService } from '../../services/resolve-host-property-ids.service';
-import type { ListHostReservationsQuery } from '../queries/ListHostReservationsQuery';
+import type { PaginatedResult } from '@src/shared/pagination/pagination.types';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import { ReservationOutput } from '@src/modules/reservation/applications/dto/reservation.output';
+import type { ResolveHostPropertyIdsService } from '@src/modules/reservation/applications/services/resolve-host-property-ids.service';
+import type { ListHostReservationsQuery } from '@src/modules/reservation/applications/useCase/queries/ListHostReservationsQuery';
 import type { ListReservationsQueryHandler } from './ListReservationsQueryHandler';
-import { ListReservationsQuery } from '../queries/ListReservationsQuery';
+import { ListReservationsQuery } from '@src/modules/reservation/applications/useCase/queries/ListReservationsQuery';
 
 export class ListHostReservationsQueryHandler implements IQueryHandler<
   ListHostReservationsQuery,

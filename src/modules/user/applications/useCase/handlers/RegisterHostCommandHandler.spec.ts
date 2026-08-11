@@ -1,9 +1,9 @@
 import { BadRequestException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { RegisterHostCommandHandler } from './RegisterHostCommandHandler';
-import { RegisterHostCommand } from '../commands/RegisterHostCommand';
-import { commandBusExecuteMock } from '../../../../../test/command-bus.mock';
-import { TRAVELER_ROLE_SLUG } from '../../../../authentication/contracts';
+import { RegisterHostCommand } from '@src/modules/user/applications/useCase/commands/RegisterHostCommand';
+import { commandBusExecuteMock } from '@src/test/command-bus.mock';
+import { TRAVELER_ROLE_SLUG } from '@src/modules/authentication/contracts';
 
 describe('RegisterHostCommandHandler', () => {
   const authRepository = {

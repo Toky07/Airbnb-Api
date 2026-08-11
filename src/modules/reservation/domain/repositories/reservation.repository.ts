@@ -1,10 +1,10 @@
 import type {
   PaginatedResult,
   PaginationParams,
-} from '../../../../shared/pagination/pagination.types';
-import type { Reservation } from '../entities/reservation.entity';
-import type { ReservationItem } from '../entities/reservation-item.entity';
-import { ReservationStatus } from '../constants/reservation-status.constant';
+} from '@src/shared/pagination/pagination.types';
+import type { Reservation } from '@src/modules/reservation/domain/entities/reservation.entity';
+import type { ReservationItem } from '@src/modules/reservation/domain/entities/reservation-item.entity';
+import { ReservationStatus } from '@src/modules/reservation/domain/constants/reservation-status.constant';
 import type { IReservationByIdReader } from './reservation-by-id.reader';
 
 export const RESERVATION_REPOSITORY = 'RESERVATION_REPOSITORY';

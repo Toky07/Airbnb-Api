@@ -1,4 +1,4 @@
-import type { ImportCategoryTypeRowDto } from '../dto/import-batch.dto';
+import type { ImportCategoryTypeRowDto } from '@src/modules/import/applications/dto/import-batch.dto';
 import type { ImportRowValidationResult } from './import-row-validation.types';
 
 export function validateImportCategoryTypeRow(

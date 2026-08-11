@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { CartCheckoutPaymentListener } from '../listeners/cart-checkout-payment.listener';
-import { CartCheckoutCompleteListener } from '../listeners/cart-checkout-complete.listener';
+import { CartCheckoutPaymentListener } from '@src/modules/cart/applications/listeners/cart-checkout-payment.listener';
+import { CartCheckoutCompleteListener } from '@src/modules/cart/applications/listeners/cart-checkout-complete.listener';
 
 @Injectable()
 export class CartPaymentEvent implements OnModuleInit {

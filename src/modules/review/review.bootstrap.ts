@@ -1,9 +1,9 @@
-import type { IReservationByIdReader } from '../reservation/contracts';
-import type { IUserRepository } from '../user/contracts';
-import type { IRoomRepository } from '../rooms/contracts';
+import type { IReservationByIdReader } from '@src/modules/reservation/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import type { IRoomRepository } from '@src/modules/rooms/contracts';
 import type { IReviewRepository } from './domain/repositories/review.repository';
 import { ReviewEligibilityService } from './applications/services/review-eligibility.service';
-import { ResolveAuthenticatedUserService } from '../../shared/auth/resolve-authenticated-user.service';
+import { ResolveAuthenticatedUserService } from '@src/shared/auth/resolve-authenticated-user.service';
 import { MapReviewOutputsService } from './applications/services/map-review-outputs.service';
 import { CreateReviewCommandHandler } from './applications/useCase/handlers/CreateReviewCommandHandler';
 import { ModerateReviewCommandHandler } from './applications/useCase/handlers/ModerateReviewCommandHandler';

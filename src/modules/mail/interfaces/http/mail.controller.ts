@@ -11,23 +11,23 @@ import {
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
-import type { JwtPayload } from '../../../authentication/contracts';
-import { RequirePermissions } from '../../../authentication/contracts';
-import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
-import type { UploadFile } from '../../../media/contracts';
-import type { SendEmailDto } from '../../applications/dto/send-email.dto';
+import type { JwtPayload } from '@src/modules/authentication/contracts';
+import { RequirePermissions } from '@src/modules/authentication/contracts';
+import { parsePaginationQuery } from '@src/shared/pagination/parse-pagination-query';
+import type { UploadFile } from '@src/modules/media/contracts';
+import type { SendEmailDto } from '@src/modules/mail/applications/dto/send-email.dto';
 import { parseEmailBody } from './parse-email-body';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { SendEmailCommand } from '../../applications/useCase/commands/SendEmailCommand';
-import { RetryEmailCommand } from '../../applications/useCase/commands/RetryEmailCommand';
-import { GetEmailQuery } from '../../applications/useCase/queries/GetEmailQuery';
-import { ListEmailsQuery } from '../../applications/useCase/queries/ListEmailsQuery';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { SendEmailCommand } from '@src/modules/mail/applications/useCase/commands/SendEmailCommand';
+import { RetryEmailCommand } from '@src/modules/mail/applications/useCase/commands/RetryEmailCommand';
+import { GetEmailQuery } from '@src/modules/mail/applications/useCase/queries/GetEmailQuery';
+import { ListEmailsQuery } from '@src/modules/mail/applications/useCase/queries/ListEmailsQuery';
 import {
   ApiJwtAuth,
   ApiPaginationQuery,
-} from '../../../../shared/swagger/swagger.decorators';
-import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
+} from '@src/shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 
 const MAX_ATTACHMENTS = 5;
 

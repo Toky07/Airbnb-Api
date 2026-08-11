@@ -1,12 +1,12 @@
 import { NotFoundException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { EMAIL_STATUS } from '../../../domain/constants/email-status.constant';
-import { Email } from '../../../domain/entities/email.entity';
-import type { IEmailRepository } from '../../../domain/repositories/email.repository';
-import type { IMailTransport } from '../../../domain/ports/mail-transport.port';
-import { EmailOutput } from '../../dto/email.output';
-import { deliverEmail } from '../../services/deliver-email';
-import type { RetryEmailCommand } from '../commands/RetryEmailCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import { EMAIL_STATUS } from '@src/modules/mail/domain/constants/email-status.constant';
+import { Email } from '@src/modules/mail/domain/entities/email.entity';
+import type { IEmailRepository } from '@src/modules/mail/domain/repositories/email.repository';
+import type { IMailTransport } from '@src/modules/mail/domain/ports/mail-transport.port';
+import { EmailOutput } from '@src/modules/mail/applications/dto/email.output';
+import { deliverEmail } from '@src/modules/mail/applications/services/deliver-email';
+import type { RetryEmailCommand } from '@src/modules/mail/applications/useCase/commands/RetryEmailCommand';
 
 export class RetryEmailCommandHandler implements ICommandHandler<
   RetryEmailCommand,

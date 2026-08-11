@@ -1,8 +1,8 @@
 import { Inject, Module, OnModuleInit } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from '../user/user.module';
-import { USER_REPOSITORY } from '../user/contracts';
-import type { IUserRepository } from '../user/contracts';
+import { UserModule } from '@src/modules/user/user.module';
+import { USER_REPOSITORY } from '@src/modules/user/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
 import { GenerateInvoicePdfService } from './applications/services/generate-invoice-pdf.service';
 import { InvoiceNumberService } from './applications/services/invoice-number.service';
 import { INVOICE_REPOSITORY } from './domain/repositories/invoice.repository';
@@ -13,9 +13,9 @@ import { InvoiceRepository } from './infrastructure/repositories/invoice.reposit
 import { InvoiceSequenceRepository } from './infrastructure/repositories/invoice-sequence.repository';
 import { InvoiceStorageService } from './infrastructure/storage/invoice-storage.service';
 import { InvoiceController } from './interfaces/http/invoice.controller';
-import { EventBus } from '../../shared/domain/event.bus';
-import { CommandBus } from '../../shared/useCase/bus/bus';
-import { QueryBus } from '../../shared/useCase/bus/query-bus';
+import { EventBus } from '@src/shared/domain/event.bus';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
 import { InvoiceGenerateRequestedEvent } from './domain/events/invoice-generate-requested.event';
 import { CreateInvoiceCommand } from './applications/useCase/commands/CreateInvoiceCommand';
 import { ListMyInvoicesQuery } from './applications/useCase/queries/ListMyInvoicesQuery';

@@ -1,9 +1,9 @@
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { CreateRoomBlockedDateCommand } from '../../../../rooms/contracts';
-import { RoomBlockedDateOutput } from '../../../../rooms/contracts';
-import { AssertHostRoomOwnershipService } from '../../services/assert-host-room-ownership.service';
-import type { CreateHostRoomBlockedDateCommand } from '../commands/CreateHostRoomBlockedDateCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { CreateRoomBlockedDateCommand } from '@src/modules/rooms/contracts';
+import { RoomBlockedDateOutput } from '@src/modules/rooms/contracts';
+import { AssertHostRoomOwnershipService } from '@src/modules/host/applications/services/assert-host-room-ownership.service';
+import type { CreateHostRoomBlockedDateCommand } from '@src/modules/host/applications/useCase/commands/CreateHostRoomBlockedDateCommand';
 
 export class CreateHostRoomBlockedDateCommandHandler implements ICommandHandler<
   CreateHostRoomBlockedDateCommand,

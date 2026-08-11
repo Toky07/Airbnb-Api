@@ -1,11 +1,11 @@
 import { Module, OnModuleInit } from '@nestjs/common';
-import { UserModule } from '../user/user.module';
-import { PropertiesModule } from '../properties/properties.module';
-import { RoomsModule } from '../rooms/room.module';
-import { AmenityModule } from '../amenity/amenity.module';
-import { PropertyMediaPresenter } from '../properties/contracts';
-import { CommandBus } from '../../shared/useCase/bus/bus';
-import { QueryBus } from '../../shared/useCase/bus/query-bus';
+import { UserModule } from '@src/modules/user/user.module';
+import { PropertiesModule } from '@src/modules/properties/properties.module';
+import { RoomsModule } from '@src/modules/rooms/room.module';
+import { AmenityModule } from '@src/modules/amenity/amenity.module';
+import { PropertyMediaPresenter } from '@src/modules/properties/contracts';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
 import { HostProfileController } from './interfaces/http/host-profile.controller';
 import { HostPropertiesController } from './interfaces/http/host-properties.controller';
 import { HostRoomsController } from './interfaces/http/host-rooms.controller';

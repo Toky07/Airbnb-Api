@@ -5,35 +5,35 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { DataSource } from 'typeorm';
 import { vi } from 'vitest';
-import { AuthModule } from '../../../authentication/auth.module';
-import { UserModule } from '../../../user/user.module';
-import { PropertiesModule } from '../../../properties/properties.module';
-import { RoomsModule } from '../../../rooms/room.module';
-import { ReservationModule } from '../../../reservation/reservation.module';
-import { PaymentModule } from '../../../payment/payment.module';
-import { CartModule } from '../../cart.module';
-import { PropertyEntity } from '../../../properties/infrastructure/entities/property-entity.entity';
-import { RoomEntity } from '../../../rooms/infrastructure/entities/room.entity';
+import { AuthModule } from '@src/modules/authentication/auth.module';
+import { UserModule } from '@src/modules/user/user.module';
+import { PropertiesModule } from '@src/modules/properties/properties.module';
+import { RoomsModule } from '@src/modules/rooms/room.module';
+import { ReservationModule } from '@src/modules/reservation/reservation.module';
+import { PaymentModule } from '@src/modules/payment/payment.module';
+import { CartModule } from '@src/modules/cart/cart.module';
+import { PropertyEntity } from '@src/modules/properties/infrastructure/entities/property-entity.entity';
+import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
 import {
   CART_SESSION_HEADER,
   CART_ITEM_TYPE,
-} from '../../domain/constants/cart-item-type.constant';
-import { PAYMENT_GATEWAY } from '../../../payment/domain/ports/payment-gateway.port';
-import { PAYMENT_STATUS } from '../../../payment/domain/constants/payment-status.constant';
-import { PaymentOrmEntity } from '../../../payment/infrastructure/entities/payment.orm-entity';
-import { ReservationOrmEntity } from '../../../reservation/infrastructure/entities/reservation.orm-entity';
-import { RESERVATION_STATUS } from '../../../reservation/contracts';
-import { createPaymentGatewayMock } from '../../../payment/applications/useCase/payment-test.helpers';
+} from '@src/modules/cart/domain/constants/cart-item-type.constant';
+import { PAYMENT_GATEWAY } from '@src/modules/payment/domain/ports/payment-gateway.port';
+import { PAYMENT_STATUS } from '@src/modules/payment/domain/constants/payment-status.constant';
+import { PaymentOrmEntity } from '@src/modules/payment/infrastructure/entities/payment.orm-entity';
+import { ReservationOrmEntity } from '@src/modules/reservation/infrastructure/entities/reservation.orm-entity';
+import { RESERVATION_STATUS } from '@src/modules/reservation/contracts';
+import { createPaymentGatewayMock } from '@src/modules/payment/applications/useCase/payment-test.helpers';
 import {
   AUTH_TEST_ENTITIES,
   DOMAIN_TEST_ENTITIES,
   registerAndLoginAsHost,
   registerAndLoginAsSuperAdmin,
-} from '../../../../test/controller-test.helpers';
+} from '@src/test/controller-test.helpers';
 import {
   getIntegrationTestDatabaseConfig,
   prepareIntegrationTestDatabase,
-} from '../../../../test/test-database.config';
+} from '@src/test/test-database.config';
 
 describe('CartController', () => {
   let app: INestApplication;

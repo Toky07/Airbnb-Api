@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import PDFDocument from 'pdfkit';
 import { existsSync } from 'fs';
-import { getInvoiceBrand } from '../../domain/constants/invoice-source.constant';
-import type { InvoiceData } from '../../domain/types/invoice-data.type';
+import { getInvoiceBrand } from '@src/modules/invoice/domain/constants/invoice-source.constant';
+import type { InvoiceData } from '@src/modules/invoice/domain/types/invoice-data.type';
 import {
   formatInvoiceAmount,
   formatInvoiceDate,
-} from '../utils/format-invoice.util';
+} from '@src/modules/invoice/applications/utils/format-invoice.util';
 
 @Injectable()
 export class GenerateInvoicePdfService {

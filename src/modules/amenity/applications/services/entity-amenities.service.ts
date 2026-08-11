@@ -1,12 +1,12 @@
 import { NotFoundException } from '@nestjs/common';
-import type { IPropertyRepository } from '../../../properties/contracts';
-import type { IRoomRepository } from '../../../rooms/contracts';
-import type { IAmenityRepository } from '../../domain/repositories/amenity.repository';
-import type { IPropertyAmenityRepository } from '../../domain/repositories/property-amenity.repository';
-import type { IRoomAmenityRepository } from '../../domain/repositories/room-amenity.repository';
-import { AMENITY_SCOPE } from '../../domain/constants/amenity-scope.constant';
-import type { AmenityScope } from '../../domain/constants/amenity-scope.constant';
-import { AmenityOutput } from '../dto/amenity.output';
+import type { IPropertyRepository } from '@src/modules/properties/contracts';
+import type { IRoomRepository } from '@src/modules/rooms/contracts';
+import type { IAmenityRepository } from '@src/modules/amenity/domain/repositories/amenity.repository';
+import type { IPropertyAmenityRepository } from '@src/modules/amenity/domain/repositories/property-amenity.repository';
+import type { IRoomAmenityRepository } from '@src/modules/amenity/domain/repositories/room-amenity.repository';
+import { AMENITY_SCOPE } from '@src/modules/amenity/domain/constants/amenity-scope.constant';
+import type { AmenityScope } from '@src/modules/amenity/domain/constants/amenity-scope.constant';
+import { AmenityOutput } from '@src/modules/amenity/applications/dto/amenity.output';
 import type { ResolveAmenitiesService } from './resolve-amenities.service';
 
 export class SyncEntityAmenitiesService {

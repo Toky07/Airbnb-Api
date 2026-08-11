@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import type { IRoomAmenityRepository } from '../../domain/repositories/room-amenity.repository';
-import { RoomAmenityOrmEntity } from '../entities/room-amenity.orm-entity';
+import type { IRoomAmenityRepository } from '@src/modules/amenity/domain/repositories/room-amenity.repository';
+import { RoomAmenityOrmEntity } from '@src/modules/amenity/infrastructure/entities/room-amenity.orm-entity';
 
 @Injectable()
 export class RoomAmenityRepository implements IRoomAmenityRepository {

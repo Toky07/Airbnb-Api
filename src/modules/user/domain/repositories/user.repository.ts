@@ -1,9 +1,9 @@
 import type {
   PaginatedResult,
   PaginationParams,
-} from '../../../../shared/pagination/pagination.types';
-import type { AccountStatus } from '../../../authentication/contracts';
-import { User } from '../entities/user.entity';
+} from '@src/shared/pagination/pagination.types';
+import type { AccountStatus } from '@src/modules/authentication/contracts';
+import { User } from '@src/modules/user/domain/entities/user.entity';
 
 export const USER_REPOSITORY = 'UserRepository';
 

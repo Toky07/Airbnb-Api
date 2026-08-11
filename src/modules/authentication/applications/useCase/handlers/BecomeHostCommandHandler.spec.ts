@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { UnauthorizedException } from '@nestjs/common';
 import { BecomeHostCommandHandler } from './BecomeHostCommandHandler';
-import { BecomeHostCommand } from '../commands/BecomeHostCommand';
-import { HOST_ROLE_SLUG } from '../../../domain/constants/permissions.constant';
+import { BecomeHostCommand } from '@src/modules/authentication/applications/useCase/commands/BecomeHostCommand';
+import { HOST_ROLE_SLUG } from '@src/modules/authentication/domain/constants/permissions.constant';
 
 describe('BecomeHostCommandHandler', () => {
   const ensureAuthHasRole = {

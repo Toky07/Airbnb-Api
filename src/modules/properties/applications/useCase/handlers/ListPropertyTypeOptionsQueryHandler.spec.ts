@@ -1,6 +1,6 @@
-import { PropertyType } from '../../../domain/entities/property-type.entity';
+import { PropertyType } from '@src/modules/properties/domain/entities/property-type.entity';
 import { ListPropertyTypeOptionsQueryHandler } from './ListPropertyTypeOptionsQueryHandler';
-import { ListPropertyTypeOptionsQuery } from '../queries/ListPropertyTypeOptionsQuery';
+import { ListPropertyTypeOptionsQuery } from '@src/modules/properties/applications/useCase/queries/ListPropertyTypeOptionsQuery';
 
 describe('ListPropertyTypeOptionsQueryHandler', () => {
   it('lists active property types', async () => {

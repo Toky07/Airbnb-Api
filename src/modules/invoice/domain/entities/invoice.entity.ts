@@ -1,4 +1,4 @@
-import type { InvoicePaymentType } from '../constants/invoice-payment-type.constant';
+import type { InvoicePaymentType } from '@src/modules/invoice/domain/constants/invoice-payment-type.constant';
 
 export class Invoice {
   constructor(

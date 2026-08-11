@@ -1,10 +1,10 @@
 import { CreatePaymentCommandHandler } from './CreatePaymentCommandHandler';
-import { CreatePaymentCommand } from '../commands/CreatePaymentCommand';
-import { Payment } from '../../../domain/entities/payment.entity';
-import { PAYMENT_TYPE } from '../../../domain/types/payment.type';
-import type { IPaymentRepository } from '../../../domain/repositories/payment.repository';
-import type { IPaymentGateway } from '../../../domain/ports/payment-gateway.port';
-import type { IPaymentPublicConfig } from '../../../domain/ports/payment-public-config.port';
+import { CreatePaymentCommand } from '@src/modules/payment/applications/useCase/commands/CreatePaymentCommand';
+import { Payment } from '@src/modules/payment/domain/entities/payment.entity';
+import { PAYMENT_TYPE } from '@src/modules/payment/domain/types/payment.type';
+import type { IPaymentRepository } from '@src/modules/payment/domain/repositories/payment.repository';
+import type { IPaymentGateway } from '@src/modules/payment/domain/ports/payment-gateway.port';
+import type { IPaymentPublicConfig } from '@src/modules/payment/domain/ports/payment-public-config.port';
 
 const mockPublish = vi.fn();
 vi.mock('../../../../../shared/domain/event.bus', () => ({

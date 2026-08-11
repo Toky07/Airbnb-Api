@@ -1,13 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
-import type { Room } from '../../domain/entities/room.entity';
+import type { Room } from '@src/modules/rooms/domain/entities/room.entity';
 import {
   ROOM_RATE_OVERRIDE_REPOSITORY,
   type IRoomRateOverrideRepository,
-} from '../../domain/repositories/room-rate-override.repository';
+} from '@src/modules/rooms/domain/repositories/room-rate-override.repository';
 import {
   ResolveDynamicStayAmountService,
   type DynamicStayPricingResult,
-} from '../../../../shared/pricing/resolve-dynamic-stay-amount.service';
+} from '@src/shared/pricing/resolve-dynamic-stay-amount.service';
 
 @Injectable()
 export class RoomStayPricingService {

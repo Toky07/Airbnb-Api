@@ -1,7 +1,7 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IPropertyTypeRepository } from '../../../domain/repositories/property-type.repository';
-import type { DeletePropertyTypeCommand } from '../commands/DeletePropertyTypeCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { IPropertyTypeRepository } from '@src/modules/properties/domain/repositories/property-type.repository';
+import type { DeletePropertyTypeCommand } from '@src/modules/properties/applications/useCase/commands/DeletePropertyTypeCommand';
 
 export class DeletePropertyTypeCommandHandler implements ICommandHandler<
   DeletePropertyTypeCommand,

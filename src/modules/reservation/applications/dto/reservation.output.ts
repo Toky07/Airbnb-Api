@@ -1,5 +1,5 @@
-import { ReservationStatus } from '../../domain/constants/reservation-status.constant';
-import type { Reservation } from '../../domain/entities/reservation.entity';
+import { ReservationStatus } from '@src/modules/reservation/domain/constants/reservation-status.constant';
+import type { Reservation } from '@src/modules/reservation/domain/entities/reservation.entity';
 import { ReservationItemOutput } from './reservation-item.output';
 
 export class ReservationOutput {

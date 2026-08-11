@@ -1,4 +1,4 @@
-import type { AmenityScope } from '../constants/amenity-scope.constant';
+import type { AmenityScope } from '@src/modules/amenity/domain/constants/amenity-scope.constant';
 
 export class Amenity {
   constructor(

@@ -7,8 +7,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { AuthEntity } from '../../../authentication/infrastructure/entity/auth.entity';
-import { ACCOUNT_STATUS } from '../../../authentication/contracts';
+import { AuthEntity } from '@src/modules/authentication/infrastructure/entity/auth.entity';
+import { ACCOUNT_STATUS } from '@src/modules/authentication/contracts';
 
 @Entity({ name: 'users' })
 export class UserEntity {

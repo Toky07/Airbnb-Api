@@ -9,29 +9,29 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
-import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
-import { RoleOutput } from '../../applications/dto/role.output';
-import { PermissionOutput } from '../../applications/dto/permission.output';
-import { RequirePermissions } from '../decorators/require-permissions.decorator';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { CreateRoleCommand } from '../../applications/useCase/commands/CreateRoleCommand';
-import { UpdateRoleCommand } from '../../applications/useCase/commands/UpdateRoleCommand';
-import { DeleteRoleCommand } from '../../applications/useCase/commands/DeleteRoleCommand';
-import { SetRolePermissionsCommand } from '../../applications/useCase/commands/SetRolePermissionsCommand';
-import { ListRolesQuery } from '../../applications/useCase/queries/ListRolesQuery';
-import { ListPermissionsQuery } from '../../applications/useCase/queries/ListPermissionsQuery';
+import { parsePaginationQuery } from '@src/shared/pagination/parse-pagination-query';
+import type { PaginatedResult } from '@src/shared/pagination/pagination.types';
+import { RoleOutput } from '@src/modules/authentication/applications/dto/role.output';
+import { PermissionOutput } from '@src/modules/authentication/applications/dto/permission.output';
+import { RequirePermissions } from '@src/modules/authentication/interfaces/decorators/require-permissions.decorator';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { CreateRoleCommand } from '@src/modules/authentication/applications/useCase/commands/CreateRoleCommand';
+import { UpdateRoleCommand } from '@src/modules/authentication/applications/useCase/commands/UpdateRoleCommand';
+import { DeleteRoleCommand } from '@src/modules/authentication/applications/useCase/commands/DeleteRoleCommand';
+import { SetRolePermissionsCommand } from '@src/modules/authentication/applications/useCase/commands/SetRolePermissionsCommand';
+import { ListRolesQuery } from '@src/modules/authentication/applications/useCase/queries/ListRolesQuery';
+import { ListPermissionsQuery } from '@src/modules/authentication/applications/useCase/queries/ListPermissionsQuery';
 import {
   ApiJwtAuth,
   ApiPaginationQuery,
-} from '../../../../shared/swagger/swagger.decorators';
+} from '@src/shared/swagger/swagger.decorators';
 import {
   CreateRoleSwaggerDto,
   SetRolePermissionsSwaggerDto,
   UpdateRoleSwaggerDto,
-} from '../../../../shared/swagger/swagger-schemas.dto';
-import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
+} from '@src/shared/swagger/swagger-schemas.dto';
+import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 
 @ApiTags(SWAGGER_TAGS.ROLES)
 @ApiJwtAuth()

@@ -5,10 +5,10 @@ import {
 } from '@nestjs/common';
 import { createReadStream, existsSync } from 'fs';
 import { basename } from 'path';
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IUserRepository } from '../../../../user/contracts';
-import type { IInvoiceRepository } from '../../../domain/repositories/invoice.repository';
-import type { DownloadInvoiceQuery } from '../queries/DownloadInvoiceQuery';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import type { IInvoiceRepository } from '@src/modules/invoice/domain/repositories/invoice.repository';
+import type { DownloadInvoiceQuery } from '@src/modules/invoice/applications/useCase/queries/DownloadInvoiceQuery';
 
 export class DownloadInvoiceQueryHandler implements IQueryHandler<
   DownloadInvoiceQuery,

@@ -1,5 +1,5 @@
 import type { IInvoiceRepository } from './domain/repositories/invoice.repository';
-import type { IUserRepository } from '../user/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
 import { GenerateInvoicePdfService } from './applications/services/generate-invoice-pdf.service';
 import type { InvoiceStorageService } from './infrastructure/storage/invoice-storage.service';
 import { InvoiceNumberService } from './applications/services/invoice-number.service';

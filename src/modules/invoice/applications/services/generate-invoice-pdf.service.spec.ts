@@ -1,5 +1,5 @@
 import { GenerateInvoicePdfService } from './generate-invoice-pdf.service';
-import { createSampleInvoiceData } from '../useCase/invoice-test.helpers';
+import { createSampleInvoiceData } from '@src/modules/invoice/applications/useCase/invoice-test.helpers';
 
 describe('GenerateInvoicePdfService', () => {
   it('génère un PDF valide avec les informations de facture', async () => {

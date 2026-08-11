@@ -2,7 +2,7 @@ import {
   buildUploadRelativePath,
   toSaveMediaContext,
 } from './build-upload-path';
-import { ENTITY_TYPE } from '../constant';
+import { ENTITY_TYPE } from '@src/modules/media/constant';
 
 describe('buildUploadRelativePath', () => {
   it('builds property path', () => {

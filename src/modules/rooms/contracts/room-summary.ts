@@ -3,9 +3,9 @@
  * Properties importe ce fichier (pas rooms/contracts/index) pour éviter
  * PropertyMapper → RoomMapper et PropertyOutput → RoomOutput.
  */
-import type { CategorySummary } from '../../../shared/types/category-summary';
-import type { Property } from '../../properties/domain/entities/property.entity';
-import { Room } from '../domain/entities/room.entity';
+import type { CategorySummary } from '@src/shared/types/category-summary';
+import type { Property } from '@src/modules/properties/domain/entities/property.entity';
+import { Room } from '@src/modules/rooms/domain/entities/room.entity';
 
 export type RoomSummary = {
   id: number;

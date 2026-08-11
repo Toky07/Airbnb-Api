@@ -1,12 +1,12 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { CART_ITEM_TYPE } from '../../domain/constants/cart-item-type.constant';
-import { CartItem } from '../../domain/entities/cart-item.entity';
-import type { Cart } from '../../domain/entities/cart.entity';
+import { CART_ITEM_TYPE } from '@src/modules/cart/domain/constants/cart-item-type.constant';
+import { CartItem } from '@src/modules/cart/domain/entities/cart-item.entity';
+import type { Cart } from '@src/modules/cart/domain/entities/cart.entity';
 import {
   CART_ITEM_CATALOG_PORT,
   type ICartItemCatalogPort,
-} from '../../domain/ports/cart-item-catalog.port';
-import type { CartCheckoutItemPayload } from '../../domain/events/cart-checkout-requested.event';
+} from '@src/modules/cart/domain/ports/cart-item-catalog.port';
+import type { CartCheckoutItemPayload } from '@src/modules/cart/domain/events/cart-checkout-requested.event';
 
 @Injectable()
 export class BuildCartItemService {

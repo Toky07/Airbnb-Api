@@ -1,9 +1,9 @@
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import { QueryBus } from '../../../../../shared/useCase/bus/query-bus';
-import { AmenityOutput } from '../../../../amenity/contracts';
-import { ListRoomAmenitiesQuery } from '../../../../amenity/contracts';
-import { AssertHostRoomOwnershipService } from '../../services/assert-host-room-ownership.service';
-import type { GetHostRoomAmenitiesQuery } from '../queries/GetHostRoomAmenitiesQuery';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { AmenityOutput } from '@src/modules/amenity/contracts';
+import { ListRoomAmenitiesQuery } from '@src/modules/amenity/contracts';
+import { AssertHostRoomOwnershipService } from '@src/modules/host/applications/services/assert-host-room-ownership.service';
+import type { GetHostRoomAmenitiesQuery } from '@src/modules/host/applications/useCase/queries/GetHostRoomAmenitiesQuery';
 
 export class GetHostRoomAmenitiesQueryHandler implements IQueryHandler<
   GetHostRoomAmenitiesQuery,

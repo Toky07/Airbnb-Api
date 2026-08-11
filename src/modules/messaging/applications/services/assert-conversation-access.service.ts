@@ -4,14 +4,14 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ResolveAuthenticatedUserService } from '../../../../shared/auth/resolve-authenticated-user.service';
-import type { IUserRepository } from '../../../user/contracts';
-import { USER_REPOSITORY } from '../../../user/contracts';
-import type { Conversation } from '../../domain/entities/conversation.entity';
+import { ResolveAuthenticatedUserService } from '@src/shared/auth/resolve-authenticated-user.service';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import { USER_REPOSITORY } from '@src/modules/user/contracts';
+import type { Conversation } from '@src/modules/messaging/domain/entities/conversation.entity';
 import {
   CONVERSATION_REPOSITORY,
   type IConversationRepository,
-} from '../../domain/repositories/conversation.repository';
+} from '@src/modules/messaging/domain/repositories/conversation.repository';
 
 @Injectable()
 export class AssertConversationAccessService {

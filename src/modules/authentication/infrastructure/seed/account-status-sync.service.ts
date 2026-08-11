@@ -1,9 +1,9 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
-import { AuthEntity } from '../entity/auth.entity';
-import { UserEntity } from '../../../user/infrastructure/entities/user.entity';
-import { ACCOUNT_STATUS } from '../../domain/constants/account-status.constant';
+import { AuthEntity } from '@src/modules/authentication/infrastructure/entity/auth.entity';
+import { UserEntity } from '@src/modules/user/infrastructure/entities/user.entity';
+import { ACCOUNT_STATUS } from '@src/modules/authentication/domain/constants/account-status.constant';
 
 @Injectable()
 export class AccountStatusSyncService implements OnModuleInit {

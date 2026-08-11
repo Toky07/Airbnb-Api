@@ -1,6 +1,6 @@
-import type { GetOrCreateConversationService } from '../services/get-or-create-conversation.service';
-import { EventBus } from '../../../../shared/domain/event.bus';
-import type { ReservationConfirmedEvent } from '../../../reservation/contracts';
+import type { GetOrCreateConversationService } from '@src/modules/messaging/applications/services/get-or-create-conversation.service';
+import { EventBus } from '@src/shared/domain/event.bus';
+import type { ReservationConfirmedEvent } from '@src/modules/reservation/contracts';
 
 export class ReservationConfirmedListener {
   constructor(

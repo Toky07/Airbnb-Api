@@ -1,4 +1,4 @@
-import type { Reservation } from '../entities/reservation.entity';
+import type { Reservation } from '@src/modules/reservation/domain/entities/reservation.entity';
 
 /**
  * Port étroit pour les modules externes qui ne font que charger une réservation.

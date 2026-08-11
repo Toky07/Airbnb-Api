@@ -1,9 +1,9 @@
-import type { PaymentProvider } from '../constants/payment-provider.constant';
-import type { PaymentStatus } from '../constants/payment-status.constant';
-import { PaymentType } from '../types/payment.type';
-import { PAYMENT_STATUS } from '../constants/payment-status.constant';
+import type { PaymentProvider } from '@src/modules/payment/domain/constants/payment-provider.constant';
+import type { PaymentStatus } from '@src/modules/payment/domain/constants/payment-status.constant';
+import { PaymentType } from '@src/modules/payment/domain/types/payment.type';
+import { PAYMENT_STATUS } from '@src/modules/payment/domain/constants/payment-status.constant';
 
-import type { PricingBreakdown } from '../../../../shared/pricing/pricing-breakdown.types';
+import type { PricingBreakdown } from '@src/shared/pricing/pricing-breakdown.types';
 
 export type CreatePaymentParams = {
   amount: number;

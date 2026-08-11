@@ -1,12 +1,12 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IRoomRepository } from '../../../../rooms/contracts';
-import type { IFavoriteRepository } from '../../../domain/repositories/favorite.repository';
-import { Favorite } from '../../../domain/entities/favorite.entity';
-import { FavoriteOutput } from '../../dto/favorite.output';
-import type { RoomMediaPresenter } from '../../../../rooms/contracts';
-import type { AddFavoriteCommand } from '../commands/AddFavoriteCommand';
-import { ResolveAuthenticatedUserService } from '../../../../../shared/auth/resolve-authenticated-user.service';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { IRoomRepository } from '@src/modules/rooms/contracts';
+import type { IFavoriteRepository } from '@src/modules/favorite/domain/repositories/favorite.repository';
+import { Favorite } from '@src/modules/favorite/domain/entities/favorite.entity';
+import { FavoriteOutput } from '@src/modules/favorite/applications/dto/favorite.output';
+import type { RoomMediaPresenter } from '@src/modules/rooms/contracts';
+import type { AddFavoriteCommand } from '@src/modules/favorite/applications/useCase/commands/AddFavoriteCommand';
+import { ResolveAuthenticatedUserService } from '@src/shared/auth/resolve-authenticated-user.service';
 
 export class AddFavoriteCommandHandler implements ICommandHandler<
   AddFavoriteCommand,

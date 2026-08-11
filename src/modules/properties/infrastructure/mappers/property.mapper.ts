@@ -1,7 +1,7 @@
-import { toPropertySummary } from '../../contracts/property-summary';
-import { toRoomDomain } from '../../../rooms/contracts/room-summary';
-import { Property } from '../../domain/entities/property.entity';
-import { PropertyEntity } from '../entities/property-entity.entity';
+import { toPropertySummary } from '@src/modules/properties/contracts/property-summary';
+import { toRoomDomain } from '@src/modules/rooms/contracts/room-summary';
+import { Property } from '@src/modules/properties/domain/entities/property.entity';
+import { PropertyEntity } from '@src/modules/properties/infrastructure/entities/property-entity.entity';
 
 export class PropertyMapper {
   static toDomain(property: PropertyEntity): Property {

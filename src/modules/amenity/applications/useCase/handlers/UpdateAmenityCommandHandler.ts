@@ -1,9 +1,9 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { Amenity } from '../../../domain/entities/amenity.entity';
-import type { IAmenityRepository } from '../../../domain/repositories/amenity.repository';
-import { AmenityOutput } from '../../dto/amenity.output';
-import type { UpdateAmenityCommand } from '../commands/UpdateAmenityCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import { Amenity } from '@src/modules/amenity/domain/entities/amenity.entity';
+import type { IAmenityRepository } from '@src/modules/amenity/domain/repositories/amenity.repository';
+import { AmenityOutput } from '@src/modules/amenity/applications/dto/amenity.output';
+import type { UpdateAmenityCommand } from '@src/modules/amenity/applications/useCase/commands/UpdateAmenityCommand';
 
 export class UpdateAmenityCommandHandler implements ICommandHandler<
   UpdateAmenityCommand,

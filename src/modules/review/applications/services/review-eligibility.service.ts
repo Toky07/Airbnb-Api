@@ -3,10 +3,10 @@ import {
   ForbiddenException,
   NotFoundException,
 } from '@nestjs/common';
-import { RESERVATION_STATUS } from '../../../reservation/contracts';
-import type { IReservationByIdReader } from '../../../reservation/contracts';
-import type { IUserRepository } from '../../../user/contracts';
-import type { IReviewRepository } from '../../domain/repositories/review.repository';
+import { RESERVATION_STATUS } from '@src/modules/reservation/contracts';
+import type { IReservationByIdReader } from '@src/modules/reservation/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import type { IReviewRepository } from '@src/modules/review/domain/repositories/review.repository';
 
 export class ReviewEligibilityService {
   constructor(

@@ -4,28 +4,28 @@ import { INestApplication } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { DataSource } from 'typeorm';
-import { AuthModule } from '../../auth.module';
-import { MailModule } from '../../../mail/mail.module';
-import { UserModule } from '../../../user/user.module';
-import { AuthEntity } from '../../infrastructure/entity/auth.entity';
+import { AuthModule } from '@src/modules/authentication/auth.module';
+import { MailModule } from '@src/modules/mail/mail.module';
+import { UserModule } from '@src/modules/user/user.module';
+import { AuthEntity } from '@src/modules/authentication/infrastructure/entity/auth.entity';
 import * as bcrypt from 'bcrypt';
-import { Role } from '../../infrastructure/entity/role.entity';
-import { PermissionEntity } from '../../infrastructure/entity/permission.entity';
-import { UserNameVO } from '../../../user/contracts';
-import { RoleEntity } from '../../domain/entities/role.entity';
-import { RoleMapper } from '../../infrastructure/mappers/role.mappers';
-import { UserEntity } from '../../../user/infrastructure/entities/user.entity';
+import { Role } from '@src/modules/authentication/infrastructure/entity/role.entity';
+import { PermissionEntity } from '@src/modules/authentication/infrastructure/entity/permission.entity';
+import { UserNameVO } from '@src/modules/user/contracts';
+import { RoleEntity } from '@src/modules/authentication/domain/entities/role.entity';
+import { RoleMapper } from '@src/modules/authentication/infrastructure/mappers/role.mappers';
+import { UserEntity } from '@src/modules/user/infrastructure/entities/user.entity';
 import {
   activateAuthAccountForTests,
   assignSuperAdminRole,
   AUTH_TEST_ENTITIES,
   clearEntitiesForTests,
   DOMAIN_TEST_ENTITIES,
-} from '../../../../test/controller-test.helpers';
+} from '@src/test/controller-test.helpers';
 import {
   getIntegrationTestDatabaseConfig,
   prepareIntegrationTestDatabase,
-} from '../../../../test/test-database.config';
+} from '@src/test/test-database.config';
 
 describe('Auth', () => {
   let app: INestApplication;

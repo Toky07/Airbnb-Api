@@ -7,18 +7,18 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiOperation, ApiProduces, ApiTags } from '@nestjs/swagger';
-import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
-import type { JwtPayload } from '../../../authentication/contracts';
-import { RequirePermissions } from '../../../authentication/contracts';
-import { ListMyInvoicesQuery } from '../../applications/useCase/queries/ListMyInvoicesQuery';
-import { ListInvoicesQuery } from '../../applications/useCase/queries/ListInvoicesQuery';
-import { DownloadInvoiceQuery } from '../../applications/useCase/queries/DownloadInvoiceQuery';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { parsePaginationQuery } from '@src/shared/pagination/parse-pagination-query';
+import type { JwtPayload } from '@src/modules/authentication/contracts';
+import { RequirePermissions } from '@src/modules/authentication/contracts';
+import { ListMyInvoicesQuery } from '@src/modules/invoice/applications/useCase/queries/ListMyInvoicesQuery';
+import { ListInvoicesQuery } from '@src/modules/invoice/applications/useCase/queries/ListInvoicesQuery';
+import { DownloadInvoiceQuery } from '@src/modules/invoice/applications/useCase/queries/DownloadInvoiceQuery';
 import {
   ApiJwtAuth,
   ApiPaginationQuery,
-} from '../../../../shared/swagger/swagger.decorators';
-import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
+} from '@src/shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 import type { StreamableFile } from '@nestjs/common';
 
 @ApiTags(SWAGGER_TAGS.INVOICES)

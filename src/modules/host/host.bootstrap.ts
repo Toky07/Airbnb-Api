@@ -1,4 +1,4 @@
-import { PropertyMediaPresenter } from '../properties/contracts';
+import { PropertyMediaPresenter } from '@src/modules/properties/contracts';
 import { AssertHostRoomOwnershipService } from './applications/services/assert-host-room-ownership.service';
 import { ResolveHostUserService } from './applications/services/resolve-host-user.service';
 import { ResolveHostPropertyService } from './applications/services/resolve-host-property.service';

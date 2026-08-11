@@ -3,7 +3,7 @@ import {
   mergeImportEntityResults,
   toImportErrorMessage,
 } from './import-error.util';
-import { emptyImportEntityResult } from '../dto/import-entity-result.dto';
+import { emptyImportEntityResult } from '@src/modules/import/applications/dto/import-entity-result.dto';
 
 describe('import-error.util', () => {
   it('extracts message from Error instances', () => {

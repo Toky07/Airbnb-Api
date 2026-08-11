@@ -1,7 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IRoomRateOverrideRepository } from '../../../domain/repositories/room-rate-override.repository';
-import type { DeleteRoomRateOverrideCommand } from '../commands/DeleteRoomRateOverrideCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { IRoomRateOverrideRepository } from '@src/modules/rooms/domain/repositories/room-rate-override.repository';
+import type { DeleteRoomRateOverrideCommand } from '@src/modules/rooms/applications/useCase/commands/DeleteRoomRateOverrideCommand';
 
 export class DeleteRoomRateOverrideCommandHandler implements ICommandHandler<
   DeleteRoomRateOverrideCommand,

@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
-import { EMAIL_STATUS } from '../../../domain/constants/email-status.constant';
-import { Email } from '../../../domain/entities/email.entity';
+import { EMAIL_STATUS } from '@src/modules/mail/domain/constants/email-status.constant';
+import { Email } from '@src/modules/mail/domain/entities/email.entity';
 import { ListEmailsQueryHandler } from './ListEmailsQueryHandler';
-import { ListEmailsQuery } from '../queries/ListEmailsQuery';
-import { createEmailRepositoryMock } from '../email-test.helpers';
+import { ListEmailsQuery } from '@src/modules/mail/applications/useCase/queries/ListEmailsQuery';
+import { createEmailRepositoryMock } from '@src/modules/mail/applications/useCase/email-test.helpers';
 
 describe('ListEmailsQueryHandler', () => {
   it('retourne les emails paginés', async () => {

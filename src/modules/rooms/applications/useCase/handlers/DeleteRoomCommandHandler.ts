@@ -1,9 +1,9 @@
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import type { IRoomRepository } from '../../../domain/repositories/room.repository';
-import { ENTITY_TYPE } from '../../../../media/contracts';
-import { DeleteMediasByEntityCommand } from '../../../../media/contracts';
-import type { DeleteRoomCommand } from '../commands/DeleteRoomCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import type { IRoomRepository } from '@src/modules/rooms/domain/repositories/room.repository';
+import { ENTITY_TYPE } from '@src/modules/media/contracts';
+import { DeleteMediasByEntityCommand } from '@src/modules/media/contracts';
+import type { DeleteRoomCommand } from '@src/modules/rooms/applications/useCase/commands/DeleteRoomCommand';
 
 export class DeleteRoomCommandHandler implements ICommandHandler<
   DeleteRoomCommand,

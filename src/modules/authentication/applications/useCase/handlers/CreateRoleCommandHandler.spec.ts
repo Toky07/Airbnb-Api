@@ -1,11 +1,11 @@
 import { ForbiddenException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { RoleEntity } from '../../../domain/entities/role.entity';
-import { TRAVELER_ROLE_SLUG } from '../../../domain/constants/system-roles.constant';
-import type { IRoleRepository } from '../../../domain/repositories/role.repository';
+import { RoleEntity } from '@src/modules/authentication/domain/entities/role.entity';
+import { TRAVELER_ROLE_SLUG } from '@src/modules/authentication/domain/constants/system-roles.constant';
+import type { IRoleRepository } from '@src/modules/authentication/domain/repositories/role.repository';
 import { CreateRoleCommandHandler } from './CreateRoleCommandHandler';
-import { CreateRoleCommand } from '../commands/CreateRoleCommand';
-import { UserNameVO } from '../../../../user/contracts';
+import { CreateRoleCommand } from '@src/modules/authentication/applications/useCase/commands/CreateRoleCommand';
+import { UserNameVO } from '@src/modules/user/contracts';
 
 describe('CreateRoleCommandHandler', () => {
   const repository = {

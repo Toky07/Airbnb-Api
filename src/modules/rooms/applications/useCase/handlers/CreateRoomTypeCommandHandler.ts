@@ -1,10 +1,10 @@
 import { ConflictException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { slugify } from '../../../../../shared/utils/slug.util';
-import { RoomType } from '../../../domain/entities/room-type.entity';
-import type { IRoomTypeRepository } from '../../../domain/repositories/room-type.repository';
-import { RoomTypeOutput } from '../../dto/room-type.output';
-import type { CreateRoomTypeCommand } from '../commands/CreateRoomTypeCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import { slugify } from '@src/shared/utils/slug.util';
+import { RoomType } from '@src/modules/rooms/domain/entities/room-type.entity';
+import type { IRoomTypeRepository } from '@src/modules/rooms/domain/repositories/room-type.repository';
+import { RoomTypeOutput } from '@src/modules/rooms/applications/dto/room-type.output';
+import type { CreateRoomTypeCommand } from '@src/modules/rooms/applications/useCase/commands/CreateRoomTypeCommand';
 
 export class CreateRoomTypeCommandHandler implements ICommandHandler<
   CreateRoomTypeCommand,

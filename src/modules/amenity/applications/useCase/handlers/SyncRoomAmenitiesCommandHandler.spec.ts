@@ -1,10 +1,10 @@
 import { NotFoundException } from '@nestjs/common';
-import { AMENITY_SCOPE } from '../../../domain/constants/amenity-scope.constant';
-import { Amenity } from '../../../domain/entities/amenity.entity';
+import { AMENITY_SCOPE } from '@src/modules/amenity/domain/constants/amenity-scope.constant';
+import { Amenity } from '@src/modules/amenity/domain/entities/amenity.entity';
 import { SyncRoomAmenitiesCommandHandler } from './SyncRoomAmenitiesCommandHandler';
-import { SyncRoomAmenitiesCommand } from '../commands/SyncRoomAmenitiesCommand';
-import { SyncEntityAmenitiesService } from '../../services/entity-amenities.service';
-import { ResolveAmenitiesService } from '../../services/resolve-amenities.service';
+import { SyncRoomAmenitiesCommand } from '@src/modules/amenity/applications/useCase/commands/SyncRoomAmenitiesCommand';
+import { SyncEntityAmenitiesService } from '@src/modules/amenity/applications/services/entity-amenities.service';
+import { ResolveAmenitiesService } from '@src/modules/amenity/applications/services/resolve-amenities.service';
 
 describe('SyncRoomAmenitiesCommandHandler', () => {
   it('syncs amenities for an existing room', async () => {

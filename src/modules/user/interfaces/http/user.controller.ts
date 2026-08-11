@@ -12,37 +12,37 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
-import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
-import { UserOutput } from '../../domain/dtos/user.output';
+import { parsePaginationQuery } from '@src/shared/pagination/parse-pagination-query';
+import type { PaginatedResult } from '@src/shared/pagination/pagination.types';
+import { UserOutput } from '@src/modules/user/domain/dtos/user.output';
 import type {
   CreateUserDto,
   UpdateUserDto,
-} from '../../domain/dtos/createUser.dto';
-import type { AssignUserRolesDto } from '../../applications/dto/assign-user-roles.dto';
+} from '@src/modules/user/domain/dtos/createUser.dto';
+import type { AssignUserRolesDto } from '@src/modules/user/applications/dto/assign-user-roles.dto';
 import { parseUserBody } from './parse-user-body';
-import type { UploadFile } from '../../../media/contracts';
-import { RequirePermissions } from '../../../authentication/contracts';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { CreateUserCommand } from '../../applications/useCase/commands/CreateUserCommand';
-import { UpdateUserCommand } from '../../applications/useCase/commands/UpdateUserCommand';
-import { DeleteUserCommand } from '../../applications/useCase/commands/DeleteUserCommand';
-import { AssignUserRolesCommand } from '../../applications/useCase/commands/AssignUserRolesCommand';
-import { FindUserQuery } from '../../applications/useCase/queries/FindUserQuery';
-import { ListUsersQuery } from '../../applications/useCase/queries/ListUsersQuery';
-import { ListUserOptionsQuery } from '../../applications/useCase/queries/ListUserOptionsQuery';
-import { SetUserPasswordCommand } from '../../applications/useCase/commands/SetUserPasswordCommand';
-import { UpdateUserStatusCommand } from '../../applications/useCase/commands/UpdateUserStatusCommand';
+import type { UploadFile } from '@src/modules/media/contracts';
+import { RequirePermissions } from '@src/modules/authentication/contracts';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { CreateUserCommand } from '@src/modules/user/applications/useCase/commands/CreateUserCommand';
+import { UpdateUserCommand } from '@src/modules/user/applications/useCase/commands/UpdateUserCommand';
+import { DeleteUserCommand } from '@src/modules/user/applications/useCase/commands/DeleteUserCommand';
+import { AssignUserRolesCommand } from '@src/modules/user/applications/useCase/commands/AssignUserRolesCommand';
+import { FindUserQuery } from '@src/modules/user/applications/useCase/queries/FindUserQuery';
+import { ListUsersQuery } from '@src/modules/user/applications/useCase/queries/ListUsersQuery';
+import { ListUserOptionsQuery } from '@src/modules/user/applications/useCase/queries/ListUserOptionsQuery';
+import { SetUserPasswordCommand } from '@src/modules/user/applications/useCase/commands/SetUserPasswordCommand';
+import { UpdateUserStatusCommand } from '@src/modules/user/applications/useCase/commands/UpdateUserStatusCommand';
 import {
   parseSetUserPasswordBody,
   parseUpdateUserStatusBody,
-} from '../../applications/dto/user-account.dto';
+} from '@src/modules/user/applications/dto/user-account.dto';
 import {
   ApiJwtAuth,
   ApiPaginationQuery,
-} from '../../../../shared/swagger/swagger.decorators';
-import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
+} from '@src/shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 
 @ApiTags(SWAGGER_TAGS.USERS)
 @ApiJwtAuth()

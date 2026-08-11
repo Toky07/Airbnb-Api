@@ -1,13 +1,13 @@
 import { Inject, Module, OnModuleInit } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RoomsModule } from '../rooms/room.module';
-import { UserModule } from '../user/user.module';
+import { RoomsModule } from '@src/modules/rooms/room.module';
+import { UserModule } from '@src/modules/user/user.module';
 import { BuildCartItemService } from './applications/services/build-cart-item.service';
 import { BuildCartPricingBreakdownService } from './applications/services/build-cart-pricing-breakdown.service';
 import { ResolveCartService } from './applications/services/resolve-cart.service';
 import { CartPresenter } from './applications/presenters/cart.presenter';
-import { CalculateStayAmountService } from '../../shared/pricing/calculate-stay-amount.service';
-import { ComputePricingBreakdownService } from '../../shared/pricing/compute-pricing-breakdown.service';
+import { CalculateStayAmountService } from '@src/shared/pricing/calculate-stay-amount.service';
+import { ComputePricingBreakdownService } from '@src/shared/pricing/compute-pricing-breakdown.service';
 import {
   CART_REPOSITORY,
   type ICartRepository,
@@ -26,8 +26,8 @@ import { CartRepository } from './infrastructure/repositories/cart.repository';
 import { CartController } from './interfaces/http/cart.controller';
 import { CartPaymentEvent } from './applications/events/register-cart-payment.event';
 import { CartBootstrap } from './cart.bootstrap';
-import { CommandBus } from '../../shared/useCase/bus/bus';
-import { QueryBus } from '../../shared/useCase/bus/query-bus';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
 import { GetCartQuery } from './applications/useCase/queries/GetCartQuery';
 import { AddCartItemCommand } from './applications/useCase/commands/AddCartItemCommand';
 import { UpdateCartItemCommand } from './applications/useCase/commands/UpdateCartItemCommand';

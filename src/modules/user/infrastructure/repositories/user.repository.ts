@@ -1,18 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { User } from '../../domain/entities/user.entity';
-import { IUserRepository } from '../../domain/repositories/user.repository';
+import { User } from '@src/modules/user/domain/entities/user.entity';
+import { IUserRepository } from '@src/modules/user/domain/repositories/user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '../entities/user.entity';
+import { UserEntity } from '@src/modules/user/infrastructure/entities/user.entity';
 import { Repository } from 'typeorm';
-import { UserMapper } from '../mappers/user.mapper';
-import { AuthEntity } from '../../../authentication/infrastructure/entity/auth.entity';
+import { UserMapper } from '@src/modules/user/infrastructure/mappers/user.mapper';
+import { AuthEntity } from '@src/modules/authentication/infrastructure/entity/auth.entity';
 import {
   buildPaginationMeta,
   type PaginatedResult,
   type PaginationParams,
-} from '../../../../shared/pagination/pagination.types';
-import type { AccountStatus } from '../../../authentication/contracts';
-import { USER_REPOSITORY } from '../../domain/repositories/user.repository';
+} from '@src/shared/pagination/pagination.types';
+import type { AccountStatus } from '@src/modules/authentication/contracts';
+import { USER_REPOSITORY } from '@src/modules/user/domain/repositories/user.repository';
 
 export { USER_REPOSITORY };
 

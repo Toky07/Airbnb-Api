@@ -1,7 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IRoomBlockedDateRepository } from '../../../domain/repositories/room-blocked-date.repository';
-import type { DeleteRoomBlockedDateCommand } from '../commands/DeleteRoomBlockedDateCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { IRoomBlockedDateRepository } from '@src/modules/rooms/domain/repositories/room-blocked-date.repository';
+import type { DeleteRoomBlockedDateCommand } from '@src/modules/rooms/applications/useCase/commands/DeleteRoomBlockedDateCommand';
 
 export class DeleteRoomBlockedDateCommandHandler implements ICommandHandler<
   DeleteRoomBlockedDateCommand,

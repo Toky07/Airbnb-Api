@@ -1,7 +1,7 @@
-import { Property } from '../../../domain/entities/property.entity';
-import type { IPropertyRepository } from '../../../domain/repositories/property.repository';
+import { Property } from '@src/modules/properties/domain/entities/property.entity';
+import type { IPropertyRepository } from '@src/modules/properties/domain/repositories/property.repository';
 import { DeletePropertyCommandHandler } from './DeletePropertyCommandHandler';
-import { DeletePropertyCommand } from '../commands/DeletePropertyCommand';
+import { DeletePropertyCommand } from '@src/modules/properties/applications/useCase/commands/DeletePropertyCommand';
 
 const repository = {
   findById: async (): Promise<Property> =>

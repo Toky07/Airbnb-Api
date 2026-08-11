@@ -1,16 +1,16 @@
 import { UnauthorizedException } from '@nestjs/common';
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IAuthRepository } from '../../../domain/repositories/auth.repository';
-import type { IUserRepository } from '../../../../user/contracts';
-import type { IPropertyRepository } from '../../../../properties/contracts';
-import { HOST_ROLE_SLUG } from '../../../domain/constants/permissions.constant';
-import { MeOutput } from '../../dto/me.output';
-import { HostAccessOutput } from '../../dto/host-access.output';
-import { UserProfileOutput } from '../../dto/user-profile.output';
-import { buildJwtPayload } from '../../../domain/utils/build-jwt-payload';
-import type { Property } from '../../../../properties/contracts';
-import type { EnsurePropertyOwnerHostRoleService } from '../../services/ensure-property-owner-host-role.service';
-import type { GetMeQuery } from '../queries/GetMeQuery';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import type { IAuthRepository } from '@src/modules/authentication/domain/repositories/auth.repository';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import type { IPropertyRepository } from '@src/modules/properties/contracts';
+import { HOST_ROLE_SLUG } from '@src/modules/authentication/domain/constants/permissions.constant';
+import { MeOutput } from '@src/modules/authentication/applications/dto/me.output';
+import { HostAccessOutput } from '@src/modules/authentication/applications/dto/host-access.output';
+import { UserProfileOutput } from '@src/modules/authentication/applications/dto/user-profile.output';
+import { buildJwtPayload } from '@src/modules/authentication/domain/utils/build-jwt-payload';
+import type { Property } from '@src/modules/properties/contracts';
+import type { EnsurePropertyOwnerHostRoleService } from '@src/modules/authentication/applications/services/ensure-property-owner-host-role.service';
+import type { GetMeQuery } from '@src/modules/authentication/applications/useCase/queries/GetMeQuery';
 
 export class GetMeQueryHandler implements IQueryHandler<GetMeQuery, MeOutput> {
   constructor(

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { GetHostPropertyAmenitiesQueryHandler } from './GetHostPropertyAmenitiesQueryHandler';
-import { GetHostPropertyAmenitiesQuery } from '../queries/GetHostPropertyAmenitiesQuery';
-import { ListPropertyAmenitiesQuery } from '../../../../amenity/contracts';
+import { GetHostPropertyAmenitiesQuery } from '@src/modules/host/applications/useCase/queries/GetHostPropertyAmenitiesQuery';
+import { ListPropertyAmenitiesQuery } from '@src/modules/amenity/contracts';
 import { authUser, createResolveHostPropertyMock } from './host-test.helpers';
 
 const mockQueryExecute = vi.fn();

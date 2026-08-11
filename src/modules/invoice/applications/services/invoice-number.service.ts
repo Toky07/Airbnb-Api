@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InvoiceSequenceRepository } from '../../infrastructure/repositories/invoice-sequence.repository';
+import { InvoiceSequenceRepository } from '@src/modules/invoice/infrastructure/repositories/invoice-sequence.repository';
 
 @Injectable()
 export class InvoiceNumberService {

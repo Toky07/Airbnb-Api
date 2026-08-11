@@ -1,17 +1,17 @@
-import type { PaginatedResult } from '../../../../../shared/pagination/pagination.types';
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
+import type { PaginatedResult } from '@src/shared/pagination/pagination.types';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
 import type {
   IPaymentRepository,
   Payment,
-} from '../../../../payment/contracts';
-import type { IUserRepository } from '../../../../user/contracts';
-import { BookingOrderListItemOutput } from '../../dto/booking-order.output';
-import type { ResolvePaymentReservationsService } from '../../services/resolve-payment-reservations.service';
+} from '@src/modules/payment/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import { BookingOrderListItemOutput } from '@src/modules/reservation/applications/dto/booking-order.output';
+import type { ResolvePaymentReservationsService } from '@src/modules/reservation/applications/services/resolve-payment-reservations.service';
 import {
   filterItemsByPropertyIds,
   groupItemsByPropertyId,
-} from '../../services/scope-booking-order-items.service';
-import type { ListBookingOrdersQuery } from '../queries/ListBookingOrdersQuery';
+} from '@src/modules/reservation/applications/services/scope-booking-order-items.service';
+import type { ListBookingOrdersQuery } from '@src/modules/reservation/applications/useCase/queries/ListBookingOrdersQuery';
 
 export type BuildBookingOrdersPageOptions = {
   propertyIds?: number[];

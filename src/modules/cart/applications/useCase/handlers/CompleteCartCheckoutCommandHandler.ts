@@ -1,15 +1,15 @@
 import { UnauthorizedException } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { CompleteCartCheckoutCommand } from '../commands/CompleteCartCheckoutCommand';
-import { EventBus } from '../../../../../shared/domain/event.bus';
-import { CartCheckoutCompleteRequestedEvent } from '../../../domain/events/cart-checkout-complete-requested.event';
-import type { CartCheckoutCompleteVerifiedEvent } from '../../../domain/events/cart-checkout-complete-verified.event';
-import type { CartOutput } from '../../dto/cart.output';
-import type { ICartUserPort } from '../../../domain/ports/cart-user.port';
-import type { ICartRepository } from '../../../domain/repositories/cart.repository';
-import type { CartPresenter } from '../../presenters/cart.presenter';
-import type { ResolveCartService } from '../../services/resolve-cart.service';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { CompleteCartCheckoutCommand } from '@src/modules/cart/applications/useCase/commands/CompleteCartCheckoutCommand';
+import { EventBus } from '@src/shared/domain/event.bus';
+import { CartCheckoutCompleteRequestedEvent } from '@src/modules/cart/domain/events/cart-checkout-complete-requested.event';
+import type { CartCheckoutCompleteVerifiedEvent } from '@src/modules/cart/domain/events/cart-checkout-complete-verified.event';
+import type { CartOutput } from '@src/modules/cart/applications/dto/cart.output';
+import type { ICartUserPort } from '@src/modules/cart/domain/ports/cart-user.port';
+import type { ICartRepository } from '@src/modules/cart/domain/repositories/cart.repository';
+import type { CartPresenter } from '@src/modules/cart/applications/presenters/cart.presenter';
+import type { ResolveCartService } from '@src/modules/cart/applications/services/resolve-cart.service';
 
 export class CompleteCartCheckoutCommandHandler implements ICommandHandler<
   CompleteCartCheckoutCommand,

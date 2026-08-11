@@ -1,5 +1,5 @@
-import { DomainEvent } from '../../../../shared/domain/domain.event';
-import type { InvoicePaymentType } from '../constants/invoice-payment-type.constant';
+import { DomainEvent } from '@src/shared/domain/domain.event';
+import type { InvoicePaymentType } from '@src/modules/invoice/domain/constants/invoice-payment-type.constant';
 
 export class InvoiceCreatedEvent implements DomainEvent {
   eventName = 'invoice.created';

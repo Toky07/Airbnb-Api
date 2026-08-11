@@ -1,8 +1,8 @@
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { DeleteRoomCommand } from '../../../../rooms/contracts';
-import { AssertHostRoomOwnershipService } from '../../services/assert-host-room-ownership.service';
-import type { DeleteHostRoomCommand } from '../commands/DeleteHostRoomCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { DeleteRoomCommand } from '@src/modules/rooms/contracts';
+import { AssertHostRoomOwnershipService } from '@src/modules/host/applications/services/assert-host-room-ownership.service';
+import type { DeleteHostRoomCommand } from '@src/modules/host/applications/useCase/commands/DeleteHostRoomCommand';
 
 export class DeleteHostRoomCommandHandler implements ICommandHandler<
   DeleteHostRoomCommand,

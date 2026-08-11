@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { Favorite } from '../../domain/entities/favorite.entity';
-import type { IFavoriteRepository } from '../../domain/repositories/favorite.repository';
-import { FavoriteOrmEntity } from '../entities/favorite.orm-entity';
-import { FavoriteMapper } from '../mappers/favorite.mapper';
+import { Favorite } from '@src/modules/favorite/domain/entities/favorite.entity';
+import type { IFavoriteRepository } from '@src/modules/favorite/domain/repositories/favorite.repository';
+import { FavoriteOrmEntity } from '@src/modules/favorite/infrastructure/entities/favorite.orm-entity';
+import { FavoriteMapper } from '@src/modules/favorite/infrastructure/mappers/favorite.mapper';
 
 @Injectable()
 export class FavoriteRepository implements IFavoriteRepository {

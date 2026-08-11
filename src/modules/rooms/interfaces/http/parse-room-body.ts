@@ -1,5 +1,5 @@
-import type { CreateRoomDto } from '../../applications/dto/createRoom.dto';
-import { Property } from '../../../properties/domain/entities/property.entity';
+import type { CreateRoomDto } from '@src/modules/rooms/applications/dto/createRoom.dto';
+import { Property } from '@src/modules/properties/domain/entities/property.entity';
 
 export function parseRoomBody(body: Record<string, unknown>): CreateRoomDto {
   const rawProperty =

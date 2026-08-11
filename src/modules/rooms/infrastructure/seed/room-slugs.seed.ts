@@ -1,8 +1,8 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
-import { slugify } from '../../../../shared/utils/slug.util';
-import { RoomEntity } from '../entities/room.entity';
+import { slugify } from '@src/shared/utils/slug.util';
+import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
 
 @Injectable()
 export class RoomSlugsSeedService implements OnModuleInit {

@@ -1,8 +1,8 @@
 import { ForbiddenException } from '@nestjs/common';
-import type { JwtPayload } from '../../../authentication/contracts';
-import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { FindRoomQuery } from '../../../rooms/contracts';
-import { RoomOutput } from '../../../rooms/contracts';
+import type { JwtPayload } from '@src/modules/authentication/contracts';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { FindRoomQuery } from '@src/modules/rooms/contracts';
+import { RoomOutput } from '@src/modules/rooms/contracts';
 import { ResolveHostPropertyService } from './resolve-host-property.service';
 
 export class AssertHostRoomOwnershipService {

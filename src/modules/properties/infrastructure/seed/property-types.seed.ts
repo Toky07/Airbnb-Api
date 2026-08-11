@@ -1,8 +1,8 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { slugify } from '../../../../shared/utils/slug.util';
-import { PropertyTypeEntity } from '../entities/property-type.entity';
+import { slugify } from '@src/shared/utils/slug.util';
+import { PropertyTypeEntity } from '@src/modules/properties/infrastructure/entities/property-type.entity';
 
 const DEFAULT_PROPERTY_TYPES = [
   'Resort',

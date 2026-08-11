@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { ReservationItem } from '../../domain/entities/reservation-item.entity';
-import { ReservationItemOutput } from '../dto/reservation-item.output';
+import { ReservationItem } from '@src/modules/reservation/domain/entities/reservation-item.entity';
+import { ReservationItemOutput } from '@src/modules/reservation/applications/dto/reservation-item.output';
 import {
   filterItemsByPropertyIds,
   groupItemsByPropertyId,

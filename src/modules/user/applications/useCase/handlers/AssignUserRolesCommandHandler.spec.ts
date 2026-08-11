@@ -1,15 +1,15 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
-import { EmailVO } from '../../../../../shared/valueObject/email.vo';
-import { UserNameVO } from '../../../domain/valueObject/username.vo';
-import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
-import { User } from '../../../domain/entities/user.entity';
-import type { IUserRepository } from '../../../domain/repositories/user.repository';
-import type { IAuthRepository } from '../../../../authentication/contracts';
-import { Auth } from '../../../../authentication/contracts';
+import { EmailVO } from '@src/shared/valueObject/email.vo';
+import { UserNameVO } from '@src/modules/user/domain/valueObject/username.vo';
+import { PhoneNumberVO } from '@src/shared/valueObject/phone.vo';
+import { User } from '@src/modules/user/domain/entities/user.entity';
+import type { IUserRepository } from '@src/modules/user/domain/repositories/user.repository';
+import type { IAuthRepository } from '@src/modules/authentication/contracts';
+import { Auth } from '@src/modules/authentication/contracts';
 import { AssignUserRolesCommandHandler } from './AssignUserRolesCommandHandler';
-import { AssignUserRolesCommand } from '../commands/AssignUserRolesCommand';
-import { SendAccountInvitationCommand } from '../../../../authentication/contracts';
-import { commandBusExecuteMock } from '../../../../../test/command-bus.mock';
+import { AssignUserRolesCommand } from '@src/modules/user/applications/useCase/commands/AssignUserRolesCommand';
+import { SendAccountInvitationCommand } from '@src/modules/authentication/contracts';
+import { commandBusExecuteMock } from '@src/test/command-bus.mock';
 
 const baseUser = new User(
   new UserNameVO('Jean'),

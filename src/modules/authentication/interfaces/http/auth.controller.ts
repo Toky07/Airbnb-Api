@@ -19,32 +19,32 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { parseMyProfileBody } from '../../../user/contracts';
-import { Public } from '../decorators/public.decorator';
-import { RequirePermissions } from '../decorators/require-permissions.decorator';
-import type { JwtPayload } from '../../domain/types/jwt-payload';
-import type { MeOutput } from '../../applications/dto/me.output';
-import type { UploadFile } from '../../../media/contracts';
-import { UserOutput } from '../../../user/contracts';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { SetPasswordWithTokenCommand } from '../../applications/useCase/commands/SetPasswordWithTokenCommand';
-import { ValidatePasswordSetupTokenQuery } from '../../applications/useCase/queries/ValidatePasswordSetupTokenQuery';
+import { parseMyProfileBody } from '@src/modules/user/contracts';
+import { Public } from '@src/modules/authentication/interfaces/decorators/public.decorator';
+import { RequirePermissions } from '@src/modules/authentication/interfaces/decorators/require-permissions.decorator';
+import type { JwtPayload } from '@src/modules/authentication/domain/types/jwt-payload';
+import type { MeOutput } from '@src/modules/authentication/applications/dto/me.output';
+import type { UploadFile } from '@src/modules/media/contracts';
+import { UserOutput } from '@src/modules/user/contracts';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { SetPasswordWithTokenCommand } from '@src/modules/authentication/applications/useCase/commands/SetPasswordWithTokenCommand';
+import { ValidatePasswordSetupTokenQuery } from '@src/modules/authentication/applications/useCase/queries/ValidatePasswordSetupTokenQuery';
 import {
   AUTH_LOGIN_THROTTLE,
   AUTH_PASSWORD_SETUP_THROTTLE,
   AUTH_REGISTER_THROTTLE,
-} from '../../../../config/throttle.config';
-import { SensitiveRouteThrottle } from '../../../../shared/decorators/sensitive-route-throttle.decorator';
-import { RegisterHostCommand } from '../../../user/contracts';
-import { UpdateMyProfileCommand } from '../../../user/contracts';
-import { LoginCommand } from '../../applications/useCase/commands/LoginCommand';
-import { AssignRoleCommand } from '../../applications/useCase/commands/AssignRoleCommand';
-import { ResetPasswordWithTokenCommand } from '../../applications/useCase/commands/ResetPasswordWithTokenCommand';
-import { RequestPasswordResetCommand } from '../../applications/useCase/commands/RequestPasswordResetCommand';
-import { ValidatePasswordResetTokenQuery } from '../../applications/useCase/queries/ValidatePasswordResetTokenQuery';
-import { GetMeQuery } from '../../applications/useCase/queries/GetMeQuery';
-import { BecomeHostCommand } from '../../applications/useCase/commands/BecomeHostCommand';
+} from '@src/config/throttle.config';
+import { SensitiveRouteThrottle } from '@src/shared/decorators/sensitive-route-throttle.decorator';
+import { RegisterHostCommand } from '@src/modules/user/contracts';
+import { UpdateMyProfileCommand } from '@src/modules/user/contracts';
+import { LoginCommand } from '@src/modules/authentication/applications/useCase/commands/LoginCommand';
+import { AssignRoleCommand } from '@src/modules/authentication/applications/useCase/commands/AssignRoleCommand';
+import { ResetPasswordWithTokenCommand } from '@src/modules/authentication/applications/useCase/commands/ResetPasswordWithTokenCommand';
+import { RequestPasswordResetCommand } from '@src/modules/authentication/applications/useCase/commands/RequestPasswordResetCommand';
+import { ValidatePasswordResetTokenQuery } from '@src/modules/authentication/applications/useCase/queries/ValidatePasswordResetTokenQuery';
+import { GetMeQuery } from '@src/modules/authentication/applications/useCase/queries/GetMeQuery';
+import { BecomeHostCommand } from '@src/modules/authentication/applications/useCase/commands/BecomeHostCommand';
 import {
   AssignRoleDto,
   ForgotPasswordDto,
@@ -54,9 +54,9 @@ import {
   SuccessResponseDto,
   TokenPasswordDto,
   TokenResponseDto,
-} from '../../applications/dto/auth-http.dto';
-import { ApiJwtAuth } from '../../../../shared/swagger/swagger.decorators';
-import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
+} from '@src/modules/authentication/applications/dto/auth-http.dto';
+import { ApiJwtAuth } from '@src/shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 
 @ApiTags(SWAGGER_TAGS.AUTH)
 @Controller('auth')

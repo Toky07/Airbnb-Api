@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
 import { ListMyConversationsQueryHandler } from './ListMyConversationsQueryHandler';
-import { ListMyConversationsQuery } from '../queries/ListMyConversationsQuery';
+import { ListMyConversationsQuery } from '@src/modules/messaging/applications/useCase/queries/ListMyConversationsQuery';
 import {
   createConversationRepositoryMock,
   createSampleConversation,
-} from '../messaging-test.helpers';
+} from '@src/modules/messaging/applications/useCase/messaging-test.helpers';
 
 describe('ListMyConversationsQueryHandler', () => {
   it('returns conversations for the authenticated user', async () => {

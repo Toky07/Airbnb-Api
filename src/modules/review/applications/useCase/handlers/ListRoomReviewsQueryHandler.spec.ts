@@ -1,10 +1,10 @@
 import { NotFoundException } from '@nestjs/common';
 import { describe, expect, it, vi } from 'vitest';
-import { REVIEW_STATUS } from '../../../domain/constants/review-status.constant';
-import { Review } from '../../../domain/entities/review.entity';
+import { REVIEW_STATUS } from '@src/modules/review/domain/constants/review-status.constant';
+import { Review } from '@src/modules/review/domain/entities/review.entity';
 import { ListRoomReviewsQueryHandler } from './ListRoomReviewsQueryHandler';
-import { ListRoomReviewsQuery } from '../queries/ListRoomReviewsQuery';
-import { MapReviewOutputsService } from '../../services/map-review-outputs.service';
+import { ListRoomReviewsQuery } from '@src/modules/review/applications/useCase/queries/ListRoomReviewsQuery';
+import { MapReviewOutputsService } from '@src/modules/review/applications/services/map-review-outputs.service';
 
 describe('ListRoomReviewsQueryHandler', () => {
   it('lists published reviews for a room slug', async () => {

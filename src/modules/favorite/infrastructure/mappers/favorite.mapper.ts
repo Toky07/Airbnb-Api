@@ -1,5 +1,5 @@
-import { Favorite } from '../../domain/entities/favorite.entity';
-import { FavoriteOrmEntity } from '../entities/favorite.orm-entity';
+import { Favorite } from '@src/modules/favorite/domain/entities/favorite.entity';
+import { FavoriteOrmEntity } from '@src/modules/favorite/infrastructure/entities/favorite.orm-entity';
 
 export class FavoriteMapper {
   static toDomain(entity: FavoriteOrmEntity): Favorite {

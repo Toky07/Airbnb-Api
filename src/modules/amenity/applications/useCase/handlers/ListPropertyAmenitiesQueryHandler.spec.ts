@@ -1,10 +1,10 @@
 import { NotFoundException } from '@nestjs/common';
-import { Property } from '../../../../properties/contracts';
-import { Amenity } from '../../../domain/entities/amenity.entity';
-import { AMENITY_SCOPE } from '../../../domain/constants/amenity-scope.constant';
+import { Property } from '@src/modules/properties/contracts';
+import { Amenity } from '@src/modules/amenity/domain/entities/amenity.entity';
+import { AMENITY_SCOPE } from '@src/modules/amenity/domain/constants/amenity-scope.constant';
 import { ListPropertyAmenitiesQueryHandler } from './ListPropertyAmenitiesQueryHandler';
-import { ListPropertyAmenitiesQuery } from '../queries/ListPropertyAmenitiesQuery';
-import { ListEntityAmenitiesService } from '../../services/entity-amenities.service';
+import { ListPropertyAmenitiesQuery } from '@src/modules/amenity/applications/useCase/queries/ListPropertyAmenitiesQuery';
+import { ListEntityAmenitiesService } from '@src/modules/amenity/applications/services/entity-amenities.service';
 
 describe('ListPropertyAmenitiesQueryHandler', () => {
   const property = new Property({

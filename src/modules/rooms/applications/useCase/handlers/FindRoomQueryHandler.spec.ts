@@ -1,11 +1,11 @@
-import { IRoomRepository } from '../../../domain/repositories/room.repository';
-import type { IRoomBlockedDateRepository } from '../../../domain/repositories/room-blocked-date.repository';
-import { Room } from '../../../domain/entities/room.entity';
-import { Property } from '../../../../properties/contracts';
-import { RoomDetailResolver } from '../../services/room-detail.resolver';
+import { IRoomRepository } from '@src/modules/rooms/domain/repositories/room.repository';
+import type { IRoomBlockedDateRepository } from '@src/modules/rooms/domain/repositories/room-blocked-date.repository';
+import { Room } from '@src/modules/rooms/domain/entities/room.entity';
+import { Property } from '@src/modules/properties/contracts';
+import { RoomDetailResolver } from '@src/modules/rooms/applications/services/room-detail.resolver';
 import { FindRoomQueryHandler } from './FindRoomQueryHandler';
-import { FindRoomQuery } from '../queries/FindRoomQuery';
-import { mockRoomMediaPresenter } from '../test-helpers/room-usecase.mocks';
+import { FindRoomQuery } from '@src/modules/rooms/applications/useCase/queries/FindRoomQuery';
+import { mockRoomMediaPresenter } from '@src/modules/rooms/applications/useCase/test-helpers/room-usecase.mocks';
 
 const mockExecute = vi.fn();
 

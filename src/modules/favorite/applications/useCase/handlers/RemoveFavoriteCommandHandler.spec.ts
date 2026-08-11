@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { RemoveFavoriteCommandHandler } from './RemoveFavoriteCommandHandler';
-import { RemoveFavoriteCommand } from '../commands/RemoveFavoriteCommand';
+import { RemoveFavoriteCommand } from '@src/modules/favorite/applications/useCase/commands/RemoveFavoriteCommand';
 import {
   createFavoriteRepositoryMock,
   createResolveAuthenticatedUserServiceMock,
-} from '../favorite-test.helpers';
-import { ResolveAuthenticatedUserService } from '../../../../../shared/auth/resolve-authenticated-user.service';
+} from '@src/modules/favorite/applications/useCase/favorite-test.helpers';
+import { ResolveAuthenticatedUserService } from '@src/shared/auth/resolve-authenticated-user.service';
 
 describe('RemoveFavoriteCommandHandler', () => {
   const favoriteRepository = createFavoriteRepositoryMock();

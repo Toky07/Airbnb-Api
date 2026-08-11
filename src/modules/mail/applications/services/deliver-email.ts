@@ -1,7 +1,7 @@
-import { EMAIL_STATUS } from '../../domain/constants/email-status.constant';
-import { Email } from '../../domain/entities/email.entity';
-import type { IEmailRepository } from '../../domain/repositories/email.repository';
-import type { IMailTransport } from '../../domain/ports/mail-transport.port';
+import { EMAIL_STATUS } from '@src/modules/mail/domain/constants/email-status.constant';
+import { Email } from '@src/modules/mail/domain/entities/email.entity';
+import type { IEmailRepository } from '@src/modules/mail/domain/repositories/email.repository';
+import type { IMailTransport } from '@src/modules/mail/domain/ports/mail-transport.port';
 import { loadTransportAttachments } from './load-transport-attachments';
 
 export async function deliverEmail(

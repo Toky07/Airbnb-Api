@@ -5,7 +5,7 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Observable, map } from 'rxjs';
-import { resolveMediaPublicUrl } from '../../utils/resolve-media-public-url';
+import { resolveMediaPublicUrl } from '@src/modules/media/utils/resolve-media-public-url';
 
 /**
  * Transforme automatiquement tout chemin `uploads/...` en URL absolue

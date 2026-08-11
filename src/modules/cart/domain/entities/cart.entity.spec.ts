@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createSampleCart } from '../../applications/cart-test.helpers';
+import { createSampleCart } from '@src/modules/cart/applications/cart-test.helpers';
 
 describe('Cart entity', () => {
   it('calcule le total et le nombre d’articles', () => {

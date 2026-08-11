@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PropertyType } from '../../domain/entities/property-type.entity';
-import type { IPropertyTypeRepository } from '../../domain/repositories/property-type.repository';
-import { PropertyTypeEntity } from '../entities/property-type.entity';
-import { PropertyTypeMapper } from '../mappers/property-type.mapper';
+import { PropertyType } from '@src/modules/properties/domain/entities/property-type.entity';
+import type { IPropertyTypeRepository } from '@src/modules/properties/domain/repositories/property-type.repository';
+import { PropertyTypeEntity } from '@src/modules/properties/infrastructure/entities/property-type.entity';
+import { PropertyTypeMapper } from '@src/modules/properties/infrastructure/mappers/property-type.mapper';
 
 @Injectable()
 export class PropertyTypeRepository implements IPropertyTypeRepository {

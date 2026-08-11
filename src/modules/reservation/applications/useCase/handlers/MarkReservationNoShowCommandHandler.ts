@@ -3,16 +3,16 @@ import {
   ForbiddenException,
   NotFoundException,
 } from '@nestjs/common';
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IPropertyRepository } from '../../../../properties/contracts';
-import type { IRoomRepository } from '../../../../rooms/contracts';
-import type { IUserRepository } from '../../../../user/contracts';
-import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
-import { Reservation } from '../../../domain/entities/reservation.entity';
-import type { IReservationRepository } from '../../../domain/repositories/reservation.repository';
-import { ReservationOutput } from '../../dto/reservation.output';
-import type { EnrichReservationOutputsService } from '../../services/enrich-reservation-outputs.service';
-import type { MarkReservationNoShowCommand } from '../commands/MarkReservationNoShowCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { IPropertyRepository } from '@src/modules/properties/contracts';
+import type { IRoomRepository } from '@src/modules/rooms/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
+import { RESERVATION_STATUS } from '@src/modules/reservation/domain/constants/reservation-status.constant';
+import { Reservation } from '@src/modules/reservation/domain/entities/reservation.entity';
+import type { IReservationRepository } from '@src/modules/reservation/domain/repositories/reservation.repository';
+import { ReservationOutput } from '@src/modules/reservation/applications/dto/reservation.output';
+import type { EnrichReservationOutputsService } from '@src/modules/reservation/applications/services/enrich-reservation-outputs.service';
+import type { MarkReservationNoShowCommand } from '@src/modules/reservation/applications/useCase/commands/MarkReservationNoShowCommand';
 
 export class MarkReservationNoShowCommandHandler implements ICommandHandler<
   MarkReservationNoShowCommand,

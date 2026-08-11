@@ -1,8 +1,8 @@
-import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import { QueryBus } from '../../../../../shared/useCase/bus/query-bus';
-import { AmenityOutput } from '../../../../amenity/contracts';
-import { ListAmenityOptionsQuery } from '../../../../amenity/contracts';
-import type { ListHostAmenityOptionsQuery } from '../queries/ListHostAmenityOptionsQuery';
+import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { AmenityOutput } from '@src/modules/amenity/contracts';
+import { ListAmenityOptionsQuery } from '@src/modules/amenity/contracts';
+import type { ListHostAmenityOptionsQuery } from '@src/modules/host/applications/useCase/queries/ListHostAmenityOptionsQuery';
 
 export class ListHostAmenityOptionsQueryHandler implements IQueryHandler<
   ListHostAmenityOptionsQuery,

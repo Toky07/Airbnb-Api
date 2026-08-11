@@ -1,6 +1,6 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { GetOrCreateConversationService } from '../services/get-or-create-conversation.service';
-import { ReservationConfirmedListener } from '../listeners/reservation-confirmed.listener';
+import { GetOrCreateConversationService } from '@src/modules/messaging/applications/services/get-or-create-conversation.service';
+import { ReservationConfirmedListener } from '@src/modules/messaging/applications/listeners/reservation-confirmed.listener';
 
 @Injectable()
 export class MessagingEvent implements OnModuleInit {

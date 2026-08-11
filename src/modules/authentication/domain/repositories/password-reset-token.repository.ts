@@ -1,4 +1,4 @@
-import type { Auth } from '../entities/user.entity';
+import type { Auth } from '@src/modules/authentication/domain/entities/user.entity';
 
 export type PasswordResetTokenRecord = {
   id: number;

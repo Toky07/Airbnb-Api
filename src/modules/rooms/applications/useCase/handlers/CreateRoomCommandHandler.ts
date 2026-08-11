@@ -1,13 +1,13 @@
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { Room } from '../../../domain/entities/room.entity';
-import type { IRoomRepository } from '../../../domain/repositories/room.repository';
-import { RoomOutput } from '../../dto/room.output';
-import { ENTITY_TYPE } from '../../../../media/contracts';
-import { SaveEntityMediasCommand } from '../../../../media/contracts';
-import type { RoomMediaPresenter } from '../../presenters/room-media.presenter';
-import type { GenerateRoomSlugService } from '../../services/generate-room-slug.service';
-import type { CreateRoomCommand } from '../commands/CreateRoomCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { Room } from '@src/modules/rooms/domain/entities/room.entity';
+import type { IRoomRepository } from '@src/modules/rooms/domain/repositories/room.repository';
+import { RoomOutput } from '@src/modules/rooms/applications/dto/room.output';
+import { ENTITY_TYPE } from '@src/modules/media/contracts';
+import { SaveEntityMediasCommand } from '@src/modules/media/contracts';
+import type { RoomMediaPresenter } from '@src/modules/rooms/applications/presenters/room-media.presenter';
+import type { GenerateRoomSlugService } from '@src/modules/rooms/applications/services/generate-room-slug.service';
+import type { CreateRoomCommand } from '@src/modules/rooms/applications/useCase/commands/CreateRoomCommand';
 
 export class CreateRoomCommandHandler implements ICommandHandler<
   CreateRoomCommand,

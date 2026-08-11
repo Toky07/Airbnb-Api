@@ -1,12 +1,12 @@
 import { ForbiddenException } from '@nestjs/common';
 import { describe, expect, it, vi } from 'vitest';
 import { SendMessageCommandHandler } from './SendMessageCommandHandler';
-import { SendMessageCommand } from '../commands/SendMessageCommand';
+import { SendMessageCommand } from '@src/modules/messaging/applications/useCase/commands/SendMessageCommand';
 import {
   createConversationRepositoryMock,
   createMessageRepositoryMock,
   createSampleConversation,
-} from '../messaging-test.helpers';
+} from '@src/modules/messaging/applications/useCase/messaging-test.helpers';
 
 describe('SendMessageCommandHandler', () => {
   it('sends a message and updates lastMessageAt', async () => {

@@ -1,7 +1,7 @@
-import { PERMISSION_DEFINITIONS } from '../../../domain/constants/permissions.constant';
-import { PermissionOutput } from '../../dto/permission.output';
+import { PERMISSION_DEFINITIONS } from '@src/modules/authentication/domain/constants/permissions.constant';
+import { PermissionOutput } from '@src/modules/authentication/applications/dto/permission.output';
 import { ListPermissionsQueryHandler } from './ListPermissionsQueryHandler';
-import { ListPermissionsQuery } from '../queries/ListPermissionsQuery';
+import { ListPermissionsQuery } from '@src/modules/authentication/applications/useCase/queries/ListPermissionsQuery';
 
 describe('ListPermissionsQueryHandler', () => {
   it('should return all permission definitions', async () => {

@@ -1,6 +1,6 @@
-import type { ImportRowError } from '../dto/import-batch.dto';
-import type { ImportEntityResult } from '../dto/import-entity-result.dto';
-import type { ImportRowValidationResult } from '../validation/import-row-validation.types';
+import type { ImportRowError } from '@src/modules/import/applications/dto/import-batch.dto';
+import type { ImportEntityResult } from '@src/modules/import/applications/dto/import-entity-result.dto';
+import type { ImportRowValidationResult } from '@src/modules/import/applications/validation/import-row-validation.types';
 
 type ImportRowValidationFailure = Extract<
   ImportRowValidationResult,

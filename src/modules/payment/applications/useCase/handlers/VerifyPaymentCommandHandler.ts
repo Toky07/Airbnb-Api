@@ -1,13 +1,13 @@
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IPaymentRepository } from '../../../domain/repositories/payment.repository';
-import type { IPaymentGateway } from '../../../domain/ports/payment-gateway.port';
-import type { MapStripeStatusService } from '../../services/map-stripe-status.service';
-import type { VerifyPaymentCommand } from '../commands/VerifyPaymentCommand';
-import { PAYMENT_STATUS } from '../../../domain/constants/payment-status.constant';
-import { Payment } from '../../../domain/entities/payment.entity';
-import { EventBus } from '../../../../../shared/domain/event.bus';
-import { PaymentConfirmedEvent } from '../../../domain/events/payment-confirmed.event';
-import type { VerifyPaymentResult } from '../../dto/verify-payment.result';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import type { IPaymentRepository } from '@src/modules/payment/domain/repositories/payment.repository';
+import type { IPaymentGateway } from '@src/modules/payment/domain/ports/payment-gateway.port';
+import type { MapStripeStatusService } from '@src/modules/payment/applications/services/map-stripe-status.service';
+import type { VerifyPaymentCommand } from '@src/modules/payment/applications/useCase/commands/VerifyPaymentCommand';
+import { PAYMENT_STATUS } from '@src/modules/payment/domain/constants/payment-status.constant';
+import { Payment } from '@src/modules/payment/domain/entities/payment.entity';
+import { EventBus } from '@src/shared/domain/event.bus';
+import { PaymentConfirmedEvent } from '@src/modules/payment/domain/events/payment-confirmed.event';
+import type { VerifyPaymentResult } from '@src/modules/payment/applications/dto/verify-payment.result';
 
 export type { VerifyPaymentResult };
 

@@ -1,6 +1,6 @@
-import type { ImportUserRowDto } from '../dto/import-batch.dto';
-import { DomainValidationException } from '../../../../shared/exceptions/domain-validation.exception';
-import { validateUserFields } from '../../../user/contracts';
+import type { ImportUserRowDto } from '@src/modules/import/applications/dto/import-batch.dto';
+import { DomainValidationException } from '@src/shared/exceptions/domain-validation.exception';
+import { validateUserFields } from '@src/modules/user/contracts';
 import type { ImportRowValidationResult } from './import-row-validation.types';
 
 export function validateImportUserRow(

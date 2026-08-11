@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { GetReservationStatsQueryHandler } from './GetReservationStatsQueryHandler';
-import { GetReservationStatsQuery } from '../queries/GetReservationStatsQuery';
-import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
+import { GetReservationStatsQuery } from '@src/modules/reservation/applications/useCase/queries/GetReservationStatsQuery';
+import { RESERVATION_STATUS } from '@src/modules/reservation/domain/constants/reservation-status.constant';
 
 describe('GetReservationStatsQueryHandler', () => {
   const reservationRepository = {

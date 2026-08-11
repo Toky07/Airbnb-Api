@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { randomUUID } from 'crypto';
-import { Cart } from '../../domain/entities/cart.entity';
-import { CartItem } from '../../domain/entities/cart-item.entity';
-import type { ICartRepository } from '../../domain/repositories/cart.repository';
-import { CartItemOrmEntity } from '../entities/cart-item.orm-entity';
-import { CartOrmEntity } from '../entities/cart.orm-entity';
-import { CartMapper } from '../mappers/cart.mapper';
+import { Cart } from '@src/modules/cart/domain/entities/cart.entity';
+import { CartItem } from '@src/modules/cart/domain/entities/cart-item.entity';
+import type { ICartRepository } from '@src/modules/cart/domain/repositories/cart.repository';
+import { CartItemOrmEntity } from '@src/modules/cart/infrastructure/entities/cart-item.orm-entity';
+import { CartOrmEntity } from '@src/modules/cart/infrastructure/entities/cart.orm-entity';
+import { CartMapper } from '@src/modules/cart/infrastructure/mappers/cart.mapper';
 
 @Injectable()
 export class CartRepository implements ICartRepository {

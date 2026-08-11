@@ -1,12 +1,12 @@
 import { Controller, Param, Post, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import type { JwtPayload } from '../../../authentication/contracts';
-import { RequirePermissions } from '../../../authentication/contracts';
-import { CancelReservationCommand } from '../../../reservation/contracts';
-import { MarkReservationNoShowCommand } from '../../../reservation/contracts';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { ApiJwtAuth } from '../../../../shared/swagger/swagger.decorators';
-import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
+import type { JwtPayload } from '@src/modules/authentication/contracts';
+import { RequirePermissions } from '@src/modules/authentication/contracts';
+import { CancelReservationCommand } from '@src/modules/reservation/contracts';
+import { MarkReservationNoShowCommand } from '@src/modules/reservation/contracts';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { ApiJwtAuth } from '@src/shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 
 @ApiTags(SWAGGER_TAGS.HOST)
 @ApiJwtAuth()

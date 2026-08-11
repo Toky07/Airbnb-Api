@@ -1,14 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
-import type { Payment } from '../../../payment/contracts';
+import type { Payment } from '@src/modules/payment/contracts';
 import {
   RESERVATION_REPOSITORY,
   type IReservationRepository,
-} from '../../domain/repositories/reservation.repository';
-import { ReservationItemOutput } from '../dto/reservation-item.output';
-import { BookingOrderItemOutput } from '../dto/booking-order-item.output';
-import { resolvePaymentReservationIds } from '../dto/booking-order.output';
+} from '@src/modules/reservation/domain/repositories/reservation.repository';
+import { ReservationItemOutput } from '@src/modules/reservation/applications/dto/reservation-item.output';
+import { BookingOrderItemOutput } from '@src/modules/reservation/applications/dto/booking-order-item.output';
+import { resolvePaymentReservationIds } from '@src/modules/reservation/applications/dto/booking-order.output';
 import { EnrichReservationOutputsService } from './enrich-reservation-outputs.service';
-import { ReservationOutput } from '../dto/reservation.output';
+import { ReservationOutput } from '@src/modules/reservation/applications/dto/reservation.output';
 
 @Injectable()
 export class ResolvePaymentReservationsService {

@@ -2,18 +2,18 @@ import { Inject, OnModuleInit } from '@nestjs/common';
 import {
   PAYMENT_REPOSITORY,
   type IPaymentRepository,
-} from '../../../payment/contracts';
+} from '@src/modules/payment/contracts';
 import {
   RESERVATION_REPOSITORY,
   type IReservationRepository,
-} from '../../domain/repositories/reservation.repository';
-import { PaymentListener } from '../listeners/payment.listener';
-import { PaymentConfirmedListener } from '../listeners/payment-confirmed.listener';
-import { InvoiceCreatedListener } from '../listeners/invoice-created.listener';
-import { CartCheckoutListener } from '../listeners/cart-checkout.listener';
-import { BuildCustomerInvoiceEmailBodyService } from '../services/build-customer-invoice-email-body.service';
-import { BuildHostPaymentNotificationEmailBodyService } from '../services/build-host-payment-notification-email-body.service';
-import { BuildReservationInvoicePayloadService } from '../services/build-reservation-invoice-payload.service';
+} from '@src/modules/reservation/domain/repositories/reservation.repository';
+import { PaymentListener } from '@src/modules/reservation/applications/listeners/payment.listener';
+import { PaymentConfirmedListener } from '@src/modules/reservation/applications/listeners/payment-confirmed.listener';
+import { InvoiceCreatedListener } from '@src/modules/reservation/applications/listeners/invoice-created.listener';
+import { CartCheckoutListener } from '@src/modules/reservation/applications/listeners/cart-checkout.listener';
+import { BuildCustomerInvoiceEmailBodyService } from '@src/modules/reservation/applications/services/build-customer-invoice-email-body.service';
+import { BuildHostPaymentNotificationEmailBodyService } from '@src/modules/reservation/applications/services/build-host-payment-notification-email-body.service';
+import { BuildReservationInvoicePayloadService } from '@src/modules/reservation/applications/services/build-reservation-invoice-payload.service';
 
 export class ReservationEvent implements OnModuleInit {
   public constructor(

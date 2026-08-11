@@ -1,13 +1,13 @@
 import { describe, expect, it, vi } from 'vitest';
 import { NotFoundException } from '@nestjs/common';
-import { EMAIL_STATUS } from '../../../domain/constants/email-status.constant';
-import { Email } from '../../../domain/entities/email.entity';
+import { EMAIL_STATUS } from '@src/modules/mail/domain/constants/email-status.constant';
+import { Email } from '@src/modules/mail/domain/entities/email.entity';
 import { RetryEmailCommandHandler } from './RetryEmailCommandHandler';
-import { RetryEmailCommand } from '../commands/RetryEmailCommand';
+import { RetryEmailCommand } from '@src/modules/mail/applications/useCase/commands/RetryEmailCommand';
 import {
   createEmailRepositoryMock,
   createMailTransportMock,
-} from '../email-test.helpers';
+} from '@src/modules/mail/applications/useCase/email-test.helpers';
 
 describe('RetryEmailCommandHandler', () => {
   it('relance un envoi échoué avec succès', async () => {

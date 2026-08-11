@@ -1,10 +1,10 @@
-import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { ENTITY_MEDIA_LIMITS, MEDIA_TYPE } from '../../../constant';
-import { Media } from '../../../domain/entities/media.entity';
-import type { IMediaRepository } from '../../../domain/repositories/media.repository';
-import type { ILocalStorageService } from '../../../services/localStorage.service';
-import { toSaveMediaContext } from '../../../utils/build-upload-path';
-import type { SyncEntityMediasCommand } from '../commands/SyncEntityMediasCommand';
+import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
+import { ENTITY_MEDIA_LIMITS, MEDIA_TYPE } from '@src/modules/media/constant';
+import { Media } from '@src/modules/media/domain/entities/media.entity';
+import type { IMediaRepository } from '@src/modules/media/domain/repositories/media.repository';
+import type { ILocalStorageService } from '@src/modules/media/services/localStorage.service';
+import { toSaveMediaContext } from '@src/modules/media/utils/build-upload-path';
+import type { SyncEntityMediasCommand } from '@src/modules/media/applications/useCase/commands/SyncEntityMediasCommand';
 
 export class SyncEntityMediasCommandHandler implements ICommandHandler<
   SyncEntityMediasCommand,

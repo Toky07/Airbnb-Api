@@ -1,7 +1,7 @@
-import { Reservation } from '../../domain/entities/reservation.entity';
-import { ReservationOrmEntity } from '../entities/reservation.orm-entity';
+import { Reservation } from '@src/modules/reservation/domain/entities/reservation.entity';
+import { ReservationOrmEntity } from '@src/modules/reservation/infrastructure/entities/reservation.orm-entity';
 import { ReservationItemMapper } from './reservation-item.mapper';
-import type { ReservationStatus } from '../../domain/constants/reservation-status.constant';
+import type { ReservationStatus } from '@src/modules/reservation/domain/constants/reservation-status.constant';
 
 export class ReservationMapper {
   static toDomain(entity: ReservationOrmEntity): Reservation {

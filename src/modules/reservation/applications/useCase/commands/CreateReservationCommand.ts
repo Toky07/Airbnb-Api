@@ -1,4 +1,4 @@
-import type { CreateReservationDto } from '../../dto/create-reservation.dto';
+import type { CreateReservationDto } from '@src/modules/reservation/applications/dto/create-reservation.dto';
 
 export class CreateReservationCommand {
   constructor(

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PAYMENT_STATUS } from '../../domain/constants/payment-status.constant';
+import { PAYMENT_STATUS } from '@src/modules/payment/domain/constants/payment-status.constant';
 import { MapStripeStatusService } from './map-stripe-status.service';
 
 describe('MapStripeStatusService', () => {

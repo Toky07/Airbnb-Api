@@ -1,8 +1,11 @@
-import type { RoomStayPricingService } from '../rooms/contracts';
-import type { IPaymentGateway, IPaymentRepository } from '../payment/contracts';
-import type { IPropertyRepository } from '../properties/contracts';
-import type { IRoomRepository } from '../rooms/contracts';
-import type { IUserRepository } from '../user/contracts';
+import type { RoomStayPricingService } from '@src/modules/rooms/contracts';
+import type {
+  IPaymentGateway,
+  IPaymentRepository,
+} from '@src/modules/payment/contracts';
+import type { IPropertyRepository } from '@src/modules/properties/contracts';
+import type { IRoomRepository } from '@src/modules/rooms/contracts';
+import type { IUserRepository } from '@src/modules/user/contracts';
 import type { IReservationRepository } from './domain/repositories/reservation.repository';
 import type { AssertReservationAccessService } from './applications/services/assert-reservation-access.service';
 import type { CheckRoomAvailabilityService } from './applications/services/check-room-availability.service';
@@ -13,7 +16,7 @@ import type { ResolveHostPropertyIdsService } from './applications/services/reso
 import type { ResolvePaymentReservationsService } from './applications/services/resolve-payment-reservations.service';
 import type { ResolveReservationCancellationPolicyService } from './applications/services/resolve-reservation-cancellation-policy.service';
 import type { ResolveReservationStatsScopeService } from './applications/services/resolve-reservation-stats-scope.service';
-import type { IInvoiceRepository } from '../invoice/contracts';
+import type { IInvoiceRepository } from '@src/modules/invoice/contracts';
 import { CancelReservationCommandHandler } from './applications/useCase/handlers/CancelReservationCommandHandler';
 import { ConfirmReservationCommandHandler } from './applications/useCase/handlers/ConfirmReservationCommandHandler';
 import { CreateReservationCommandHandler } from './applications/useCase/handlers/CreateReservationCommandHandler';

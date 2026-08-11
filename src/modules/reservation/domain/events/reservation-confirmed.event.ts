@@ -1,5 +1,5 @@
-import { DomainEvent } from '../../../../shared/domain/domain.event';
-import type { Reservation } from '../entities/reservation.entity';
+import { DomainEvent } from '@src/shared/domain/domain.event';
+import type { Reservation } from '@src/modules/reservation/domain/entities/reservation.entity';
 
 export class ReservationConfirmedEvent implements DomainEvent {
   eventName = 'reservation.confirmed';

@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { ENTITY_TYPE } from '../../../constant';
-import { Media } from '../../../domain/entities/media.entity';
-import type { IMediaRepository } from '../../../domain/repositories/media.repository';
+import { ENTITY_TYPE } from '@src/modules/media/constant';
+import { Media } from '@src/modules/media/domain/entities/media.entity';
+import type { IMediaRepository } from '@src/modules/media/domain/repositories/media.repository';
 import { GetMediasByEntityQueryHandler } from './GetMediasByEntityQueryHandler';
-import { GetMediasByEntityQuery } from '../queries/GetMediasByEntityQuery';
+import { GetMediasByEntityQuery } from '@src/modules/media/applications/useCase/queries/GetMediasByEntityQuery';
 
 describe('GetMediasByEntityQueryHandler', () => {
   it('should return medias for entity', async () => {

@@ -1,12 +1,12 @@
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { getStripeCurrency } from '../../../../config/env.config';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { getStripeCurrency } from '@src/config/env.config';
 import {
   CreatePaymentCommand,
   type CreatePaymentResult,
-} from '../../../payment/contracts';
-import type { CartCheckoutReservationCreatedEvent } from '../../domain/events/cart-checkout-reservation-created.event';
-import { CartCheckoutCompletedEvent } from '../../domain/events/cart-checkout-completed.event';
-import { EventBus } from '../../../../shared/domain/event.bus';
+} from '@src/modules/payment/contracts';
+import type { CartCheckoutReservationCreatedEvent } from '@src/modules/cart/domain/events/cart-checkout-reservation-created.event';
+import { CartCheckoutCompletedEvent } from '@src/modules/cart/domain/events/cart-checkout-completed.event';
+import { EventBus } from '@src/shared/domain/event.bus';
 
 export class CartCheckoutPaymentListener {
   async listen(): Promise<void> {

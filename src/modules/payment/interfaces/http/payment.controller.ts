@@ -2,11 +2,11 @@ import { Controller, Headers, Post, Req } from '@nestjs/common';
 import type { RawBodyRequest } from '@nestjs/common';
 import type { Request } from 'express';
 import { ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Public } from '../../../authentication/contracts';
-import { ConfirmStripePaymentCommand } from '../../contracts';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import type { Payment } from '../../domain/entities/payment.entity';
-import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
+import { Public } from '@src/modules/authentication/contracts';
+import { ConfirmStripePaymentCommand } from '@src/modules/payment/contracts';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import type { Payment } from '@src/modules/payment/domain/entities/payment.entity';
+import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 
 @ApiTags(SWAGGER_TAGS.PAYMENTS)
 @Controller('payments')

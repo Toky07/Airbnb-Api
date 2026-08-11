@@ -1,10 +1,10 @@
-import type { CategorySummary } from '../../../../shared/types/category-summary';
-import type { CancellationPolicy } from '../../../reservation/contracts/cancellation-policy';
+import type { CategorySummary } from '@src/shared/types/category-summary';
+import type { CancellationPolicy } from '@src/modules/reservation/contracts/cancellation-policy';
 import {
   toRoomSummary,
   type RoomSummary,
-} from '../../../rooms/contracts/room-summary';
-import { Property } from '../../domain/entities/property.entity';
+} from '@src/modules/rooms/contracts/room-summary';
+import { Property } from '@src/modules/properties/domain/entities/property.entity';
 
 export class PropertyOutput {
   constructor(

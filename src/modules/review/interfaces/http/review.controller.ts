@@ -9,26 +9,26 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import type { AuthenticatedRequest } from '../../../../shared/http/authenticated-request.type';
+import type { AuthenticatedRequest } from '@src/shared/http/authenticated-request.type';
 import {
   ApiJwtAuth,
   ApiPaginationQuery,
-} from '../../../../shared/swagger/swagger.decorators';
-import { RequirePermissions } from '../../../authentication/contracts';
-import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
-import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
+} from '@src/shared/swagger/swagger.decorators';
+import { RequirePermissions } from '@src/modules/authentication/contracts';
+import { parsePaginationQuery } from '@src/shared/pagination/parse-pagination-query';
+import type { PaginatedResult } from '@src/shared/pagination/pagination.types';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
 import {
   CreateReviewDto,
   ModerateReviewDto,
-} from '../../applications/dto/create-review.dto';
-import { ReviewOutput } from '../../applications/dto/review.output';
-import { CreateReviewCommand } from '../../applications/useCase/commands/CreateReviewCommand';
-import { ModerateReviewCommand } from '../../applications/useCase/commands/ModerateReviewCommand';
-import { ListMyReviewsQuery } from '../../applications/useCase/queries/ListMyReviewsQuery';
-import { ListPendingReviewsQuery } from '../../applications/useCase/queries/ListPendingReviewsQuery';
-import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
+} from '@src/modules/review/applications/dto/create-review.dto';
+import { ReviewOutput } from '@src/modules/review/applications/dto/review.output';
+import { CreateReviewCommand } from '@src/modules/review/applications/useCase/commands/CreateReviewCommand';
+import { ModerateReviewCommand } from '@src/modules/review/applications/useCase/commands/ModerateReviewCommand';
+import { ListMyReviewsQuery } from '@src/modules/review/applications/useCase/queries/ListMyReviewsQuery';
+import { ListPendingReviewsQuery } from '@src/modules/review/applications/useCase/queries/ListPendingReviewsQuery';
+import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 
 @ApiTags(SWAGGER_TAGS.REVIEWS)
 @ApiJwtAuth()

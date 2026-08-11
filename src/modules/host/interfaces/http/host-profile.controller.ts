@@ -1,11 +1,11 @@
 import { Controller, Get, Req } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import type { JwtPayload } from '../../../authentication/contracts';
-import { RequirePermissions } from '../../../authentication/contracts';
-import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { ApiJwtAuth } from '../../../../shared/swagger/swagger.decorators';
-import { SWAGGER_TAGS } from '../../../../shared/swagger/swagger.constants';
-import { GetHostProfileQuery } from '../../applications/useCase/queries/GetHostProfileQuery';
+import type { JwtPayload } from '@src/modules/authentication/contracts';
+import { RequirePermissions } from '@src/modules/authentication/contracts';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { ApiJwtAuth } from '@src/shared/swagger/swagger.decorators';
+import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
+import { GetHostProfileQuery } from '@src/modules/host/applications/useCase/queries/GetHostProfileQuery';
 
 @ApiTags(SWAGGER_TAGS.HOST)
 @ApiJwtAuth()

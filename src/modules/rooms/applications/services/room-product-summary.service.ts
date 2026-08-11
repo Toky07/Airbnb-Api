@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ENTITY_TYPE } from '../../../media/contracts';
-import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
-import { GetMediasByEntityQuery } from '../../../media/contracts';
-import { Media } from '../../../media/contracts';
+import { ENTITY_TYPE } from '@src/modules/media/contracts';
+import { QueryBus } from '@src/shared/useCase/bus/query-bus';
+import { GetMediasByEntityQuery } from '@src/modules/media/contracts';
+import { Media } from '@src/modules/media/contracts';
 import {
   ROOM_REPOSITORY,
   type IRoomRepository,
-} from '../../domain/repositories/room.repository';
+} from '@src/modules/rooms/domain/repositories/room.repository';
 
 export type RoomProductSummary = {
   roomName: string;

@@ -1,11 +1,11 @@
-import { User } from '../../domain/entities/user.entity';
-import { UserNameVO } from '../../domain/valueObject/username.vo';
-import { EmailVO } from '../../../../shared/valueObject/email.vo';
-import { UserEntity } from '../entities/user.entity';
-import { PhoneNumberVO } from '../../../../shared/valueObject/phone.vo';
-import type { UserRoleSummary } from '../../domain/dtos/user.output';
-import type { AccountStatus } from '../../../authentication/contracts';
-import { AccountStatusResolver } from '../../../authentication/contracts';
+import { User } from '@src/modules/user/domain/entities/user.entity';
+import { UserNameVO } from '@src/modules/user/domain/valueObject/username.vo';
+import { EmailVO } from '@src/shared/valueObject/email.vo';
+import { UserEntity } from '@src/modules/user/infrastructure/entities/user.entity';
+import { PhoneNumberVO } from '@src/shared/valueObject/phone.vo';
+import type { UserRoleSummary } from '@src/modules/user/domain/dtos/user.output';
+import type { AccountStatus } from '@src/modules/authentication/contracts';
+import { AccountStatusResolver } from '@src/modules/authentication/contracts';
 
 export class UserMapper {
   static toDomain(user: UserEntity): User {

@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SyncHostPropertyAmenitiesCommandHandler } from './SyncHostPropertyAmenitiesCommandHandler';
-import { SyncHostPropertyAmenitiesCommand } from '../commands/SyncHostPropertyAmenitiesCommand';
-import { SyncPropertyAmenitiesCommand } from '../../../../amenity/contracts';
+import { SyncHostPropertyAmenitiesCommand } from '@src/modules/host/applications/useCase/commands/SyncHostPropertyAmenitiesCommand';
+import { SyncPropertyAmenitiesCommand } from '@src/modules/amenity/contracts';
 import { authUser, createResolveHostPropertyMock } from './host-test.helpers';
-import { commandBusExecuteMock } from '../../../../../test/command-bus.mock';
+import { commandBusExecuteMock } from '@src/test/command-bus.mock';
 
 describe('SyncHostPropertyAmenitiesCommandHandler', () => {
   beforeEach(() => {

@@ -1,5 +1,9 @@
 import { join } from 'path';
-import { ENTITY_TYPE, UPLOAD_ROOT, type EntityType } from '../constant';
+import {
+  ENTITY_TYPE,
+  UPLOAD_ROOT,
+  type EntityType,
+} from '@src/modules/media/constant';
 
 export type SaveMediaContext =
   | { entityType: typeof ENTITY_TYPE.PROPERTY; propertyId: number }

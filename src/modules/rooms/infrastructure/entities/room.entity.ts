@@ -1,4 +1,4 @@
-import { PropertyEntity } from '../../../properties/infrastructure/entities/property-entity.entity';
+import { PropertyEntity } from '@src/modules/properties/infrastructure/entities/property-entity.entity';
 import { RoomTypeEntity } from './room-type.entity';
 import {
   PrimaryGeneratedColumn,

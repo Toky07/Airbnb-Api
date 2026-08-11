@@ -4,16 +4,16 @@ import { Repository } from 'typeorm';
 import {
   buildPaginationMeta,
   type PaginatedResult,
-} from '../../../../shared/pagination/pagination.types';
-import { REVIEW_STATUS } from '../../domain/constants/review-status.constant';
-import type { Review } from '../../domain/entities/review.entity';
+} from '@src/shared/pagination/pagination.types';
+import { REVIEW_STATUS } from '@src/modules/review/domain/constants/review-status.constant';
+import type { Review } from '@src/modules/review/domain/entities/review.entity';
 import type {
   IReviewRepository,
   ReviewListParams,
   RoomRatingSummary,
-} from '../../domain/repositories/review.repository';
-import { ReviewOrmEntity } from '../entities/review.orm-entity';
-import { ReviewMapper } from '../mappers/review.mapper';
+} from '@src/modules/review/domain/repositories/review.repository';
+import { ReviewOrmEntity } from '@src/modules/review/infrastructure/entities/review.orm-entity';
+import { ReviewMapper } from '@src/modules/review/infrastructure/mappers/review.mapper';
 
 @Injectable()
 export class ReviewRepository implements IReviewRepository {

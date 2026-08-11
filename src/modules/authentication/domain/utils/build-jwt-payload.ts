@@ -1,6 +1,6 @@
-import { SUPERADMIN_ROLE_SLUG } from '../constants/permissions.constant';
-import type { Auth } from '../entities/user.entity';
-import type { JwtPayload } from '../types/jwt-payload';
+import { SUPERADMIN_ROLE_SLUG } from '@src/modules/authentication/domain/constants/permissions.constant';
+import type { Auth } from '@src/modules/authentication/domain/entities/user.entity';
+import type { JwtPayload } from '@src/modules/authentication/domain/types/jwt-payload';
 
 export function buildJwtPayload(auth: Auth): JwtPayload {
   const roleSlugs = auth.roles.map((r) => r.slug).filter(Boolean);

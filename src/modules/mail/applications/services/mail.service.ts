@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import type { UploadFile } from '../../../media/contracts';
-import { CommandBus } from '../../../../shared/useCase/bus/bus';
+import type { UploadFile } from '@src/modules/media/contracts';
+import { CommandBus } from '@src/shared/useCase/bus/bus';
 import {
   SendEmailCommand,
   type SendEmailCommandPayload,
-} from '../useCase/commands/SendEmailCommand';
-import { EmailOutput } from '../dto/email.output';
+} from '@src/modules/mail/applications/useCase/commands/SendEmailCommand';
+import { EmailOutput } from '@src/modules/mail/applications/dto/email.output';
 
 /**
  * Facade exported for other modules (users, host, import, etc.).

@@ -1,4 +1,4 @@
-import type { AdminManageableAccountStatus } from '../../../../authentication/contracts';
+import type { AdminManageableAccountStatus } from '@src/modules/authentication/contracts';
 
 export class UpdateUserStatusCommand {
   constructor(
