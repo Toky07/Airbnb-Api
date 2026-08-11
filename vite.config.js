@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const path_1 = require("node:path");
 const config_1 = require("vitest/config");
+const usesPostgres = process.env.DB_TYPE !== 'sqlite';
 const shared = {
     globals: true,
     setupFiles: ['./src/test/vitest.setup.ts'],
@@ -15,7 +17,25 @@ const shared = {
 };
 exports.default = (0, config_1.defineConfig)({
     plugins: [],
+    resolve: {
+        alias: {
+            '@src': (0, path_1.resolve)(__dirname, 'src'),
+        },
+    },
     test: {
+        coverage: {
+            provider: 'v8',
+            reportsDirectory: './coverage',
+            reporter: ['text', 'html', 'lcov'],
+            include: ['src/**/*.ts'],
+            exclude: [
+                'src/**/*.spec.ts',
+                'src/**/*.controller.spec.ts',
+                'src/**/main.ts',
+                'src/database/migrations/**',
+                'src/config/typeorm-cli.config.ts',
+            ],
+        },
         projects: [
             {
                 extends: true,
@@ -36,12 +56,16 @@ exports.default = (0, config_1.defineConfig)({
                 test: {
                     ...shared,
                     name: 'e2e',
+                    setupFiles: [
+                        './src/test/vitest.setup.ts',
+                        './src/test/vitest.e2e.setup.ts',
+                    ],
                     include: ['**/*.controller.spec.ts'],
-                    isolate: true,
-                    fileParallelism: true,
+                    isolate: false,
+                    fileParallelism: !usesPostgres,
+                    hookTimeout: usesPostgres ? 30_000 : 10_000,
                 },
             },
         ],
     },
 });
-//# sourceMappingURL=vite.config.js.map
