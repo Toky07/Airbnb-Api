@@ -18,7 +18,7 @@ import { PropertyOutput } from '../../applications/dto/property.output';
 import type { CreatePropertyDto } from '../../applications/dto/createProperty.dto';
 import { parsePropertyBody } from './parse-property-body';
 import type { UploadFile } from '../../../media/contracts';
-import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
+import { RequirePermissions } from '../../../authentication/contracts';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
 import { CreatePropertyCommand } from '../../applications/useCase/commands/CreatePropertyCommand';

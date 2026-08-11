@@ -10,7 +10,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
+import type { JwtPayload } from '../../../authentication/contracts';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
 import { SendMessageDto } from '../../applications/dto/send-message.dto';

@@ -9,9 +9,9 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Public } from '../../../authentication/interfaces/decorators/public.decorator';
-import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
-import { RequireSuperAdmin } from '../../../authentication/interfaces/decorators/require-superadmin.decorator';
+import { Public } from '../../../authentication/contracts';
+import { RequirePermissions } from '../../../authentication/contracts';
+import { RequireSuperAdmin } from '../../../authentication/contracts';
 import { AmenityOutput } from '../../applications/dto/amenity.output';
 import {
   CreateAmenityDto,

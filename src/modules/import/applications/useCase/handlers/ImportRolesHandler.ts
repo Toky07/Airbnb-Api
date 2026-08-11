@@ -1,13 +1,13 @@
 import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { CreateRoleCommand } from '../../../../authentication/applications/useCase/commands/CreateRoleCommand';
-import { RoleOutput } from '../../../../authentication/applications/dto/role.output';
-import { UpdateRoleCommand } from '../../../../authentication/applications/useCase/commands/UpdateRoleCommand';
-import { SetRolePermissionsCommand } from '../../../../authentication/applications/useCase/commands/SetRolePermissionsCommand';
-import type { IRoleRepository } from '../../../../authentication/domain/repositories/role.repository';
+import { CreateRoleCommand } from '../../../../authentication/contracts';
+import { RoleOutput } from '../../../../authentication/contracts';
+import { UpdateRoleCommand } from '../../../../authentication/contracts';
+import { SetRolePermissionsCommand } from '../../../../authentication/contracts';
+import type { IRoleRepository } from '../../../../authentication/contracts';
 import {
   isPermissionLockedRoleSlug,
   isSystemRoleSlug,
-} from '../../../../authentication/domain/constants/system-roles.constant';
+} from '../../../../authentication/contracts';
 import type { ImportRoleRowDto } from '../../dto/import-batch.dto';
 import type { ImportEntityResult } from '../../dto/import-entity-result.dto';
 import { emptyImportEntityResult } from '../../dto/import-entity-result.dto';

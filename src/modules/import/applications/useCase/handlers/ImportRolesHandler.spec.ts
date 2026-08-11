@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ImportRolesHandler } from './ImportRolesHandler';
-import { CreateRoleCommand } from '../../../../authentication/applications/useCase/commands/CreateRoleCommand';
-import { UpdateRoleCommand } from '../../../../authentication/applications/useCase/commands/UpdateRoleCommand';
-import { SetRolePermissionsCommand } from '../../../../authentication/applications/useCase/commands/SetRolePermissionsCommand';
+import { CreateRoleCommand } from '../../../../authentication/contracts';
+import { UpdateRoleCommand } from '../../../../authentication/contracts';
+import { SetRolePermissionsCommand } from '../../../../authentication/contracts';
 import { commandBusExecuteMock } from '../../../../../test/command-bus.mock';
 
 describe('ImportRolesHandler', () => {

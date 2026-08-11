@@ -1,4 +1,4 @@
-import { ALL_PERMISSION_KEYS } from '../../../authentication/domain/constants/permissions.constant';
+import { ALL_PERMISSION_KEYS } from '../../../authentication/contracts';
 
 export function parseImportRolePermissionKeys(raw?: string): string[] {
   const trimmed = raw?.trim() ?? '';

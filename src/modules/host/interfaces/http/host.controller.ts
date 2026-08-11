@@ -14,8 +14,8 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
-import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
+import type { JwtPayload } from '../../../authentication/contracts';
+import { RequirePermissions } from '../../../authentication/contracts';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
 import { parseRequiredPropertyId } from './parse-required-property-id';
 import type { CreatePropertyDto } from '../../../properties/contracts';

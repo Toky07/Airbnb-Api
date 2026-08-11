@@ -4,7 +4,7 @@ import type {
   ImportBatchDto,
   ImportBatchResult,
 } from '../../applications/dto/import-batch.dto';
-import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
+import { RequirePermissions } from '../../../authentication/contracts';
 import { IMPORT_THROTTLE } from '../../../../config/throttle.config';
 import { SensitiveRouteThrottle } from '../../../../shared/decorators/sensitive-route-throttle.decorator';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';

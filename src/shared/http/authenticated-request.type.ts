@@ -1,4 +1,4 @@
-import type { JwtPayload } from '../../modules/authentication/domain/types/jwt-payload';
+import type { JwtPayload } from '../../modules/authentication/contracts';
 
 export type AuthenticatedRequest = {
   user: JwtPayload;

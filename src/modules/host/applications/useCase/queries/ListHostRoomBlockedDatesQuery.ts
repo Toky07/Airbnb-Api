@@ -1,4 +1,4 @@
-import type { JwtPayload } from '../../../../authentication/domain/types/jwt-payload';
+import type { JwtPayload } from '../../../../authentication/contracts';
 
 export class ListHostRoomBlockedDatesQuery {
   constructor(

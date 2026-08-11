@@ -5,7 +5,7 @@ import * as bcrypt from 'bcrypt';
 import {
   HOST_ROLE_SLUG,
   SUPERADMIN_ROLE_SLUG,
-} from '../modules/authentication/domain/constants/permissions.constant';
+} from '../modules/authentication/contracts';
 import { AuthEntity } from '../modules/authentication/infrastructure/entity/auth.entity';
 import { PermissionEntity } from '../modules/authentication/infrastructure/entity/permission.entity';
 import { Role } from '../modules/authentication/infrastructure/entity/role.entity';
@@ -18,7 +18,7 @@ import { RoomEntity } from '../modules/rooms/infrastructure/entities/room.entity
 import { RoomBlockedDateOrmEntity } from '../modules/rooms/infrastructure/entities/room-blocked-date.orm-entity';
 import { RoomRateOverrideOrmEntity } from '../modules/rooms/infrastructure/entities/room-rate-override.orm-entity';
 import { UserEntity } from '../modules/user/infrastructure/entities/user.entity';
-import { ACCOUNT_STATUS } from '../modules/authentication/domain/constants/account-status.constant';
+import { ACCOUNT_STATUS } from '../modules/authentication/contracts';
 import { PasswordSetupTokenOrmEntity } from '../modules/authentication/infrastructure/entities/password-setup-token.orm-entity';
 import { ReservationOrmEntity } from '../modules/reservation/infrastructure/entities/reservation.orm-entity';
 import { ReservationItemOrmEntity } from '../modules/reservation/infrastructure/entities/reservation-item.orm-entity';

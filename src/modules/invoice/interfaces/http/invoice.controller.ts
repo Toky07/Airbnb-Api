@@ -9,8 +9,8 @@ import {
 import { ApiOperation, ApiProduces, ApiTags } from '@nestjs/swagger';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
-import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
-import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
+import type { JwtPayload } from '../../../authentication/contracts';
+import { RequirePermissions } from '../../../authentication/contracts';
 import { ListMyInvoicesQuery } from '../../applications/useCase/queries/ListMyInvoicesQuery';
 import { ListInvoicesQuery } from '../../applications/useCase/queries/ListInvoicesQuery';
 import { DownloadInvoiceQuery } from '../../applications/useCase/queries/DownloadInvoiceQuery';

@@ -4,7 +4,7 @@ import { AssertHostRoomOwnershipService } from './assert-host-room-ownership.ser
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
 import { FindRoomQuery } from '../../../rooms/contracts';
 import type { ResolveHostPropertyService } from './resolve-host-property.service';
-import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
+import type { JwtPayload } from '../../../authentication/contracts';
 
 describe('AssertHostRoomOwnershipService', () => {
   const authUser = { sub: 1 } as JwtPayload;

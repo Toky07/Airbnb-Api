@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
+import type { JwtPayload } from '../../../authentication/contracts';
 import type { Property } from '../../../properties/contracts';
 import { PROPERTY_REPOSITORY } from '../../../properties/contracts';
 import type { IPropertyRepository } from '../../../properties/contracts';

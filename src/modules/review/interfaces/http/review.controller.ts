@@ -14,7 +14,7 @@ import {
   ApiJwtAuth,
   ApiPaginationQuery,
 } from '../../../../shared/swagger/swagger.decorators';
-import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
+import { RequirePermissions } from '../../../authentication/contracts';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
 import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';

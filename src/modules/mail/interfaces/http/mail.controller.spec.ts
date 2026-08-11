@@ -12,7 +12,7 @@ import { AuthEntity } from '../../../authentication/infrastructure/entity/auth.e
 import { Role } from '../../../authentication/infrastructure/entity/role.entity';
 import { PermissionEntity } from '../../../authentication/infrastructure/entity/permission.entity';
 import { UserEntity } from '../../../user/infrastructure/entities/user.entity';
-import { HOST_ROLE_SLUG } from '../../../authentication/domain/constants/permissions.constant';
+import { HOST_ROLE_SLUG } from '../../../authentication/contracts';
 import { MediaOrmEntity } from '../../../media/infrastructure/entities/media-orm.entity';
 import { MediaModule } from '../../../media/media.module';
 import {

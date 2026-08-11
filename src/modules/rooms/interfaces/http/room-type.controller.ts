@@ -8,8 +8,8 @@ import {
   Put,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Public } from '../../../authentication/interfaces/decorators/public.decorator';
-import { RequireSuperAdmin } from '../../../authentication/interfaces/decorators/require-superadmin.decorator';
+import { Public } from '../../../authentication/contracts';
+import { RequireSuperAdmin } from '../../../authentication/contracts';
 import { RoomTypeOutput } from '../../applications/dto/room-type.output';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';

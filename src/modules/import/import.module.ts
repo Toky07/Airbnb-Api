@@ -1,7 +1,7 @@
 import { Inject, Module, OnModuleInit } from '@nestjs/common';
 import { AuthModule } from '../authentication/auth.module';
-import { ROLE_REPOSITORY } from '../authentication/domain/repositories/role.repository';
-import type { IRoleRepository } from '../authentication/domain/repositories/role.repository';
+import { ROLE_REPOSITORY } from '../authentication/contracts';
+import type { IRoleRepository } from '../authentication/contracts';
 import { PropertiesModule } from '../properties/properties.module';
 import { PROPERTY_REPOSITORY } from '../properties/contracts';
 import type { IPropertyRepository } from '../properties/contracts';

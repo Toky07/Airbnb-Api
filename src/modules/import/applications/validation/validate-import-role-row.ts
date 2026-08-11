@@ -1,4 +1,4 @@
-import { ALL_PERMISSION_KEYS } from '../../../authentication/domain/constants/permissions.constant';
+import { ALL_PERMISSION_KEYS } from '../../../authentication/contracts';
 import type { ImportRoleRowDto } from '../dto/import-batch.dto';
 import { ROLE_SLUG_PATTERN } from './import-validation.constants';
 import type { ImportRowValidationResult } from './import-row-validation.types';

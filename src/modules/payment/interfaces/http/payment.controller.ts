@@ -2,7 +2,7 @@ import { Controller, Headers, Post, Req } from '@nestjs/common';
 import type { RawBodyRequest } from '@nestjs/common';
 import type { Request } from 'express';
 import { ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Public } from '../../../authentication/interfaces/decorators/public.decorator';
+import { Public } from '../../../authentication/contracts';
 import { ConfirmStripePaymentCommand } from '../../contracts';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import type { Payment } from '../../domain/entities/payment.entity';

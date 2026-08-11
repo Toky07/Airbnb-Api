@@ -10,9 +10,9 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
-import { hasPermission } from '../../../authentication/domain/utils/build-jwt-payload';
-import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
+import type { JwtPayload } from '../../../authentication/contracts';
+import { hasPermission } from '../../../authentication/contracts';
+import { RequirePermissions } from '../../../authentication/contracts';
 import { CreateReservationDto } from '../../applications/dto/create-reservation.dto';
 import { parseReservationQuery } from './parse-reservation-query';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';

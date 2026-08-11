@@ -1,4 +1,4 @@
-import type { JwtPayload } from '../../../../authentication/domain/types/jwt-payload';
+import type { JwtPayload } from '../../../../authentication/contracts';
 import type { CreatePropertyDto } from '../../../../properties/contracts';
 import type { UploadFile } from '../../../../media/contracts';
 

@@ -1,6 +1,6 @@
 import { ForbiddenException } from '@nestjs/common';
 import { vi } from 'vitest';
-import type { JwtPayload } from '../../../../authentication/domain/types/jwt-payload';
+import type { JwtPayload } from '../../../../authentication/contracts';
 import { Property } from '../../../../properties/contracts';
 import { PropertyOutput } from '../../../../properties/contracts';
 import type { PropertyMediaPresenter } from '../../../../properties/contracts';
