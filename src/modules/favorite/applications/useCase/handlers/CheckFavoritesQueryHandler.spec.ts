@@ -4,22 +4,23 @@ import { CheckFavoritesQueryHandler } from './CheckFavoritesQueryHandler';
 import { CheckFavoritesQuery } from '../queries/CheckFavoritesQuery';
 import {
   createFavoriteRepositoryMock,
-  createResolveFavoriteUserServiceMock,
+  createResolveAuthenticatedUserServiceMock,
 } from '../favorite-test.helpers';
-import { ResolveFavoriteUserService } from '../../services/resolve-favorite-user.service';
+import { ResolveAuthenticatedUserService } from '../../../../../shared/auth/resolve-authenticated-user.service';
 
 describe('CheckFavoritesQueryHandler', () => {
   const favoriteRepository = createFavoriteRepositoryMock();
-  const resolveFavoriteUserService = createResolveFavoriteUserServiceMock();
+  const resolveAuthenticatedUserService =
+    createResolveAuthenticatedUserServiceMock();
   let handler: CheckFavoritesQueryHandler;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    resolveFavoriteUserService.resolveUserId.mockResolvedValue(9);
+    resolveAuthenticatedUserService.resolveUserId.mockResolvedValue(9);
     favoriteRepository.findFavoritedRoomIds.mockResolvedValue([1, 3]);
     handler = new CheckFavoritesQueryHandler(
       favoriteRepository,
-      resolveFavoriteUserService as unknown as ResolveFavoriteUserService,
+      resolveAuthenticatedUserService as unknown as ResolveAuthenticatedUserService,
     );
   });
 
@@ -34,7 +35,7 @@ describe('CheckFavoritesQueryHandler', () => {
   });
 
   it('refuse si utilisateur introuvable', async () => {
-    resolveFavoriteUserService.resolveUserId.mockRejectedValue(
+    resolveAuthenticatedUserService.resolveUserId.mockRejectedValue(
       new ForbiddenException('Accès refusé.'),
     );
 

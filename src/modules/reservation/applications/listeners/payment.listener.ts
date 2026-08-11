@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { EventBus } from '../../../../shared/domain/event.bus';
-import { PaymentCreatedEvent } from '../../../payment/domain/events/payment-created.event';
+import { PaymentCreatedEvent } from '../../../payment/contracts';
 import {
   type IReservationRepository,
   RESERVATION_REPOSITORY,

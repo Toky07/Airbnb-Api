@@ -64,8 +64,12 @@ export default tseslint.config(
     },
   },
   {
-    files: ['src/modules/cart/**/*.ts'],
-    ignores: ['src/modules/cart/**/*.spec.ts'],
+    files: ['src/modules/cart/**/*.ts', 'src/modules/reservation/**/*.ts'],
+    ignores: [
+      'src/modules/cart/**/*.spec.ts',
+      'src/modules/reservation/**/*.spec.ts',
+      'src/modules/reservation/infrastructure/entities/**',
+    ],
     rules: {
       'no-restricted-imports': [
         'error',
@@ -79,7 +83,7 @@ export default tseslint.config(
                 '**/payment/domain/**',
               ],
               message:
-                'Le module cart doit importer payment uniquement via payment/contracts.',
+                'Importer payment uniquement via payment/contracts (sauf ORM TypeORM).',
             },
           ],
         },

@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import type { Payment } from '../../../payment/domain/entities/payment.entity';
+import type { Payment } from '../../../payment/contracts';
 import {
   RESERVATION_REPOSITORY,
   type IReservationRepository,

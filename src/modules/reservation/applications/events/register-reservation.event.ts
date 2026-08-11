@@ -2,7 +2,7 @@ import { Inject, OnModuleInit } from '@nestjs/common';
 import {
   PAYMENT_REPOSITORY,
   type IPaymentRepository,
-} from '../../../payment/domain/repositories/payment.repository';
+} from '../../../payment/contracts';
 import {
   RESERVATION_REPOSITORY,
   type IReservationRepository,

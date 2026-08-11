@@ -4,10 +4,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import { PAYMENT_STATUS } from '../../../../payment/domain/constants/payment-status.constant';
-import { Payment } from '../../../../payment/domain/entities/payment.entity';
-import type { IPaymentRepository } from '../../../../payment/domain/repositories/payment.repository';
-import type { IPaymentGateway } from '../../../../payment/domain/ports/payment-gateway.port';
+import {
+  PAYMENT_STATUS,
+  Payment,
+  type IPaymentGateway,
+  type IPaymentRepository,
+} from '../../../../payment/contracts';
 import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
 import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
 import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';

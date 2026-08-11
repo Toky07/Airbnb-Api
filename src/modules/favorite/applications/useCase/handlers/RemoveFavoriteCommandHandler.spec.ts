@@ -4,22 +4,23 @@ import { RemoveFavoriteCommandHandler } from './RemoveFavoriteCommandHandler';
 import { RemoveFavoriteCommand } from '../commands/RemoveFavoriteCommand';
 import {
   createFavoriteRepositoryMock,
-  createResolveFavoriteUserServiceMock,
+  createResolveAuthenticatedUserServiceMock,
 } from '../favorite-test.helpers';
-import { ResolveFavoriteUserService } from '../../services/resolve-favorite-user.service';
+import { ResolveAuthenticatedUserService } from '../../../../../shared/auth/resolve-authenticated-user.service';
 
 describe('RemoveFavoriteCommandHandler', () => {
   const favoriteRepository = createFavoriteRepositoryMock();
-  const resolveFavoriteUserService = createResolveFavoriteUserServiceMock();
+  const resolveAuthenticatedUserService =
+    createResolveAuthenticatedUserServiceMock();
   let handler: RemoveFavoriteCommandHandler;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    resolveFavoriteUserService.resolveUserId.mockResolvedValue(9);
+    resolveAuthenticatedUserService.resolveUserId.mockResolvedValue(9);
     favoriteRepository.deleteByUserAndRoom.mockResolvedValue(true);
     handler = new RemoveFavoriteCommandHandler(
       favoriteRepository,
-      resolveFavoriteUserService as unknown as ResolveFavoriteUserService,
+      resolveAuthenticatedUserService as unknown as ResolveAuthenticatedUserService,
     );
   });
 
@@ -30,7 +31,7 @@ describe('RemoveFavoriteCommandHandler', () => {
   });
 
   it('refuse si utilisateur introuvable', async () => {
-    resolveFavoriteUserService.resolveUserId.mockRejectedValue(
+    resolveAuthenticatedUserService.resolveUserId.mockRejectedValue(
       new ForbiddenException('Accès refusé.'),
     );
 

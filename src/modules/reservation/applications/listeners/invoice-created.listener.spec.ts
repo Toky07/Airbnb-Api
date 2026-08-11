@@ -3,10 +3,12 @@ import { EventBus } from '../../../../shared/domain/event.bus';
 import { INVOICE_PAYMENT_TYPE } from '../../../invoice/domain/constants/invoice-payment-type.constant';
 import { InvoiceCreatedEvent } from '../../../invoice/domain/events/invoice-created.event';
 import { EmailSendRequestedEvent } from '../../../mail/domain/events/email-send-requested.event';
-import { PAYMENT_STATUS } from '../../../payment/domain/constants/payment-status.constant';
-import { PAYMENT_PROVIDER } from '../../../payment/domain/constants/payment-provider.constant';
-import { PAYMENT_TYPE } from '../../../payment/domain/types/payment.type';
-import { Payment } from '../../../payment/domain/entities/payment.entity';
+import {
+  PAYMENT_PROVIDER,
+  PAYMENT_STATUS,
+  PAYMENT_TYPE,
+  Payment,
+} from '../../../payment/contracts';
 import { RESERVATION_NOTIFICATION_SOURCE } from '../../domain/constants/reservation-notification.constant';
 import { InvoiceCreatedListener } from '../listeners/invoice-created.listener';
 import { createSampleReservationInvoiceContext } from '../reservation-invoice-test.helpers';

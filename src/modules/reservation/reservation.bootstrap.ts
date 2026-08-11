@@ -1,6 +1,5 @@
 import type { RoomStayPricingService } from '../rooms/applications/services/room-stay-pricing.service';
-import type { IPaymentGateway } from '../payment/domain/ports/payment-gateway.port';
-import type { IPaymentRepository } from '../payment/domain/repositories/payment.repository';
+import type { IPaymentGateway, IPaymentRepository } from '../payment/contracts';
 import type { IPropertyRepository } from '../properties/domain/repositories/property.repository';
 import type { IRoomRepository } from '../rooms/domain/repositories/room.repository';
 import type { IUserRepository } from '../user/domain/repositories/user.repository';

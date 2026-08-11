@@ -4,7 +4,7 @@ import { REVIEW_STATUS } from '../../../domain/constants/review-status.constant'
 import { Review } from '../../../domain/entities/review.entity';
 import { ListMyReviewsQueryHandler } from './ListMyReviewsQueryHandler';
 import { ListMyReviewsQuery } from '../queries/ListMyReviewsQuery';
-import { ResolveReviewUserService } from '../../services/resolve-review-user.service';
+import { ResolveAuthenticatedUserService } from '../../../../../shared/auth/resolve-authenticated-user.service';
 
 describe('ListMyReviewsQueryHandler', () => {
   it('returns paginated reviews for the authenticated user', async () => {
@@ -14,19 +14,23 @@ describe('ListMyReviewsQueryHandler', () => {
         meta: { page: 1, limit: 20, total: 1, totalPages: 1 },
       }),
     };
-    const resolveReviewUserService = {
+    const resolveAuthenticatedUserService = {
       resolveUser: vi.fn().mockResolvedValue({ id: 9, name: 'Alice' }),
     };
 
     const handler = new ListMyReviewsQueryHandler(
       reviewRepository as never,
-      resolveReviewUserService as unknown as ResolveReviewUserService,
+      resolveAuthenticatedUserService as unknown as ResolveAuthenticatedUserService,
     );
 
     const result = await handler.execute(
       new ListMyReviewsQuery(1, { page: 1, limit: 20 }),
     );
 
+    expect(resolveAuthenticatedUserService.resolveUser).toHaveBeenCalledWith(
+      1,
+      { failure: 'not-found' },
+    );
     expect(result.data).toHaveLength(1);
     expect(result.data[0]?.authorName).toBe('Alice');
   });
@@ -36,7 +40,7 @@ describe('ListMyReviewsQueryHandler', () => {
       {} as never,
       {
         resolveUser: vi.fn().mockRejectedValue(new NotFoundException()),
-      } as unknown as ResolveReviewUserService,
+      } as unknown as ResolveAuthenticatedUserService,
     );
 
     await expect(

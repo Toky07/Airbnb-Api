@@ -3,7 +3,7 @@ import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-hand
 import { INVOICE_PAYMENT_TYPE } from '../../../../invoice/domain/constants/invoice-payment-type.constant';
 import type { IInvoiceRepository } from '../../../../invoice/domain/repositories/invoice.repository';
 import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
-import type { IPaymentRepository } from '../../../../payment/domain/repositories/payment.repository';
+import type { IPaymentRepository } from '../../../../payment/contracts';
 import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
 import { BookingOrderDetailOutput } from '../../dto/booking-order.output';
 import type { BookingOrderItemOutput } from '../../dto/booking-order-item.output';

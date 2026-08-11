@@ -27,7 +27,7 @@ export function createFavoriteRepositoryMock() {
   };
 }
 
-export function createResolveFavoriteUserServiceMock(userId = 9) {
+export function createResolveAuthenticatedUserServiceMock(userId = 9) {
   return {
     resolveUserId: vi.fn().mockResolvedValue(userId),
   };

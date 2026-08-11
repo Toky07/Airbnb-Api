@@ -2,7 +2,7 @@ import { NotFoundException } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import type { IFavoriteRepository } from '../../../domain/repositories/favorite.repository';
 import type { RemoveFavoriteCommand } from '../commands/RemoveFavoriteCommand';
-import { ResolveFavoriteUserService } from '../../services/resolve-favorite-user.service';
+import { ResolveAuthenticatedUserService } from '../../../../../shared/auth/resolve-authenticated-user.service';
 
 export class RemoveFavoriteCommandHandler implements ICommandHandler<
   RemoveFavoriteCommand,
@@ -10,11 +10,11 @@ export class RemoveFavoriteCommandHandler implements ICommandHandler<
 > {
   constructor(
     private readonly favoriteRepository: IFavoriteRepository,
-    private readonly resolveFavoriteUserService: ResolveFavoriteUserService,
+    private readonly resolveAuthenticatedUserService: ResolveAuthenticatedUserService,
   ) {}
 
   async execute(command: RemoveFavoriteCommand): Promise<void> {
-    const userId = await this.resolveFavoriteUserService.resolveUserId(
+    const userId = await this.resolveAuthenticatedUserService.resolveUserId(
       command.authId,
     );
 

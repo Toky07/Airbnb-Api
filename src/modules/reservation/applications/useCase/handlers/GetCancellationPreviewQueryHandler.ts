@@ -1,7 +1,9 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IPaymentRepository } from '../../../../payment/domain/repositories/payment.repository';
-import { PAYMENT_STATUS } from '../../../../payment/domain/constants/payment-status.constant';
+import {
+  PAYMENT_STATUS,
+  type IPaymentRepository,
+} from '../../../../payment/contracts';
 import { CancellationPreviewOutput } from '../../dto/cancellation-preview.output';
 import type { AssertReservationAccessService } from '../../services/assert-reservation-access.service';
 import type { ComputeCancellationRefundService } from '../../services/compute-cancellation-refund.service';

@@ -1,4 +1,4 @@
-import type { IPaymentRepository } from '../../../payment/domain/repositories/payment.repository';
+import type { IPaymentRepository } from '../../../payment/contracts';
 import type { BuildCustomerInvoiceEmailBodyService } from '../services/build-customer-invoice-email-body.service';
 import type { BuildHostPaymentNotificationEmailBodyService } from '../services/build-host-payment-notification-email-body.service';
 import type { BuildReservationInvoicePayloadService } from '../services/build-reservation-invoice-payload.service';

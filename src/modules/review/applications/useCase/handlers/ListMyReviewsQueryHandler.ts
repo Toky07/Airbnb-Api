@@ -3,7 +3,7 @@ import type { PaginatedResult } from '../../../../../shared/pagination/paginatio
 import type { IReviewRepository } from '../../../domain/repositories/review.repository';
 import { ReviewOutput } from '../../dto/review.output';
 import type { ListMyReviewsQuery } from '../queries/ListMyReviewsQuery';
-import { ResolveReviewUserService } from '../../services/resolve-review-user.service';
+import { ResolveAuthenticatedUserService } from '../../../../../shared/auth/resolve-authenticated-user.service';
 
 export class ListMyReviewsQueryHandler implements IQueryHandler<
   ListMyReviewsQuery,
@@ -11,13 +11,16 @@ export class ListMyReviewsQueryHandler implements IQueryHandler<
 > {
   constructor(
     private readonly reviewRepository: IReviewRepository,
-    private readonly resolveReviewUserService: ResolveReviewUserService,
+    private readonly resolveAuthenticatedUserService: ResolveAuthenticatedUserService,
   ) {}
 
   async execute(
     query: ListMyReviewsQuery,
   ): Promise<PaginatedResult<ReviewOutput>> {
-    const user = await this.resolveReviewUserService.resolveUser(query.authId);
+    const user = await this.resolveAuthenticatedUserService.resolveUser(
+      query.authId,
+      { failure: 'not-found' },
+    );
 
     const result = await this.reviewRepository.findPaginated({
       page: query.pagination.page,

@@ -4,12 +4,12 @@ import { ListMyFavoritesQueryHandler } from './ListMyFavoritesQueryHandler';
 import { ListMyFavoritesQuery } from '../queries/ListMyFavoritesQuery';
 import {
   createFavoriteRepositoryMock,
-  createResolveFavoriteUserServiceMock,
+  createResolveAuthenticatedUserServiceMock,
   createSampleFavorite,
 } from '../favorite-test.helpers';
 import { Room } from '../../../../rooms/domain/entities/room.entity';
 import { Property } from '../../../../properties/domain/entities/property.entity';
-import { ResolveFavoriteUserService } from '../../services/resolve-favorite-user.service';
+import { ResolveAuthenticatedUserService } from '../../../../../shared/auth/resolve-authenticated-user.service';
 
 function createSampleRoom() {
   return new Room({
@@ -43,14 +43,15 @@ function createSampleRoom() {
 
 describe('ListMyFavoritesQueryHandler', () => {
   const favoriteRepository = createFavoriteRepositoryMock();
-  const resolveFavoriteUserService = createResolveFavoriteUserServiceMock();
+  const resolveAuthenticatedUserService =
+    createResolveAuthenticatedUserServiceMock();
   const roomRepository = { findById: vi.fn() };
   const roomMediaPresenter = { toOutput: vi.fn() };
   let handler: ListMyFavoritesQueryHandler;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    resolveFavoriteUserService.resolveUserId.mockResolvedValue(9);
+    resolveAuthenticatedUserService.resolveUserId.mockResolvedValue(9);
     favoriteRepository.findByUserId.mockResolvedValue([createSampleFavorite()]);
     roomRepository.findById.mockResolvedValue(createSampleRoom());
     roomMediaPresenter.toOutput.mockResolvedValue({ id: 10, name: 'Suite' });
@@ -58,7 +59,7 @@ describe('ListMyFavoritesQueryHandler', () => {
       favoriteRepository,
       roomRepository as never,
       roomMediaPresenter,
-      resolveFavoriteUserService as unknown as ResolveFavoriteUserService,
+      resolveAuthenticatedUserService as unknown as ResolveAuthenticatedUserService,
     );
   });
 
@@ -70,7 +71,7 @@ describe('ListMyFavoritesQueryHandler', () => {
   });
 
   it('refuse si utilisateur introuvable', async () => {
-    resolveFavoriteUserService.resolveUserId.mockRejectedValue(
+    resolveAuthenticatedUserService.resolveUserId.mockRejectedValue(
       new ForbiddenException('Accès refusé.'),
     );
 

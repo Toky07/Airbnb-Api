@@ -2,7 +2,7 @@ import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-hand
 import type { IFavoriteRepository } from '../../../domain/repositories/favorite.repository';
 import { CheckFavoritesOutput } from '../../dto/check-favorites.output';
 import type { CheckFavoritesQuery } from '../queries/CheckFavoritesQuery';
-import { ResolveFavoriteUserService } from '../../services/resolve-favorite-user.service';
+import { ResolveAuthenticatedUserService } from '../../../../../shared/auth/resolve-authenticated-user.service';
 
 export class CheckFavoritesQueryHandler implements IQueryHandler<
   CheckFavoritesQuery,
@@ -10,11 +10,11 @@ export class CheckFavoritesQueryHandler implements IQueryHandler<
 > {
   constructor(
     private readonly favoriteRepository: IFavoriteRepository,
-    private readonly resolveFavoriteUserService: ResolveFavoriteUserService,
+    private readonly resolveAuthenticatedUserService: ResolveAuthenticatedUserService,
   ) {}
 
   async execute(query: CheckFavoritesQuery): Promise<CheckFavoritesOutput> {
-    const userId = await this.resolveFavoriteUserService.resolveUserId(
+    const userId = await this.resolveAuthenticatedUserService.resolveUserId(
       query.authId,
     );
 

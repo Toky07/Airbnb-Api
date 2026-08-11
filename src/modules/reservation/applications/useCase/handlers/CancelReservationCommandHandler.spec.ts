@@ -5,7 +5,7 @@ import {
   createPaymentRepositoryMock,
   createSamplePayment,
 } from '../../../../payment/applications/useCase/payment-test.helpers';
-import { PAYMENT_STATUS } from '../../../../payment/domain/constants/payment-status.constant';
+import { PAYMENT_STATUS } from '../../../../payment/contracts';
 import { Property } from '../../../../properties/domain/entities/property.entity';
 import { CANCELLATION_POLICY } from '../../../domain/constants/cancellation-policy.constant';
 import { UserNameVO } from '../../../../user/domain/valueObject/username.vo';

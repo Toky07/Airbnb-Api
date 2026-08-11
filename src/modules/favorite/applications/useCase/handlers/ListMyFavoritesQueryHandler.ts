@@ -4,7 +4,7 @@ import type { IFavoriteRepository } from '../../../domain/repositories/favorite.
 import { FavoriteOutput } from '../../dto/favorite.output';
 import type { RoomMediaPresenter } from '../../../../rooms/applications/presenters/room-media.presenter';
 import type { ListMyFavoritesQuery } from '../queries/ListMyFavoritesQuery';
-import { ResolveFavoriteUserService } from '../../services/resolve-favorite-user.service';
+import { ResolveAuthenticatedUserService } from '../../../../../shared/auth/resolve-authenticated-user.service';
 
 export class ListMyFavoritesQueryHandler implements IQueryHandler<
   ListMyFavoritesQuery,
@@ -14,11 +14,11 @@ export class ListMyFavoritesQueryHandler implements IQueryHandler<
     private readonly favoriteRepository: IFavoriteRepository,
     private readonly roomRepository: IRoomRepository,
     private readonly roomMediaPresenter: RoomMediaPresenter,
-    private readonly resolveFavoriteUserService: ResolveFavoriteUserService,
+    private readonly resolveAuthenticatedUserService: ResolveAuthenticatedUserService,
   ) {}
 
   async execute(query: ListMyFavoritesQuery): Promise<FavoriteOutput[]> {
-    const userId = await this.resolveFavoriteUserService.resolveUserId(
+    const userId = await this.resolveAuthenticatedUserService.resolveUserId(
       query.authId,
     );
 

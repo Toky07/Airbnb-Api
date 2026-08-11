@@ -1,6 +1,6 @@
 import type { PaginatedResult } from '../../../../../shared/pagination/pagination.types';
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IPaymentRepository } from '../../../../payment/domain/repositories/payment.repository';
+import type { IPaymentRepository } from '../../../../payment/contracts';
 import type { IReservationRepository } from '../../../domain/repositories/reservation.repository';
 import { BookingOrderListItemOutput } from '../../dto/booking-order.output';
 import type { ResolveHostPropertyIdsService } from '../../services/resolve-host-property-ids.service';

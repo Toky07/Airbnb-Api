@@ -1,7 +1,9 @@
 import type { PaginatedResult } from '../../../../../shared/pagination/pagination.types';
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { Payment } from '../../../../payment/domain/entities/payment.entity';
-import type { IPaymentRepository } from '../../../../payment/domain/repositories/payment.repository';
+import type {
+  IPaymentRepository,
+  Payment,
+} from '../../../../payment/contracts';
 import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
 import { BookingOrderListItemOutput } from '../../dto/booking-order.output';
 import type { ResolvePaymentReservationsService } from '../../services/resolve-payment-reservations.service';

@@ -3,7 +3,7 @@ import type { IUserRepository } from '../user/domain/repositories/user.repositor
 import type { IRoomRepository } from '../rooms/domain/repositories/room.repository';
 import type { IReviewRepository } from './domain/repositories/review.repository';
 import { ReviewEligibilityService } from './applications/services/review-eligibility.service';
-import { ResolveReviewUserService } from './applications/services/resolve-review-user.service';
+import { ResolveAuthenticatedUserService } from '../../shared/auth/resolve-authenticated-user.service';
 import { MapReviewOutputsService } from './applications/services/map-review-outputs.service';
 import { CreateReviewCommandHandler } from './applications/useCase/handlers/CreateReviewCommandHandler';
 import { ModerateReviewCommandHandler } from './applications/useCase/handlers/ModerateReviewCommandHandler';
@@ -24,7 +24,7 @@ export class ReviewBootstrap {
       deps.reviewRepository,
       deps.userRepository,
     );
-    const resolveReviewUserService = new ResolveReviewUserService(
+    const resolveAuthenticatedUserService = new ResolveAuthenticatedUserService(
       deps.userRepository,
     );
     const mapReviewOutputsService = new MapReviewOutputsService(
@@ -47,7 +47,7 @@ export class ReviewBootstrap {
       ),
       listMyReviewsQueryHandler: new ListMyReviewsQueryHandler(
         deps.reviewRepository,
-        resolveReviewUserService,
+        resolveAuthenticatedUserService,
       ),
       getRoomRatingSummaryQueryHandler: new GetRoomRatingSummaryQueryHandler(
         deps.reviewRepository,

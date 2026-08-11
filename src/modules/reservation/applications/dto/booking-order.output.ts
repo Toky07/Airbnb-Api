@@ -1,6 +1,8 @@
-import { PAYMENT_TYPE } from '../../../payment/domain/types/payment.type';
-import type { PaymentStatus } from '../../../payment/domain/constants/payment-status.constant';
-import type { Payment } from '../../../payment/domain/entities/payment.entity';
+import {
+  PAYMENT_TYPE,
+  type Payment,
+  type PaymentStatus,
+} from '../../../payment/contracts';
 import type { User } from '../../../user/domain/entities/user.entity';
 import type { ReservationStatus } from '../../domain/constants/reservation-status.constant';
 import { BookingOrderItemOutput } from './booking-order-item.output';

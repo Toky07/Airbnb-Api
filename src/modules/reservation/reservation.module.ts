@@ -13,8 +13,12 @@ import { ROOM_REPOSITORY } from '../rooms/domain/repositories/room.repository';
 import type { IRoomRepository } from '../rooms/domain/repositories/room.repository';
 import { USER_REPOSITORY } from '../user/infrastructure/repositories/user.repository';
 import type { IUserRepository } from '../user/domain/repositories/user.repository';
-import { PAYMENT_REPOSITORY } from '../payment/domain/repositories/payment.repository';
-import type { IPaymentRepository } from '../payment/domain/repositories/payment.repository';
+import {
+  PAYMENT_GATEWAY,
+  PAYMENT_REPOSITORY,
+  type IPaymentGateway,
+  type IPaymentRepository,
+} from '../payment/contracts';
 import { CheckRoomAvailabilityService } from './applications/services/check-room-availability.service';
 import { EnrichReservationOutputsService } from './applications/services/enrich-reservation-outputs.service';
 import { ResolvePaymentReservationsService } from './applications/services/resolve-payment-reservations.service';
@@ -28,10 +32,6 @@ import { ClearExpiredReservationService } from './applications/services/clear-ex
 import { ComputeCancellationRefundService } from './applications/services/compute-cancellation-refund.service';
 import { AssertReservationAccessService } from './applications/services/assert-reservation-access.service';
 import { ResolveReservationCancellationPolicyService } from './applications/services/resolve-reservation-cancellation-policy.service';
-import {
-  PAYMENT_GATEWAY,
-  type IPaymentGateway,
-} from '../payment/domain/ports/payment-gateway.port';
 import {
   RESERVATION_REPOSITORY,
   type IReservationRepository,

@@ -6,7 +6,7 @@ import { Favorite } from '../../../domain/entities/favorite.entity';
 import { FavoriteOutput } from '../../dto/favorite.output';
 import type { RoomMediaPresenter } from '../../../../rooms/applications/presenters/room-media.presenter';
 import type { AddFavoriteCommand } from '../commands/AddFavoriteCommand';
-import { ResolveFavoriteUserService } from '../../services/resolve-favorite-user.service';
+import { ResolveAuthenticatedUserService } from '../../../../../shared/auth/resolve-authenticated-user.service';
 
 export class AddFavoriteCommandHandler implements ICommandHandler<
   AddFavoriteCommand,
@@ -16,11 +16,11 @@ export class AddFavoriteCommandHandler implements ICommandHandler<
     private readonly favoriteRepository: IFavoriteRepository,
     private readonly roomRepository: IRoomRepository,
     private readonly roomMediaPresenter: RoomMediaPresenter,
-    private readonly resolveFavoriteUserService: ResolveFavoriteUserService,
+    private readonly resolveAuthenticatedUserService: ResolveAuthenticatedUserService,
   ) {}
 
   async execute(command: AddFavoriteCommand): Promise<FavoriteOutput> {
-    const userId = await this.resolveFavoriteUserService.resolveUserId(
+    const userId = await this.resolveAuthenticatedUserService.resolveUserId(
       command.authId,
     );
 
