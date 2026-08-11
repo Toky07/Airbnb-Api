@@ -1,25 +1,12 @@
 import request from 'supertest';
-import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { JwtModule } from '@nestjs/jwt';
-import { AuthModule } from '@src/modules/authentication/auth.module';
-import { UserModule } from '@src/modules/user/user.module';
-import { HostModule } from '@src/modules/host/host.module';
 import { PropertyEntity } from '@src/modules/properties/infrastructure/entities/property-entity.entity';
 import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
 import { AmenityOrmEntity } from '@src/modules/amenity/infrastructure/entities/amenity.orm-entity';
 import { AMENITY_SCOPE } from '@src/modules/amenity/contracts';
-import {
-  AUTH_TEST_ENTITIES,
-  DOMAIN_TEST_ENTITIES,
-  registerAndLoginAsHost,
-} from '@src/test/controller-test.helpers';
-import {
-  getIntegrationTestDatabaseConfig,
-  prepareIntegrationTestDatabase,
-} from '@src/test/test-database.config';
+import { registerAndLoginAsHost } from '@src/test/controller-test.helpers';
+import { setupE2eApp } from '@src/test/e2e-app';
 
 describe('Host HTTP (/host)', () => {
   let app: INestApplication;
@@ -55,30 +42,9 @@ describe('Host HTTP (/host)', () => {
 
   beforeAll(async () => {
     process.env.MAIL_TRANSPORT = 'console';
-    await prepareIntegrationTestDatabase();
-
-    const moduleRef = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRoot(
-          getIntegrationTestDatabaseConfig([
-            ...AUTH_TEST_ENTITIES,
-            ...DOMAIN_TEST_ENTITIES,
-          ]),
-        ),
-        JwtModule.register({
-          global: true,
-          secret: '1234',
-          signOptions: { expiresIn: '5h' },
-        }),
-        AuthModule,
-        UserModule,
-        HostModule,
-      ],
-    }).compile();
-
-    dataSource = moduleRef.get(DataSource);
-    app = moduleRef.createNestApplication();
-    await app.init();
+    const ctx = await setupE2eApp();
+    app = ctx.app;
+    dataSource = ctx.dataSource;
 
     token = await registerAndLoginAsHost(app, dataSource, {
       email: 'host-controller@test.com',
@@ -87,10 +53,6 @@ describe('Host HTTP (/host)', () => {
       lastName: 'Controller',
       phoneNumber: '+33601020304',
     });
-  });
-
-  afterAll(async () => {
-    await app.close();
   });
 
   it('GET /host/profile returns host profile', async () => {

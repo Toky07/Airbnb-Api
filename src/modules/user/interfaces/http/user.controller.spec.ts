@@ -1,23 +1,13 @@
 import request from 'supertest';
-import { Test } from '@nestjs/testing';
-import { UserModule } from '@src/modules/user/user.module';
 import { INestApplication } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from '@src/modules/user/infrastructure/entities/user.entity';
 import { DataSource } from 'typeorm';
-import { JwtModule } from '@nestjs/jwt';
+import { UserEntity } from '@src/modules/user/infrastructure/entities/user.entity';
 import { AuthEntity } from '@src/modules/authentication/infrastructure/entity/auth.entity';
-import { AuthModule } from '@src/modules/authentication/auth.module';
 import {
-  AUTH_TEST_ENTITIES,
   clearEntitiesForTests,
-  DOMAIN_TEST_ENTITIES,
   registerAndLoginAsSuperAdmin,
 } from '@src/test/controller-test.helpers';
-import {
-  getIntegrationTestDatabaseConfig,
-  prepareIntegrationTestDatabase,
-} from '@src/test/test-database.config';
+import { setupE2eApp } from '@src/test/e2e-app';
 
 describe('UserController', () => {
   let app: INestApplication;
@@ -26,30 +16,9 @@ describe('UserController', () => {
 
   beforeAll(async () => {
     process.env.MAIL_TRANSPORT = 'console';
-    await prepareIntegrationTestDatabase();
-
-    const moduleRef = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRoot(
-          getIntegrationTestDatabaseConfig([
-            ...AUTH_TEST_ENTITIES,
-            ...DOMAIN_TEST_ENTITIES,
-          ]),
-        ),
-        JwtModule.register({
-          global: true,
-          secret: '1234',
-          signOptions: { expiresIn: '5h' },
-        }),
-        UserModule,
-        AuthModule,
-      ],
-    }).compile();
-
-    dataSource = moduleRef.get(DataSource);
-
-    app = moduleRef.createNestApplication();
-    await app.init();
+    const ctx = await setupE2eApp();
+    app = ctx.app;
+    dataSource = ctx.dataSource;
 
     token = await registerAndLoginAsSuperAdmin(app, dataSource, {
       email: 'test@test.com',
@@ -373,9 +342,5 @@ describe('UserController', () => {
       .get(`/users/${user.id}`)
       .set('Authorization', `Bearer ${token}`)
       .expect(404);
-  });
-
-  afterAll(async () => {
-    await app.close();
   });
 });

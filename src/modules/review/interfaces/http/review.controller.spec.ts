@@ -1,15 +1,6 @@
 import request from 'supertest';
-import { Test, type TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule } from '@nestjs/jwt';
+import { INestApplication } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { AuthModule } from '@src/modules/authentication/auth.module';
-import { UserModule } from '@src/modules/user/user.module';
-import { PropertiesModule } from '@src/modules/properties/properties.module';
-import { RoomsModule } from '@src/modules/rooms/room.module';
-import { ReservationModule } from '@src/modules/reservation/reservation.module';
-import { ReviewModule } from '@src/modules/review/review.module';
 import { PropertyEntity } from '@src/modules/properties/infrastructure/entities/property-entity.entity';
 import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
 import { UserEntity } from '@src/modules/user/infrastructure/entities/user.entity';
@@ -19,15 +10,10 @@ import { ReviewOrmEntity } from '@src/modules/review/infrastructure/entities/rev
 import { REVIEW_STATUS } from '@src/modules/review/domain/constants/review-status.constant';
 import { RESERVATION_STATUS } from '@src/modules/reservation/contracts';
 import {
-  AUTH_TEST_ENTITIES,
   DEFAULT_REGISTER,
-  DOMAIN_TEST_ENTITIES,
   registerAndLoginAsSuperAdmin,
 } from '@src/test/controller-test.helpers';
-import {
-  getIntegrationTestDatabaseConfig,
-  prepareIntegrationTestDatabase,
-} from '@src/test/test-database.config';
+import { setupE2eApp } from '@src/test/e2e-app';
 
 describe('ReviewController', () => {
   let app: INestApplication;
@@ -39,37 +25,9 @@ describe('ReviewController', () => {
 
   beforeAll(async () => {
     process.env.MAIL_TRANSPORT = 'console';
-    await prepareIntegrationTestDatabase();
-
-    const moduleRef: TestingModule = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRoot(
-          getIntegrationTestDatabaseConfig([
-            ...AUTH_TEST_ENTITIES,
-            ...DOMAIN_TEST_ENTITIES,
-            ReviewOrmEntity,
-          ]),
-        ),
-        JwtModule.register({
-          global: true,
-          secret: '1234',
-          signOptions: { expiresIn: '5h' },
-        }),
-        AuthModule,
-        UserModule,
-        PropertiesModule,
-        RoomsModule,
-        ReservationModule,
-        ReviewModule,
-      ],
-    }).compile();
-
-    dataSource = moduleRef.get(DataSource);
-    app = moduleRef.createNestApplication();
-    app.useGlobalPipes(
-      new ValidationPipe({ whitelist: true, transform: true }),
-    );
-    await app.init();
+    const ctx = await setupE2eApp();
+    app = ctx.app;
+    dataSource = ctx.dataSource;
 
     token = await registerAndLoginAsSuperAdmin(app, dataSource);
 
@@ -126,10 +84,6 @@ describe('ReviewController', () => {
     });
 
     reservationId = reservation.id;
-  });
-
-  afterAll(async () => {
-    await app?.close();
   });
 
   it('POST /reviews crée un avis en attente', async () => {

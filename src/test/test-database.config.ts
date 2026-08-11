@@ -21,6 +21,7 @@ const E2E_DB_STATE_KEY = '__airbnb_e2e_db_state__';
 
 type E2eDbState = {
   initPromise: Promise<void> | null;
+  adminDataSource: DataSource | null;
 };
 
 function getE2eDbState(): E2eDbState {
@@ -31,6 +32,7 @@ function getE2eDbState(): E2eDbState {
   if (!globalState[E2E_DB_STATE_KEY]) {
     globalState[E2E_DB_STATE_KEY] = {
       initPromise: null,
+      adminDataSource: null,
     };
   }
 
@@ -79,22 +81,65 @@ async function resetSchemaAndMigrate(dataSource: DataSource): Promise<void> {
   await dataSource.runMigrations();
 }
 
-async function truncateAllTables(dataSource: DataSource): Promise<void> {
+async function truncateAllTables(
+  dataSource: DataSource,
+  preserveTables: string[] = [],
+): Promise<void> {
+  const preserved = new Set(['migrations', ...preserveTables]);
   const tables: Array<{ tablename: string }> = await dataSource.query(`
     SELECT tablename
     FROM pg_tables
     WHERE schemaname = 'public'
-      AND tablename <> 'migrations'
   `);
 
-  if (tables.length === 0) {
+  const tableNames = tables
+    .map((table) => table.tablename)
+    .filter((name) => !preserved.has(name))
+    .map((name) => `"${name}"`)
+    .join(', ');
+
+  if (!tableNames) {
     return;
   }
 
-  const tableNames = tables.map((table) => `"${table.tablename}"`).join(', ');
   await dataSource.query(
     `TRUNCATE TABLE ${tableNames} RESTART IDENTITY CASCADE`,
   );
+}
+
+/** Catalog tables seeded once at Nest boot; keep them between e2e files. */
+export const E2E_PRESERVED_CATALOG_TABLES = [
+  'permissions',
+  'roles',
+  'role_permissions',
+  'property_types',
+  'room_types',
+  'amenities',
+] as const;
+
+/** Truncate public tables (schema kept). */
+export async function truncateIntegrationTables(
+  dataSource: DataSource,
+  options?: { preserveCatalog?: boolean },
+): Promise<void> {
+  if (process.env.DB_TYPE === 'sqlite') {
+    return;
+  }
+
+  await truncateAllTables(
+    dataSource,
+    options?.preserveCatalog ? [...E2E_PRESERVED_CATALOG_TABLES] : [],
+  );
+}
+
+async function getOrCreateAdminDataSource(): Promise<DataSource> {
+  const state = getE2eDbState();
+  if (state.adminDataSource?.isInitialized) {
+    return state.adminDataSource;
+  }
+
+  state.adminDataSource = await createAdminDataSource();
+  return state.adminDataSource;
 }
 
 /**
@@ -103,7 +148,8 @@ async function truncateAllTables(dataSource: DataSource): Promise<void> {
  * - Later calls: truncate tables only (keeps schema).
  */
 export async function prepareIntegrationTestDatabase(): Promise<void> {
-  // Prevent duplicate EventBus listeners when Vitest reuses the module graph.
+  // Prevent duplicate EventBus listeners when Vitest reuses the module graph
+  // and each controller file boots its own Nest app.
   EventBus.getInstance().clear();
 
   if (process.env.DB_TYPE === 'sqlite') {
@@ -114,25 +160,15 @@ export async function prepareIntegrationTestDatabase(): Promise<void> {
 
   if (!state.initPromise) {
     state.initPromise = (async () => {
-      const dataSource = await createAdminDataSource();
-      try {
-        await resetSchemaAndMigrate(dataSource);
-      } finally {
-        await dataSource.destroy();
-      }
+      const dataSource = await getOrCreateAdminDataSource();
+      await resetSchemaAndMigrate(dataSource);
     })();
     await state.initPromise;
     return;
   }
 
   await state.initPromise;
-
-  const dataSource = await createAdminDataSource();
-  try {
-    await truncateAllTables(dataSource);
-  } finally {
-    await dataSource.destroy();
-  }
+  await truncateAllTables(await getOrCreateAdminDataSource());
 }
 
 export function getIntegrationTestDatabaseConfig(

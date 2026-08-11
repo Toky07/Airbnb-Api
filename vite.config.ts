@@ -62,8 +62,8 @@ export default defineConfig({
             './src/test/vitest.e2e.setup.ts',
           ],
           include: ['**/*.controller.spec.ts'],
-          // Share the module graph across files: Postgres suite is sequential
-          // anyway, and re-transforming Nest modules for every file dominated runtime.
+          // Share the module graph + Nest app across files: Postgres suite is
+          // sequential, and re-booting Nest/TypeORM per file dominated runtime.
           isolate: false,
           fileParallelism: !usesPostgres,
           hookTimeout: usesPostgres ? 30_000 : 10_000,

@@ -1,34 +1,18 @@
 import request from 'supertest';
-import { Test, type TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule } from '@nestjs/jwt';
+import { INestApplication } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { AuthModule } from '@src/modules/authentication/auth.module';
-import { UserModule } from '@src/modules/user/user.module';
-import { RoomsModule } from '@src/modules/rooms/room.module';
-import { PropertiesModule } from '@src/modules/properties/properties.module';
-import { ReservationModule } from '@src/modules/reservation/reservation.module';
-import { MessagingModule } from '@src/modules/messaging/messaging.module';
 import { PropertyEntity } from '@src/modules/properties/infrastructure/entities/property-entity.entity';
 import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
 import { UserEntity } from '@src/modules/user/infrastructure/entities/user.entity';
 import { ReservationOrmEntity } from '@src/modules/reservation/infrastructure/entities/reservation.orm-entity';
 import { ReservationItemOrmEntity } from '@src/modules/reservation/infrastructure/entities/reservation-item.orm-entity';
-import { ConversationOrmEntity } from '@src/modules/messaging/infrastructure/entities/conversation.orm-entity';
-import { MessageOrmEntity } from '@src/modules/messaging/infrastructure/entities/message.orm-entity';
 import { RESERVATION_STATUS } from '@src/modules/reservation/contracts';
 import {
-  AUTH_TEST_ENTITIES,
   DEFAULT_REGISTER,
-  DOMAIN_TEST_ENTITIES,
   registerAndLoginAsHost,
   registerAndLoginAsSuperAdmin,
 } from '@src/test/controller-test.helpers';
-import {
-  getIntegrationTestDatabaseConfig,
-  prepareIntegrationTestDatabase,
-} from '@src/test/test-database.config';
+import { setupE2eApp } from '@src/test/e2e-app';
 
 describe('MessagingController', () => {
   let app: INestApplication;
@@ -41,38 +25,9 @@ describe('MessagingController', () => {
 
   beforeAll(async () => {
     process.env.MAIL_TRANSPORT = 'console';
-    await prepareIntegrationTestDatabase();
-
-    const moduleRef: TestingModule = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRoot(
-          getIntegrationTestDatabaseConfig([
-            ...AUTH_TEST_ENTITIES,
-            ...DOMAIN_TEST_ENTITIES,
-            ConversationOrmEntity,
-            MessageOrmEntity,
-          ]),
-        ),
-        JwtModule.register({
-          global: true,
-          secret: '1234',
-          signOptions: { expiresIn: '5h' },
-        }),
-        AuthModule,
-        UserModule,
-        PropertiesModule,
-        RoomsModule,
-        ReservationModule,
-        MessagingModule,
-      ],
-    }).compile();
-
-    dataSource = moduleRef.get(DataSource);
-    app = moduleRef.createNestApplication();
-    app.useGlobalPipes(
-      new ValidationPipe({ whitelist: true, transform: true }),
-    );
-    await app.init();
+    const ctx = await setupE2eApp();
+    app = ctx.app;
+    dataSource = ctx.dataSource;
 
     guestToken = await registerAndLoginAsSuperAdmin(app, dataSource);
     hostToken = await registerAndLoginAsHost(app, dataSource, {
@@ -139,10 +94,6 @@ describe('MessagingController', () => {
     });
 
     reservationId = reservation.id;
-  });
-
-  afterAll(async () => {
-    await app?.close();
   });
 
   it('POST /conversations/from-reservation/:reservationId creates a conversation', async () => {

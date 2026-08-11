@@ -1,27 +1,12 @@
 import request from 'supertest';
-import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule } from '@nestjs/jwt';
-import { AuthModule } from '@src/modules/authentication/auth.module';
-import { MailModule } from '@src/modules/mail/mail.module';
-import { UserModule } from '@src/modules/user/user.module';
-import { AuthEntity } from '@src/modules/authentication/infrastructure/entity/auth.entity';
 import { Role } from '@src/modules/authentication/infrastructure/entity/role.entity';
 import { DataSource } from 'typeorm';
 import { UserNameVO } from '@src/modules/user/contracts';
 import { RoleEntity } from '@src/modules/authentication/domain/entities/role.entity';
 import { RoleMapper } from '@src/modules/authentication/infrastructure/mappers/role.mappers';
-import { PermissionEntity } from '@src/modules/authentication/infrastructure/entity/permission.entity';
-import {
-  AUTH_TEST_ENTITIES,
-  DOMAIN_TEST_ENTITIES,
-  registerAndLoginAsSuperAdmin,
-} from '@src/test/controller-test.helpers';
-import {
-  getIntegrationTestDatabaseConfig,
-  prepareIntegrationTestDatabase,
-} from '@src/test/test-database.config';
+import { registerAndLoginAsSuperAdmin } from '@src/test/controller-test.helpers';
+import { setupE2eApp } from '@src/test/e2e-app';
 
 describe('Roles', () => {
   let app: INestApplication;
@@ -41,30 +26,9 @@ describe('Roles', () => {
 
   beforeAll(async () => {
     process.env.MAIL_TRANSPORT = 'console';
-    await prepareIntegrationTestDatabase();
-
-    const moduleRef = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRoot(
-          getIntegrationTestDatabaseConfig([
-            ...AUTH_TEST_ENTITIES,
-            ...DOMAIN_TEST_ENTITIES,
-          ]),
-        ),
-        JwtModule.register({
-          global: true,
-          secret: '1234',
-          signOptions: { expiresIn: '5h' },
-        }),
-        MailModule,
-        UserModule,
-        AuthModule,
-      ],
-    }).compile();
-
-    dataSource = moduleRef.get(DataSource);
-    app = moduleRef.createNestApplication();
-    await app.init();
+    const ctx = await setupE2eApp();
+    app = ctx.app;
+    dataSource = ctx.dataSource;
     token = await registerAndLoginAsSuperAdmin(app, dataSource);
   });
 

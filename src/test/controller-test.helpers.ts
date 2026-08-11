@@ -84,6 +84,21 @@ export const DOMAIN_TEST_ENTITIES = [
   ReviewOrmEntity,
 ] as const;
 
+const passwordHashCache = new Map<string, Promise<string>>();
+
+function hashPasswordForTests(password: string): Promise<string> {
+  const cacheKey = `${password}:4`;
+  const existing = passwordHashCache.get(cacheKey);
+  if (existing) {
+    return existing;
+  }
+
+  // Cost 4 is enough for tests and much faster than production rounds.
+  const hashPromise = bcrypt.hash(password, 4);
+  passwordHashCache.set(cacheKey, hashPromise);
+  return hashPromise;
+}
+
 async function assignRoleBySlug(
   dataSource: DataSource,
   email: string,
@@ -147,8 +162,7 @@ export async function activateAuthAccountForTests(
   }
 
   await authRepo.update(auth.id, {
-    // Cost 4 is enough for tests and much faster than production rounds.
-    password: await bcrypt.hash(password, 4),
+    password: await hashPasswordForTests(password),
     status: ACCOUNT_STATUS.ACTIVE,
   });
 

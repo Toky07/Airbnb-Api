@@ -1,27 +1,11 @@
 import request from 'supertest';
-import { Test } from '@nestjs/testing';
-import { RoomsModule } from '@src/modules/rooms/room.module';
 import { INestApplication } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { JwtModule } from '@nestjs/jwt';
 import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
 import { RoomBlockedDateOrmEntity } from '@src/modules/rooms/infrastructure/entities/room-blocked-date.orm-entity';
-import { RoomTypeEntity } from '@src/modules/rooms/infrastructure/entities/room-type.entity';
 import { PropertyEntity } from '@src/modules/properties/infrastructure/entities/property-entity.entity';
-import { PropertyTypeEntity } from '@src/modules/properties/infrastructure/entities/property-type.entity';
-import { MediaOrmEntity } from '@src/modules/media/infrastructure/entities/media-orm.entity';
-import { AuthModule } from '@src/modules/authentication/auth.module';
-import { UserModule } from '@src/modules/user/user.module';
-import {
-  AUTH_TEST_ENTITIES,
-  DOMAIN_TEST_ENTITIES,
-  registerAndLoginAsSuperAdmin,
-} from '@src/test/controller-test.helpers';
-import {
-  getIntegrationTestDatabaseConfig,
-  prepareIntegrationTestDatabase,
-} from '@src/test/test-database.config';
+import { registerAndLoginAsSuperAdmin } from '@src/test/controller-test.helpers';
+import { setupE2eApp } from '@src/test/e2e-app';
 
 describe('RoomController', () => {
   let app: INestApplication;
@@ -55,32 +39,9 @@ describe('RoomController', () => {
   } as const;
 
   beforeAll(async () => {
-    await prepareIntegrationTestDatabase();
-
-    const moduleRef = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRoot(
-          getIntegrationTestDatabaseConfig([
-            ...AUTH_TEST_ENTITIES,
-            ...DOMAIN_TEST_ENTITIES,
-          ]),
-        ),
-        JwtModule.register({
-          global: true,
-          secret: '1234',
-          secret: '1234',
-          signOptions: { expiresIn: '5h' },
-        }),
-        AuthModule,
-        UserModule,
-        RoomsModule,
-      ],
-    }).compile();
-
-    dataSource = moduleRef.get(DataSource);
-
-    app = moduleRef.createNestApplication();
-    await app.init();
+    const ctx = await setupE2eApp();
+    app = ctx.app;
+    dataSource = ctx.dataSource;
 
     token = await registerAndLoginAsSuperAdmin(app, dataSource);
   });
@@ -345,9 +306,5 @@ describe('RoomController', () => {
 
     const deletedRoom = await repository.findOne({ where: { id: room.id } });
     expect(deletedRoom).toBeNull();
-  });
-
-  afterAll(async () => {
-    await app.close();
   });
 });
