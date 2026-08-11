@@ -51,4 +51,33 @@ describe('SyncEntityAmenitiesService', () => {
       NotFoundException,
     );
   });
+
+  it('syncs room amenities', async () => {
+    const roomRepository = {
+      findById: vi.fn().mockResolvedValue({ id: 2 }),
+    };
+    const roomAmenityRepository = {
+      replaceForRoom: vi.fn().mockResolvedValue(undefined),
+    };
+    const amenityRepository = {
+      findByIds: vi
+        .fn()
+        .mockResolvedValue([
+          new Amenity('Wi-Fi', 'wifi', AMENITY_SCOPE.ROOM, true, 1),
+        ]),
+    };
+
+    const service = new SyncEntityAmenitiesService(
+      {} as never,
+      roomRepository as never,
+      {} as never,
+      roomAmenityRepository as never,
+      new ResolveAmenitiesService(amenityRepository as never),
+    );
+
+    const result = await service.syncRoom(2, [1]);
+
+    expect(roomAmenityRepository.replaceForRoom).toHaveBeenCalledWith(2, [1]);
+    expect(result).toHaveLength(1);
+  });
 });
