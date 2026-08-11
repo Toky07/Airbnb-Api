@@ -12,10 +12,8 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { JwtPayload } from '@src/modules/authentication/contracts';
 import { Public } from '@src/modules/authentication/contracts';
 import { CompleteCartCheckoutDto } from '@src/modules/cart/applications/dto/complete-cart-checkout.dto';
-import {
-  AddCartItemDto,
-  UpdateCartItemDto,
-} from '@src/modules/cart/applications/dto/add-cart-item.dto';
+import { AddCartItemDto } from '@src/modules/cart/applications/dto/add-cart-item.dto';
+import { UpdateCartItemDto } from '@src/modules/cart/applications/dto/update-cart-item.dto';
 import { parseCartContext } from './parse-cart-context';
 import { QueryBus } from '@src/shared/useCase/bus/query-bus';
 import { CommandBus } from '@src/shared/useCase/bus/bus';

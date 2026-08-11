@@ -5,7 +5,7 @@ import { Amenity } from '@src/modules/amenity/domain/entities/amenity.entity';
 import { AMENITY_SCOPE } from '@src/modules/amenity/domain/constants/amenity-scope.constant';
 import { ListRoomAmenitiesQueryHandler } from './ListRoomAmenitiesQueryHandler';
 import { ListRoomAmenitiesQuery } from '@src/modules/amenity/applications/useCase/queries/ListRoomAmenitiesQuery';
-import { ListEntityAmenitiesService } from '@src/modules/amenity/applications/services/entity-amenities.service';
+import { ListEntityAmenitiesService } from '@src/modules/amenity/applications/services/list-entity-amenities.service';
 
 const property = new Property({
   name: 'Hôtel Test',

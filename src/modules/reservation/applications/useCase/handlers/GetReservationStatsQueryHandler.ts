@@ -2,11 +2,9 @@ import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interf
 import type { IUserRepository } from '@src/modules/user/contracts';
 import { RESERVATION_STATUS } from '@src/modules/reservation/domain/constants/reservation-status.constant';
 import type { IReservationRepository } from '@src/modules/reservation/domain/repositories/reservation.repository';
-import {
-  RecentCustomerOutput,
-  ReservationActivityOutput,
-  ReservationStatsOutput,
-} from '@src/modules/reservation/applications/dto/reservation-stats.output';
+import { RecentCustomerOutput } from '@src/modules/reservation/applications/dto/recent-customer.output';
+import { ReservationActivityOutput } from '@src/modules/reservation/applications/dto/reservation-activity.output';
+import { ReservationStatsOutput } from '@src/modules/reservation/applications/dto/reservation-stats.output';
 import { ReservationItemOutput } from '@src/modules/reservation/applications/dto/reservation-item.output';
 import type { EnrichReservationOutputsService } from '@src/modules/reservation/applications/services/enrich-reservation-outputs.service';
 import type { CountScopedRoomsService } from '@src/modules/reservation/applications/services/count-scoped-rooms.service';

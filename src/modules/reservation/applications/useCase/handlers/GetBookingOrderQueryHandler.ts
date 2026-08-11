@@ -7,7 +7,7 @@ import {
 import type { IPropertyRepository } from '@src/modules/properties/contracts';
 import type { IPaymentRepository } from '@src/modules/payment/contracts';
 import type { IUserRepository } from '@src/modules/user/contracts';
-import { BookingOrderDetailOutput } from '@src/modules/reservation/applications/dto/booking-order.output';
+import { BookingOrderDetailOutput } from '@src/modules/reservation/applications/dto/booking-order-detail.output';
 import type { BookingOrderItemOutput } from '@src/modules/reservation/applications/dto/booking-order-item.output';
 import type { ResolvePaymentReservationsService } from '@src/modules/reservation/applications/services/resolve-payment-reservations.service';
 import { filterItemsByPropertyIds } from '@src/modules/reservation/applications/services/scope-booking-order-items.service';

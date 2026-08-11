@@ -2,7 +2,7 @@ import type { PaginatedResult } from '@src/shared/pagination/pagination.types';
 import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
 import type { IPaymentRepository } from '@src/modules/payment/contracts';
 import type { IReservationRepository } from '@src/modules/reservation/domain/repositories/reservation.repository';
-import { BookingOrderListItemOutput } from '@src/modules/reservation/applications/dto/booking-order.output';
+import { BookingOrderListItemOutput } from '@src/modules/reservation/applications/dto/booking-order-list-item.output';
 import type { ResolveHostPropertyIdsService } from '@src/modules/reservation/applications/services/resolve-host-property-ids.service';
 import type { ListHostBookingOrdersQuery } from '@src/modules/reservation/applications/useCase/queries/ListHostBookingOrdersQuery';
 import type { ListBookingOrdersQueryHandler } from './ListBookingOrdersQueryHandler';

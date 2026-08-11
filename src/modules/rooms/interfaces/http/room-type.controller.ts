@@ -18,10 +18,8 @@ import { UpdateRoomTypeCommand } from '@src/modules/rooms/applications/useCase/c
 import { DeleteRoomTypeCommand } from '@src/modules/rooms/applications/useCase/commands/DeleteRoomTypeCommand';
 import { ListRoomTypesQuery } from '@src/modules/rooms/applications/useCase/queries/ListRoomTypesQuery';
 import { ListRoomTypeOptionsQuery } from '@src/modules/rooms/applications/useCase/queries/ListRoomTypeOptionsQuery';
-import {
-  CreateRoomTypeSwaggerDto,
-  UpdateRoomTypeSwaggerDto,
-} from '@src/shared/swagger/swagger-schemas.dto';
+import { CreateRoomTypeSwaggerDto } from '@src/shared/swagger/create-room-type-swagger.dto';
+import { UpdateRoomTypeSwaggerDto } from '@src/shared/swagger/update-room-type-swagger.dto';
 import { ApiJwtAuth } from '@src/shared/swagger/swagger.decorators';
 import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 

@@ -3,7 +3,7 @@ import { AMENITY_SCOPE } from '@src/modules/amenity/domain/constants/amenity-sco
 import { Amenity } from '@src/modules/amenity/domain/entities/amenity.entity';
 import { SyncPropertyAmenitiesCommandHandler } from './SyncPropertyAmenitiesCommandHandler';
 import { SyncPropertyAmenitiesCommand } from '@src/modules/amenity/applications/useCase/commands/SyncPropertyAmenitiesCommand';
-import { SyncEntityAmenitiesService } from '@src/modules/amenity/applications/services/entity-amenities.service';
+import { SyncEntityAmenitiesService } from '@src/modules/amenity/applications/services/sync-entity-amenities.service';
 import { ResolveAmenitiesService } from '@src/modules/amenity/applications/services/resolve-amenities.service';
 
 describe('SyncPropertyAmenitiesCommandHandler', () => {

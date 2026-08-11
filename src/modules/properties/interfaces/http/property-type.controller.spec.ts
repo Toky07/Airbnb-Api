@@ -1,23 +1,12 @@
 import request from 'supertest';
-import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { JwtModule } from '@nestjs/jwt';
-import { PropertiesModule } from '@src/modules/properties/properties.module';
-import { AuthModule } from '@src/modules/authentication/auth.module';
-import { UserModule } from '@src/modules/user/user.module';
 import { PropertyTypeEntity } from '@src/modules/properties/infrastructure/entities/property-type.entity';
 import {
-  AUTH_TEST_ENTITIES,
-  DOMAIN_TEST_ENTITIES,
   registerAndLoginAsHost,
   registerAndLoginAsSuperAdmin,
 } from '@src/test/controller-test.helpers';
-import {
-  getIntegrationTestDatabaseConfig,
-  prepareIntegrationTestDatabase,
-} from '@src/test/test-database.config';
+import { setupE2eApp } from '@src/test/e2e-app';
 
 describe('PropertyTypeController', () => {
   let app: INestApplication;
@@ -28,30 +17,9 @@ describe('PropertyTypeController', () => {
 
   beforeAll(async () => {
     process.env.MAIL_TRANSPORT = 'console';
-    await prepareIntegrationTestDatabase();
-
-    const moduleRef = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRoot(
-          getIntegrationTestDatabaseConfig([
-            ...AUTH_TEST_ENTITIES,
-            ...DOMAIN_TEST_ENTITIES,
-          ]),
-        ),
-        JwtModule.register({
-          global: true,
-          secret: '1234',
-          signOptions: { expiresIn: '5h' },
-        }),
-        AuthModule,
-        UserModule,
-        PropertiesModule,
-      ],
-    }).compile();
-
-    dataSource = moduleRef.get(DataSource);
-    app = moduleRef.createNestApplication();
-    await app.init();
+    const ctx = await setupE2eApp();
+    app = ctx.app;
+    dataSource = ctx.dataSource;
 
     token = await registerAndLoginAsSuperAdmin(app, dataSource);
     hostToken = await registerAndLoginAsHost(app, dataSource, {
@@ -61,10 +29,6 @@ describe('PropertyTypeController', () => {
       lastName: 'Host',
       phoneNumber: '+33601020305',
     });
-  });
-
-  afterAll(async () => {
-    await app.close();
   });
 
   it('GET /property-types lists all property types for super admin', async () => {

@@ -1,4 +1,4 @@
-import type { UpdateCartItemDto } from '@src/modules/cart/applications/dto/add-cart-item.dto';
+import type { UpdateCartItemDto } from '@src/modules/cart/applications/dto/update-cart-item.dto';
 import type { CartRequestContext } from '@src/modules/cart/applications/services/resolve-cart.service';
 
 export class UpdateCartItemCommand {

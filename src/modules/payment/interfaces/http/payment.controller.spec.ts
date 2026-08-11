@@ -1,73 +1,48 @@
 import request from 'supertest';
-import { Test } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule } from '@nestjs/jwt';
+import { INestApplication } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { PaymentModule } from '@src/modules/payment/payment.module';
 import { PaymentOrmEntity } from '@src/modules/payment/infrastructure/entities/payment.orm-entity';
-import { PAYMENT_GATEWAY } from '@src/modules/payment/domain/ports/payment-gateway.port';
 import { PAYMENT_STATUS } from '@src/modules/payment/domain/constants/payment-status.constant';
-import {
-  AUTH_TEST_ENTITIES,
-  DOMAIN_TEST_ENTITIES,
-} from '@src/test/controller-test.helpers';
-import {
-  getIntegrationTestDatabaseConfig,
-  prepareIntegrationTestDatabase,
-} from '@src/test/test-database.config';
-import {
-  createPaymentGatewayMock,
-  createWebhookVerifierMock,
-} from '@src/modules/payment/applications/useCase/payment-test.helpers';
-import { StripeWebhookVerifier } from '@src/modules/payment/infrastructure/stripe/StripeWebhookVerifier';
 import { ReservationOrmEntity } from '@src/modules/reservation/infrastructure/entities/reservation.orm-entity';
 import { RESERVATION_STATUS } from '@src/modules/reservation/contracts';
 import { PropertyEntity } from '@src/modules/properties/infrastructure/entities/property-entity.entity';
 import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
+import { UserEntity } from '@src/modules/user/infrastructure/entities/user.entity';
+import { setupE2eApp, type E2eAppContext } from '@src/test/e2e-app';
 
 describe('PaymentController', () => {
   let app: INestApplication;
   let dataSource: DataSource;
   let roomId: number;
-  const paymentGateway = createPaymentGatewayMock();
-  const webhookVerifier = createWebhookVerifierMock();
+  let guestId: number;
+  let webhookVerifier: E2eAppContext['webhookVerifier'];
 
   beforeAll(async () => {
     process.env.MAIL_TRANSPORT = 'console';
     process.env.STRIPE_PUBLISHABLE_KEY = 'pk_test_controller';
-    await prepareIntegrationTestDatabase();
+    const ctx = await setupE2eApp();
+    app = ctx.app;
+    dataSource = ctx.dataSource;
+    webhookVerifier = ctx.webhookVerifier;
 
-    const moduleRef = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRoot(
-          getIntegrationTestDatabaseConfig([
-            ...AUTH_TEST_ENTITIES,
-            ...DOMAIN_TEST_ENTITIES,
-            ReservationOrmEntity,
-            PaymentOrmEntity,
-          ]),
-        ),
-        JwtModule.register({
-          global: true,
-          secret: '1234',
-          signOptions: { expiresIn: '5h' },
-        }),
-        PaymentModule,
-      ],
-    })
-      .overrideProvider(PAYMENT_GATEWAY)
-      .useValue(paymentGateway)
-      .overrideProvider(StripeWebhookVerifier)
-      .useValue(webhookVerifier)
-      .compile();
+    const guest = await dataSource.getRepository(UserEntity).save({
+      firstName: 'Guest',
+      lastName: 'Pay',
+      email: 'guest-pay@test.com',
+      phoneNumber: '+33601020304',
+      avatar: '',
+      status: 'active',
+    });
+    guestId = guest.id;
 
-    dataSource = moduleRef.get(DataSource);
-    app = moduleRef.createNestApplication({ rawBody: true });
-    app.useGlobalPipes(
-      new ValidationPipe({ whitelist: true, transform: true }),
-    );
-    await app.init();
+    const host = await dataSource.getRepository(UserEntity).save({
+      firstName: 'Host',
+      lastName: 'Pay',
+      email: 'host-pay@test.com',
+      phoneNumber: '+33601020305',
+      avatar: '',
+      status: 'active',
+    });
 
     const property = await dataSource.getRepository(PropertyEntity).save({
       name: 'Hotel Test',
@@ -79,7 +54,7 @@ describe('PaymentController', () => {
       longitude: 0,
       checkInTime: '15:00',
       checkOutTime: '11:00',
-      ownerId: 1,
+      ownerId: host.id,
     });
 
     const room = await dataSource.getRepository(RoomEntity).save({
@@ -93,7 +68,7 @@ describe('PaymentController', () => {
       quantity: 1,
       size: 30,
       status: 'available',
-      propertyId: property.id,
+      property,
     });
     roomId = room.id;
 
@@ -103,14 +78,10 @@ describe('PaymentController', () => {
       status: 'pending',
       provider: 'stripe',
       transactionId: 'pi_test_123',
-      userId: 1,
+      userId: guest.id,
       propertyType: 'order',
       propertyId: 1,
     });
-  });
-
-  afterAll(async () => {
-    await app?.close();
   });
 
   it('POST /payments/webhook met à jour le statut du paiement', async () => {
@@ -124,7 +95,7 @@ describe('PaymentController', () => {
     });
 
     await dataSource.getRepository(ReservationOrmEntity).save({
-      userId: 1,
+      userId: guestId,
       status: RESERVATION_STATUS.PENDING,
       payment: { id: payment!.id },
       items: [

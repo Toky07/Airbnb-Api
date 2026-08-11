@@ -1,8 +1,6 @@
 import {
-  IsArray,
   IsBoolean,
   IsIn,
-  IsInt,
   IsOptional,
   IsString,
   MinLength,
@@ -27,24 +25,4 @@ export class CreateAmenityDto {
   @IsOptional()
   @IsBoolean()
   isActive?: boolean;
-}
-
-export class UpdateAmenityDto {
-  @IsOptional()
-  @IsString()
-  name?: string;
-
-  @IsOptional()
-  @IsString()
-  icon?: string;
-
-  @IsOptional()
-  @IsBoolean()
-  isActive?: boolean;
-}
-
-export class SyncAmenitiesDto {
-  @IsArray()
-  @IsInt({ each: true })
-  amenityIds: number[];
 }

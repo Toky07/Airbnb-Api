@@ -18,10 +18,8 @@ import { UpdatePropertyTypeCommand } from '@src/modules/properties/applications/
 import { DeletePropertyTypeCommand } from '@src/modules/properties/applications/useCase/commands/DeletePropertyTypeCommand';
 import { ListPropertyTypesQuery } from '@src/modules/properties/applications/useCase/queries/ListPropertyTypesQuery';
 import { ListPropertyTypeOptionsQuery } from '@src/modules/properties/applications/useCase/queries/ListPropertyTypeOptionsQuery';
-import {
-  CreatePropertyTypeSwaggerDto,
-  UpdatePropertyTypeSwaggerDto,
-} from '@src/shared/swagger/swagger-schemas.dto';
+import { CreatePropertyTypeSwaggerDto } from '@src/shared/swagger/create-property-type-swagger.dto';
+import { UpdatePropertyTypeSwaggerDto } from '@src/shared/swagger/update-property-type-swagger.dto';
 import { ApiJwtAuth } from '@src/shared/swagger/swagger.decorators';
 import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 

@@ -8,10 +8,8 @@ import { ImportPropertiesHandler } from './ImportPropertiesHandler';
 import { ImportRolesHandler } from './ImportRolesHandler';
 import { ImportRoomsHandler } from './ImportRoomsHandler';
 import { ImportUsersHandler } from './ImportUsersHandler';
-import {
-  ImportPropertyTypesHandler,
-  ImportRoomTypesHandler,
-} from './import-category-types.handler';
+import { ImportPropertyTypesHandler } from './ImportPropertyTypesHandler';
+import { ImportRoomTypesHandler } from './ImportRoomTypesHandler';
 import type { ImportDataCommand } from '@src/modules/import/applications/useCase/commands/ImportDataCommand';
 
 export class ImportDataCommandHandler implements ICommandHandler<

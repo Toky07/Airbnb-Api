@@ -45,16 +45,14 @@ import { RequestPasswordResetCommand } from '@src/modules/authentication/applica
 import { ValidatePasswordResetTokenQuery } from '@src/modules/authentication/applications/useCase/queries/ValidatePasswordResetTokenQuery';
 import { GetMeQuery } from '@src/modules/authentication/applications/useCase/queries/GetMeQuery';
 import { BecomeHostCommand } from '@src/modules/authentication/applications/useCase/commands/BecomeHostCommand';
-import {
-  AssignRoleDto,
-  ForgotPasswordDto,
-  LoginDto,
-  LoginResponseDto,
-  RegisterDto,
-  SuccessResponseDto,
-  TokenPasswordDto,
-  TokenResponseDto,
-} from '@src/modules/authentication/applications/dto/auth-http.dto';
+import { AssignRoleDto } from '@src/modules/authentication/applications/dto/assign-role.dto';
+import { ForgotPasswordDto } from '@src/modules/authentication/applications/dto/forgot-password.dto';
+import { LoginDto } from '@src/modules/authentication/applications/dto/login.dto';
+import { LoginResponseDto } from '@src/modules/authentication/applications/dto/login-response.dto';
+import { RegisterDto } from '@src/modules/authentication/applications/dto/register.dto';
+import { SuccessResponseDto } from '@src/modules/authentication/applications/dto/success-response.dto';
+import { TokenPasswordDto } from '@src/modules/authentication/applications/dto/token-password.dto';
+import { TokenResponseDto } from '@src/modules/authentication/applications/dto/token-response.dto';
 import { ApiJwtAuth } from '@src/shared/swagger/swagger.decorators';
 import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 

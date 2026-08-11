@@ -1,16 +1,9 @@
 import request from 'supertest';
-import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule } from '@nestjs/jwt';
 import { DataSource } from 'typeorm';
-import { AuthModule } from '@src/modules/authentication/auth.module';
-import { MailModule } from '@src/modules/mail/mail.module';
-import { UserModule } from '@src/modules/user/user.module';
 import { AuthEntity } from '@src/modules/authentication/infrastructure/entity/auth.entity';
 import * as bcrypt from 'bcrypt';
 import { Role } from '@src/modules/authentication/infrastructure/entity/role.entity';
-import { PermissionEntity } from '@src/modules/authentication/infrastructure/entity/permission.entity';
 import { UserNameVO } from '@src/modules/user/contracts';
 import { RoleEntity } from '@src/modules/authentication/domain/entities/role.entity';
 import { RoleMapper } from '@src/modules/authentication/infrastructure/mappers/role.mappers';
@@ -18,14 +11,9 @@ import { UserEntity } from '@src/modules/user/infrastructure/entities/user.entit
 import {
   activateAuthAccountForTests,
   assignSuperAdminRole,
-  AUTH_TEST_ENTITIES,
   clearEntitiesForTests,
-  DOMAIN_TEST_ENTITIES,
 } from '@src/test/controller-test.helpers';
-import {
-  getIntegrationTestDatabaseConfig,
-  prepareIntegrationTestDatabase,
-} from '@src/test/test-database.config';
+import { setupE2eApp } from '@src/test/e2e-app';
 
 describe('Auth', () => {
   let app: INestApplication;
@@ -33,30 +21,9 @@ describe('Auth', () => {
 
   beforeAll(async () => {
     process.env.MAIL_TRANSPORT = 'console';
-    await prepareIntegrationTestDatabase();
-
-    const moduleRef = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRoot(
-          getIntegrationTestDatabaseConfig([
-            ...AUTH_TEST_ENTITIES,
-            ...DOMAIN_TEST_ENTITIES,
-          ]),
-        ),
-        JwtModule.register({
-          global: true,
-          secret: '1234',
-          signOptions: { expiresIn: '5h' },
-        }),
-        MailModule,
-        UserModule,
-        AuthModule,
-      ],
-    }).compile();
-
-    dataSource = moduleRef.get(DataSource);
-    app = moduleRef.createNestApplication();
-    await app.init();
+    const ctx = await setupE2eApp();
+    app = ctx.app;
+    dataSource = ctx.dataSource;
   });
 
   beforeEach(async () => {
@@ -174,9 +141,5 @@ describe('Auth', () => {
       .expect(200);
 
     expect(response.body).toStrictEqual({ success: true });
-  });
-
-  afterAll(async () => {
-    await app.close();
   });
 });

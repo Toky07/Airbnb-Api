@@ -19,10 +19,8 @@ import { parsePaginationQuery } from '@src/shared/pagination/parse-pagination-qu
 import type { PaginatedResult } from '@src/shared/pagination/pagination.types';
 import { CommandBus } from '@src/shared/useCase/bus/bus';
 import { QueryBus } from '@src/shared/useCase/bus/query-bus';
-import {
-  CreateReviewDto,
-  ModerateReviewDto,
-} from '@src/modules/review/applications/dto/create-review.dto';
+import { CreateReviewDto } from '@src/modules/review/applications/dto/create-review.dto';
+import { ModerateReviewDto } from '@src/modules/review/applications/dto/moderate-review.dto';
 import { ReviewOutput } from '@src/modules/review/applications/dto/review.output';
 import { CreateReviewCommand } from '@src/modules/review/applications/useCase/commands/CreateReviewCommand';
 import { ModerateReviewCommand } from '@src/modules/review/applications/useCase/commands/ModerateReviewCommand';

@@ -34,10 +34,8 @@ import { ListUsersQuery } from '@src/modules/user/applications/useCase/queries/L
 import { ListUserOptionsQuery } from '@src/modules/user/applications/useCase/queries/ListUserOptionsQuery';
 import { SetUserPasswordCommand } from '@src/modules/user/applications/useCase/commands/SetUserPasswordCommand';
 import { UpdateUserStatusCommand } from '@src/modules/user/applications/useCase/commands/UpdateUserStatusCommand';
-import {
-  parseSetUserPasswordBody,
-  parseUpdateUserStatusBody,
-} from '@src/modules/user/applications/dto/user-account.dto';
+import { parseSetUserPasswordBody } from '@src/modules/user/applications/dto/set-user-password.dto';
+import { parseUpdateUserStatusBody } from '@src/modules/user/applications/dto/update-user-status.dto';
 import {
   ApiJwtAuth,
   ApiPaginationQuery,

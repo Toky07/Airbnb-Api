@@ -1,39 +1,22 @@
 import request from 'supertest';
-import { Test } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule } from '@nestjs/jwt';
+import { INestApplication } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { vi } from 'vitest';
-import { AuthModule } from '@src/modules/authentication/auth.module';
-import { UserModule } from '@src/modules/user/user.module';
-import { PropertiesModule } from '@src/modules/properties/properties.module';
-import { RoomsModule } from '@src/modules/rooms/room.module';
-import { ReservationModule } from '@src/modules/reservation/reservation.module';
-import { PaymentModule } from '@src/modules/payment/payment.module';
-import { CartModule } from '@src/modules/cart/cart.module';
 import { PropertyEntity } from '@src/modules/properties/infrastructure/entities/property-entity.entity';
 import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
 import {
   CART_SESSION_HEADER,
   CART_ITEM_TYPE,
 } from '@src/modules/cart/domain/constants/cart-item-type.constant';
-import { PAYMENT_GATEWAY } from '@src/modules/payment/domain/ports/payment-gateway.port';
 import { PAYMENT_STATUS } from '@src/modules/payment/domain/constants/payment-status.constant';
 import { PaymentOrmEntity } from '@src/modules/payment/infrastructure/entities/payment.orm-entity';
 import { ReservationOrmEntity } from '@src/modules/reservation/infrastructure/entities/reservation.orm-entity';
 import { RESERVATION_STATUS } from '@src/modules/reservation/contracts';
-import { createPaymentGatewayMock } from '@src/modules/payment/applications/useCase/payment-test.helpers';
 import {
-  AUTH_TEST_ENTITIES,
-  DOMAIN_TEST_ENTITIES,
   registerAndLoginAsHost,
   registerAndLoginAsSuperAdmin,
 } from '@src/test/controller-test.helpers';
-import {
-  getIntegrationTestDatabaseConfig,
-  prepareIntegrationTestDatabase,
-} from '@src/test/test-database.config';
+import { setupE2eApp, type E2eAppContext } from '@src/test/e2e-app';
 
 describe('CartController', () => {
   let app: INestApplication;
@@ -41,64 +24,34 @@ describe('CartController', () => {
   let token: string;
   let roomId: number;
   let paymentIntentCounter = 0;
-  let paymentGateway = createPaymentGatewayMock();
+  let paymentGateway: E2eAppContext['paymentGateway'];
   const sessionId = 'guest-cart-session-e2e';
 
   beforeAll(async () => {
     process.env.MAIL_TRANSPORT = 'console';
     process.env.STRIPE_PUBLISHABLE_KEY = 'pk_test_cart';
 
-    paymentGateway = createPaymentGatewayMock({
-      createPaymentIntent: vi.fn().mockImplementation(async () => {
+    const ctx = await setupE2eApp();
+    app = ctx.app;
+    dataSource = ctx.dataSource;
+    paymentGateway = ctx.paymentGateway;
+
+    paymentGateway.createPaymentIntent = vi
+      .fn()
+      .mockImplementation(async () => {
         paymentIntentCounter += 1;
         return {
           id: `pi_cart_checkout_test_${paymentIntentCounter}`,
           clientSecret: `pi_cart_checkout_test_secret_${paymentIntentCounter}`,
           status: 'requires_payment_method',
         };
-      }),
-      retrievePaymentIntent: vi
-        .fn()
-        .mockImplementation(async (transactionId: string) => ({
-          id: transactionId,
-          status: 'succeeded',
-        })),
-    });
-
-    await prepareIntegrationTestDatabase();
-
-    const moduleRef = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRoot(
-          getIntegrationTestDatabaseConfig([
-            ...AUTH_TEST_ENTITIES,
-            ...DOMAIN_TEST_ENTITIES,
-          ]),
-        ),
-        JwtModule.register({
-          global: true,
-          secret: '1234',
-          signOptions: { expiresIn: '5h' },
-        }),
-        AuthModule,
-        UserModule,
-        PropertiesModule,
-        RoomsModule,
-        ReservationModule,
-        PaymentModule,
-        CartModule,
-      ],
-    })
-      .overrideProvider(PAYMENT_GATEWAY)
-      .useValue(paymentGateway)
-      .compile();
-
-    dataSource = moduleRef.get(DataSource);
-    app = moduleRef.createNestApplication();
-    app.useGlobalPipes(
-      new ValidationPipe({ whitelist: true, transform: true }),
-    );
-    await app.init();
+      });
+    paymentGateway.retrievePaymentIntent = vi
+      .fn()
+      .mockImplementation(async (transactionId: string) => ({
+        id: transactionId,
+        status: 'succeeded',
+      }));
 
     token = await registerAndLoginAsSuperAdmin(app, dataSource);
 
@@ -126,14 +79,9 @@ describe('CartController', () => {
       quantity: 1,
       size: 30,
       status: 'available',
-      propertyId: property.id,
+      property,
     });
-
     roomId = room.id;
-  });
-
-  afterAll(async () => {
-    await app?.close();
   });
 
   async function clearAuthenticatedCart(): Promise<void> {

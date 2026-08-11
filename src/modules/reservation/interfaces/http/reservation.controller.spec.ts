@@ -1,37 +1,17 @@
 import request from 'supertest';
-import { Test, type TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule } from '@nestjs/jwt';
+import { type TestingModule } from '@nestjs/testing';
+import { INestApplication } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { vi } from 'vitest';
-import { AuthModule } from '@src/modules/authentication/auth.module';
-import { UserModule } from '@src/modules/user/user.module';
-import { RoomsModule } from '@src/modules/rooms/room.module';
-import { PropertiesModule } from '@src/modules/properties/properties.module';
-import { ReservationModule } from '@src/modules/reservation/reservation.module';
-import { PaymentModule } from '@src/modules/payment/payment.module';
 import { PropertyEntity } from '@src/modules/properties/infrastructure/entities/property-entity.entity';
 import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
 import { RESERVATION_STATUS } from '@src/modules/reservation/domain/constants/reservation-status.constant';
 import {
-  AUTH_TEST_ENTITIES,
   DEFAULT_REGISTER,
-  DOMAIN_TEST_ENTITIES,
   registerAndLoginAsSuperAdmin,
 } from '@src/test/controller-test.helpers';
-import {
-  getIntegrationTestDatabaseConfig,
-  prepareIntegrationTestDatabase,
-} from '@src/test/test-database.config';
+import { setupE2eApp, type E2eAppContext } from '@src/test/e2e-app';
 import { ReservationOrmEntity } from '@src/modules/reservation/infrastructure/entities/reservation.orm-entity';
 import { PaymentOrmEntity } from '@src/modules/payment/infrastructure/entities/payment.orm-entity';
-import { PAYMENT_GATEWAY } from '@src/modules/payment/domain/ports/payment-gateway.port';
-import {
-  createPaymentGatewayMock,
-  createWebhookVerifierMock,
-} from '@src/modules/payment/applications/useCase/payment-test.helpers';
-import { StripeWebhookVerifier } from '@src/modules/payment/infrastructure/stripe/StripeWebhookVerifier';
 import { UserEntity } from '@src/modules/user/infrastructure/entities/user.entity';
 import {
   RESERVATION_REPOSITORY,
@@ -46,49 +26,17 @@ describe('ReservationController', () => {
   let token: string;
   let roomId: number;
   let propertyId: number;
-  const webhookVerifier = createWebhookVerifierMock();
+  let webhookVerifier: E2eAppContext['webhookVerifier'];
 
   beforeAll(async () => {
     process.env.MAIL_TRANSPORT = 'console';
     process.env.STRIPE_PUBLISHABLE_KEY = 'pk_test_reservation';
-    await prepareIntegrationTestDatabase();
-
-    moduleRef = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRoot(
-          getIntegrationTestDatabaseConfig([
-            ...AUTH_TEST_ENTITIES,
-            ...DOMAIN_TEST_ENTITIES,
-            ReservationOrmEntity,
-            PaymentOrmEntity,
-          ]),
-        ),
-        JwtModule.register({
-          global: true,
-          secret: '1234',
-          signOptions: { expiresIn: '5h' },
-        }),
-        AuthModule,
-        UserModule,
-        PropertiesModule,
-        RoomsModule,
-        PaymentModule,
-        ReservationModule,
-      ],
-    })
-      .overrideProvider(PAYMENT_GATEWAY)
-      .useValue(createPaymentGatewayMock())
-      .overrideProvider(StripeWebhookVerifier)
-      .useValue(webhookVerifier)
-      .compile();
-
-    dataSource = moduleRef.get(DataSource);
+    const ctx = await setupE2eApp();
+    app = ctx.app;
+    dataSource = ctx.dataSource;
+    moduleRef = ctx.moduleRef;
+    webhookVerifier = ctx.webhookVerifier;
     reservationRepository = moduleRef.get(RESERVATION_REPOSITORY);
-    app = moduleRef.createNestApplication({ rawBody: true });
-    app.useGlobalPipes(
-      new ValidationPipe({ whitelist: true, transform: true }),
-    );
-    await app.init();
 
     token = await registerAndLoginAsSuperAdmin(app, dataSource);
 
@@ -126,10 +74,6 @@ describe('ReservationController', () => {
     });
 
     roomId = room.id;
-  });
-
-  afterAll(async () => {
-    await app?.close();
   });
 
   it('POST /reservations crée une réservation avec ses items', async () => {

@@ -4,10 +4,8 @@ import type { IRoomAmenityRepository } from './domain/repositories/room-amenity.
 import type { IPropertyRepository } from '@src/modules/properties/contracts';
 import type { IRoomRepository } from '@src/modules/rooms/contracts';
 import { ResolveAmenitiesService } from './applications/services/resolve-amenities.service';
-import {
-  ListEntityAmenitiesService,
-  SyncEntityAmenitiesService,
-} from './applications/services/entity-amenities.service';
+import { ListEntityAmenitiesService } from './applications/services/list-entity-amenities.service';
+import { SyncEntityAmenitiesService } from './applications/services/sync-entity-amenities.service';
 import { CreateAmenityCommandHandler } from './applications/useCase/handlers/CreateAmenityCommandHandler';
 import { UpdateAmenityCommandHandler } from './applications/useCase/handlers/UpdateAmenityCommandHandler';
 import { DeleteAmenityCommandHandler } from './applications/useCase/handlers/DeleteAmenityCommandHandler';

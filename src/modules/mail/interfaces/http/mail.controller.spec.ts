@@ -1,31 +1,16 @@
 import request from 'supertest';
-import { Test } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule } from '@nestjs/jwt';
+import { INestApplication } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { AuthModule } from '@src/modules/authentication/auth.module';
-import { UserModule } from '@src/modules/user/user.module';
-import { MailModule } from '@src/modules/mail/mail.module';
 import { EmailOrmEntity } from '@src/modules/mail/infrastructure/entities/email.orm-entity';
-import { AuthEntity } from '@src/modules/authentication/infrastructure/entity/auth.entity';
 import { Role } from '@src/modules/authentication/infrastructure/entity/role.entity';
 import { PermissionEntity } from '@src/modules/authentication/infrastructure/entity/permission.entity';
-import { UserEntity } from '@src/modules/user/infrastructure/entities/user.entity';
 import { HOST_ROLE_SLUG } from '@src/modules/authentication/contracts';
-import { MediaOrmEntity } from '@src/modules/media/infrastructure/entities/media-orm.entity';
-import { MediaModule } from '@src/modules/media/media.module';
 import {
-  AUTH_TEST_ENTITIES,
   assignHostRole,
   clearEntitiesForTests,
-  DOMAIN_TEST_ENTITIES,
   activateAuthAccountForTests,
 } from '@src/test/controller-test.helpers';
-import {
-  getIntegrationTestDatabaseConfig,
-  prepareIntegrationTestDatabase,
-} from '@src/test/test-database.config';
+import { setupE2eApp } from '@src/test/e2e-app';
 
 describe('MailController', () => {
   let app: INestApplication;
@@ -36,34 +21,9 @@ describe('MailController', () => {
   beforeAll(async () => {
     previousMailTransport = process.env.MAIL_TRANSPORT;
     process.env.MAIL_TRANSPORT = 'console';
-    await prepareIntegrationTestDatabase();
-
-    const moduleRef = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRoot(
-          getIntegrationTestDatabaseConfig([
-            ...AUTH_TEST_ENTITIES,
-            ...DOMAIN_TEST_ENTITIES,
-          ]),
-        ),
-        JwtModule.register({
-          global: true,
-          secret: '1234',
-          signOptions: { expiresIn: '5h' },
-        }),
-        AuthModule,
-        UserModule,
-        MediaModule,
-        MailModule,
-      ],
-    }).compile();
-
-    dataSource = moduleRef.get(DataSource);
-    app = moduleRef.createNestApplication();
-    app.useGlobalPipes(
-      new ValidationPipe({ whitelist: true, transform: true }),
-    );
-    await app.init();
+    const ctx = await setupE2eApp();
+    app = ctx.app;
+    dataSource = ctx.dataSource;
 
     await request(app.getHttpServer())
       .post('/auth/register')
@@ -94,7 +54,6 @@ describe('MailController', () => {
     } else {
       process.env.MAIL_TRANSPORT = previousMailTransport;
     }
-    await app?.close();
   });
 
   beforeEach(async () => {
