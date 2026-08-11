@@ -8,11 +8,11 @@ import {
 import { PAYMENT_STATUS } from '../../../../payment/contracts';
 import { Property } from '../../../../properties/domain/entities/property.entity';
 import { CANCELLATION_POLICY } from '../../../domain/constants/cancellation-policy.constant';
-import { UserNameVO } from '../../../../user/domain/valueObject/username.vo';
+import { UserNameVO } from '../../../../user/contracts';
 import { EmailVO } from '../../../../../shared/valueObject/email.vo';
 import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
-import { User } from '../../../../user/domain/entities/user.entity';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import { User } from '../../../../user/contracts';
+import type { IUserRepository } from '../../../../user/contracts';
 import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
 import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
 import { Room } from '../../../../rooms/domain/entities/room.entity';

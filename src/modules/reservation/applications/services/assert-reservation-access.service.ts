@@ -8,8 +8,8 @@ import type { IPropertyRepository } from '../../../properties/domain/repositorie
 import { PROPERTY_REPOSITORY } from '../../../properties/infrastructure/repositories/property.repository';
 import type { IRoomRepository } from '../../../rooms/domain/repositories/room.repository';
 import { ROOM_REPOSITORY } from '../../../rooms/domain/repositories/room.repository';
-import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
-import { USER_REPOSITORY } from '../../../user/infrastructure/repositories/user.repository';
+import type { IUserRepository } from '../../../user/contracts';
+import { USER_REPOSITORY } from '../../../user/contracts';
 import type { Reservation } from '../../domain/entities/reservation.entity';
 import {
   RESERVATION_REPOSITORY,

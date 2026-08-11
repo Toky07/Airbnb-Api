@@ -6,7 +6,7 @@ import {
 } from '../../../../invoice/contracts';
 import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
 import type { IPaymentRepository } from '../../../../payment/contracts';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import type { IUserRepository } from '../../../../user/contracts';
 import { BookingOrderDetailOutput } from '../../dto/booking-order.output';
 import type { BookingOrderItemOutput } from '../../dto/booking-order-item.output';
 import type { ResolvePaymentReservationsService } from '../../services/resolve-payment-reservations.service';

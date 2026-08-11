@@ -1,5 +1,5 @@
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import type { IUserRepository } from '../../../../user/contracts';
 import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
 import type { IReservationRepository } from '../../../domain/repositories/reservation.repository';
 import {

@@ -1,10 +1,10 @@
 import { NotFoundException } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IAuthRepository } from '../../../../authentication/domain/repositories/auth.repository';
+import type { IAuthRepository } from '../../../../authentication/contracts';
 import type { IUserRepository } from '../../../domain/repositories/user.repository';
 import { UserOutput } from '../../../domain/dtos/user.output';
 import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { SendAccountInvitationCommand } from '../../../../authentication/applications/useCase/commands/SendAccountInvitationCommand';
+import { SendAccountInvitationCommand } from '../../../../authentication/contracts';
 import type { AssignUserRolesCommand } from '../commands/AssignUserRolesCommand';
 
 export class AssignUserRolesCommandHandler implements ICommandHandler<

@@ -1,5 +1,5 @@
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IAuthRepository } from '../../../../authentication/domain/repositories/auth.repository';
+import type { IAuthRepository } from '../../../../authentication/contracts';
 import type { IUserRepository } from '../../../domain/repositories/user.repository';
 import type { SaveUserAvatarService } from '../../services/save-user-avatar.service';
 import type { DeleteUserCommand } from '../commands/DeleteUserCommand';

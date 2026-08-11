@@ -7,8 +7,8 @@ import { RESERVATION_REPOSITORY } from '../reservation/domain/repositories/reser
 import type { IReservationRepository } from '../reservation/domain/repositories/reservation.repository';
 import { ROOM_REPOSITORY } from '../rooms/domain/repositories/room.repository';
 import type { IRoomRepository } from '../rooms/domain/repositories/room.repository';
-import { USER_REPOSITORY } from '../user/infrastructure/repositories/user.repository';
-import type { IUserRepository } from '../user/domain/repositories/user.repository';
+import { USER_REPOSITORY } from '../user/contracts';
+import type { IUserRepository } from '../user/contracts';
 import { REVIEW_REPOSITORY } from './domain/repositories/review.repository';
 import type { IReviewRepository } from './domain/repositories/review.repository';
 import { ReviewOrmEntity } from './infrastructure/entities/review.orm-entity';

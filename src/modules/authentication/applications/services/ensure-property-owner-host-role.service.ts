@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { AUTH_REPOSITORY } from '../../domain/repositories/auth.repository';
 import type { IAuthRepository } from '../../domain/repositories/auth.repository';
-import { USER_REPOSITORY } from '../../../user/infrastructure/repositories/user.repository';
-import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
+import { USER_REPOSITORY } from '../../../user/contracts';
+import type { IUserRepository } from '../../../user/contracts';
 import { HOST_ROLE_SLUG } from '../../domain/constants/permissions.constant';
 import { EnsureAuthHasRoleService } from './ensure-auth-has-role.service';
 

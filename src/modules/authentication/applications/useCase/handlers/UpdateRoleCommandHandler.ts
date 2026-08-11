@@ -2,7 +2,7 @@ import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import type { IRoleRepository } from '../../../domain/repositories/role.repository';
 import { RoleOutput } from '../../dto/role.output';
-import { UserNameVO } from '../../../../user/domain/valueObject/username.vo';
+import { UserNameVO } from '../../../../user/contracts';
 import { isSystemRoleSlug } from '../../../domain/constants/system-roles.constant';
 import type { UpdateRoleCommand } from '../commands/UpdateRoleCommand';
 

@@ -2,8 +2,10 @@ import type {
   PaginatedResult,
   PaginationParams,
 } from '../../../../shared/pagination/pagination.types';
-import type { AccountStatus } from '../../../authentication/domain/constants/account-status.constant';
+import type { AccountStatus } from '../../../authentication/contracts';
 import { User } from '../entities/user.entity';
+
+export const USER_REPOSITORY = 'UserRepository';
 
 export interface IUserRepository {
   create(user: User): Promise<User>;

@@ -151,4 +151,53 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    files: ['src/modules/authentication/**/*.ts'],
+    ignores: ['**/*.spec.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '**/user/applications/**',
+                '**/user/domain/**',
+                '**/user/interfaces/**',
+                '**/user/infrastructure/repositories/**',
+              ],
+              message:
+                'Importer user uniquement via user/contracts (sauf UserModule / ORM UserEntity).',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/modules/user/**/*.ts'],
+    ignores: [
+      '**/*.spec.ts',
+      'src/modules/user/infrastructure/**',
+      'src/modules/user/user.module.ts',
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '**/authentication/applications/**',
+                '**/authentication/domain/**',
+                '**/authentication/interfaces/**',
+              ],
+              message:
+                'Importer authentication uniquement via authentication/contracts (sauf AuthModule / ORM AuthEntity).',
+            },
+          ],
+        },
+      ],
+    },
+  },
 );

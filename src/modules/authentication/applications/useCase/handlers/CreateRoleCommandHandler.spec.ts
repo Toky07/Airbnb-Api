@@ -5,7 +5,7 @@ import { TRAVELER_ROLE_SLUG } from '../../../domain/constants/system-roles.const
 import type { IRoleRepository } from '../../../domain/repositories/role.repository';
 import { CreateRoleCommandHandler } from './CreateRoleCommandHandler';
 import { CreateRoleCommand } from '../commands/CreateRoleCommand';
-import { UserNameVO } from '../../../../user/domain/valueObject/username.vo';
+import { UserNameVO } from '../../../../user/contracts';
 
 describe('CreateRoleCommandHandler', () => {
   const repository = {

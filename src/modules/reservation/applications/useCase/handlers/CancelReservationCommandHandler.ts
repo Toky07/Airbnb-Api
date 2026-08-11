@@ -12,7 +12,7 @@ import {
 } from '../../../../payment/contracts';
 import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
 import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import type { IUserRepository } from '../../../../user/contracts';
 import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
 import { Reservation } from '../../../domain/entities/reservation.entity';
 import type { IReservationRepository } from '../../../domain/repositories/reservation.repository';

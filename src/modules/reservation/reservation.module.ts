@@ -11,8 +11,8 @@ import { PROPERTY_REPOSITORY } from '../properties/infrastructure/repositories/p
 import type { IPropertyRepository } from '../properties/domain/repositories/property.repository';
 import { ROOM_REPOSITORY } from '../rooms/domain/repositories/room.repository';
 import type { IRoomRepository } from '../rooms/domain/repositories/room.repository';
-import { USER_REPOSITORY } from '../user/infrastructure/repositories/user.repository';
-import type { IUserRepository } from '../user/domain/repositories/user.repository';
+import { USER_REPOSITORY } from '../user/contracts';
+import type { IUserRepository } from '../user/contracts';
 import {
   PAYMENT_GATEWAY,
   PAYMENT_REPOSITORY,

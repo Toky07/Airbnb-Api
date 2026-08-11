@@ -9,11 +9,11 @@ import { RoomStayPricingService } from '../../../../rooms/applications/services/
 import { Property } from '../../../../properties/domain/entities/property.entity';
 import { Room } from '../../../../rooms/domain/entities/room.entity';
 import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
-import { UserNameVO } from '../../../../user/domain/valueObject/username.vo';
+import { UserNameVO } from '../../../../user/contracts';
 import { EmailVO } from '../../../../../shared/valueObject/email.vo';
 import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
-import { User } from '../../../../user/domain/entities/user.entity';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import { User } from '../../../../user/contracts';
+import type { IUserRepository } from '../../../../user/contracts';
 import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';
 import { CreateReservationCommandHandler } from './CreateReservationCommandHandler';
 import { CreateReservationCommand } from '../commands/CreateReservationCommand';

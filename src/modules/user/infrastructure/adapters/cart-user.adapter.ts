@@ -4,7 +4,7 @@ import {
   type CartUserSnapshot,
   type ICartUserPort,
 } from '../../../cart/domain/ports/cart-user.port';
-import { USER_REPOSITORY } from '../../infrastructure/repositories/user.repository';
+import { USER_REPOSITORY } from '../../domain/repositories/user.repository';
 import type { IUserRepository } from '../../domain/repositories/user.repository';
 
 @Injectable()

@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { ListMyInvoicesQueryHandler } from './ListMyInvoicesQueryHandler';
 import { ListMyInvoicesQuery } from '../queries/ListMyInvoicesQuery';
 import { createInvoiceRepositoryMock } from '../invoice-test.helpers';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import type { IUserRepository } from '../../../../user/contracts';
 
 describe('ListMyInvoicesQueryHandler', () => {
   it('retourne les factures du voyageur connecté', async () => {

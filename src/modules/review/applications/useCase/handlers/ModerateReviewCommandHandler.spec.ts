@@ -2,7 +2,7 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { REVIEW_STATUS } from '../../../domain/constants/review-status.constant';
 import { Review } from '../../../domain/entities/review.entity';
 import type { IReviewRepository } from '../../../domain/repositories/review.repository';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import type { IUserRepository } from '../../../../user/contracts';
 import { ModerateReviewCommand } from '../commands/ModerateReviewCommand';
 import { ModerateReviewCommandHandler } from './ModerateReviewCommandHandler';
 

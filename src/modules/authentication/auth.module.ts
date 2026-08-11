@@ -24,8 +24,8 @@ import { EnsureAuthHasRoleService } from './applications/services/ensure-auth-ha
 import { UserModule } from '../user/user.module';
 import { PropertiesModule } from '../properties/properties.module';
 import { MailModule } from '../mail/mail.module';
-import { USER_REPOSITORY } from '../user/infrastructure/repositories/user.repository';
-import type { IUserRepository } from '../user/domain/repositories/user.repository';
+import { USER_REPOSITORY } from '../user/contracts';
+import type { IUserRepository } from '../user/contracts';
 import { PROPERTY_REPOSITORY } from '../properties/infrastructure/repositories/property.repository';
 import type { IPropertyRepository } from '../properties/domain/repositories/property.repository';
 import { UserEntity } from '../user/infrastructure/entities/user.entity';

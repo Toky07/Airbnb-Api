@@ -1,8 +1,8 @@
 import { Inject, Module, OnModuleInit } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from '../user/user.module';
-import { USER_REPOSITORY } from '../user/infrastructure/repositories/user.repository';
-import type { IUserRepository } from '../user/domain/repositories/user.repository';
+import { USER_REPOSITORY } from '../user/contracts';
+import type { IUserRepository } from '../user/contracts';
 import { GenerateInvoicePdfService } from './applications/services/generate-invoice-pdf.service';
 import { InvoiceNumberService } from './applications/services/invoice-number.service';
 import { INVOICE_REPOSITORY } from './domain/repositories/invoice.repository';

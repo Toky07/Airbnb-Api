@@ -1,5 +1,5 @@
 import type { IFavoriteRepository } from './domain/repositories/favorite.repository';
-import type { IUserRepository } from '../user/domain/repositories/user.repository';
+import type { IUserRepository } from '../user/contracts';
 import type { IRoomRepository } from '../rooms/domain/repositories/room.repository';
 import type { RoomMediaPresenter } from '../rooms/applications/presenters/room-media.presenter';
 import { ResolveAuthenticatedUserService } from '../../shared/auth/resolve-authenticated-user.service';

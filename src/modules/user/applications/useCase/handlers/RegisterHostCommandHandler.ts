@@ -1,16 +1,16 @@
 import { BadRequestException } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IAuthRepository } from '../../../../authentication/domain/repositories/auth.repository';
-import type { IRoleRepository } from '../../../../authentication/domain/repositories/role.repository';
+import type { IAuthRepository } from '../../../../authentication/contracts';
+import type { IRoleRepository } from '../../../../authentication/contracts';
 import type { IUserRepository } from '../../../domain/repositories/user.repository';
 import { EmailVO } from '../../../../../shared/valueObject/email.vo';
-import { TRAVELER_ROLE_SLUG } from '../../../../authentication/domain/constants/system-roles.constant';
+import { TRAVELER_ROLE_SLUG } from '../../../../authentication/contracts';
 import { User } from '../../../domain/entities/user.entity';
 import { UserNameVO } from '../../../domain/valueObject/username.vo';
 import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
 import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { SendAccountInvitationCommand } from '../../../../authentication/applications/useCase/commands/SendAccountInvitationCommand';
-import { ACCOUNT_STATUS } from '../../../../authentication/domain/constants/account-status.constant';
+import { SendAccountInvitationCommand } from '../../../../authentication/contracts';
+import { ACCOUNT_STATUS } from '../../../../authentication/contracts';
 import type { RegisterHostCommand } from '../commands/RegisterHostCommand';
 
 export class RegisterHostCommandHandler implements ICommandHandler<

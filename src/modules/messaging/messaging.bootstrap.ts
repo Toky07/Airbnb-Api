@@ -1,6 +1,6 @@
 import type { IConversationRepository } from './domain/repositories/conversation.repository';
 import type { IMessageRepository } from './domain/repositories/message.repository';
-import type { IUserRepository } from '../user/domain/repositories/user.repository';
+import type { IUserRepository } from '../user/contracts';
 import type { AssertConversationAccessService } from './applications/services/assert-conversation-access.service';
 import type { GetOrCreateConversationService } from './applications/services/get-or-create-conversation.service';
 import type { ResolveReservationParticipantsService } from './applications/services/resolve-reservation-participants.service';

@@ -1,18 +1,22 @@
 import { Inject, Module, OnModuleInit, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from '../authentication/auth.module';
-import { AUTH_REPOSITORY } from '../authentication/domain/repositories/auth.repository';
-import type { IAuthRepository } from '../authentication/domain/repositories/auth.repository';
-import { ROLE_REPOSITORY } from '../authentication/domain/repositories/role.repository';
-import type { IRoleRepository } from '../authentication/domain/repositories/role.repository';
-import { LOCAL_STORAGE_SERVICE } from '../media/contracts';
-import type { ILocalStorageService } from '../media/contracts';
+import {
+  AUTH_REPOSITORY,
+  ROLE_REPOSITORY,
+  type IAuthRepository,
+  type IRoleRepository,
+} from '../authentication/contracts';
+import {
+  LOCAL_STORAGE_SERVICE,
+  type ILocalStorageService,
+} from '../media/contracts';
 import { UserController } from './interfaces/http/user.controller';
+import { UserRepository } from './infrastructure/repositories/user.repository';
 import {
   USER_REPOSITORY,
-  UserRepository,
-} from './infrastructure/repositories/user.repository';
-import type { IUserRepository } from './domain/repositories/user.repository';
+  type IUserRepository,
+} from './domain/repositories/user.repository';
 import { cartUserProvider } from './infrastructure/adapters/cart-user.adapter';
 import { UserEntity } from './infrastructure/entities/user.entity';
 import { AuthEntity } from '../authentication/infrastructure/entity/auth.entity';

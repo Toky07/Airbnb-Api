@@ -19,13 +19,13 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { parseMyProfileBody } from '../../../user/interfaces/http/parse-my-profile-body';
+import { parseMyProfileBody } from '../../../user/contracts';
 import { Public } from '../decorators/public.decorator';
 import { RequirePermissions } from '../decorators/require-permissions.decorator';
 import type { JwtPayload } from '../../domain/types/jwt-payload';
 import type { MeOutput } from '../../applications/dto/me.output';
 import type { UploadFile } from '../../../media/contracts';
-import { UserOutput } from '../../../user/domain/dtos/user.output';
+import { UserOutput } from '../../../user/contracts';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
 import { SetPasswordWithTokenCommand } from '../../applications/useCase/commands/SetPasswordWithTokenCommand';
@@ -36,8 +36,8 @@ import {
   AUTH_REGISTER_THROTTLE,
 } from '../../../../config/throttle.config';
 import { SensitiveRouteThrottle } from '../../../../shared/decorators/sensitive-route-throttle.decorator';
-import { RegisterHostCommand } from '../../../user/applications/useCase/commands/RegisterHostCommand';
-import { UpdateMyProfileCommand } from '../../../user/applications/useCase/commands/UpdateMyProfileCommand';
+import { RegisterHostCommand } from '../../../user/contracts';
+import { UpdateMyProfileCommand } from '../../../user/contracts';
 import { LoginCommand } from '../../applications/useCase/commands/LoginCommand';
 import { AssignRoleCommand } from '../../applications/useCase/commands/AssignRoleCommand';
 import { ResetPasswordWithTokenCommand } from '../../applications/useCase/commands/ResetPasswordWithTokenCommand';

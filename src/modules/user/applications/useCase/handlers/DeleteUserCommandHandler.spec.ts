@@ -5,7 +5,7 @@ import { UserNameVO } from '../../../domain/valueObject/username.vo';
 import { DeleteUserCommandHandler } from './DeleteUserCommandHandler';
 import { DeleteUserCommand } from '../commands/DeleteUserCommand';
 import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
-import type { IAuthRepository } from '../../../../authentication/domain/repositories/auth.repository';
+import type { IAuthRepository } from '../../../../authentication/contracts';
 import { describe, expect, it, vi } from 'vitest';
 import type { SaveUserAvatarService } from '../../services/save-user-avatar.service';
 

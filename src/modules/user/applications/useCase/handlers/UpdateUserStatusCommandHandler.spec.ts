@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { BadRequestException } from '@nestjs/common';
 import { UpdateUserStatusCommandHandler } from './UpdateUserStatusCommandHandler';
 import { UpdateUserStatusCommand } from '../commands/UpdateUserStatusCommand';
-import { ACCOUNT_STATUS } from '../../../../authentication/domain/constants/account-status.constant';
+import { ACCOUNT_STATUS } from '../../../../authentication/contracts';
 
 describe('UpdateUserStatusCommandHandler', () => {
   const userRepository = {

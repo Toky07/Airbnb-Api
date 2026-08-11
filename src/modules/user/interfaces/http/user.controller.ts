@@ -22,7 +22,7 @@ import type {
 import type { AssignUserRolesDto } from '../../applications/dto/assign-user-roles.dto';
 import { parseUserBody } from './parse-user-body';
 import type { UploadFile } from '../../../media/contracts';
-import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
+import { RequirePermissions } from '../../../authentication/contracts';
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { QueryBus } from '../../../../shared/useCase/bus/query-bus';
 import { CreateUserCommand } from '../../applications/useCase/commands/CreateUserCommand';

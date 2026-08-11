@@ -1,5 +1,5 @@
 import { CommandBus } from '../../../../../shared/useCase/bus/bus';
-import { CreateUserCommand } from '../../../../user/applications/useCase/commands/CreateUserCommand';
+import { CreateUserCommand } from '../../../../user/contracts';
 import { fetchImageFromUrl } from '../../../../media/contracts';
 import type { ImportUserRowDto } from '../../dto/import-batch.dto';
 import type { ImportEntityResult } from '../../dto/import-entity-result.dto';

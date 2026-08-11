@@ -4,8 +4,8 @@ import {
   ROOM_REPOSITORY,
   type IRoomRepository,
 } from '../../../rooms/domain/repositories/room.repository';
-import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
-import { USER_REPOSITORY } from '../../../user/infrastructure/repositories/user.repository';
+import type { IUserRepository } from '../../../user/contracts';
+import { USER_REPOSITORY } from '../../../user/contracts';
 import {
   INVOICE_PAYMENT_TYPE,
   InvoiceGenerateRequestedEvent,

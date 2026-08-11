@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Auth } from '../../../domain/entities/user.entity';
 import { EmailVO } from '../../../../../shared/valueObject/email.vo';
-import { User } from '../../../../user/domain/entities/user.entity';
-import { UserNameVO } from '../../../../user/domain/valueObject/username.vo';
+import { User } from '../../../../user/contracts';
+import { UserNameVO } from '../../../../user/contracts';
 import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
 import { ValidatePasswordSetupTokenQueryHandler } from './ValidatePasswordSetupTokenQueryHandler';
 import { ValidatePasswordSetupTokenQuery } from '../queries/ValidatePasswordSetupTokenQuery';

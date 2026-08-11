@@ -1,4 +1,4 @@
-import { UserNameVO } from '../../../../user/domain/valueObject/username.vo';
+import { UserNameVO } from '../../../../user/contracts';
 import { RoleOutput } from '../../dto/role.output';
 import { RoleEntity } from '../../../domain/entities/role.entity';
 import type { IRoleRepository } from '../../../domain/repositories/role.repository';

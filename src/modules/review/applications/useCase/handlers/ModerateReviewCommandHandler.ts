@@ -6,7 +6,7 @@ import {
 } from '../../../domain/constants/review-status.constant';
 import { Review } from '../../../domain/entities/review.entity';
 import type { IReviewRepository } from '../../../domain/repositories/review.repository';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import type { IUserRepository } from '../../../../user/contracts';
 import { ReviewOutput } from '../../dto/review.output';
 import type { ModerateReviewCommand } from '../commands/ModerateReviewCommand';
 

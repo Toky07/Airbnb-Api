@@ -1,5 +1,5 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import { UserNameVO } from '../../../../user/domain/valueObject/username.vo';
+import { UserNameVO } from '../../../../user/contracts';
 import { RoleEntity } from '../../../domain/entities/role.entity';
 import {
   HOST_ROLE_SLUG,

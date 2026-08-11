@@ -1,5 +1,5 @@
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import type { IUserRepository } from '../../../../user/contracts';
 import type { IConversationRepository } from '../../../domain/repositories/conversation.repository';
 import { ConversationOutput } from '../../dto/conversation.output';
 import type { ListMyConversationsQuery } from '../queries/ListMyConversationsQuery';

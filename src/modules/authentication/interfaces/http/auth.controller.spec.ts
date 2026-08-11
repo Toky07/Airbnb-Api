@@ -11,7 +11,7 @@ import { AuthEntity } from '../../infrastructure/entity/auth.entity';
 import * as bcrypt from 'bcrypt';
 import { Role } from '../../infrastructure/entity/role.entity';
 import { PermissionEntity } from '../../infrastructure/entity/permission.entity';
-import { UserNameVO } from '../../../user/domain/valueObject/username.vo';
+import { UserNameVO } from '../../../user/contracts';
 import { RoleEntity } from '../../domain/entities/role.entity';
 import { RoleMapper } from '../../infrastructure/mappers/role.mappers';
 import { UserEntity } from '../../../user/infrastructure/entities/user.entity';

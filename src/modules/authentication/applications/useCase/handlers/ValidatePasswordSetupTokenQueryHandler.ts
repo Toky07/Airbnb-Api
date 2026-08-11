@@ -1,5 +1,5 @@
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import type { IUserRepository } from '../../../../user/contracts';
 import type { IPasswordSetupTokenRepository } from '../../../domain/repositories/password-setup-token.repository';
 import type { PasswordSetupValidationOutput } from '../../dto/password-setup.output';
 import { PasswordSetupTokenService } from '../../../domain/services/password-setup-token.service';

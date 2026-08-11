@@ -4,9 +4,9 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { AUTH_REPOSITORY } from '../../../authentication/domain/repositories/auth.repository';
-import type { IAuthRepository } from '../../../authentication/domain/repositories/auth.repository';
-import { USER_REPOSITORY } from '../../infrastructure/repositories/user.repository';
+import { AUTH_REPOSITORY } from '../../../authentication/contracts';
+import type { IAuthRepository } from '../../../authentication/contracts';
+import { USER_REPOSITORY } from '../../domain/repositories/user.repository';
 import type { IUserRepository } from '../../domain/repositories/user.repository';
 
 @Injectable()

@@ -1,4 +1,4 @@
-import { UserNameVO } from '../../../user/domain/valueObject/username.vo';
+import { UserNameVO } from '../../../user/contracts';
 
 export class RoleEntity {
   id: number | undefined;

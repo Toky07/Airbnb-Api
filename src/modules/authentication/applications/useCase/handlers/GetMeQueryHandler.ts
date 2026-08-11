@@ -1,7 +1,7 @@
 import { UnauthorizedException } from '@nestjs/common';
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
 import type { IAuthRepository } from '../../../domain/repositories/auth.repository';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import type { IUserRepository } from '../../../../user/contracts';
 import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
 import { HOST_ROLE_SLUG } from '../../../domain/constants/permissions.constant';
 import { MeOutput } from '../../dto/me.output';

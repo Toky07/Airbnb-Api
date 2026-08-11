@@ -1,7 +1,7 @@
 import { UnauthorizedException } from '@nestjs/common';
 import type { PaginatedResult } from '../../../../../shared/pagination/pagination.types';
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import type { IUserRepository } from '../../../../user/contracts';
 import { ReservationOutput } from '../../dto/reservation.output';
 import type { ListMyReservationsQuery } from '../queries/ListMyReservationsQuery';
 import type { ListReservationsQueryHandler } from './ListReservationsQueryHandler';

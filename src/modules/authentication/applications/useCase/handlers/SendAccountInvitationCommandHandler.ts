@@ -1,7 +1,7 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import type { IAuthRepository } from '../../../domain/repositories/auth.repository';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import type { IUserRepository } from '../../../../user/contracts';
 import type { IPasswordSetupTokenRepository } from '../../../domain/repositories/password-setup-token.repository';
 import type { MailService } from '../../../../mail/contracts';
 import { PasswordSetupLinkBuilder } from '../../../domain/services/password-setup-link.builder';

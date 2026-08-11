@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { RESERVATION_STATUS } from '../../../reservation/domain/constants/reservation-status.constant';
 import type { IReservationRepository } from '../../../reservation/domain/repositories/reservation.repository';
-import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
+import type { IUserRepository } from '../../../user/contracts';
 import type { IReviewRepository } from '../../domain/repositories/review.repository';
 
 export class ReviewEligibilityService {

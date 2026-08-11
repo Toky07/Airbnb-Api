@@ -5,8 +5,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { ResolveAuthenticatedUserService } from '../../../../shared/auth/resolve-authenticated-user.service';
-import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
-import { USER_REPOSITORY } from '../../../user/infrastructure/repositories/user.repository';
+import type { IUserRepository } from '../../../user/contracts';
+import { USER_REPOSITORY } from '../../../user/contracts';
 import type { Conversation } from '../../domain/entities/conversation.entity';
 import {
   CONVERSATION_REPOSITORY,

@@ -6,7 +6,7 @@ import {
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import type { RoomStayPricingService } from '../../../../rooms/applications/services/room-stay-pricing.service';
 import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import type { IUserRepository } from '../../../../user/contracts';
 import type { Room } from '../../../../rooms/domain/entities/room.entity';
 import { computeReservationHoldUntil } from '../../../domain/constants/reservation-hold.constant';
 import { RESERVATION_STATUS } from '../../../domain/constants/reservation-status.constant';

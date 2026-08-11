@@ -4,11 +4,11 @@ import { UserNameVO } from '../../../domain/valueObject/username.vo';
 import { PhoneNumberVO } from '../../../../../shared/valueObject/phone.vo';
 import { User } from '../../../domain/entities/user.entity';
 import type { IUserRepository } from '../../../domain/repositories/user.repository';
-import type { IAuthRepository } from '../../../../authentication/domain/repositories/auth.repository';
-import { Auth } from '../../../../authentication/domain/entities/user.entity';
+import type { IAuthRepository } from '../../../../authentication/contracts';
+import { Auth } from '../../../../authentication/contracts';
 import { AssignUserRolesCommandHandler } from './AssignUserRolesCommandHandler';
 import { AssignUserRolesCommand } from '../commands/AssignUserRolesCommand';
-import { SendAccountInvitationCommand } from '../../../../authentication/applications/useCase/commands/SendAccountInvitationCommand';
+import { SendAccountInvitationCommand } from '../../../../authentication/contracts';
 import { commandBusExecuteMock } from '../../../../../test/command-bus.mock';
 
 const baseUser = new User(

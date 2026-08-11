@@ -9,7 +9,7 @@ import { UserModule } from '../../../user/user.module';
 import { AuthEntity } from '../../infrastructure/entity/auth.entity';
 import { Role } from '../../infrastructure/entity/role.entity';
 import { DataSource } from 'typeorm';
-import { UserNameVO } from '../../../user/domain/valueObject/username.vo';
+import { UserNameVO } from '../../../user/contracts';
 import { RoleEntity } from '../../domain/entities/role.entity';
 import { RoleMapper } from '../../infrastructure/mappers/role.mappers';
 import { PermissionEntity } from '../../infrastructure/entity/permission.entity';

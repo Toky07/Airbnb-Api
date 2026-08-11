@@ -1,4 +1,4 @@
-import type { AdminManageableAccountStatus } from '../../../../authentication/domain/constants/account-status.constant';
+import type { AdminManageableAccountStatus } from '../../../../authentication/contracts';
 
 export class UpdateUserStatusCommand {
   constructor(

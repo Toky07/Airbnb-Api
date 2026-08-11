@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { RegisterHostCommandHandler } from './RegisterHostCommandHandler';
 import { RegisterHostCommand } from '../commands/RegisterHostCommand';
 import { commandBusExecuteMock } from '../../../../../test/command-bus.mock';
-import { TRAVELER_ROLE_SLUG } from '../../../../authentication/domain/constants/system-roles.constant';
+import { TRAVELER_ROLE_SLUG } from '../../../../authentication/contracts';
 
 describe('RegisterHostCommandHandler', () => {
   const authRepository = {

@@ -2,7 +2,7 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import type { IAuthRepository } from '../../../domain/repositories/auth.repository';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import type { IUserRepository } from '../../../../user/contracts';
 import type { IPasswordSetupTokenRepository } from '../../../domain/repositories/password-setup-token.repository';
 import { PasswordSetupTokenService } from '../../../domain/services/password-setup-token.service';
 import { ACCOUNT_STATUS } from '../../../domain/constants/account-status.constant';

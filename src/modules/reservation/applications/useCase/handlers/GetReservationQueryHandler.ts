@@ -2,7 +2,7 @@ import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
 import type { IPropertyRepository } from '../../../../properties/domain/repositories/property.repository';
 import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import type { IUserRepository } from '../../../../user/contracts';
 import type { Reservation } from '../../../domain/entities/reservation.entity';
 import type { IReservationRepository } from '../../../domain/repositories/reservation.repository';
 import { ReservationOutput } from '../../dto/reservation.output';

@@ -11,9 +11,10 @@ import {
   type PaginatedResult,
   type PaginationParams,
 } from '../../../../shared/pagination/pagination.types';
-import type { AccountStatus } from '../../../authentication/domain/constants/account-status.constant';
+import type { AccountStatus } from '../../../authentication/contracts';
+import { USER_REPOSITORY } from '../../domain/repositories/user.repository';
 
-export const USER_REPOSITORY = 'UserRepository';
+export { USER_REPOSITORY };
 
 @Injectable()
 export class UserRepository implements IUserRepository {

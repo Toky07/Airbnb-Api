@@ -7,7 +7,7 @@ import { RESERVATION_STATUS } from '../../../reservation/domain/constants/reserv
 import { Reservation } from '../../../reservation/domain/entities/reservation.entity';
 import { ReservationItem } from '../../../reservation/domain/entities/reservation-item.entity';
 import type { IReservationRepository } from '../../../reservation/domain/repositories/reservation.repository';
-import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
+import type { IUserRepository } from '../../../user/contracts';
 import type { IReviewRepository } from '../../domain/repositories/review.repository';
 import { ReviewEligibilityService } from './review-eligibility.service';
 

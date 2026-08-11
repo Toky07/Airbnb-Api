@@ -5,8 +5,8 @@ import { PROPERTY_TYPE_REPOSITORY } from '../../../properties/domain/repositorie
 import type { IPropertyTypeRepository } from '../../../properties/domain/repositories/property-type.repository';
 import { ROOM_TYPE_REPOSITORY } from '../../../rooms/domain/repositories/room-type.repository';
 import type { IRoomTypeRepository } from '../../../rooms/domain/repositories/room-type.repository';
-import { USER_REPOSITORY } from '../../../user/infrastructure/repositories/user.repository';
-import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
+import { USER_REPOSITORY } from '../../../user/contracts';
+import type { IUserRepository } from '../../../user/contracts';
 
 export type ImportBatchContext = {
   emailToUserId: Map<string, number>;

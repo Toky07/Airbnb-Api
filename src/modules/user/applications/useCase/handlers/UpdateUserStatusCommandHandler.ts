@@ -1,12 +1,12 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
-import type { IAuthRepository } from '../../../../authentication/domain/repositories/auth.repository';
+import type { IAuthRepository } from '../../../../authentication/contracts';
 import type { IUserRepository } from '../../../domain/repositories/user.repository';
 import { UserOutput } from '../../../domain/dtos/user.output';
 import {
   ACCOUNT_STATUS,
   type AdminManageableAccountStatus,
-} from '../../../../authentication/domain/constants/account-status.constant';
+} from '../../../../authentication/contracts';
 import type { EnsureUserAuthAccountService } from '../../services/ensure-user-auth-account.service';
 import type { UpdateUserStatusCommand } from '../commands/UpdateUserStatusCommand';
 

@@ -4,7 +4,7 @@ import type {
   IPaymentRepository,
   Payment,
 } from '../../../../payment/contracts';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import type { IUserRepository } from '../../../../user/contracts';
 import { BookingOrderListItemOutput } from '../../dto/booking-order.output';
 import type { ResolvePaymentReservationsService } from '../../services/resolve-payment-reservations.service';
 import {

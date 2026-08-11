@@ -6,7 +6,7 @@ import {
 import { createReadStream, existsSync } from 'fs';
 import { basename } from 'path';
 import type { IQueryHandler } from '../../../../../shared/useCase/bus/query-handler.interface';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import type { IUserRepository } from '../../../../user/contracts';
 import type { IInvoiceRepository } from '../../../domain/repositories/invoice.repository';
 import type { DownloadInvoiceQuery } from '../queries/DownloadInvoiceQuery';
 

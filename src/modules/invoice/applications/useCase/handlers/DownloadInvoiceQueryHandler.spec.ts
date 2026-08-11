@@ -1,6 +1,6 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { describe, expect, it, vi } from 'vitest';
-import type { IUserRepository } from '../../../../user/domain/repositories/user.repository';
+import type { IUserRepository } from '../../../../user/contracts';
 import type { IInvoiceRepository } from '../../../domain/repositories/invoice.repository';
 import { DownloadInvoiceQuery } from '../queries/DownloadInvoiceQuery';
 import { DownloadInvoiceQueryHandler } from './DownloadInvoiceQueryHandler';

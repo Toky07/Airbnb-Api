@@ -1,5 +1,5 @@
-import type { IAuthRepository } from '../authentication/domain/repositories/auth.repository';
-import type { IRoleRepository } from '../authentication/domain/repositories/role.repository';
+import type { IAuthRepository } from '../authentication/contracts';
+import type { IRoleRepository } from '../authentication/contracts';
 import type { ILocalStorageService } from '../media/contracts';
 import type { IUserRepository } from './domain/repositories/user.repository';
 import { SaveUserAvatarService } from './applications/services/save-user-avatar.service';

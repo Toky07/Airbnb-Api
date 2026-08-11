@@ -1,5 +1,5 @@
 import type { PaginatedResult } from '../../../../shared/pagination/pagination.types';
-import type { IUserRepository } from '../../../user/domain/repositories/user.repository';
+import type { IUserRepository } from '../../../user/contracts';
 import type { Review } from '../../domain/entities/review.entity';
 import { ReviewOutput } from '../dto/review.output';
 

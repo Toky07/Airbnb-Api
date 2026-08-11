@@ -1,7 +1,7 @@
 import { EmailVO } from '../../../../shared/valueObject/email.vo';
 import { Auth } from '../entities/user.entity';
 import { RoleEntity } from '../entities/role.entity';
-import { UserNameVO } from '../../../user/domain/valueObject/username.vo';
+import { UserNameVO } from '../../../user/contracts';
 import { buildJwtPayload, hasPermission } from './build-jwt-payload';
 
 describe('buildJwtPayload', () => {

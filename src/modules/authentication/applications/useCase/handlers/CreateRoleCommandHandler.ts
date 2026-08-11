@@ -4,7 +4,7 @@ import { slugify } from '../../../../../shared/utils/slug.util';
 import { RoleEntity } from '../../../domain/entities/role.entity';
 import type { IRoleRepository } from '../../../domain/repositories/role.repository';
 import { RoleOutput } from '../../dto/role.output';
-import { UserNameVO } from '../../../../user/domain/valueObject/username.vo';
+import { UserNameVO } from '../../../../user/contracts';
 import { isSystemRoleSlug } from '../../../domain/constants/system-roles.constant';
 import type { CreateRoleCommand } from '../commands/CreateRoleCommand';
 
