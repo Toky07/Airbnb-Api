@@ -10,9 +10,7 @@ describe('ListRoomReviewsQueryHandler', () => {
   it('lists published reviews for a room slug', async () => {
     const reviewRepository = {
       findPaginated: vi.fn().mockResolvedValue({
-        data: [
-          new Review(2, 1, 5, 5, 'Parfait', REVIEW_STATUS.PUBLISHED, 1),
-        ],
+        data: [new Review(2, 1, 5, 5, 'Parfait', REVIEW_STATUS.PUBLISHED, 1)],
         meta: { page: 1, limit: 20, total: 1, totalPages: 1 },
       }),
     };
@@ -50,7 +48,9 @@ describe('ListRoomReviewsQueryHandler', () => {
     );
 
     await expect(
-      handler.execute(new ListRoomReviewsQuery('missing', { page: 1, limit: 20 })),
+      handler.execute(
+        new ListRoomReviewsQuery('missing', { page: 1, limit: 20 }),
+      ),
     ).rejects.toBeInstanceOf(NotFoundException);
   });
 });

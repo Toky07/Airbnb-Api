@@ -35,9 +35,10 @@ export function pushImportRowError(
   result.errors.push({ entity, index, message, field });
 }
 
-export function mergeImportEntityResults(
-  ...results: ImportEntityResult[]
-): { created: number; errors: ImportRowError[] } {
+export function mergeImportEntityResults(...results: ImportEntityResult[]): {
+  created: number;
+  errors: ImportRowError[];
+} {
   return results.reduce(
     (acc, result) => ({
       created: acc.created + result.created,

@@ -63,4 +63,27 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-vars': 'off',
     },
   },
+  {
+    files: ['src/modules/cart/**/*.ts'],
+    ignores: ['src/modules/cart/**/*.spec.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '**/payment/applications/**',
+                '**/payment/infrastructure/**',
+                '**/payment/interfaces/**',
+                '**/payment/domain/**',
+              ],
+              message:
+                'Le module cart doit importer payment uniquement via payment/contracts.',
+            },
+          ],
+        },
+      ],
+    },
+  },
 );

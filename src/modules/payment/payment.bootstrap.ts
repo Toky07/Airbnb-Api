@@ -1,5 +1,6 @@
 import type { IPaymentRepository } from './domain/repositories/payment.repository';
 import type { IPaymentGateway } from './domain/ports/payment-gateway.port';
+import type { IPaymentPublicConfig } from './domain/ports/payment-public-config.port';
 import type { IWebhookVerifier } from './domain/ports/webhook-verifier.port';
 import { CreatePaymentCommandHandler } from './applications/useCase/handlers/CreatePaymentCommandHandler';
 import { ConfirmStripePaymentCommandHandler } from './applications/useCase/handlers/ConfirmStripePaymentCommandHandler';
@@ -12,6 +13,7 @@ export class PaymentBootstrap {
     repository: IPaymentRepository,
     paymentGateway: IPaymentGateway,
     webhookVerifier: IWebhookVerifier,
+    paymentPublicConfig: IPaymentPublicConfig,
   ) {
     const mapStripeStatus = new MapStripeStatusService();
     const payloadValidator = new StripeWebhookPayloadValidator();
@@ -20,6 +22,7 @@ export class PaymentBootstrap {
       createPaymentCommandHandler: new CreatePaymentCommandHandler(
         repository,
         paymentGateway,
+        paymentPublicConfig,
       ),
       confirmStripePaymentCommandHandler:
         new ConfirmStripePaymentCommandHandler(

@@ -8,14 +8,14 @@ describe('ImportBatchContextService', () => {
   it('builds a lookup context from existing data', async () => {
     const service = new ImportBatchContextService(
       {
-        findAll: vi.fn().mockResolvedValue([
-          { id: 1, email: 'Host@Example.com' },
-        ]),
+        findAll: vi
+          .fn()
+          .mockResolvedValue([{ id: 1, email: 'Host@Example.com' }]),
       } as never,
       {
-        findAll: vi.fn().mockResolvedValue([
-          { id: 10, ownerId: 1, name: 'Hotel Central' },
-        ]),
+        findAll: vi
+          .fn()
+          .mockResolvedValue([{ id: 10, ownerId: 1, name: 'Hotel Central' }]),
       } as never,
       {
         findAll: vi.fn().mockResolvedValue([{ slug: 'hotel' }]),

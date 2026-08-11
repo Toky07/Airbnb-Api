@@ -50,7 +50,9 @@ describe('ListRoomAmenitiesQueryHandler', () => {
         ],
       } as never,
     );
-    const handler = new ListRoomAmenitiesQueryHandler(listEntityAmenitiesService);
+    const handler = new ListRoomAmenitiesQueryHandler(
+      listEntityAmenitiesService,
+    );
 
     const result = await handler.execute(new ListRoomAmenitiesQuery(5));
 
@@ -66,7 +68,9 @@ describe('ListRoomAmenitiesQueryHandler', () => {
       {} as never,
       {} as never,
     );
-    const handler = new ListRoomAmenitiesQueryHandler(listEntityAmenitiesService);
+    const handler = new ListRoomAmenitiesQueryHandler(
+      listEntityAmenitiesService,
+    );
 
     await expect(
       handler.execute(new ListRoomAmenitiesQuery(99)),

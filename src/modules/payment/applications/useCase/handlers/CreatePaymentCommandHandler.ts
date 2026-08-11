@@ -2,18 +2,13 @@ import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-
 import type { IPaymentRepository } from '../../../domain/repositories/payment.repository';
 import type { CreatePaymentCommand } from '../commands/CreatePaymentCommand';
 import type { IPaymentGateway } from '../../../domain/ports/payment-gateway.port';
+import type { IPaymentPublicConfig } from '../../../domain/ports/payment-public-config.port';
+import type { CreatePaymentResult } from '../../dto/create-payment.result';
 import { Payment } from '../../../domain/entities/payment.entity';
 import { EventBus } from '../../../../../shared/domain/event.bus';
 import { PaymentCreatedEvent } from '../../../domain/events/payment-created.event';
-import { getStripePublishableKey } from '../../../infrastructure/stripe/stripe.config';
 
-export type CreatePaymentResult = {
-  paymentId: number;
-  clientSecret: string | null;
-  amount: number;
-  currency: string;
-  publishableKey: string;
-};
+export type { CreatePaymentResult };
 
 export class CreatePaymentCommandHandler implements ICommandHandler<
   CreatePaymentCommand,
@@ -22,6 +17,7 @@ export class CreatePaymentCommandHandler implements ICommandHandler<
   constructor(
     private readonly repository: IPaymentRepository,
     private readonly paymentGateway: IPaymentGateway,
+    private readonly paymentPublicConfig: IPaymentPublicConfig,
   ) {}
 
   async execute(command: CreatePaymentCommand): Promise<CreatePaymentResult> {
@@ -62,7 +58,7 @@ export class CreatePaymentCommandHandler implements ICommandHandler<
       clientSecret: paymentIntent.clientSecret,
       amount: command.amount,
       currency: command.currency,
-      publishableKey: getStripePublishableKey(),
+      publishableKey: this.paymentPublicConfig.getPublishableKey(),
     };
   }
 }

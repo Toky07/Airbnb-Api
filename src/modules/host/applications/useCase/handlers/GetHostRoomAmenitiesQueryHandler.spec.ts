@@ -2,7 +2,10 @@ import { ForbiddenException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { GetHostRoomAmenitiesQueryHandler } from './GetHostRoomAmenitiesQueryHandler';
 import { GetHostRoomAmenitiesQuery } from '../queries/GetHostRoomAmenitiesQuery';
-import { authUser, createAssertHostRoomOwnershipMock } from './host-test.helpers';
+import {
+  authUser,
+  createAssertHostRoomOwnershipMock,
+} from './host-test.helpers';
 
 describe('GetHostRoomAmenitiesQueryHandler', () => {
   beforeEach(() => {

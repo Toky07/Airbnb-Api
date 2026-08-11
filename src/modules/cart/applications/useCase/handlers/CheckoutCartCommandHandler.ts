@@ -5,7 +5,7 @@ import type { CheckoutCartCommand } from '../commands/CheckoutCartCommand';
 import { EventBus } from '../../../../../shared/domain/event.bus';
 import { CartCheckoutRequestedEvent } from '../../../domain/events/cart-checkout-requested.event';
 import type { CartCheckoutCompletedEvent } from '../../../domain/events/cart-checkout-completed.event';
-import { CreatePaymentIntentOutput } from '../../../../../shared/payment/create-payment-intent.output';
+import { CreatePaymentIntentOutput } from '../../dto/create-payment-intent.output';
 import { PricingBreakdownOutput } from '../../../../../shared/pricing/pricing-breakdown.output';
 import type { BuildCartItemService } from '../../services/build-cart-item.service';
 import type { ResolveCartService } from '../../services/resolve-cart.service';

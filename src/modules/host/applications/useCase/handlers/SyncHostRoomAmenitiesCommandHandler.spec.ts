@@ -2,7 +2,10 @@ import { ForbiddenException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SyncHostRoomAmenitiesCommandHandler } from './SyncHostRoomAmenitiesCommandHandler';
 import { SyncHostRoomAmenitiesCommand } from '../commands/SyncHostRoomAmenitiesCommand';
-import { authUser, createAssertHostRoomOwnershipMock } from './host-test.helpers';
+import {
+  authUser,
+  createAssertHostRoomOwnershipMock,
+} from './host-test.helpers';
 
 describe('SyncHostRoomAmenitiesCommandHandler', () => {
   beforeEach(() => {

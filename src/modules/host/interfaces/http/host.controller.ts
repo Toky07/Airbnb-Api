@@ -17,7 +17,7 @@ import { ApiConsumes, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import type { JwtPayload } from '../../../authentication/domain/types/jwt-payload';
 import { RequirePermissions } from '../../../authentication/interfaces/decorators/require-permissions.decorator';
 import { parsePaginationQuery } from '../../../../shared/pagination/parse-pagination-query';
-import { parseRequiredPropertyId } from '../../../../shared/http/parse-required-property-id';
+import { parseRequiredPropertyId } from './parse-required-property-id';
 import type { CreatePropertyDto } from '../../../properties/applications/dto/createProperty.dto';
 import { parsePropertyBody } from '../../../properties/interfaces/http/parse-property-body';
 import { parseRoomBody } from '../../../rooms/interfaces/http/parse-room-body';

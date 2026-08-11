@@ -10,9 +10,7 @@ describe('ListMyReviewsQueryHandler', () => {
   it('returns paginated reviews for the authenticated user', async () => {
     const reviewRepository = {
       findPaginated: vi.fn().mockResolvedValue({
-        data: [
-          new Review(9, 1, 5, 4, 'Très bien', REVIEW_STATUS.PUBLISHED, 1),
-        ],
+        data: [new Review(9, 1, 5, 4, 'Très bien', REVIEW_STATUS.PUBLISHED, 1)],
         meta: { page: 1, limit: 20, total: 1, totalPages: 1 },
       }),
     };

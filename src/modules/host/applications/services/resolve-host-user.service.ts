@@ -8,9 +8,7 @@ import { ResolveAuthenticatedUserService } from '../../../../shared/auth/resolve
 export class ResolveHostUserService {
   private readonly resolveAuthenticatedUser: ResolveAuthenticatedUserService;
 
-  constructor(
-    @Inject(USER_REPOSITORY) userRepository: IUserRepository,
-  ) {
+  constructor(@Inject(USER_REPOSITORY) userRepository: IUserRepository) {
     this.resolveAuthenticatedUser = new ResolveAuthenticatedUserService(
       userRepository,
     );

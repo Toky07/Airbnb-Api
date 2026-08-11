@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import type { ICommandHandler } from '../../../../../shared/useCase/bus/command-handler.interface';
 import type { IRoomRepository } from '../../../../rooms/domain/repositories/room.repository';
 import type { IFavoriteRepository } from '../../../domain/repositories/favorite.repository';

@@ -1,6 +1,8 @@
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
-import { VerifyPaymentCommand } from '../../../payment/applications/useCase/commands/VerifyPaymentCommand';
-import type { VerifyPaymentResult } from '../../../payment/applications/useCase/handlers/VerifyPaymentCommandHandler';
+import {
+  VerifyPaymentCommand,
+  type VerifyPaymentResult,
+} from '../../../payment/contracts';
 import type { CartCheckoutCompleteRequestedEvent } from '../../domain/events/cart-checkout-complete-requested.event';
 import { CartCheckoutCompleteVerifiedEvent } from '../../domain/events/cart-checkout-complete-verified.event';
 import { EventBus } from '../../../../shared/domain/event.bus';

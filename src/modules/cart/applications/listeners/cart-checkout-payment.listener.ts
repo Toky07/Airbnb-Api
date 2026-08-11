@@ -1,7 +1,9 @@
 import { CommandBus } from '../../../../shared/useCase/bus/bus';
 import { getStripeCurrency } from '../../../../config/env.config';
-import { CreatePaymentCommand } from '../../../payment/applications/useCase/commands/CreatePaymentCommand';
-import type { CreatePaymentResult } from '../../../payment/applications/useCase/handlers/CreatePaymentCommandHandler';
+import {
+  CreatePaymentCommand,
+  type CreatePaymentResult,
+} from '../../../payment/contracts';
 import type { CartCheckoutReservationCreatedEvent } from '../../domain/events/cart-checkout-reservation-created.event';
 import { CartCheckoutCompletedEvent } from '../../domain/events/cart-checkout-completed.event';
 import { EventBus } from '../../../../shared/domain/event.bus';

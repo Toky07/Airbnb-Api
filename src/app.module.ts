@@ -21,7 +21,7 @@ import { getDatabaseConfig } from './config/database.config';
 import { getCacheConfig } from './config/cache.config';
 import { HealthController } from './health/health.controller';
 import { RateLimitModule } from './shared/rate-limit.module';
-import { AbsoluteMediaUrlInterceptor } from './shared/interceptors/absolute-media-url.interceptor';
+import { AbsoluteMediaUrlInterceptor } from './modules/media/interfaces/http/absolute-media-url.interceptor';
 
 @Module({
   imports: [

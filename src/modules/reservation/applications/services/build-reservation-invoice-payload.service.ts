@@ -21,7 +21,7 @@ import type {
   ReservationInvoiceLineItem,
 } from '../../domain/types/reservation-invoice-context.type';
 import { ResolvePaymentReservationsService } from './resolve-payment-reservations.service';
-import { formatInvoiceDate } from '../utils/format-invoice.util';
+import { formatInvoiceDate } from '../../../invoice/contracts';
 import { ReservationItemOutput } from '../dto/reservation-item.output';
 
 @Injectable()

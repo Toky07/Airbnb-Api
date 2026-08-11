@@ -7,7 +7,7 @@ import type {
 import {
   formatInvoiceAmount,
   formatInvoiceDate,
-} from '../utils/format-invoice.util';
+} from '../../../invoice/contracts';
 
 @Injectable()
 export class BuildHostPaymentNotificationEmailBodyService {

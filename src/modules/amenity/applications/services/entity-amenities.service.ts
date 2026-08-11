@@ -27,10 +27,8 @@ export class SyncEntityAmenitiesService {
       throw new NotFoundException('Établissement introuvable');
     }
 
-    return this.sync(
-      amenityIds,
-      AMENITY_SCOPE.PROPERTY,
-      (ids) => this.propertyAmenityRepository.replaceForProperty(propertyId, ids),
+    return this.sync(amenityIds, AMENITY_SCOPE.PROPERTY, (ids) =>
+      this.propertyAmenityRepository.replaceForProperty(propertyId, ids),
     );
   }
 

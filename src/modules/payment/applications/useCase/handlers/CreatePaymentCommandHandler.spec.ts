@@ -1,18 +1,14 @@
 import { CreatePaymentCommandHandler } from './CreatePaymentCommandHandler';
 import { CreatePaymentCommand } from '../commands/CreatePaymentCommand';
 import { Payment } from '../../../domain/entities/payment.entity';
-import { PAYMENT_STATUS } from '../../../domain/constants/payment-status.constant';
 import { PAYMENT_TYPE } from '../../../domain/types/payment.type';
 import type { IPaymentRepository } from '../../../domain/repositories/payment.repository';
 import type { IPaymentGateway } from '../../../domain/ports/payment-gateway.port';
+import type { IPaymentPublicConfig } from '../../../domain/ports/payment-public-config.port';
 
 const mockPublish = vi.fn();
 vi.mock('../../../../../shared/domain/event.bus', () => ({
   EventBus: { getInstance: () => ({ publish: mockPublish }) },
-}));
-
-vi.mock('../../../infrastructure/stripe/stripe.config', () => ({
-  getStripePublishableKey: () => 'pk_test_mock',
 }));
 
 function createHandler() {
@@ -32,9 +28,17 @@ function createHandler() {
     }),
   } as unknown as IPaymentGateway;
 
-  const handler = new CreatePaymentCommandHandler(repository, gateway);
+  const paymentPublicConfig = {
+    getPublishableKey: vi.fn().mockReturnValue('pk_test_mock'),
+  } as unknown as IPaymentPublicConfig;
 
-  return { handler, repository, gateway };
+  const handler = new CreatePaymentCommandHandler(
+    repository,
+    gateway,
+    paymentPublicConfig,
+  );
+
+  return { handler, repository, gateway, paymentPublicConfig };
 }
 
 const command = new CreatePaymentCommand(
@@ -91,9 +95,10 @@ describe('CreatePaymentCommandHandler', () => {
   });
 
   it('should return paymentId, clientSecret, amount, currency, publishableKey', async () => {
-    const { handler } = createHandler();
+    const { handler, paymentPublicConfig } = createHandler();
     const result = await handler.execute(command);
 
+    expect(paymentPublicConfig.getPublishableKey).toHaveBeenCalled();
     expect(result).toEqual({
       paymentId: 1,
       clientSecret: 'pi_test_123_secret',

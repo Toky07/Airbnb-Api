@@ -58,7 +58,10 @@ export class FavoriteController {
     description: 'IDs séparés par des virgules',
     example: '1,2,3',
   })
-  check(@Req() request: AuthenticatedRequest, @Query('roomIds') roomIds: string) {
+  check(
+    @Req() request: AuthenticatedRequest,
+    @Query('roomIds') roomIds: string,
+  ) {
     return QueryBus.execute(
       new CheckFavoritesQuery(
         request.user.sub,

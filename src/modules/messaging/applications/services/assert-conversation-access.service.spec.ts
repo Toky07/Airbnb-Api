@@ -51,8 +51,8 @@ describe('AssertConversationAccessService', () => {
       } as unknown as IUserRepository,
     );
 
-    await expect(service.assertCanAccess(conversation, 99)).rejects.toBeInstanceOf(
-      ForbiddenException,
-    );
+    await expect(
+      service.assertCanAccess(conversation, 99),
+    ).rejects.toBeInstanceOf(ForbiddenException);
   });
 });

@@ -7,10 +7,9 @@ import { PAYMENT_STATUS } from '../../../domain/constants/payment-status.constan
 import { Payment } from '../../../domain/entities/payment.entity';
 import { EventBus } from '../../../../../shared/domain/event.bus';
 import { PaymentConfirmedEvent } from '../../../domain/events/payment-confirmed.event';
+import type { VerifyPaymentResult } from '../../dto/verify-payment.result';
 
-export type VerifyPaymentResult = {
-  cartId: number | null;
-};
+export type { VerifyPaymentResult };
 
 export class VerifyPaymentCommandHandler implements ICommandHandler<
   VerifyPaymentCommand,

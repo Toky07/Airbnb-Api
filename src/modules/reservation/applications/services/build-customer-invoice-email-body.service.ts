@@ -4,7 +4,7 @@ import type { ReservationInvoiceContext } from '../../domain/types/reservation-i
 import {
   formatInvoiceAmount,
   formatInvoiceDate,
-} from '../utils/format-invoice.util';
+} from '../../../invoice/contracts';
 
 @Injectable()
 export class BuildCustomerInvoiceEmailBodyService {

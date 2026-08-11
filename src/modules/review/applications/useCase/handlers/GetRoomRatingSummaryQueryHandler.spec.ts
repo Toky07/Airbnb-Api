@@ -21,7 +21,9 @@ describe('GetRoomRatingSummaryQueryHandler', () => {
       roomRepository as never,
     );
 
-    const result = await handler.execute(new GetRoomRatingSummaryQuery('suite'));
+    const result = await handler.execute(
+      new GetRoomRatingSummaryQuery('suite'),
+    );
 
     expect(result.averageRating).toBe(4.5);
     expect(result.totalReviews).toBe(12);

@@ -10,14 +10,18 @@ import { ResolveAmenitiesService } from './resolve-amenities.service';
 
 describe('SyncEntityAmenitiesService', () => {
   it('syncs property amenities', async () => {
-    const propertyRepository = { findById: vi.fn().mockResolvedValue({ id: 1 }) };
+    const propertyRepository = {
+      findById: vi.fn().mockResolvedValue({ id: 1 }),
+    };
     const propertyAmenityRepository = {
       replaceForProperty: vi.fn().mockResolvedValue(undefined),
     };
     const amenityRepository = {
-      findByIds: vi.fn().mockResolvedValue([
-        new Amenity('Parking', 'parking', AMENITY_SCOPE.PROPERTY, true, 1),
-      ]),
+      findByIds: vi
+        .fn()
+        .mockResolvedValue([
+          new Amenity('Parking', 'parking', AMENITY_SCOPE.PROPERTY, true, 1),
+        ]),
     };
 
     const service = new SyncEntityAmenitiesService(
@@ -59,9 +63,11 @@ describe('ListEntityAmenitiesService', () => {
       findAmenityIdsByRoomId: vi.fn().mockResolvedValue([1]),
     };
     const amenityRepository = {
-      findByIds: vi.fn().mockResolvedValue([
-        new Amenity('Wi-Fi', 'wifi', AMENITY_SCOPE.ROOM, true, 1),
-      ]),
+      findByIds: vi
+        .fn()
+        .mockResolvedValue([
+          new Amenity('Wi-Fi', 'wifi', AMENITY_SCOPE.ROOM, true, 1),
+        ]),
     };
 
     const service = new ListEntityAmenitiesService(

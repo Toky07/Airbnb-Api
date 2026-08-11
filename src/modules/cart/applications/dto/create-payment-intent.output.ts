@@ -1,4 +1,4 @@
-import type { PricingBreakdownOutput } from '../pricing/pricing-breakdown.output';
+import type { PricingBreakdownOutput } from '../../../../shared/pricing/pricing-breakdown.output';
 
 export class CreatePaymentIntentOutput {
   constructor(

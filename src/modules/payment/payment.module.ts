@@ -5,21 +5,28 @@ import {
   PAYMENT_GATEWAY,
 } from './domain/ports/payment-gateway.port';
 import {
+  type IPaymentPublicConfig,
+  PAYMENT_PUBLIC_CONFIG,
+} from './domain/ports/payment-public-config.port';
+import {
   type IPaymentRepository,
   PAYMENT_REPOSITORY,
 } from './domain/repositories/payment.repository';
 import { PaymentOrmEntity } from './infrastructure/entities/payment.orm-entity';
 import { PaymentRepository } from './infrastructure/repositories/payment.repository';
 import { StripePaymentGateway } from './infrastructure/stripe/stripe-payment-gateway';
+import { StripePaymentPublicConfig } from './infrastructure/stripe/stripe-payment-public-config';
 import { StripeClientProvider } from './infrastructure/stripe/StripeClientProvider';
 import { StripeWebhookVerifier } from './infrastructure/stripe/StripeWebhookVerifier';
 import { MapStripeStatusService } from './applications/services/map-stripe-status.service';
 import { PaymentController } from './interfaces/http/payment.controller';
 import { PaymentBootstrap } from './payment.bootstrap';
 import { CommandBus } from '../../shared/useCase/bus/bus';
-import { CreatePaymentCommand } from './applications/useCase/commands/CreatePaymentCommand';
-import { ConfirmStripePaymentCommand } from './applications/useCase/commands/ConfirmStripePaymentCommand';
-import { VerifyPaymentCommand } from './applications/useCase/commands/VerifyPaymentCommand';
+import {
+  ConfirmStripePaymentCommand,
+  CreatePaymentCommand,
+  VerifyPaymentCommand,
+} from './contracts';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PaymentOrmEntity])],
@@ -31,6 +38,10 @@ import { VerifyPaymentCommand } from './applications/useCase/commands/VerifyPaym
     {
       provide: PAYMENT_GATEWAY,
       useClass: StripePaymentGateway,
+    },
+    {
+      provide: PAYMENT_PUBLIC_CONFIG,
+      useClass: StripePaymentPublicConfig,
     },
     {
       provide: PAYMENT_REPOSITORY,
@@ -45,6 +56,8 @@ export class PaymentModule implements OnModuleInit {
     private readonly paymentRepository: IPaymentRepository,
     @Inject(PAYMENT_GATEWAY)
     private readonly paymentGateway: IPaymentGateway,
+    @Inject(PAYMENT_PUBLIC_CONFIG)
+    private readonly paymentPublicConfig: IPaymentPublicConfig,
     private readonly webhookVerifier: StripeWebhookVerifier,
   ) {}
 
@@ -53,6 +66,7 @@ export class PaymentModule implements OnModuleInit {
       this.paymentRepository,
       this.paymentGateway,
       this.webhookVerifier,
+      this.paymentPublicConfig,
     );
 
     CommandBus.register(
