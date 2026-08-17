@@ -1,3 +1,6 @@
+# Canonical CI for the Airbnb monorepo lives at the repo root:
+#   .github/workflows/api.yml + .github/actions/node-ci
+# This workflow only runs when pushing to the Airbnb-Api repository itself.
 name: CI
 
 on:
