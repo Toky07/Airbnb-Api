@@ -63,7 +63,20 @@ function mapPropertyType(
   };
 }
 
+export type PropertySummaryWithOwner = PropertySummary & { ownerId: number };
+
 /** Normalise un entity ORM / domaine Property vers PropertySummary. */
+export function toPropertySummary(
+  source: PropertySummarySource,
+): PropertySummaryWithOwner;
+export function toPropertySummary(
+  source: PropertySummarySource,
+  options: { omitOwnerId: true },
+): PropertySummary;
+export function toPropertySummary(
+  source: PropertySummarySource,
+  options?: { omitOwnerId?: boolean },
+): PropertySummary;
 export function toPropertySummary(
   source: PropertySummarySource,
   options?: { omitOwnerId?: boolean },
