@@ -20,12 +20,12 @@ case "${ENVIRONMENT:-prod}" in
     # nest start --watch relance trop tôt et laisse :3000 occupé (EADDRINUSE).
     # Compile en watch + node --watch tue correctement l'ancien process.
     npx nest build --watch &
-    wait_for_file dist/src/main.js 90
-    exec node --watch dist/src/main.js
+    wait_for_file dist/main.js 90
+    exec node --watch dist/main.js
     ;;
   prod|production)
-    npx run migration:run
-    exec node dist/src/main.js
+    npm run migration:run
+    exec node dist/main.js
     ;;
   *)
     echo "ENVIRONMENT must be 'dev' or 'prod' (got: ${ENVIRONMENT})" >&2

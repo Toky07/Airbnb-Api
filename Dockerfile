@@ -33,7 +33,7 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
 ENTRYPOINT ["dumb-init", "--", "/entrypoint.sh"]
 
 # ---------------------------------------------------------------------------
-# Production — build compilé (node dist/src/main.js)
+# Production — build compilé (node dist/main.js)
 # ---------------------------------------------------------------------------
 FROM node:22-bookworm-slim AS production
 WORKDIR /app
