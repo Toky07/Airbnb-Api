@@ -27,6 +27,11 @@ export {
   type SaveMediaContext,
 } from '@src/modules/media/utils/build-upload-path';
 export { resolveUploadRoot } from '@src/modules/media/utils/resolve-upload-root';
+export { configurePublicUploads } from '@src/modules/media/utils/configure-public-uploads';
+export {
+  getAttachmentMulterOptions,
+  getImageMulterOptions,
+} from '@src/modules/media/utils/multer-upload.options';
 export { dataUrlToUploadFile } from '@src/modules/media/utils/data-url-to-upload-file';
 export { isStoredUploadPath } from '@src/modules/media/utils/is-stored-upload-path';
 export { fetchImageFromUrl } from '@src/modules/media/utils/fetch-image-from-url';

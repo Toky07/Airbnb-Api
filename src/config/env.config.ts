@@ -1,3 +1,5 @@
+import type { JwtSignOptions } from '@nestjs/jwt';
+
 type EnvSource = NodeJS.ProcessEnv;
 
 const WEAK_JWT_SECRETS = new Set(['1234', 'change-me', 'secret', 'jwt-secret']);
@@ -35,6 +37,31 @@ export function getJwtSecret(env: EnvSource = process.env): string {
 
 export function getJwtExpiresIn(env: EnvSource = process.env): string {
   return readEnv(env, 'JWT_EXPIRES_IN') ?? '8h';
+}
+
+export function getJwtIssuer(env: EnvSource = process.env): string {
+  return readEnv(env, 'JWT_ISSUER') ?? 'airbnb-api';
+}
+
+export function getJwtAudience(env: EnvSource = process.env): string {
+  return readEnv(env, 'JWT_AUDIENCE') ?? 'airbnb-clients';
+}
+
+export function getJwtModuleOptions(env: EnvSource = process.env) {
+  return {
+    secret: getJwtSecret(env),
+    signOptions: {
+      expiresIn: getJwtExpiresIn(env) as JwtSignOptions['expiresIn'],
+      algorithm: 'HS256' as const,
+      issuer: getJwtIssuer(env),
+      audience: getJwtAudience(env),
+    },
+    verifyOptions: {
+      algorithms: ['HS256' as const],
+      issuer: getJwtIssuer(env),
+      audience: getJwtAudience(env),
+    },
+  };
 }
 
 export function getStripeSecretKey(env: EnvSource = process.env): string {

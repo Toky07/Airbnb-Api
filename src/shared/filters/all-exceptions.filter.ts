@@ -30,6 +30,23 @@ export class AllExceptionsFilter implements ExceptionFilter {
     }
 
     if (exception instanceof Error) {
+      if (exception.name === 'MulterError') {
+        const code = 'code' in exception ? String(exception.code) : '';
+        if (code === 'LIMIT_FILE_SIZE') {
+          response.status(HttpStatus.PAYLOAD_TOO_LARGE).json({
+            statusCode: HttpStatus.PAYLOAD_TOO_LARGE,
+            message: 'Fichier trop volumineux.',
+          });
+          return;
+        }
+
+        response.status(HttpStatus.BAD_REQUEST).json({
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'Fichier invalide.',
+        });
+        return;
+      }
+
       if (exception.message === 'User not found') {
         response.status(HttpStatus.NOT_FOUND).json({
           statusCode: HttpStatus.NOT_FOUND,

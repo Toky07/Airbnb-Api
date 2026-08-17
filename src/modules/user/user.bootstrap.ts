@@ -44,6 +44,7 @@ export class UserBootstrap {
       assignUserRolesCommandHandler: new AssignUserRolesCommandHandler(
         deps.userRepository,
         deps.authRepository,
+        deps.roleRepository,
       ),
       registerHostCommandHandler: new RegisterHostCommandHandler(
         deps.authRepository,

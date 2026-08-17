@@ -4,7 +4,8 @@ import {
   StreamableFile,
 } from '@nestjs/common';
 import { createReadStream, existsSync } from 'fs';
-import { basename } from 'path';
+import { isAbsolute } from 'path';
+import { resolveUploadRoot, toDiskPath } from '@src/modules/media/contracts';
 import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
 import type { IUserRepository } from '@src/modules/user/contracts';
 import type { IInvoiceRepository } from '@src/modules/invoice/domain/repositories/invoice.repository';
@@ -34,14 +35,19 @@ export class DownloadInvoiceQueryHandler implements IQueryHandler<
       }
     }
 
-    if (!existsSync(invoice.path)) {
+    const absolutePath = isAbsolute(invoice.path)
+      ? invoice.path
+      : toDiskPath(invoice.path, resolveUploadRoot());
+
+    if (!existsSync(absolutePath)) {
       throw new NotFoundException('Fichier facture introuvable.');
     }
 
-    const stream = createReadStream(invoice.path);
+    const downloadName = `facture-${invoice.invoiceNumber}.pdf`;
+    const stream = createReadStream(absolutePath);
     return new StreamableFile(stream, {
       type: 'application/pdf',
-      disposition: `attachment; filename="${basename(invoice.path)}"`,
+      disposition: `attachment; filename="${downloadName}"`,
     });
   }
 }

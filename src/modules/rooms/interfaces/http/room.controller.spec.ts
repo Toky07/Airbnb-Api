@@ -5,6 +5,7 @@ import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.enti
 import { RoomBlockedDateOrmEntity } from '@src/modules/rooms/infrastructure/entities/room-blocked-date.orm-entity';
 import { PropertyEntity } from '@src/modules/properties/infrastructure/entities/property-entity.entity';
 import { registerAndLoginAsSuperAdmin } from '@src/test/controller-test.helpers';
+import { jpegBuffer } from '@src/test/image-fixtures';
 import { setupE2eApp } from '@src/test/e2e-app';
 
 describe('RoomController', () => {
@@ -241,8 +242,8 @@ describe('RoomController', () => {
       .field('size', String(defaultRoom.size))
       .field('status', defaultRoom.status)
       .field('property', JSON.stringify({ id: property.id }))
-      .attach('images', Buffer.from('room-1'), 'room1.jpg')
-      .attach('images', Buffer.from('room-2'), 'room2.jpg')
+      .attach('images', jpegBuffer('room-1'), 'room1.jpg')
+      .attach('images', jpegBuffer('room-2'), 'room2.jpg')
       .set('Authorization', `Bearer ${token}`)
       .expect(201);
 
@@ -306,5 +307,68 @@ describe('RoomController', () => {
 
     const deletedRoom = await repository.findOne({ where: { id: room.id } });
     expect(deletedRoom).toBeNull();
+  });
+
+  it('GET /rooms hides unpublished rooms and ownerId from the public catalog', async () => {
+    const property = await dataSource.getRepository(PropertyEntity).save({
+      ...defaultProperty,
+      name: 'Draft Property',
+    });
+    const draft = await dataSource.getRepository(RoomEntity).save({
+      ...defaultRoom,
+      name: 'Draft Room',
+      status: 'draft',
+      property,
+    });
+
+    const list = await request(app.getHttpServer())
+      .get('/rooms')
+      .query({ status: 'draft', limit: 25 })
+      .expect(200);
+
+    const ids = (
+      list.body.data as Array<{ id: number; property?: { ownerId?: number } }>
+    ).map((room) => room.id);
+    expect(ids).not.toContain(draft.id);
+    expect(
+      (list.body.data as Array<{ property?: { ownerId?: number } }>).every(
+        (room) => room.property?.ownerId === undefined,
+      ),
+    ).toBe(true);
+
+    await request(app.getHttpServer()).get(`/rooms/${draft.id}`).expect(404);
+  });
+
+  it('GET /uploads/invoices/* is not served as a public static file', async () => {
+    await request(app.getHttpServer())
+      .get('/uploads/invoices/facture-FACT-2026-000001.pdf')
+      .expect(404);
+  });
+
+  it('POST /rooms rejects svg uploads', async () => {
+    const property = await dataSource
+      .getRepository(PropertyEntity)
+      .save({ ...defaultProperty, name: 'Upload Filter Property' });
+
+    await request(app.getHttpServer())
+      .post('/rooms')
+      .field('name', defaultRoom.name)
+      .field('description', defaultRoom.description)
+      .field('pricePerNight', String(defaultRoom.pricePerNight))
+      .field('maxGuests', String(defaultRoom.maxGuests))
+      .field('bedrooms', String(defaultRoom.bedrooms))
+      .field('bathrooms', String(defaultRoom.bathrooms))
+      .field('beds', String(defaultRoom.beds))
+      .field('quantity', String(defaultRoom.quantity))
+      .field('size', String(defaultRoom.size))
+      .field('status', defaultRoom.status)
+      .field('property', JSON.stringify({ id: property.id }))
+      .attach(
+        'images',
+        Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"></svg>'),
+        'xss.svg',
+      )
+      .set('Authorization', `Bearer ${token}`)
+      .expect(400);
   });
 });

@@ -1,7 +1,9 @@
+import { NotFoundException } from '@nestjs/common';
 import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
 import type { IRoomRepository } from '@src/modules/rooms/domain/repositories/room.repository';
 import type { RoomDetailResolver } from '@src/modules/rooms/applications/services/room-detail.resolver';
 import type { FindRoomQuery } from '@src/modules/rooms/applications/useCase/queries/FindRoomQuery';
+import { isPubliclyListedRoom } from '@src/modules/rooms/domain/utils/is-publicly-listed-room';
 
 export class FindRoomQueryHandler implements IQueryHandler<
   FindRoomQuery,
@@ -18,6 +20,10 @@ export class FindRoomQueryHandler implements IQueryHandler<
         ? await this.repository.findById(query.lookup.id)
         : await this.repository.findBySlug(query.lookup.slug);
 
-    return this.roomDetailResolver.resolve(room);
+    if (query.publicCatalog && !isPubliclyListedRoom(room)) {
+      throw new NotFoundException('Room not found');
+    }
+
+    return this.roomDetailResolver.resolve(room, query.publicCatalog);
   }
 }

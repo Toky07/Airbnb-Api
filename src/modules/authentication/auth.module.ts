@@ -9,7 +9,7 @@ import { AuthRepository } from './infrastructure/repositories/auth.repository';
 import { TOKEN_GENERATOR } from './domain/generator/token.generator';
 import type { TokenGenerator } from './domain/generator/token.generator';
 import { JwtTokenGenerator } from './infrastructure/generator/jwt-token.generator';
-import { JwtModule, type JwtSignOptions } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 import { RoleController } from './interfaces/http/role.controller';
 import { ROLE_REPOSITORY } from './domain/repositories/role.repository';
 import type { IRoleRepository } from './domain/repositories/role.repository';
@@ -60,7 +60,7 @@ import { RequestPasswordResetCommand } from './applications/useCase/commands/Req
 import { ValidatePasswordResetTokenQuery } from './applications/useCase/queries/ValidatePasswordResetTokenQuery';
 import { BecomeHostCommand } from './applications/useCase/commands/BecomeHostCommand';
 import { RateLimitModule } from '@src/shared/rate-limit.module';
-import { getJwtExpiresIn, getJwtSecret } from '@src/config/env.config';
+import { getJwtModuleOptions } from '@src/config/env.config';
 
 @Module({
   imports: [
@@ -75,12 +75,7 @@ import { getJwtExpiresIn, getJwtSecret } from '@src/config/env.config';
     ]),
     JwtModule.registerAsync({
       global: true,
-      useFactory: () => ({
-        secret: getJwtSecret(),
-        signOptions: {
-          expiresIn: getJwtExpiresIn() as JwtSignOptions['expiresIn'],
-        },
-      }),
+      useFactory: () => getJwtModuleOptions(),
     }),
     forwardRef(() => UserModule),
     PropertiesModule,

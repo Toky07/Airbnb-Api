@@ -5,6 +5,7 @@ import type { ComputePricingBreakdownService } from '@src/shared/pricing/compute
 import type { IRoomRepository } from '@src/modules/rooms/domain/repositories/room.repository';
 import type { RoomStayPricingService } from '@src/modules/rooms/applications/services/room-stay-pricing.service';
 import type { GetRoomPricingPreviewQuery } from '@src/modules/rooms/applications/useCase/queries/GetRoomPricingPreviewQuery';
+import { assertPubliclyListedRoom } from '@src/modules/rooms/domain/utils/is-publicly-listed-room';
 
 export class GetRoomPricingPreviewQueryHandler implements IQueryHandler<
   GetRoomPricingPreviewQuery,
@@ -28,6 +29,8 @@ export class GetRoomPricingPreviewQueryHandler implements IQueryHandler<
     if (!room?.id) {
       throw new BadRequestException('Chambre introuvable.');
     }
+
+    assertPubliclyListedRoom(room);
 
     if (query.guestCount > room.maxGuests) {
       throw new BadRequestException(

@@ -13,6 +13,7 @@ export class AuthMapper {
       auth.password,
       roles,
       auth.status as AccountStatus,
+      auth.updatedAt,
     );
   }
 

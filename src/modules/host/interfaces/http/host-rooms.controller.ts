@@ -20,7 +20,11 @@ import { parseRequiredPropertyId } from './parse-required-property-id';
 import { parseRoomBody } from '@src/modules/rooms/contracts';
 import { parseKeptImages } from '@src/modules/rooms/contracts';
 import type { CreateRoomDto } from '@src/modules/rooms/contracts';
-import { ENTITY_MEDIA_LIMITS, ENTITY_TYPE } from '@src/modules/media/contracts';
+import {
+  ENTITY_MEDIA_LIMITS,
+  ENTITY_TYPE,
+  getImageMulterOptions,
+} from '@src/modules/media/contracts';
 import type { UploadFile } from '@src/modules/media/contracts';
 import { CommandBus } from '@src/shared/useCase/bus/bus';
 import { QueryBus } from '@src/shared/useCase/bus/query-bus';
@@ -74,7 +78,11 @@ export class HostRoomsController {
   @Post('rooms')
   @RequirePermissions('host.rooms.create')
   @UseInterceptors(
-    FilesInterceptor('images', ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM]),
+    FilesInterceptor(
+      'images',
+      ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM],
+      getImageMulterOptions(),
+    ),
   )
   createRoom(
     @Req() request: { user: JwtPayload },
@@ -96,7 +104,11 @@ export class HostRoomsController {
   @Put('rooms/:id')
   @RequirePermissions('host.rooms.update')
   @UseInterceptors(
-    FilesInterceptor('images', ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM]),
+    FilesInterceptor(
+      'images',
+      ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM],
+      getImageMulterOptions(),
+    ),
   )
   updateRoom(
     @Req() request: { user: JwtPayload },

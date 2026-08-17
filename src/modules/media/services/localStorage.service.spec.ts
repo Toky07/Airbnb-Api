@@ -23,7 +23,7 @@ describe('LocalStorageService', () => {
 
   it('should save a property image under uploads/{propertyId}/property', async () => {
     const file = {
-      buffer: Buffer.from('test-image'),
+      buffer: Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
       originalname: 'test.png',
       mimetype: 'image/png',
     } as UploadFile;
@@ -37,12 +37,14 @@ describe('LocalStorageService', () => {
     expect(relativePath).toMatch(/\.png$/);
 
     const content = await readFile(toDiskPath(relativePath, diskRoot));
-    expect(content.toString()).toBe('test-image');
+    expect(content.subarray(0, 8)).toEqual(
+      Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
+    );
   });
 
   it('should save a user avatar under uploads/users/{userId}/avatar', async () => {
     const file = {
-      buffer: Buffer.from('user-avatar'),
+      buffer: Buffer.from([0xff, 0xd8, 0xff, 0xe0]),
       originalname: 'avatar.jpg',
       mimetype: 'image/jpeg',
     } as UploadFile;
@@ -58,7 +60,7 @@ describe('LocalStorageService', () => {
 
   it('should save a room image under uploads/{propertyId}/room/{roomId}', async () => {
     const file = {
-      buffer: Buffer.from('room-image'),
+      buffer: Buffer.from([0xff, 0xd8, 0xff, 0xe0]),
       originalname: 'room.jpg',
       mimetype: 'image/jpeg',
     } as UploadFile;
@@ -77,7 +79,7 @@ describe('LocalStorageService', () => {
     const absolutePath = toDiskPath(relativePath, diskRoot);
     await service.save(
       {
-        buffer: Buffer.from('delete-me'),
+        buffer: Buffer.from([0xff, 0xd8, 0xff, 0xe0]),
         originalname: 'to-delete.jpg',
         mimetype: 'image/jpeg',
       } as UploadFile,
@@ -87,5 +89,18 @@ describe('LocalStorageService', () => {
     await service.delete(relativePath);
 
     await expect(readFile(absolutePath)).rejects.toThrow();
+  });
+
+  it('rejects html and svg payloads', async () => {
+    await expect(
+      service.save(
+        {
+          buffer: Buffer.from('<html></html>'),
+          originalname: 'x.html',
+          mimetype: 'text/html',
+        } as UploadFile,
+        toSaveMediaContext(ENTITY_TYPE.PROPERTY, 1),
+      ),
+    ).rejects.toThrow('Seules les images JPEG, PNG ou WebP sont acceptées.');
   });
 });

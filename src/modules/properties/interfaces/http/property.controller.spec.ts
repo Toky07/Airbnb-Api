@@ -4,6 +4,7 @@ import { DataSource } from 'typeorm';
 import { PropertyEntity } from '@src/modules/properties/infrastructure/entities/property-entity.entity';
 import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
 import { registerAndLoginAsSuperAdmin } from '@src/test/controller-test.helpers';
+import { jpegBuffer } from '@src/test/image-fixtures';
 import { setupE2eApp } from '@src/test/e2e-app';
 
 describe('PropertyController', () => {
@@ -133,7 +134,7 @@ describe('PropertyController', () => {
       .field('checkInTime', defaultProperty.checkInTime)
       .field('checkOutTime', defaultProperty.checkOutTime)
       .field('ownerId', String(defaultProperty.ownerId))
-      .attach('image', Buffer.from('property-image'), 'property.jpg')
+      .attach('image', jpegBuffer('property-image'), 'property.jpg')
       .set('Authorization', `Bearer ${token}`)
       .expect(201);
 
@@ -193,7 +194,7 @@ describe('PropertyController', () => {
       .field('checkInTime', defaultProperty.checkInTime)
       .field('checkOutTime', defaultProperty.checkOutTime)
       .field('ownerId', String(defaultProperty.ownerId))
-      .attach('image', Buffer.from('updated-image'), 'updated.jpg')
+      .attach('image', jpegBuffer('updated-image'), 'updated.jpg')
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 

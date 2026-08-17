@@ -17,7 +17,10 @@ import type { PaginatedResult } from '@src/shared/pagination/pagination.types';
 import { PropertyOutput } from '@src/modules/properties/applications/dto/property.output';
 import type { CreatePropertyDto } from '@src/modules/properties/applications/dto/createProperty.dto';
 import { parsePropertyBody } from './parse-property-body';
-import type { UploadFile } from '@src/modules/media/contracts';
+import {
+  type UploadFile,
+  getImageMulterOptions,
+} from '@src/modules/media/contracts';
 import { RequirePermissions } from '@src/modules/authentication/contracts';
 import { CommandBus } from '@src/shared/useCase/bus/bus';
 import { QueryBus } from '@src/shared/useCase/bus/query-bus';
@@ -67,7 +70,7 @@ export class PropertyController {
   @RequirePermissions('properties.create')
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Créer un établissement' })
-  @UseInterceptors(FileInterceptor('image'))
+  @UseInterceptors(FileInterceptor('image', getImageMulterOptions()))
   create(
     @Body() body: CreatePropertyDto | Record<string, unknown>,
     @UploadedFile() image?: UploadFile,
@@ -85,7 +88,7 @@ export class PropertyController {
   @RequirePermissions('properties.update')
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Modifier un établissement' })
-  @UseInterceptors(FileInterceptor('image'))
+  @UseInterceptors(FileInterceptor('image', getImageMulterOptions()))
   update(
     @Param('id') id: number,
     @Body() body: CreatePropertyDto | Record<string, unknown>,

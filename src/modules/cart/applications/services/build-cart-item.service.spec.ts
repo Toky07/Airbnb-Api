@@ -45,4 +45,16 @@ describe('BuildCartItemService', () => {
       guestCount: 2,
     });
   });
+
+  it('refuse les articles de type service', async () => {
+    await expect(
+      service.fromDto({
+        itemType: CART_ITEM_TYPE.SERVICE,
+        serviceId: 1,
+        propertyId: 3,
+        label: '<script>xss</script>',
+        unitPrice: 1,
+      }),
+    ).rejects.toThrow('Les articles de type service ne sont pas disponibles.');
+  });
 });

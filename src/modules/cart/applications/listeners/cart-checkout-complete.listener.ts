@@ -13,7 +13,7 @@ export class CartCheckoutCompleteListener {
       'cart.checkout.complete.requested',
       async (event: CartCheckoutCompleteRequestedEvent) => {
         const result = await CommandBus.execute<VerifyPaymentResult>(
-          new VerifyPaymentCommand(event.paymentId),
+          new VerifyPaymentCommand(event.paymentId, event.authId),
         );
 
         await EventBus.getInstance().publish(

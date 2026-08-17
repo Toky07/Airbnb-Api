@@ -31,7 +31,9 @@ export class BuildCartItemService {
       return this.buildReservationItem(dto);
     }
 
-    return this.buildServiceItem(dto);
+    throw new BadRequestException(
+      'Les articles de type service ne sont pas disponibles.',
+    );
   }
 
   buildCheckoutItems(cart: Cart): CartCheckoutItemPayload[] {
@@ -76,41 +78,6 @@ export class BuildCartItemService {
       dto.endDate,
       dto.guestCount,
       details.nights,
-    );
-  }
-
-  private buildServiceItem(dto: {
-    serviceId?: number;
-    propertyId?: number;
-    label?: string;
-    unitPrice?: number;
-    quantity?: number;
-  }): CartItem {
-    if (
-      !dto.serviceId ||
-      !dto.propertyId ||
-      !dto.label?.trim() ||
-      dto.unitPrice == null
-    ) {
-      throw new BadRequestException('Champs de service invalides.');
-    }
-
-    const quantity = dto.quantity ?? 1;
-    const totalPrice = Number((dto.unitPrice * quantity).toFixed(2));
-
-    return new CartItem(
-      CART_ITEM_TYPE.SERVICE,
-      dto.label.trim(),
-      dto.unitPrice,
-      totalPrice,
-      quantity,
-      dto.propertyId,
-      null,
-      dto.serviceId,
-      null,
-      null,
-      null,
-      null,
     );
   }
 }

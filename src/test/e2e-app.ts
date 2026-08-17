@@ -1,8 +1,13 @@
 import { ValidationPipe, type INestApplication } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
+import { getJwtModuleOptions } from '@src/config/env.config';
 import { Test, type TestingModule } from '@nestjs/testing';
+import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
+import type { NestExpressApplication } from '@nestjs/platform-express';
+import { configurePublicUploads } from '@src/modules/media/contracts';
+import { resolveUploadRoot } from '@src/modules/media/contracts';
+import { AllExceptionsFilter } from '@src/shared/filters/all-exceptions.filter';
 import { AmenityModule } from '@src/modules/amenity/amenity.module';
 import { AuthModule } from '@src/modules/authentication/auth.module';
 import { CartModule } from '@src/modules/cart/cart.module';
@@ -90,8 +95,7 @@ async function bootE2eApp(): Promise<E2eAppContext> {
       TypeOrmModule.forRoot(getIntegrationTestDatabaseConfig(TYPEORM_ENTITIES)),
       JwtModule.register({
         global: true,
-        secret: process.env.JWT_SECRET ?? '1234',
-        signOptions: { expiresIn: '5h' },
+        ...getJwtModuleOptions(),
       }),
       AuthModule,
       UserModule,
@@ -117,7 +121,10 @@ async function bootE2eApp(): Promise<E2eAppContext> {
     .compile();
 
   const dataSource = moduleRef.get(DataSource);
-  const app = moduleRef.createNestApplication({ rawBody: true });
+  const app = moduleRef.createNestApplication<NestExpressApplication>({
+    rawBody: true,
+  });
+  app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -125,6 +132,7 @@ async function bootE2eApp(): Promise<E2eAppContext> {
       transform: true,
     }),
   );
+  configurePublicUploads(app, resolveUploadRoot());
   await app.init();
 
   return {

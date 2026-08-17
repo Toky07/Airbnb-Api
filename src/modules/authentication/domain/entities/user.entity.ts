@@ -10,6 +10,7 @@ export class Auth {
     public readonly password: string | null,
     public _roles: RoleEntity[] = [],
     public status: AccountStatus = ACCOUNT_STATUS.PENDING,
+    public readonly updatedAt?: Date,
   ) {}
 
   public get email(): string {

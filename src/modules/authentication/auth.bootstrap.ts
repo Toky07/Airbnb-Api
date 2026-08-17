@@ -53,6 +53,7 @@ export class AuthBootstrap {
       loginCommandHandler: new LoginCommandHandler(deps.tokenGenerator),
       assignRoleCommandHandler: new AssignRoleCommandHandler(
         deps.authRepository,
+        deps.roleRepository,
       ),
       createRoleCommandHandler: new CreateRoleCommandHandler(
         deps.roleRepository,

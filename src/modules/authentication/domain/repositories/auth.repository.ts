@@ -11,6 +11,7 @@ export interface IAuthRepository {
   updatePassword(authId: number, passwordHash: string): Promise<void>;
   updateStatus(authId: number, status: AccountStatus): Promise<void>;
   delete(id: number): Promise<boolean>;
+  countWithRoleSlug(slug: string): Promise<number>;
 }
 
 export const AUTH_REPOSITORY = 'AUTH_REPOSITORY';

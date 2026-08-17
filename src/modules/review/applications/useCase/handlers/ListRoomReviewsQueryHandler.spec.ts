@@ -15,7 +15,9 @@ describe('ListRoomReviewsQueryHandler', () => {
       }),
     };
     const roomRepository = {
-      findBySlug: vi.fn().mockResolvedValue({ id: 5, slug: 'suite' }),
+      findBySlug: vi
+        .fn()
+        .mockResolvedValue({ id: 5, slug: 'suite', status: 'available' }),
     };
     const mapReviewOutputsService = {
       mapPaginatedWithAuthors: vi.fn().mockResolvedValue({

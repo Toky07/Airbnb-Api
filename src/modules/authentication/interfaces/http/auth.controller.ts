@@ -7,24 +7,18 @@ import {
   Put,
   Req,
   UnauthorizedException,
-  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import {
-  ApiBody,
-  ApiConsumes,
-  ApiOperation,
-  ApiQuery,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { parseMyProfileBody } from '@src/modules/user/contracts';
 import { Public } from '@src/modules/authentication/interfaces/decorators/public.decorator';
 import { RequirePermissions } from '@src/modules/authentication/interfaces/decorators/require-permissions.decorator';
 import type { JwtPayload } from '@src/modules/authentication/domain/types/jwt-payload';
 import type { MeOutput } from '@src/modules/authentication/applications/dto/me.output';
 import type { UploadFile } from '@src/modules/media/contracts';
+import { getImageMulterOptions } from '@src/modules/media/contracts';
 import { UserOutput } from '@src/modules/user/contracts';
 import { CommandBus } from '@src/shared/useCase/bus/bus';
 import { QueryBus } from '@src/shared/useCase/bus/query-bus';
@@ -52,6 +46,7 @@ import { LoginResponseDto } from '@src/modules/authentication/applications/dto/l
 import { RegisterDto } from '@src/modules/authentication/applications/dto/register.dto';
 import { SuccessResponseDto } from '@src/modules/authentication/applications/dto/success-response.dto';
 import { TokenPasswordDto } from '@src/modules/authentication/applications/dto/token-password.dto';
+import { TokenDto } from '@src/modules/authentication/applications/dto/token.dto';
 import { TokenResponseDto } from '@src/modules/authentication/applications/dto/token-response.dto';
 import { ApiJwtAuth } from '@src/shared/swagger/swagger.decorators';
 import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
@@ -88,11 +83,11 @@ export class AuthController {
 
   @Public()
   @SensitiveRouteThrottle(AUTH_PASSWORD_SETUP_THROTTLE)
-  @Get('password-setup/validate')
+  @Post('password-setup/validate')
+  @HttpCode(200)
   @ApiOperation({ summary: "Valider un token d'invitation mot de passe" })
-  @ApiQuery({ name: 'token', required: true })
-  async validatePasswordSetup(@Query('token') token: string) {
-    return QueryBus.execute(new ValidatePasswordSetupTokenQuery(token));
+  async validatePasswordSetup(@Body() body: TokenDto) {
+    return QueryBus.execute(new ValidatePasswordSetupTokenQuery(body.token));
   }
 
   @Public()
@@ -123,11 +118,11 @@ export class AuthController {
 
   @Public()
   @SensitiveRouteThrottle(AUTH_PASSWORD_SETUP_THROTTLE)
-  @Get('reset-password/validate')
+  @Post('reset-password/validate')
+  @HttpCode(200)
   @ApiOperation({ summary: 'Valider un token de réinitialisation' })
-  @ApiQuery({ name: 'token', required: true })
-  async validatePasswordReset(@Query('token') token: string) {
-    return QueryBus.execute(new ValidatePasswordResetTokenQuery(token));
+  async validatePasswordReset(@Body() body: TokenDto) {
+    return QueryBus.execute(new ValidatePasswordResetTokenQuery(body.token));
   }
 
   @Public()
@@ -186,7 +181,7 @@ export class AuthController {
       },
     },
   })
-  @UseInterceptors(FileInterceptor('avatar'))
+  @UseInterceptors(FileInterceptor('avatar', getImageMulterOptions()))
   async updateProfile(
     @Req() request: { user?: JwtPayload },
     @Body() body: Record<string, unknown>,
@@ -211,10 +206,15 @@ export class AuthController {
   @ApiJwtAuth()
   @ApiOperation({ summary: 'Assigner des rôles à un utilisateur (admin)' })
   async assignRole(
+    @Req() request: { user?: JwtPayload },
     @Body() assignRoleDto: AssignRoleDto,
   ): Promise<SuccessResponseDto> {
     const response = await CommandBus.execute<boolean>(
-      new AssignRoleCommand(assignRoleDto.userId, assignRoleDto.roleId),
+      new AssignRoleCommand(
+        assignRoleDto.userId,
+        assignRoleDto.roleId,
+        request.user?.isSuperAdmin === true,
+      ),
     );
     return { success: response };
   }

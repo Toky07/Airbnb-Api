@@ -12,7 +12,7 @@ import {
 import { CART_ITEM_TYPE } from '@src/modules/cart/domain/constants/cart-item-type.constant';
 
 export class AddCartItemDto {
-  @IsIn([CART_ITEM_TYPE.RESERVATION, CART_ITEM_TYPE.SERVICE])
+  @IsIn([CART_ITEM_TYPE.RESERVATION])
   itemType: (typeof CART_ITEM_TYPE)[keyof typeof CART_ITEM_TYPE];
 
   @ValidateIf(

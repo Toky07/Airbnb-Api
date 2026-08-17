@@ -6,6 +6,7 @@ import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.enti
 import { AmenityOrmEntity } from '@src/modules/amenity/infrastructure/entities/amenity.orm-entity';
 import { AMENITY_SCOPE } from '@src/modules/amenity/contracts';
 import { registerAndLoginAsHost } from '@src/test/controller-test.helpers';
+import { jpegBuffer } from '@src/test/image-fixtures';
 import { setupE2eApp } from '@src/test/e2e-app';
 
 describe('Host HTTP (/host)', () => {
@@ -368,7 +369,7 @@ describe('Host HTTP (/host)', () => {
       .field('longitude', String(defaultProperty.longitude))
       .field('checkInTime', defaultProperty.checkInTime)
       .field('checkOutTime', defaultProperty.checkOutTime)
-      .attach('image', Buffer.from('host-property-image'), 'property.jpg')
+      .attach('image', jpegBuffer('host-property-image'), 'property.jpg')
       .expect(201);
 
     expect(response.body.image).toMatch(/uploads\/\d+\/property\/.+\.jpg$/);

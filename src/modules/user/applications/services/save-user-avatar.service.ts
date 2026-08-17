@@ -6,6 +6,7 @@ import {
   type ILocalStorageService,
   type UploadFile,
 } from '@src/modules/media/contracts';
+import { BadRequestException } from '@nestjs/common';
 
 export type ResolveUserAvatarInput = {
   file?: UploadFile;
@@ -43,7 +44,11 @@ export class SaveUserAvatarService {
       return this.storage.save(uploadFile, context);
     }
 
-    return avatarFromDto;
+    if (isStoredUploadPath(avatarFromDto) || avatarFromDto === currentAvatar) {
+      return avatarFromDto;
+    }
+
+    throw new BadRequestException("URL d'avatar externe refusée.");
   }
 
   async deleteStored(avatarPath: string): Promise<void> {

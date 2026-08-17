@@ -8,13 +8,30 @@ import { UserEntity } from '../../src/modules/user/infrastructure/entities/user.
 
 export const ADMIN_ACCOUNT = {
   email: 'admin@example.com',
-  password: '1234',
   firstName: 'Admin',
   lastName: 'Example',
   phoneNumber: '+33600000000',
 } as const;
 
+function resolveSampleAdminPassword(): string {
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(
+      'import:sample-data is forbidden when NODE_ENV=production.',
+    );
+  }
+
+  const configured = process.env.SAMPLE_ADMIN_PASSWORD?.trim();
+  if (!configured) {
+    throw new Error(
+      'SAMPLE_ADMIN_PASSWORD is required to create the sample admin user.',
+    );
+  }
+
+  return configured;
+}
+
 export async function ensureAdminUser(dataSource: DataSource): Promise<void> {
+  const password = resolveSampleAdminPassword();
   const userRepo = dataSource.getRepository(UserEntity);
   const authRepo = dataSource.getRepository(AuthEntity);
   const roleRepo = dataSource.getRepository(Role);
@@ -33,7 +50,7 @@ export async function ensureAdminUser(dataSource: DataSource): Promise<void> {
     return;
   }
 
-  const passwordHash = await bcrypt.hash(ADMIN_ACCOUNT.password, 10);
+  const passwordHash = await bcrypt.hash(password, 10);
 
   const user =
     existingUser ??
@@ -80,7 +97,5 @@ export async function ensureAdminUser(dataSource: DataSource): Promise<void> {
     await authRepo.save(auth);
   }
 
-  console.log(
-    `Utilisateur admin prêt : ${ADMIN_ACCOUNT.email} / ${ADMIN_ACCOUNT.password}`,
-  );
+  console.log(`Utilisateur admin prêt : ${ADMIN_ACCOUNT.email}`);
 }

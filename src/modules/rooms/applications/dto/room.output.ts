@@ -43,6 +43,7 @@ export class RoomOutput {
     unavailableDates?: UnavailableDateRange[],
     amenities: AmenityOutput[] = [],
     propertyAmenities: AmenityOutput[] = [],
+    omitOwnerId = false,
   ): RoomOutput {
     return new RoomOutput(
       room.id!,
@@ -60,7 +61,7 @@ export class RoomOutput {
       room.status,
       room.roomTypeId,
       room.roomType,
-      toPropertySummary(room.property),
+      toPropertySummary(room.property, { omitOwnerId }),
       room.createdAt!,
       room.updatedAt!,
       images,

@@ -56,9 +56,9 @@ describe('VerifyPaymentCommandHandler', () => {
       findById: vi.fn().mockResolvedValue(null),
     });
 
-    await expect(handler.execute(new VerifyPaymentCommand(99))).rejects.toThrow(
-      'Paiement introuvable.',
-    );
+    await expect(
+      handler.execute(new VerifyPaymentCommand(99, 1)),
+    ).rejects.toThrow('Paiement introuvable.');
   });
 
   it('should throw when payment has no cartId', async () => {
@@ -68,9 +68,9 @@ describe('VerifyPaymentCommandHandler', () => {
         .mockResolvedValue(createSamplePayment({ cartId: null })),
     });
 
-    await expect(handler.execute(new VerifyPaymentCommand(1))).rejects.toThrow(
-      'Ce paiement ne correspond pas à un panier.',
-    );
+    await expect(
+      handler.execute(new VerifyPaymentCommand(1, 1)),
+    ).rejects.toThrow('Ce paiement ne correspond pas à un panier.');
   });
 
   it('should return cartId when payment is already succeeded', async () => {
@@ -82,7 +82,7 @@ describe('VerifyPaymentCommandHandler', () => {
         ),
     });
 
-    const result = await handler.execute(new VerifyPaymentCommand(1));
+    const result = await handler.execute(new VerifyPaymentCommand(1, 1));
 
     expect(result).toEqual({ cartId: 5 });
     expect(mockPublish).not.toHaveBeenCalled();
@@ -91,7 +91,7 @@ describe('VerifyPaymentCommandHandler', () => {
   it('should verify with gateway and update status when pending', async () => {
     const { handler, gateway, repository } = createHandler();
 
-    const result = await handler.execute(new VerifyPaymentCommand(1));
+    const result = await handler.execute(new VerifyPaymentCommand(1, 1));
 
     expect(gateway.retrievePaymentIntent).toHaveBeenCalledWith('pi_test_123');
     expect(repository.update).toHaveBeenCalledWith(
@@ -109,8 +109,16 @@ describe('VerifyPaymentCommandHandler', () => {
       }),
     });
 
-    await expect(handler.execute(new VerifyPaymentCommand(1))).rejects.toThrow(
-      "Le paiement n'est pas encore confirmé.",
-    );
+    await expect(
+      handler.execute(new VerifyPaymentCommand(1, 1)),
+    ).rejects.toThrow("Le paiement n'est pas encore confirmé.");
+  });
+
+  it('should reject verification by a different user', async () => {
+    const { handler } = createHandler();
+
+    await expect(
+      handler.execute(new VerifyPaymentCommand(1, 99)),
+    ).rejects.toThrow('Paiement introuvable.');
   });
 });

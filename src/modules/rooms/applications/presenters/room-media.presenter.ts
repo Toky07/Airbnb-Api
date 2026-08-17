@@ -8,7 +8,7 @@ import { RoomOutput } from '@src/modules/rooms/applications/dto/room.output';
 
 @Injectable()
 export class RoomMediaPresenter {
-  async toOutput(room: Room): Promise<RoomOutput> {
+  async toOutput(room: Room, omitOwnerId = false): Promise<RoomOutput> {
     const medias = room.id
       ? await QueryBus.execute<Media[]>(
           new GetMediasByEntityQuery(ENTITY_TYPE.ROOM, room.id),
@@ -17,6 +17,10 @@ export class RoomMediaPresenter {
     return RoomOutput.fromDomain(
       room,
       medias.map((media) => media.path),
+      undefined,
+      [],
+      [],
+      omitOwnerId,
     );
   }
 }

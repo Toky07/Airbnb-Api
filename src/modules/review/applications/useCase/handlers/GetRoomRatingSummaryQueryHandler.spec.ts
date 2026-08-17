@@ -13,7 +13,9 @@ describe('GetRoomRatingSummaryQueryHandler', () => {
       }),
     };
     const roomRepository = {
-      findBySlug: vi.fn().mockResolvedValue({ id: 3, slug: 'suite' }),
+      findBySlug: vi
+        .fn()
+        .mockResolvedValue({ id: 3, slug: 'suite', status: 'available' }),
     };
 
     const handler = new GetRoomRatingSummaryQueryHandler(
