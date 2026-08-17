@@ -15,7 +15,10 @@ import type { JwtPayload } from '@src/modules/authentication/contracts';
 import { RequirePermissions } from '@src/modules/authentication/contracts';
 import type { CreatePropertyDto } from '@src/modules/properties/contracts';
 import { parsePropertyBody } from '@src/modules/properties/contracts';
-import type { UploadFile } from '@src/modules/media/contracts';
+import {
+  type UploadFile,
+  getImageMulterOptions,
+} from '@src/modules/media/contracts';
 import { ListPropertyTypeOptionsQuery } from '@src/modules/properties/contracts';
 import { CommandBus } from '@src/shared/useCase/bus/bus';
 import { QueryBus } from '@src/shared/useCase/bus/query-bus';
@@ -53,7 +56,7 @@ export class HostPropertiesController {
   @RequirePermissions('host.property.create')
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Créer un établissement' })
-  @UseInterceptors(FileInterceptor('image'))
+  @UseInterceptors(FileInterceptor('image', getImageMulterOptions()))
   createProperty(
     @Req() request: { user: JwtPayload },
     @Body() body: CreatePropertyDto | Record<string, unknown>,
@@ -73,7 +76,7 @@ export class HostPropertiesController {
   @RequirePermissions('host.property.update')
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Modifier un établissement' })
-  @UseInterceptors(FileInterceptor('image'))
+  @UseInterceptors(FileInterceptor('image', getImageMulterOptions()))
   updateProperty(
     @Req() request: { user: JwtPayload },
     @Param('id') id: number,

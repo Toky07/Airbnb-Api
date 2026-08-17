@@ -1,8 +1,13 @@
-import { IsBoolean, IsOptional, IsString, MinLength } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmail,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
 export class SendEmailDto {
-  @IsString()
-  @MinLength(3)
+  @IsEmail()
   to: string;
 
   @IsOptional()

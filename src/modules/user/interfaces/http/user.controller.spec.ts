@@ -6,7 +6,9 @@ import { AuthEntity } from '@src/modules/authentication/infrastructure/entity/au
 import {
   clearEntitiesForTests,
   registerAndLoginAsSuperAdmin,
+  registerAndLoginAsTraveler,
 } from '@src/test/controller-test.helpers';
+import { jpegBuffer } from '@src/test/image-fixtures';
 import { setupE2eApp } from '@src/test/e2e-app';
 
 describe('UserController', () => {
@@ -107,7 +109,6 @@ describe('UserController', () => {
         lastName: 'Doe',
         email: 'newuser@test.com',
         phoneNumber: '+1234567890',
-        avatar: 'avatar.png',
       })
       .set('Authorization', `Bearer ${token}`)
       .expect(201);
@@ -118,7 +119,7 @@ describe('UserController', () => {
       lastName: 'Doe',
       email: 'newuser@test.com',
       phoneNumber: '+1234567890',
-      avatar: 'avatar.png',
+      avatar: '',
       roles: expect.any(Array),
       authLinked: expect.any(Boolean),
       status: expect.any(String),
@@ -157,7 +158,7 @@ describe('UserController', () => {
       .field('lastName', 'Doe')
       .field('email', 'jane@test.com')
       .field('phoneNumber', '+1234567890')
-      .attach('avatar', Buffer.from('user-avatar'), 'avatar.jpg')
+      .attach('avatar', jpegBuffer('user-avatar'), 'avatar.jpg')
       .set('Authorization', `Bearer ${token}`)
       .expect(201);
 
@@ -168,8 +169,8 @@ describe('UserController', () => {
   });
 
   it('/POST users with avatar data URL', async () => {
-    const buffer = Buffer.from('data-url-avatar');
-    const dataUrl = `data:image/png;base64,${buffer.toString('base64')}`;
+    const buffer = jpegBuffer('data-url-avatar');
+    const dataUrl = `data:image/jpeg;base64,${buffer.toString('base64')}`;
 
     const response = await request(app.getHttpServer())
       .post('/users')
@@ -184,7 +185,7 @@ describe('UserController', () => {
       .expect(201);
 
     expect(response.body.avatar).toMatch(
-      /uploads\/users\/\d+\/avatar\/.+\.png$/,
+      /uploads\/users\/\d+\/avatar\/.+\.jpg$/,
     );
   });
 
@@ -242,7 +243,7 @@ describe('UserController', () => {
       .field('lastName', 'Doe')
       .field('email', 'test@test.com')
       .field('phoneNumber', '+1234567890')
-      .attach('avatar', Buffer.from('updated-avatar'), 'updated.jpg')
+      .attach('avatar', jpegBuffer('updated-avatar'), 'updated.jpg')
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
@@ -342,5 +343,31 @@ describe('UserController', () => {
       .get(`/users/${user.id}`)
       .set('Authorization', `Bearer ${token}`)
       .expect(404);
+  });
+
+  it('rejects a still-valid JWT after the account is disabled', async () => {
+    const travelerEmail = `disabled-jwt-${Date.now()}@test.com`;
+    const travelerToken = await registerAndLoginAsTraveler(app, dataSource, {
+      email: travelerEmail,
+      password: '123456',
+      firstName: 'Disabled',
+      lastName: 'Jwt',
+      phoneNumber: '+33601020996',
+    });
+
+    const traveler = await dataSource.getRepository(UserEntity).findOneBy({
+      email: travelerEmail,
+    });
+
+    await request(app.getHttpServer())
+      .put(`/users/${traveler!.id}/status`)
+      .send({ status: 'disabled' })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    await request(app.getHttpServer())
+      .get('/auth/me')
+      .set('Authorization', `Bearer ${travelerToken}`)
+      .expect(401);
   });
 });

@@ -22,7 +22,7 @@ export type PropertySummary = {
   checkOutTime: string;
   cancellationPolicy: CancellationPolicy;
   touristTaxPerGuestNight: number;
-  ownerId: number;
+  ownerId?: number;
   propertyTypeId: number | null;
   propertyType: CategorySummary | null;
   id?: number;
@@ -63,9 +63,23 @@ function mapPropertyType(
   };
 }
 
+export type PropertySummaryWithOwner = PropertySummary & { ownerId: number };
+
 /** Normalise un entity ORM / domaine Property vers PropertySummary. */
 export function toPropertySummary(
   source: PropertySummarySource,
+): PropertySummaryWithOwner;
+export function toPropertySummary(
+  source: PropertySummarySource,
+  options: { omitOwnerId: true },
+): PropertySummary;
+export function toPropertySummary(
+  source: PropertySummarySource,
+  options?: { omitOwnerId?: boolean },
+): PropertySummary;
+export function toPropertySummary(
+  source: PropertySummarySource,
+  options?: { omitOwnerId?: boolean },
 ): PropertySummary {
   return {
     name: source.name,
@@ -81,7 +95,7 @@ export function toPropertySummary(
       parseCancellationPolicy(source.cancellationPolicy) ??
       DEFAULT_CANCELLATION_POLICY,
     touristTaxPerGuestNight: Number(source.touristTaxPerGuestNight ?? 0),
-    ownerId: source.ownerId,
+    ...(options?.omitOwnerId ? {} : { ownerId: source.ownerId }),
     propertyTypeId: source.propertyTypeId ?? null,
     propertyType: mapPropertyType(source.propertyType),
     createdAt: source.createdAt,

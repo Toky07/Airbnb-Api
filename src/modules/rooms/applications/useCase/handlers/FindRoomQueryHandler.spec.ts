@@ -150,4 +150,40 @@ describe('FindRoomQueryHandler', () => {
       'Room not found',
     );
   });
+
+  it('hides unpublished rooms from the public catalog', async () => {
+    const handler = createHandler();
+    vi.spyOn(repository, 'findById').mockResolvedValue(
+      new Room({
+        id: 3,
+        name: 'Draft',
+        description: 'Hidden',
+        pricePerNight: 100,
+        maxGuests: 2,
+        bedrooms: 1,
+        bathrooms: 1,
+        beds: 1,
+        quantity: 1,
+        size: 1,
+        status: 'draft',
+        property: new Property({
+          id: 10,
+          name: 'P',
+          description: 'D',
+          address: 'A',
+          city: 'C',
+          country: 'Co',
+          latitude: 0,
+          longitude: 0,
+          checkInTime: 'in',
+          checkOutTime: 'out',
+          ownerId: 1,
+        }),
+      }),
+    );
+
+    await expect(
+      handler.execute(new FindRoomQuery({ id: 3 }, true)),
+    ).rejects.toThrow('Room not found');
+  });
 });

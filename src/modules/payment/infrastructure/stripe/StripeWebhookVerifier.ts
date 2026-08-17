@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import type { IWebhookVerifier } from '@src/modules/payment/domain/ports/webhook-verifier.port';
 import type { WebhookEventPayload } from '@src/modules/payment/domain/ports/payment-gateway.port';
 import { StripeClientProvider } from './StripeClientProvider';
@@ -13,7 +13,7 @@ export class StripeWebhookVerifier implements IWebhookVerifier {
     const webhookSecret = getStripeWebhookSecret();
 
     if (!webhookSecret) {
-      throw new Error('STRIPE_WEBHOOK_SECRET is not configured.');
+      throw new BadRequestException('STRIPE_WEBHOOK_SECRET is not configured.');
     }
 
     let event: unknown;
@@ -21,12 +21,12 @@ export class StripeWebhookVerifier implements IWebhookVerifier {
     try {
       event = stripe.webhooks.constructEvent(payload, signature, webhookSecret);
     } catch {
-      throw new Error('Signature Stripe invalide.');
+      throw new BadRequestException('Signature Stripe invalide.');
     }
 
     const eventType = (event as { type?: string }).type ?? '';
     if (!eventType.startsWith('payment_intent.')) {
-      throw new Error('Événement Stripe non pris en charge.');
+      throw new BadRequestException('Événement Stripe non pris en charge.');
     }
 
     const paymentIntent = (

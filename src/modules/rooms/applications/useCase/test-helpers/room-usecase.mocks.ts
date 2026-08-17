@@ -4,7 +4,8 @@ import { RoomMediaPresenter } from '@src/modules/rooms/applications/presenters/r
 import { GenerateRoomSlugService } from '@src/modules/rooms/applications/services/generate-room-slug.service';
 
 export const mockRoomMediaPresenter = {
-  toOutput: async (room: Room) => RoomOutput.fromDomain(room),
+  toOutput: async (room: Room, omitOwnerId = false) =>
+    RoomOutput.fromDomain(room, [], undefined, [], [], omitOwnerId),
 };
 
 export const mockGenerateRoomSlug = {

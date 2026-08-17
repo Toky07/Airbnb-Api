@@ -57,6 +57,10 @@ const authRepository = {
   assignRoles: vi.fn().mockResolvedValue(true),
 } as unknown as IAuthRepository;
 
+const roleRepository = {
+  findById: vi.fn().mockResolvedValue({ slug: 'host' }),
+} as never;
+
 describe('AssignUserRolesCommandHandler', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -72,6 +76,7 @@ describe('AssignUserRolesCommandHandler', () => {
     const handler = new AssignUserRolesCommandHandler(
       userRepository,
       authRepository,
+      roleRepository,
     );
     const result = await handler.execute(new AssignUserRolesCommand(1, [2]));
 
@@ -97,6 +102,7 @@ describe('AssignUserRolesCommandHandler', () => {
     const handler = new AssignUserRolesCommandHandler(
       userRepository,
       authRepository,
+      roleRepository,
     );
 
     await handler.execute(new AssignUserRolesCommand(1, [3]));

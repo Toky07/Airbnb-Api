@@ -4,8 +4,8 @@ import { parseSetUserPasswordBody } from './set-user-password.dto';
 
 describe('parseSetUserPasswordBody', () => {
   it('accepte un mot de passe valide et trimme', () => {
-    expect(parseSetUserPasswordBody({ password: '  secret1  ' })).toEqual({
-      password: 'secret1',
+    expect(parseSetUserPasswordBody({ password: '  secret12  ' })).toEqual({
+      password: 'secret12',
     });
   });
 

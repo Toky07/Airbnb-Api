@@ -1,3 +1,5 @@
+import { RedisThrottlerStorage } from './redis-throttler.storage';
+
 export function isThrottleEnabled(): boolean {
   return process.env.THROTTLE_ENABLED !== 'false';
 }
@@ -21,6 +23,12 @@ export function getThrottleTtlMs(envKey: string, fallback: number): number {
 }
 
 export function getThrottlerModuleOptions() {
+  const redisUrl = process.env.REDIS_URL?.trim();
+  const storage =
+    redisUrl && isThrottleEnabled()
+      ? new RedisThrottlerStorage(redisUrl)
+      : undefined;
+
   return {
     skipIf: () => !isThrottleEnabled(),
     throttlers: [
@@ -30,6 +38,7 @@ export function getThrottlerModuleOptions() {
         limit: 100,
       },
     ],
+    ...(storage ? { storage } : {}),
   };
 }
 

@@ -8,6 +8,7 @@ import { RESERVATION_STATUS } from '@src/modules/reservation/domain/constants/re
 import {
   DEFAULT_REGISTER,
   registerAndLoginAsSuperAdmin,
+  registerAndLoginAsTraveler,
 } from '@src/test/controller-test.helpers';
 import { setupE2eApp, type E2eAppContext } from '@src/test/e2e-app';
 import { ReservationOrmEntity } from '@src/modules/reservation/infrastructure/entities/reservation.orm-entity';
@@ -113,6 +114,27 @@ describe('ReservationController', () => {
       .findOne({ where: { id: response.body.id } });
     expect(reservation?.holdUntil).toBeTruthy();
     expect(reservation!.holdUntil!.getTime()).toBeGreaterThan(Date.now());
+  });
+
+  it('POST /reservations est refusé pour un voyageur', async () => {
+    const travelerToken = await registerAndLoginAsTraveler(app, dataSource, {
+      email: `traveler-resa-${Date.now()}@test.com`,
+      password: '123456',
+      firstName: 'Voyageur',
+      lastName: 'Test',
+      phoneNumber: '+33601020998',
+    });
+
+    await request(app.getHttpServer())
+      .post('/reservations')
+      .set('Authorization', `Bearer ${travelerToken}`)
+      .send({
+        roomId,
+        startDate: '2026-10-01',
+        endDate: '2026-10-03',
+        guestCount: 2,
+      })
+      .expect(403);
   });
 
   it('GET /reservations/stats retourne les stats de réservation', async () => {

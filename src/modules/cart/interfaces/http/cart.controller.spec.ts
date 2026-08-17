@@ -15,6 +15,7 @@ import { RESERVATION_STATUS } from '@src/modules/reservation/contracts';
 import {
   registerAndLoginAsHost,
   registerAndLoginAsSuperAdmin,
+  registerAndLoginAsTraveler,
 } from '@src/test/controller-test.helpers';
 import { setupE2eApp, type E2eAppContext } from '@src/test/e2e-app';
 
@@ -25,7 +26,7 @@ describe('CartController', () => {
   let roomId: number;
   let paymentIntentCounter = 0;
   let paymentGateway: E2eAppContext['paymentGateway'];
-  const sessionId = 'guest-cart-session-e2e';
+  const sessionId = '11111111-1111-4111-8111-111111111111';
 
   beforeAll(async () => {
     process.env.MAIL_TRANSPORT = 'console';
@@ -246,7 +247,7 @@ describe('CartController', () => {
       lastName: 'Guest',
       phoneNumber: '+33601020999',
     });
-    const secondSession = `cart-session-overlap-${Date.now()}`;
+    const secondSession = '22222222-2222-4222-8222-222222222222';
 
     await request(app.getHttpServer())
       .post('/cart/items')
@@ -303,6 +304,51 @@ describe('CartController', () => {
       where: { id: checkout.body.paymentId },
     });
     expect(payment?.status).toBe(PAYMENT_STATUS.SUCCEEDED);
+  });
+
+  it('POST /cart/checkout/complete refuses a payment owned by another user', async () => {
+    await clearAuthenticatedCart();
+
+    await request(app.getHttpServer())
+      .post('/cart/items')
+      .set('Authorization', `Bearer ${token}`)
+      .set(CART_SESSION_HEADER, sessionId)
+      .send({
+        itemType: CART_ITEM_TYPE.RESERVATION,
+        roomId,
+        startDate: '2027-02-01',
+        endDate: '2027-02-03',
+        guestCount: 2,
+      })
+      .expect(201);
+
+    const checkout = await request(app.getHttpServer())
+      .post('/cart/checkout')
+      .set('Authorization', `Bearer ${token}`)
+      .set(CART_SESSION_HEADER, sessionId)
+      .expect(201);
+
+    const attackerToken = await registerAndLoginAsTraveler(app, dataSource, {
+      email: `cart-idor-${Date.now()}@test.com`,
+      password: '123456',
+      firstName: 'Attacker',
+      lastName: 'User',
+      phoneNumber: '+33601020997',
+    });
+
+    await request(app.getHttpServer())
+      .post('/cart/checkout/complete')
+      .set('Authorization', `Bearer ${attackerToken}`)
+      .send({ paymentId: checkout.body.paymentId })
+      .expect(403);
+
+    const ownerCart = await request(app.getHttpServer())
+      .get('/cart')
+      .set('Authorization', `Bearer ${token}`)
+      .set(CART_SESSION_HEADER, sessionId)
+      .expect(200);
+
+    expect(ownerCart.body.items.length).toBeGreaterThan(0);
   });
 
   it('DELETE /cart/items/:id supprime un article', async () => {

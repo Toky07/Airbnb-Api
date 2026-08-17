@@ -30,6 +30,8 @@ export {
   type SystemRoleSlug,
 } from '@src/modules/authentication/domain/constants/system-roles.constant';
 export { hasPermission } from '@src/modules/authentication/domain/utils/build-jwt-payload';
+export { assertPasswordPolicy } from '@src/modules/authentication/domain/utils/assert-password-policy';
+export { assertCanAssignRoleIds } from '@src/modules/authentication/domain/utils/assert-can-assign-roles';
 export { SendAccountInvitationCommand } from '@src/modules/authentication/applications/useCase/commands/SendAccountInvitationCommand';
 export { CreateRoleCommand } from '@src/modules/authentication/applications/useCase/commands/CreateRoleCommand';
 export { UpdateRoleCommand } from '@src/modules/authentication/applications/useCase/commands/UpdateRoleCommand';

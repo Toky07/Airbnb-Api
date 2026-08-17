@@ -96,6 +96,11 @@ export const PERMISSION_DEFINITIONS: PermissionDefinition[] = [
     module: 'reservations',
   },
   {
+    key: 'reservations.create',
+    label: 'Créer une réservation (admin)',
+    module: 'reservations',
+  },
+  {
     key: 'reservations.cancel',
     label: 'Annuler les réservations',
     module: 'reservations',
@@ -103,6 +108,16 @@ export const PERMISSION_DEFINITIONS: PermissionDefinition[] = [
   {
     key: 'host.reservations.read',
     label: 'Voir les réservations de son établissement',
+    module: 'host',
+  },
+  {
+    key: 'host.reservations.cancel',
+    label: 'Annuler les réservations de son établissement',
+    module: 'host',
+  },
+  {
+    key: 'host.reservations.no_show',
+    label: 'Marquer un no-show sur son établissement',
     module: 'host',
   },
   {

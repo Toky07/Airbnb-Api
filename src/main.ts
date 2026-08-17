@@ -9,7 +9,10 @@ import { AppModule } from './app.module';
 import { getCorsConfig } from './config/cors.config';
 import { validateEnv } from './config/env.config';
 import { getHelmetOptions, isHelmetEnabled } from './config/helmet.config';
-import { resolveUploadRoot } from './modules/media/contracts';
+import {
+  configurePublicUploads,
+  resolveUploadRoot,
+} from './modules/media/contracts';
 import { AllExceptionsFilter } from './shared/filters/all-exceptions.filter';
 import { setupSwagger } from './config/swagger.config';
 
@@ -22,6 +25,9 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     rawBody: true,
   });
+
+  const expressApp = app.getHttpAdapter().getInstance();
+  expressApp.set('trust proxy', 1);
 
   if (isHelmetEnabled()) {
     app.use(helmet(getHelmetOptions()));
@@ -36,9 +42,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  app.useStaticAssets(join(process.cwd(), uploadRoot), {
-    prefix: `/${uploadRoot}`,
-  });
+  configurePublicUploads(app, uploadRoot);
 
   setupSwagger(app);
 

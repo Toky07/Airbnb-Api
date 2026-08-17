@@ -242,6 +242,43 @@ export async function registerAndLoginAsHost(
   return login.body.token as string;
 }
 
+export async function registerAndLoginAsTraveler(
+  app: INestApplication,
+  dataSource: DataSource,
+  payload: RegisterPayload = {
+    email: 'traveler@test.com',
+    password: '123456',
+    firstName: 'Traveler',
+    lastName: 'Test',
+    phoneNumber: '+33601020305',
+  },
+): Promise<string> {
+  process.env.MAIL_TRANSPORT = process.env.MAIL_TRANSPORT ?? 'console';
+
+  await request(app.getHttpServer())
+    .post('/auth/register')
+    .send({
+      email: payload.email,
+      firstName: payload.firstName,
+      lastName: payload.lastName,
+      phoneNumber: payload.phoneNumber,
+    })
+    .expect(201);
+
+  await activateAuthAccountForTests(
+    dataSource,
+    payload.email,
+    payload.password,
+  );
+
+  const login = await request(app.getHttpServer())
+    .post('/auth/login')
+    .send({ email: payload.email, password: payload.password })
+    .expect(200);
+
+  return login.body.token as string;
+}
+
 export async function clearEntitiesForTests(
   dataSource: DataSource,
   entities: Parameters<DataSource['getRepository']>[0][],

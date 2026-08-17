@@ -13,7 +13,7 @@ import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 @Controller('host')
 export class HostReservationsController {
   @Post('reservations/:id/cancel')
-  @RequirePermissions('host.reservations.read')
+  @RequirePermissions('host.reservations.cancel')
   cancelReservation(
     @Req() request: { user: JwtPayload },
     @Param('id') id: number,
@@ -28,7 +28,7 @@ export class HostReservationsController {
   }
 
   @Post('reservations/:id/no-show')
-  @RequirePermissions('host.reservations.read')
+  @RequirePermissions('host.reservations.no_show')
   markReservationNoShow(
     @Req() request: { user: JwtPayload },
     @Param('id') id: number,

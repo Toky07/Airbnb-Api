@@ -39,6 +39,7 @@ import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 @Controller('reservations')
 export class ReservationController {
   @Post()
+  @RequirePermissions('reservations.create')
   @ApiOperation({ summary: 'Créer une réservation (admin / direct)' })
   create(
     @Req() request: { user?: JwtPayload },
@@ -210,7 +211,7 @@ export class ReservationController {
       new CancelReservationCommand(parsedId, {
         authId: user.sub,
         canCancelAll: hasPermission(user, ['reservations.cancel']),
-        canCancelHost: hasPermission(user, ['host.reservations.read']),
+        canCancelHost: hasPermission(user, ['host.reservations.cancel']),
       }),
     );
   }

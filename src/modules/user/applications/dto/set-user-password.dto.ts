@@ -1,4 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
+import { assertPasswordPolicy } from '@src/modules/authentication/contracts';
 
 export class SetUserPasswordDto {
   password!: string;
@@ -14,11 +15,7 @@ export function parseSetUserPasswordBody(
     throw new BadRequestException('Le mot de passe est obligatoire.');
   }
 
-  if (password.length < 6) {
-    throw new BadRequestException(
-      'Le mot de passe doit contenir au moins 6 caractères.',
-    );
-  }
+  assertPasswordPolicy(password);
 
   return { password };
 }

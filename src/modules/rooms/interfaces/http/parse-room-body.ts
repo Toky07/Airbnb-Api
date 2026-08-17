@@ -1,11 +1,16 @@
+import { BadRequestException } from '@nestjs/common';
 import type { CreateRoomDto } from '@src/modules/rooms/applications/dto/createRoom.dto';
 import { Property } from '@src/modules/properties/domain/entities/property.entity';
 
 export function parseRoomBody(body: Record<string, unknown>): CreateRoomDto {
-  const rawProperty =
-    typeof body.property === 'string'
-      ? JSON.parse(body.property)
-      : body.property;
+  let rawProperty = body.property;
+  if (typeof rawProperty === 'string') {
+    try {
+      rawProperty = JSON.parse(rawProperty) as unknown;
+    } catch {
+      throw new BadRequestException('Propriété invalide.');
+    }
+  }
 
   const property =
     rawProperty instanceof Property

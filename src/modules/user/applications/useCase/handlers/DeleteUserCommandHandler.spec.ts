@@ -27,6 +27,8 @@ const repository = {
 
 const authRepository = {
   findByEmail: async () => null,
+  findById: async () => null,
+  countWithRoleSlug: async () => 0,
   delete: async () => true,
 } as IAuthRepository;
 
@@ -59,5 +61,25 @@ describe('DeleteUserCommandHandler', () => {
     await handler.execute(new DeleteUserCommand(1));
 
     expect(deleteAuth).toHaveBeenCalledWith(10);
+  });
+
+  it('refuses to delete the last superadmin', async () => {
+    const handler = new DeleteUserCommandHandler(
+      repository,
+      {
+        ...authRepository,
+        findById: async () =>
+          ({
+            id: 10,
+            roles: [{ slug: 'superadmin' }],
+          }) as never,
+        countWithRoleSlug: async () => 1,
+      },
+      saveUserAvatar,
+    );
+
+    await expect(handler.execute(new DeleteUserCommand(1))).rejects.toThrow(
+      'Impossible de supprimer le dernier super administrateur.',
+    );
   });
 });

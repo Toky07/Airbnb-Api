@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Query,
+  Req,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -22,6 +23,7 @@ import type {
 import type { AssignUserRolesDto } from '@src/modules/user/applications/dto/assign-user-roles.dto';
 import { parseUserBody } from './parse-user-body';
 import type { UploadFile } from '@src/modules/media/contracts';
+import { getImageMulterOptions } from '@src/modules/media/contracts';
 import { RequirePermissions } from '@src/modules/authentication/contracts';
 import { CommandBus } from '@src/shared/useCase/bus/bus';
 import { QueryBus } from '@src/shared/useCase/bus/query-bus';
@@ -74,7 +76,7 @@ export class UserController {
   @RequirePermissions('users.create')
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Créer un utilisateur' })
-  @UseInterceptors(FileInterceptor('avatar'))
+  @UseInterceptors(FileInterceptor('avatar', getImageMulterOptions()))
   async create(
     @Body() body: CreateUserDto | Record<string, unknown>,
     @UploadedFile() avatar?: UploadFile,
@@ -112,11 +114,16 @@ export class UserController {
   @RequirePermissions('roles.manage')
   @ApiOperation({ summary: 'Assigner des rôles à un utilisateur' })
   async assignRoles(
+    @Req() request: { user?: { isSuperAdmin?: boolean } },
     @Param('id') id: string,
     @Body() body: AssignUserRolesDto,
   ): Promise<UserOutput> {
     return CommandBus.execute(
-      new AssignUserRolesCommand(Number(id), body.roleIds ?? []),
+      new AssignUserRolesCommand(
+        Number(id),
+        body.roleIds ?? [],
+        request.user?.isSuperAdmin === true,
+      ),
     );
   }
 
@@ -124,7 +131,7 @@ export class UserController {
   @RequirePermissions('users.update')
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Modifier un utilisateur' })
-  @UseInterceptors(FileInterceptor('avatar'))
+  @UseInterceptors(FileInterceptor('avatar', getImageMulterOptions()))
   async update(
     @Param('id') id: string,
     @Body() body: UpdateUserDto | Record<string, unknown>,

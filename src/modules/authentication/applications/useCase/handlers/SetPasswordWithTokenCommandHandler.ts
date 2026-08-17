@@ -6,6 +6,7 @@ import type { IUserRepository } from '@src/modules/user/contracts';
 import type { IPasswordSetupTokenRepository } from '@src/modules/authentication/domain/repositories/password-setup-token.repository';
 import { PasswordSetupTokenService } from '@src/modules/authentication/domain/services/password-setup-token.service';
 import { ACCOUNT_STATUS } from '@src/modules/authentication/domain/constants/account-status.constant';
+import { assertPasswordPolicy } from '@src/modules/authentication/domain/utils/assert-password-policy';
 import type { SetPasswordWithTokenCommand } from '@src/modules/authentication/applications/useCase/commands/SetPasswordWithTokenCommand';
 
 export class SetPasswordWithTokenCommandHandler implements ICommandHandler<
@@ -27,11 +28,7 @@ export class SetPasswordWithTokenCommandHandler implements ICommandHandler<
       throw new BadRequestException('Token et mot de passe requis.');
     }
 
-    if (trimmedPassword.length < 6) {
-      throw new BadRequestException(
-        'Le mot de passe doit contenir au moins 6 caractères.',
-      );
-    }
+    assertPasswordPolicy(trimmedPassword);
 
     const tokenRecord = await this.tokenRepository.findValidByHash(
       this.tokenService.hash(token),

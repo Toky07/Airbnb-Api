@@ -1,3 +1,4 @@
+import { ForbiddenException } from '@nestjs/common';
 import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
 import type { IPaymentRepository } from '@src/modules/payment/domain/repositories/payment.repository';
 import type { IPaymentGateway } from '@src/modules/payment/domain/ports/payment-gateway.port';
@@ -26,6 +27,10 @@ export class VerifyPaymentCommandHandler implements ICommandHandler<
 
     if (!payment?.id) {
       throw new Error('Paiement introuvable.');
+    }
+
+    if (payment.userId !== command.ownerAuthId) {
+      throw new ForbiddenException('Paiement introuvable.');
     }
 
     if (payment.cartId == null) {

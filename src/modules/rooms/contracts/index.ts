@@ -12,6 +12,11 @@ export {
   type RoomSummarySource,
 } from './room-summary';
 export {
+  assertPubliclyListedRoom,
+  isPubliclyListedRoom,
+  PUBLIC_ROOM_STATUS,
+} from '@src/modules/rooms/domain/utils/is-publicly-listed-room';
+export {
   ROOM_REPOSITORY,
   type IRoomRepository,
 } from '@src/modules/rooms/domain/repositories/room.repository';

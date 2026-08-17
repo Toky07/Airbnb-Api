@@ -1,10 +1,13 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.interface';
-import type { IAuthRepository } from '@src/modules/authentication/contracts';
+import {
+  ACCOUNT_STATUS,
+  assertPasswordPolicy,
+  type IAuthRepository,
+} from '@src/modules/authentication/contracts';
 import type { IUserRepository } from '@src/modules/user/domain/repositories/user.repository';
 import { UserOutput } from '@src/modules/user/domain/dtos/user.output';
-import { ACCOUNT_STATUS } from '@src/modules/authentication/contracts';
 import type { EnsureUserAuthAccountService } from '@src/modules/user/applications/services/ensure-user-auth-account.service';
 import type { SetUserPasswordCommand } from '@src/modules/user/applications/useCase/commands/SetUserPasswordCommand';
 
@@ -21,11 +24,11 @@ export class SetUserPasswordCommandHandler implements ICommandHandler<
   async execute(command: SetUserPasswordCommand): Promise<UserOutput> {
     const password = command.password?.trim();
 
-    if (!password || password.length < 6) {
-      throw new BadRequestException(
-        'Le mot de passe doit contenir au moins 6 caractères.',
-      );
+    if (!password) {
+      throw new BadRequestException('Le mot de passe est obligatoire.');
     }
+
+    assertPasswordPolicy(password);
 
     const { authId } = await this.ensureUserAuthAccount.execute(command.userId);
     const auth = await this.authRepository.findById(authId);

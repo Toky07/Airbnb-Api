@@ -15,6 +15,7 @@ import type { JwtPayload } from '@src/modules/authentication/contracts';
 import { RequirePermissions } from '@src/modules/authentication/contracts';
 import { parsePaginationQuery } from '@src/shared/pagination/parse-pagination-query';
 import type { UploadFile } from '@src/modules/media/contracts';
+import { getAttachmentMulterOptions } from '@src/modules/media/contracts';
 import type { SendEmailDto } from '@src/modules/mail/applications/dto/send-email.dto';
 import { parseEmailBody } from './parse-email-body';
 import { CommandBus } from '@src/shared/useCase/bus/bus';
@@ -54,7 +55,13 @@ export class MailController {
   @RequirePermissions('emails.send')
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Envoyer un email manuellement' })
-  @UseInterceptors(FilesInterceptor('attachments', MAX_ATTACHMENTS))
+  @UseInterceptors(
+    FilesInterceptor(
+      'attachments',
+      MAX_ATTACHMENTS,
+      getAttachmentMulterOptions(),
+    ),
+  )
   send(
     @Req() request: { user?: JwtPayload },
     @Body() body: SendEmailDto | Record<string, unknown>,

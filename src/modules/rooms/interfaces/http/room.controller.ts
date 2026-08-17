@@ -7,12 +7,17 @@ import {
   Post,
   Put,
   Query,
+  Req,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { ENTITY_MEDIA_LIMITS, ENTITY_TYPE } from '@src/modules/media/contracts';
+import {
+  ENTITY_MEDIA_LIMITS,
+  ENTITY_TYPE,
+  getImageMulterOptions,
+} from '@src/modules/media/contracts';
 import { parsePaginationQuery } from '@src/shared/pagination/parse-pagination-query';
 import type { PaginatedResult } from '@src/shared/pagination/pagination.types';
 import { RoomOutput } from '@src/modules/rooms/applications/dto/room.output';
@@ -20,8 +25,12 @@ import type { CreateRoomDto } from '@src/modules/rooms/applications/dto/createRo
 import { parseKeptImages } from './parse-kept-images';
 import { parseRoomBody } from './parse-room-body';
 import type { UploadFile } from '@src/modules/media/contracts';
-import { RequirePermissions } from '@src/modules/authentication/contracts';
-import { Public } from '@src/modules/authentication/contracts';
+import {
+  hasPermission,
+  Public,
+  RequirePermissions,
+  type JwtPayload,
+} from '@src/modules/authentication/contracts';
 import { CommandBus } from '@src/shared/useCase/bus/bus';
 import { QueryBus } from '@src/shared/useCase/bus/query-bus';
 import { CreateRoomCommand } from '@src/modules/rooms/applications/useCase/commands/CreateRoomCommand';
@@ -50,9 +59,13 @@ export class RoomController {
   @ApiOperation({ summary: 'Recherche et liste des chambres (public)' })
   @ApiPaginationQuery()
   async findAll(
+    @Req() request: { user?: JwtPayload },
     @Query() query: Record<string, unknown>,
   ): Promise<PaginatedResult<RoomOutput>> {
-    return QueryBus.execute(new ListRoomsQuery(parsePaginationQuery(query)));
+    const publicCatalog = !canManageRooms(request.user);
+    return QueryBus.execute(
+      new ListRoomsQuery(parsePaginationQuery(query), publicCatalog),
+    );
   }
 
   @Public()
@@ -102,15 +115,25 @@ export class RoomController {
   @Public()
   @Get('by-slug/:slug')
   @ApiOperation({ summary: "Détail d'une chambre par slug" })
-  async findBySlug(@Param('slug') slug: string) {
-    return QueryBus.execute(new FindRoomQuery({ slug }));
+  async findBySlug(
+    @Req() request: { user?: JwtPayload },
+    @Param('slug') slug: string,
+  ) {
+    return QueryBus.execute(
+      new FindRoomQuery({ slug }, !canManageRooms(request.user)),
+    );
   }
 
   @Public()
   @Get(':id')
   @ApiOperation({ summary: "Détail d'une chambre par ID" })
-  async findById(@Param('id') id: number) {
-    return QueryBus.execute(new FindRoomQuery({ id: Number(id) }));
+  async findById(
+    @Req() request: { user?: JwtPayload },
+    @Param('id') id: number,
+  ) {
+    return QueryBus.execute(
+      new FindRoomQuery({ id: Number(id) }, !canManageRooms(request.user)),
+    );
   }
 
   @Post()
@@ -119,7 +142,11 @@ export class RoomController {
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Créer une chambre (admin)' })
   @UseInterceptors(
-    FilesInterceptor('images', ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM]),
+    FilesInterceptor(
+      'images',
+      ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM],
+      getImageMulterOptions(),
+    ),
   )
   async create(
     @Body() body: CreateRoomDto | Record<string, unknown>,
@@ -138,7 +165,11 @@ export class RoomController {
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Modifier une chambre (admin)' })
   @UseInterceptors(
-    FilesInterceptor('images', ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM]),
+    FilesInterceptor(
+      'images',
+      ENTITY_MEDIA_LIMITS[ENTITY_TYPE.ROOM],
+      getImageMulterOptions(),
+    ),
   )
   async update(
     @Param('id') id: number,
@@ -166,4 +197,8 @@ export class RoomController {
     );
     return { status };
   }
+}
+
+function canManageRooms(user?: JwtPayload): boolean {
+  return Boolean(user && hasPermission(user, ['rooms.read']));
 }

@@ -14,7 +14,10 @@ describe('payment/contracts', () => {
     expect(
       new CreatePaymentCommand(100, 'eur', 'stripe', 1, 'reservation', 2),
     ).toBeInstanceOf(CreatePaymentCommand);
-    expect(new VerifyPaymentCommand(9)).toEqual({ paymentId: 9 });
+    expect(new VerifyPaymentCommand(9, 1)).toEqual({
+      paymentId: 9,
+      ownerAuthId: 1,
+    });
     expect(PAYMENT_GATEWAY).toBe('PAYMENT_GATEWAY');
     expect(PAYMENT_PUBLIC_CONFIG).toBe('PAYMENT_PUBLIC_CONFIG');
     expect(PAYMENT_REPOSITORY).toBe('PAYMENT_REPOSITORY');

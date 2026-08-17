@@ -4,6 +4,7 @@ import type { ICommandHandler } from '@src/shared/useCase/bus/command-handler.in
 import type { IAuthRepository } from '@src/modules/authentication/domain/repositories/auth.repository';
 import type { IPasswordResetTokenRepository } from '@src/modules/authentication/domain/repositories/password-reset-token.repository';
 import { PasswordSetupTokenService } from '@src/modules/authentication/domain/services/password-setup-token.service';
+import { assertPasswordPolicy } from '@src/modules/authentication/domain/utils/assert-password-policy';
 import type { ResetPasswordWithTokenCommand } from '@src/modules/authentication/applications/useCase/commands/ResetPasswordWithTokenCommand';
 
 export class ResetPasswordWithTokenCommandHandler implements ICommandHandler<
@@ -24,11 +25,7 @@ export class ResetPasswordWithTokenCommandHandler implements ICommandHandler<
       throw new BadRequestException('Token et mot de passe requis.');
     }
 
-    if (trimmedPassword.length < 6) {
-      throw new BadRequestException(
-        'Le mot de passe doit contenir au moins 6 caractères.',
-      );
-    }
+    assertPasswordPolicy(trimmedPassword);
 
     const tokenRecord = await this.resetTokenRepository.findValidByHash(
       this.tokenService.hash(token),

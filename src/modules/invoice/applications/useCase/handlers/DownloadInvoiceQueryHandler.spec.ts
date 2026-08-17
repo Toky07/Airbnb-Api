@@ -9,6 +9,7 @@ describe('DownloadInvoiceQueryHandler', () => {
   const invoice = {
     id: 7,
     userId: 9,
+    invoiceNumber: 'FACT-2026-000007',
     path: '/tmp/does-not-need-to-exist-for-access-checks.pdf',
   };
 

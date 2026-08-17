@@ -24,23 +24,15 @@ export class JwtTokenGenerator implements TokenGenerator {
     const auth = await this.authRepository.findByEmail(email);
 
     if (!auth?.id || auth.status === ACCOUNT_STATUS.DISABLED) {
-      throw new UnauthorizedException(
-        'Compte désactivé. Contactez un administrateur.',
-      );
+      throw new UnauthorizedException('Identifiants invalides.');
     }
 
     if (!auth.password || auth.status !== ACCOUNT_STATUS.ACTIVE) {
-      throw new UnauthorizedException(
-        'Compte non activé. Consultez votre email pour définir votre mot de passe.',
-      );
+      throw new UnauthorizedException('Identifiants invalides.');
     }
 
     if (!(await bcrypt.compare(password, auth.password))) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-
-    if (!auth.id) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Identifiants invalides.');
     }
 
     return this.jwtService.signAsync(buildJwtPayload(auth));

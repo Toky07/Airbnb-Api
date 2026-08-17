@@ -17,7 +17,10 @@ export class RoomDetailResolver {
     private readonly blockedDateRepository: IRoomBlockedDateRepository,
   ) {}
 
-  async resolve(room: Awaited<ReturnType<IRoomRepository['findById']>>) {
+  async resolve(
+    room: Awaited<ReturnType<IRoomRepository['findById']>>,
+    omitOwnerId = false,
+  ) {
     if (!room) {
       throw new NotFoundException('Room not found');
     }
@@ -25,7 +28,7 @@ export class RoomDetailResolver {
     const propertyId = room.property?.id;
     const [output, unavailableDates, amenities, propertyAmenities] =
       await Promise.all([
-        this.presenter.toOutput(room),
+        this.presenter.toOutput(room, omitOwnerId),
         this.findUnavailableDates(room.id!),
         QueryBus.execute(new ListRoomAmenitiesQuery(room.id!)),
         propertyId
