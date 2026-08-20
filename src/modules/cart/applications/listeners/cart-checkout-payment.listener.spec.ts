@@ -49,7 +49,7 @@ describe('CartCheckoutPaymentListener', () => {
       expect.any(CreatePaymentCommand),
     );
     const command = commandBusExecuteMock.mock
-      .calls[0]![0] as CreatePaymentCommand;
+      .calls[0][0] as CreatePaymentCommand;
     expect(command.transferDestination).toBe('acct_test_host');
     expect(command.hostUserId).toBe(7);
     expect(command.applicationFeeAmount).toBeGreaterThan(0);

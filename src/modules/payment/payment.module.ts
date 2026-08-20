@@ -17,10 +17,7 @@ import {
   type IPaymentRepository,
   PAYMENT_REPOSITORY,
 } from './domain/repositories/payment.repository';
-import {
-  STRIPE_CONNECT_ACCOUNTS,
-  type IStripeConnectAccounts,
-} from './domain/ports/stripe-connect-accounts.port';
+import { STRIPE_CONNECT_ACCOUNTS } from './domain/ports/stripe-connect-accounts.port';
 import { PaymentOrmEntity } from './infrastructure/entities/payment.orm-entity';
 import { PaymentRepository } from './infrastructure/repositories/payment.repository';
 import { StripePaymentGateway } from './infrastructure/stripe/stripe-payment-gateway';

@@ -55,7 +55,10 @@ export class CreateHostStripeOnboardingLinkCommandHandler implements ICommandHan
       returnUrl: `${appUrl}/host?stripe=return`,
     });
 
-    if (user.stripeOnboardingStatus === STRIPE_CONNECT_ONBOARDING_STATUS.NOT_STARTED) {
+    if (
+      user.stripeOnboardingStatus ===
+      STRIPE_CONNECT_ONBOARDING_STATUS.NOT_STARTED
+    ) {
       user.stripeOnboardingStatus = STRIPE_CONNECT_ONBOARDING_STATUS.PENDING;
       await this.resolveHostUser.update(user);
     }

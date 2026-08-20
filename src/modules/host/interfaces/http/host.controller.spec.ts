@@ -129,10 +129,12 @@ describe('Host HTTP (/host)', () => {
   });
 
   it('POST /host/stripe/dashboard-link retourne un login link', async () => {
-    await dataSource.getRepository(UserEntity).update(
-      { email: 'host-controller@test.com' },
-      { stripeAccountId: 'acct_host_e2e' },
-    );
+    await dataSource
+      .getRepository(UserEntity)
+      .update(
+        { email: 'host-controller@test.com' },
+        { stripeAccountId: 'acct_host_e2e' },
+      );
     stripeConnectAccounts.createLoginLink = vi.fn().mockResolvedValue({
       url: 'https://connect.stripe.com/express/acct_host_e2e',
     });

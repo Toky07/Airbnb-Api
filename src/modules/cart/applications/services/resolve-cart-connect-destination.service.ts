@@ -48,7 +48,7 @@ export class ResolveCartConnectDestinationService {
       );
     }
 
-    const hostUserId = [...ownerIds][0]!;
+    const hostUserId = [...ownerIds][0];
     const host = await this.userRepository.findById(hostUserId);
 
     if (!host?.stripeAccountId || !host.stripeChargesEnabled) {

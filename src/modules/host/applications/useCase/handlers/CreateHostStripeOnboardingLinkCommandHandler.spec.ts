@@ -63,7 +63,7 @@ describe('CreateHostStripeOnboardingLinkCommandHandler', () => {
     const user = createHost({
       stripeAccountId: 'acct_existing',
       stripeOnboardingStatus: STRIPE_CONNECT_ONBOARDING_STATUS.PENDING,
-    } as Partial<User>);
+    });
     user.stripeAccountId = 'acct_existing';
     user.stripeOnboardingStatus = STRIPE_CONNECT_ONBOARDING_STATUS.PENDING;
     const resolveHostUser = {

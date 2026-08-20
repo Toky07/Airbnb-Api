@@ -181,9 +181,7 @@ export class UserRepository implements IUserRepository {
     return UserMapper.toDomain(enriched);
   }
 
-  async findByStripeAccountId(
-    stripeAccountId: string,
-  ): Promise<User | null> {
+  async findByStripeAccountId(stripeAccountId: string): Promise<User | null> {
     const user = await this.repository.findOne({
       where: { stripeAccountId },
       relations: [...this.authRelations],

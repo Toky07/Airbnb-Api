@@ -22,9 +22,9 @@ describe('CreateHostStripeDashboardLinkCommandHandler', () => {
     const handler = new CreateHostStripeDashboardLinkCommandHandler(
       { resolve: vi.fn().mockResolvedValue(user) } as never,
       {
-        createLoginLink: vi
-          .fn()
-          .mockResolvedValue({ url: 'https://connect.stripe.com/express/acct' }),
+        createLoginLink: vi.fn().mockResolvedValue({
+          url: 'https://connect.stripe.com/express/acct',
+        }),
       } as never,
     );
 
