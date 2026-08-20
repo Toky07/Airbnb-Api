@@ -8,7 +8,10 @@ import { ResolveAuthenticatedUserService } from '@src/shared/auth/resolve-authen
 export class ResolveHostUserService {
   private readonly resolveAuthenticatedUser: ResolveAuthenticatedUserService;
 
-  constructor(@Inject(USER_REPOSITORY) userRepository: IUserRepository) {
+  constructor(
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: IUserRepository,
+  ) {
     this.resolveAuthenticatedUser = new ResolveAuthenticatedUserService(
       userRepository,
     );
@@ -18,5 +21,9 @@ export class ResolveHostUserService {
     return this.resolveAuthenticatedUser.resolveUser(authId, {
       message: 'Profil hôte introuvable.',
     });
+  }
+
+  update(user: User): Promise<User> {
+    return this.userRepository.update(user);
   }
 }

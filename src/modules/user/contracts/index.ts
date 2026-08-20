@@ -8,6 +8,11 @@ export {
   type IUserRepository,
 } from '@src/modules/user/domain/repositories/user.repository';
 export { User } from '@src/modules/user/domain/entities/user.entity';
+export {
+  STRIPE_CONNECT_ONBOARDING_STATUS,
+  resolveStripeConnectOnboardingStatus,
+  type StripeConnectOnboardingStatus,
+} from '@src/modules/user/domain/constants/stripe-connect.constant';
 export { UserOutput } from '@src/modules/user/domain/dtos/user.output';
 export { UserNameVO } from '@src/modules/user/domain/valueObject/username.vo';
 export { RegisterHostCommand } from '@src/modules/user/applications/useCase/commands/RegisterHostCommand';

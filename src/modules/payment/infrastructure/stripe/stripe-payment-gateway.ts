@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import type {
   CreatePaymentIntentParams,
+  CreateRefundParams,
   IPaymentGateway,
   PaymentIntentSnapshot,
 } from '@src/modules/payment/domain/ports/payment-gateway.port';
@@ -19,6 +20,15 @@ export class StripePaymentGateway implements IPaymentGateway {
         currency: params.currency,
         automatic_payment_methods: { enabled: true },
         metadata: params.metadata,
+        ...(params.transferDestination
+          ? {
+              transfer_data: { destination: params.transferDestination },
+            }
+          : {}),
+        ...(params.applicationFeeAmount != null &&
+        params.applicationFeeAmount > 0
+          ? { application_fee_amount: params.applicationFeeAmount }
+          : {}),
       });
 
     return this.toSnapshot(paymentIntent);
@@ -33,10 +43,14 @@ export class StripePaymentGateway implements IPaymentGateway {
   async createRefund(
     paymentIntentId: string,
     amount: number,
+    options?: CreateRefundParams,
   ): Promise<{ id: string }> {
     const refund = await this.stripeClientProvider.stripe.refunds.create({
       payment_intent: paymentIntentId,
       amount,
+      ...(options?.refundApplicationFee
+        ? { refund_application_fee: true }
+        : {}),
     });
 
     return { id: refund.id };

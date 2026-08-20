@@ -4,6 +4,7 @@ import { RoomsModule } from '@src/modules/rooms/room.module';
 import { UserModule } from '@src/modules/user/user.module';
 import { BuildCartItemService } from './applications/services/build-cart-item.service';
 import { BuildCartPricingBreakdownService } from './applications/services/build-cart-pricing-breakdown.service';
+import { ResolveCartConnectDestinationService } from './applications/services/resolve-cart-connect-destination.service';
 import { ResolveCartService } from './applications/services/resolve-cart.service';
 import { CartPresenter } from './applications/presenters/cart.presenter';
 import { CalculateStayAmountService } from '@src/shared/pricing/calculate-stay-amount.service';
@@ -52,6 +53,7 @@ import { CompleteCartCheckoutCommand } from './applications/useCase/commands/Com
     ResolveCartService,
     BuildCartItemService,
     BuildCartPricingBreakdownService,
+    ResolveCartConnectDestinationService,
     CalculateStayAmountService,
     ComputePricingBreakdownService,
     CartPresenter,
@@ -70,6 +72,7 @@ export class CartModule implements OnModuleInit {
     private readonly resolveCartService: ResolveCartService,
     private readonly buildCartItemService: BuildCartItemService,
     private readonly buildCartPricingBreakdown: BuildCartPricingBreakdownService,
+    private readonly resolveCartConnectDestination: ResolveCartConnectDestinationService,
     private readonly cartPresenter: CartPresenter,
   ) {}
 
@@ -81,6 +84,7 @@ export class CartModule implements OnModuleInit {
       resolveCartService: this.resolveCartService,
       buildCartItemService: this.buildCartItemService,
       buildCartPricingBreakdown: this.buildCartPricingBreakdown,
+      resolveCartConnectDestination: this.resolveCartConnectDestination,
       cartPresenter: this.cartPresenter,
     });
 

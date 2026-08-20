@@ -1,6 +1,10 @@
 import type { IQueryHandler } from '@src/shared/useCase/bus/query-handler.interface';
 import { PropertyMediaPresenter } from '@src/modules/properties/contracts';
-import { HostProfileOutput } from '@src/modules/host/applications/dto/host-profile.output';
+import {
+  HostProfileOutput,
+  HostStripeConnectOutput,
+} from '@src/modules/host/applications/dto/host-profile.output';
+import { STRIPE_CONNECT_ONBOARDING_STATUS } from '@src/modules/user/contracts';
 import { ResolveHostUserService } from '@src/modules/host/applications/services/resolve-host-user.service';
 import { ResolveHostPropertyService } from '@src/modules/host/applications/services/resolve-host-property.service';
 import type { GetHostProfileQuery } from '@src/modules/host/applications/useCase/queries/GetHostProfileQuery';
@@ -31,6 +35,13 @@ export class GetHostProfileQueryHandler implements IQueryHandler<
         phoneNumber: user.phoneNumber,
       },
       propertyOutputs,
+      new HostStripeConnectOutput(
+        user.stripeOnboardingStatus ??
+          STRIPE_CONNECT_ONBOARDING_STATUS.NOT_STARTED,
+        Boolean(user.stripeChargesEnabled),
+        Boolean(user.stripePayoutsEnabled),
+        Boolean(user.stripeAccountId),
+      ),
     );
   }
 }

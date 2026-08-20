@@ -30,6 +30,7 @@ function createHandler(
     update?: ReturnType<typeof vi.fn>;
     verify?: ReturnType<typeof vi.fn>;
     fromWebhookEventType?: ReturnType<typeof vi.fn>;
+    syncStripeConnectAccount?: { execute: ReturnType<typeof vi.fn> };
   } = {},
 ) {
   const payment = makePayment();
@@ -63,6 +64,8 @@ function createHandler(
     repository,
     mapStripeStatus,
     webhookVerifier,
+    undefined,
+    overrides.syncStripeConnectAccount as never,
   );
 
   return { handler, repository, webhookVerifier, payment };
@@ -165,5 +168,37 @@ describe('ConfirmStripePaymentCommandHandler', () => {
       new ConfirmStripePaymentCommand(validPayload, validSignature),
     );
     expect(mockPublish).not.toHaveBeenCalled();
+  });
+
+  it('synchronise le compte Connect sur account.updated', async () => {
+    const syncStripeConnectAccount = {
+      execute: vi.fn().mockResolvedValue(undefined),
+    };
+    const { handler, repository } = createHandler({
+      verify: vi.fn().mockReturnValue({
+        type: 'account.updated',
+        paymentIntentId: null,
+        status: '',
+        accountId: 'acct_1',
+        chargesEnabled: true,
+        payoutsEnabled: true,
+      }),
+      syncStripeConnectAccount,
+    });
+
+    const result = await handler.execute(
+      new ConfirmStripePaymentCommand(validPayload, validSignature),
+    );
+
+    expect(syncStripeConnectAccount.execute).toHaveBeenCalledWith(
+      expect.objectContaining({
+        stripeAccountId: 'acct_1',
+        chargesEnabled: true,
+        payoutsEnabled: true,
+        deauthorized: false,
+      }),
+    );
+    expect(repository.findByTransactionId).not.toHaveBeenCalled();
+    expect(result).toEqual({ received: true });
   });
 });

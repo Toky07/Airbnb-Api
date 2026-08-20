@@ -53,6 +53,15 @@ export class PaymentOrmEntity {
   @Column({ type: 'jsonb', nullable: true })
   pricingBreakdown: Record<string, unknown> | null;
 
+  @Column({ type: 'integer', nullable: true })
+  hostUserId: number | null;
+
+  @Column({ type: 'varchar', nullable: true })
+  stripeAccountId: string | null;
+
+  @Column({ type: 'integer', nullable: true })
+  applicationFeeAmount: number | null;
+
   @CreateDateColumn()
   createdAt: Date;
 

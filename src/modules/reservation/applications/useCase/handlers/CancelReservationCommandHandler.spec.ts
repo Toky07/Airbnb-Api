@@ -174,7 +174,11 @@ describe('CancelReservationCommandHandler', () => {
 
     expect(result.reservation.status).toBe(RESERVATION_STATUS.CANCELLED);
     expect(result.refundAmount).toBe(20_000);
-    expect(paymentGateway.createRefund).toHaveBeenCalled();
+    expect(paymentGateway.createRefund).toHaveBeenCalledWith(
+      expect.any(String),
+      20_000,
+      { refundApplicationFee: true },
+    );
   });
 
   it('rejette si la réservation est déjà annulée', async () => {

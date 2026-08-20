@@ -22,7 +22,16 @@ describe('cart/contracts', () => {
     expect(CART_ITEM_CATALOG_PORT).toBe('CART_ITEM_CATALOG_PORT');
     expect(CART_PRODUCT_SUMMARY_PORT).toBe('CART_PRODUCT_SUMMARY_PORT');
     expect(
-      new CartCheckoutRequestedEvent('c1', 1, 2, 1000, [], emptyPricing),
+      new CartCheckoutRequestedEvent(
+        'c1',
+        1,
+        2,
+        1000,
+        [],
+        emptyPricing,
+        'acct_test',
+        7,
+      ),
     ).toBeInstanceOf(CartCheckoutRequestedEvent);
     expect(
       new CartCheckoutReservationCreatedEvent('c1', 1, 2, 3, 1000),

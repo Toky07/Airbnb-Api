@@ -17,3 +17,15 @@ export function getVatRate(env: EnvSource = process.env): number {
 export function getServiceFeePercent(env: EnvSource = process.env): number {
   return readNumber(env, 'SERVICE_FEE_PERCENT', 0);
 }
+
+export function getHostCommissionPercent(env: EnvSource = process.env): number {
+  return readNumber(env, 'HOST_COMMISSION_PERCENT', 0);
+}
+
+export function getStripeFeePercent(env: EnvSource = process.env): number {
+  return readNumber(env, 'STRIPE_FEE_PERCENT', 0.015);
+}
+
+export function getStripeFeeFixedCents(env: EnvSource = process.env): number {
+  return Math.round(readNumber(env, 'STRIPE_FEE_FIXED_CENTS', 25));
+}

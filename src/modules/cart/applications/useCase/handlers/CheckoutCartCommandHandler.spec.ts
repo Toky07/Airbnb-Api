@@ -32,6 +32,12 @@ describe('CheckoutCartCommandHandler', () => {
       {
         buildFromCart: vi.fn().mockResolvedValue(samplePricingBreakdown),
       } as never,
+      {
+        resolveFromCart: vi.fn().mockResolvedValue({
+          hostUserId: 7,
+          stripeAccountId: 'acct_test_host',
+        }),
+      } as never,
     );
   });
 

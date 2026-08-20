@@ -107,4 +107,37 @@ describe('CreatePaymentCommandHandler', () => {
       publishableKey: 'pk_test_mock',
     });
   });
+
+  it('passe destination Connect et application_fee au gateway', async () => {
+    const { handler, gateway } = createHandler();
+    await handler.execute(
+      new CreatePaymentCommand(
+        10000,
+        'eur',
+        'stripe',
+        1,
+        PAYMENT_TYPE.RESERVATION,
+        42,
+        5,
+        null,
+        'acct_host_1',
+        1205,
+        7,
+      ),
+    );
+
+    expect(gateway.createPaymentIntent).toHaveBeenCalledWith({
+      amount: 10000,
+      currency: 'eur',
+      metadata: {
+        userId: '1',
+        propertyType: 'reservation',
+        propertyId: '42',
+        hostUserId: '7',
+        stripeAccountId: 'acct_host_1',
+      },
+      transferDestination: 'acct_host_1',
+      applicationFeeAmount: 1205,
+    });
+  });
 });

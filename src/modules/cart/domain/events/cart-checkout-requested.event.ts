@@ -21,5 +21,7 @@ export class CartCheckoutRequestedEvent implements DomainEvent {
     public readonly amountInCents: number,
     public readonly items: CartCheckoutItemPayload[],
     public readonly pricingBreakdown: PricingBreakdown,
+    public readonly stripeAccountId: string,
+    public readonly hostUserId: number,
   ) {}
 }

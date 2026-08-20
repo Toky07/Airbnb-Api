@@ -6,6 +6,10 @@ import { PhoneNumberVO } from '@src/shared/valueObject/phone.vo';
 import type { UserRoleSummary } from '@src/modules/user/domain/dtos/user.output';
 import type { AccountStatus } from '@src/modules/authentication/contracts';
 import { AccountStatusResolver } from '@src/modules/authentication/contracts';
+import {
+  isStripeConnectOnboardingStatus,
+  STRIPE_CONNECT_ONBOARDING_STATUS,
+} from '@src/modules/user/domain/constants/stripe-connect.constant';
 
 export class UserMapper {
   static toDomain(user: UserEntity): User {
@@ -20,7 +24,7 @@ export class UserMapper {
       status: user.status as AccountStatus,
     });
 
-    return new User(
+    const domain = new User(
       new UserNameVO(user.firstName),
       new UserNameVO(user.lastName),
       new EmailVO(user.email),
@@ -34,6 +38,15 @@ export class UserMapper {
       Boolean(user.authId ?? user.auth?.id),
       status,
     );
+    domain.stripeAccountId = user.stripeAccountId ?? null;
+    domain.stripeOnboardingStatus = isStripeConnectOnboardingStatus(
+      user.stripeOnboardingStatus,
+    )
+      ? user.stripeOnboardingStatus
+      : STRIPE_CONNECT_ONBOARDING_STATUS.NOT_STARTED;
+    domain.stripeChargesEnabled = Boolean(user.stripeChargesEnabled);
+    domain.stripePayoutsEnabled = Boolean(user.stripePayoutsEnabled);
+    return domain;
   }
 
   static toEntity(user: User): UserEntity {
@@ -46,6 +59,10 @@ export class UserMapper {
       avatar: user.avatar,
       status: user.status,
       authId: user.authId ?? null,
+      stripeAccountId: user.stripeAccountId,
+      stripeOnboardingStatus: user.stripeOnboardingStatus,
+      stripeChargesEnabled: user.stripeChargesEnabled,
+      stripePayoutsEnabled: user.stripePayoutsEnabled,
       createdAt: user._createdAt!,
       updatedAt: user._updatedAt!,
     };

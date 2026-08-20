@@ -19,6 +19,9 @@ export type CreatePaymentParams = {
   refundedAmount?: number;
   refundTransactionId?: string | null;
   pricingBreakdown?: PricingBreakdown | null;
+  hostUserId?: number | null;
+  stripeAccountId?: string | null;
+  applicationFeeAmount?: number | null;
   id?: number;
   createdAt?: Date;
   updatedAt?: Date;
@@ -44,6 +47,9 @@ export class Payment {
     public readonly refundedAmount: number = 0,
     public readonly refundTransactionId: string | null = null,
     public readonly pricingBreakdown: PricingBreakdown | null = null,
+    public readonly hostUserId: number | null = null,
+    public readonly stripeAccountId: string | null = null,
+    public readonly applicationFeeAmount: number | null = null,
   ) {}
 
   confirm(): void {
@@ -73,6 +79,9 @@ export class Payment {
       params.refundedAmount ?? 0,
       params.refundTransactionId ?? null,
       params.pricingBreakdown ?? null,
+      params.hostUserId ?? null,
+      params.stripeAccountId ?? null,
+      params.applicationFeeAmount ?? null,
     );
   }
 }

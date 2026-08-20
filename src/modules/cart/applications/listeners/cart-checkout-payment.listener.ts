@@ -1,5 +1,6 @@
 import { CommandBus } from '@src/shared/useCase/bus/bus';
 import { getStripeCurrency } from '@src/config/env.config';
+import { computeApplicationFeeAmount } from '@src/shared/pricing/compute-application-fee.service';
 import {
   CreatePaymentCommand,
   type CreatePaymentResult,
@@ -13,6 +14,15 @@ export class CartCheckoutPaymentListener {
     EventBus.getInstance().subscribe(
       'cart.checkout.reservation.created',
       async (event: CartCheckoutReservationCreatedEvent) => {
+        if (!event.stripeAccountId || event.hostUserId == null) {
+          throw new Error('Compte Stripe Connect hôte manquant.');
+        }
+
+        const applicationFeeAmount = event.pricingBreakdown
+          ? computeApplicationFeeAmount(event.pricingBreakdown)
+              .applicationFeeAmount
+          : 0;
+
         const result = await CommandBus.execute<CreatePaymentResult>(
           new CreatePaymentCommand(
             event.amountInCents,
@@ -23,6 +33,9 @@ export class CartCheckoutPaymentListener {
             event.reservationId,
             event.cartId,
             event.pricingBreakdown,
+            event.stripeAccountId,
+            applicationFeeAmount,
+            event.hostUserId,
           ),
         );
 

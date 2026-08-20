@@ -126,4 +126,44 @@ describe('PaymentController', () => {
 
     expect(response.body.status).toBe(PAYMENT_STATUS.SUCCEEDED);
   });
+
+  it('POST /payments/webhook synchronise account.updated', async () => {
+    const host = await dataSource.getRepository(UserEntity).save({
+      firstName: 'Host',
+      lastName: 'Connect',
+      email: 'host-connect-webhook@test.com',
+      phoneNumber: '+33601020306',
+      avatar: '',
+      status: 'active',
+      stripeAccountId: 'acct_webhook_host',
+      stripeOnboardingStatus: 'pending',
+      stripeChargesEnabled: false,
+      stripePayoutsEnabled: false,
+    });
+
+    webhookVerifier.verify = vi.fn().mockReturnValue({
+      type: 'account.updated',
+      paymentIntentId: null,
+      status: '',
+      accountId: 'acct_webhook_host',
+      chargesEnabled: true,
+      payoutsEnabled: true,
+    });
+
+    const response = await request(app.getHttpServer())
+      .post('/payments/webhook')
+      .set('stripe-signature', 'sig_test')
+      .set('Content-Type', 'application/json')
+      .send(Buffer.from('{"id":"evt_account"}'))
+      .expect(201);
+
+    expect(response.body).toEqual({ received: true });
+
+    const updated = await dataSource.getRepository(UserEntity).findOneByOrFail({
+      id: host.id,
+    });
+    expect(updated.stripeChargesEnabled).toBe(true);
+    expect(updated.stripePayoutsEnabled).toBe(true);
+    expect(updated.stripeOnboardingStatus).toBe('complete');
+  });
 });

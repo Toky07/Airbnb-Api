@@ -1,5 +1,10 @@
 import { Inject, Module, OnModuleInit } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from '@src/modules/user/user.module';
+import {
+  USER_REPOSITORY,
+  type IUserRepository,
+} from '@src/modules/user/contracts';
 import {
   type IPaymentGateway,
   PAYMENT_GATEWAY,
@@ -12,12 +17,17 @@ import {
   type IPaymentRepository,
   PAYMENT_REPOSITORY,
 } from './domain/repositories/payment.repository';
+import {
+  STRIPE_CONNECT_ACCOUNTS,
+  type IStripeConnectAccounts,
+} from './domain/ports/stripe-connect-accounts.port';
 import { PaymentOrmEntity } from './infrastructure/entities/payment.orm-entity';
 import { PaymentRepository } from './infrastructure/repositories/payment.repository';
 import { StripePaymentGateway } from './infrastructure/stripe/stripe-payment-gateway';
 import { StripePaymentPublicConfig } from './infrastructure/stripe/stripe-payment-public-config';
 import { StripeClientProvider } from './infrastructure/stripe/StripeClientProvider';
 import { StripeWebhookVerifier } from './infrastructure/stripe/StripeWebhookVerifier';
+import { StripeConnectAccountsAdapter } from './infrastructure/stripe/stripe-connect-accounts.adapter';
 import { MapStripeStatusService } from './applications/services/map-stripe-status.service';
 import { PaymentController } from './interfaces/http/payment.controller';
 import { PaymentBootstrap } from './payment.bootstrap';
@@ -27,14 +37,16 @@ import {
   CreatePaymentCommand,
   VerifyPaymentCommand,
 } from './contracts';
+import { SyncStripeConnectAccountCommand } from './applications/useCase/commands/SyncStripeConnectAccountCommand';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PaymentOrmEntity])],
+  imports: [TypeOrmModule.forFeature([PaymentOrmEntity]), UserModule],
   controllers: [PaymentController],
   providers: [
     StripeClientProvider,
     StripeWebhookVerifier,
     MapStripeStatusService,
+    StripeConnectAccountsAdapter,
     {
       provide: PAYMENT_GATEWAY,
       useClass: StripePaymentGateway,
@@ -47,8 +59,12 @@ import {
       provide: PAYMENT_REPOSITORY,
       useClass: PaymentRepository,
     },
+    {
+      provide: STRIPE_CONNECT_ACCOUNTS,
+      useClass: StripeConnectAccountsAdapter,
+    },
   ],
-  exports: [PAYMENT_REPOSITORY, PAYMENT_GATEWAY],
+  exports: [PAYMENT_REPOSITORY, PAYMENT_GATEWAY, STRIPE_CONNECT_ACCOUNTS],
 })
 export class PaymentModule implements OnModuleInit {
   constructor(
@@ -58,6 +74,8 @@ export class PaymentModule implements OnModuleInit {
     private readonly paymentGateway: IPaymentGateway,
     @Inject(PAYMENT_PUBLIC_CONFIG)
     private readonly paymentPublicConfig: IPaymentPublicConfig,
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: IUserRepository,
     private readonly webhookVerifier: StripeWebhookVerifier,
   ) {}
 
@@ -67,6 +85,7 @@ export class PaymentModule implements OnModuleInit {
       this.paymentGateway,
       this.webhookVerifier,
       this.paymentPublicConfig,
+      this.userRepository,
     );
 
     CommandBus.register(
@@ -80,6 +99,10 @@ export class PaymentModule implements OnModuleInit {
     CommandBus.register(
       VerifyPaymentCommand,
       bootstrap.verifyPaymentCommandHandler,
+    );
+    CommandBus.register(
+      SyncStripeConnectAccountCommand,
+      bootstrap.syncStripeConnectAccountCommandHandler,
     );
   }
 }

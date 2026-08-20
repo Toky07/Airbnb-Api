@@ -42,6 +42,8 @@ export class CartCheckoutListener {
             event.amountInCents,
             holdUntil,
             event.pricingBreakdown,
+            event.stripeAccountId,
+            event.hostUserId,
           ),
         );
       },

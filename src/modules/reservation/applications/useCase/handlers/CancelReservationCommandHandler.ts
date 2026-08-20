@@ -85,6 +85,7 @@ export class CancelReservationCommandHandler implements ICommandHandler<
       const stripeRefund = await this.paymentGateway.createRefund(
         payment.transactionId,
         refund.refundAmount,
+        { refundApplicationFee: refund.refundAmount === payment.amount },
       );
       updatedPayment = await this.paymentRepository.update(
         Payment.create({
