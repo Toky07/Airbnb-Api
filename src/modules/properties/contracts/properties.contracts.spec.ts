@@ -44,6 +44,8 @@ describe('properties/contracts', () => {
     expect(summary.id).toBe(9);
     expect(summary.city).toBe('Paris');
     expect(summary).not.toHaveProperty('rooms');
+    expect(summary).not.toHaveProperty('wifiPassword');
+    expect(summary).not.toHaveProperty('checkInInstructions');
     expect(toPropertySummary).toBe(leafToPropertySummary);
   });
 });

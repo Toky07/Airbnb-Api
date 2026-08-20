@@ -50,6 +50,21 @@ export class PropertyEntity {
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   touristTaxPerGuestNight: number;
 
+  @Column({ type: 'text', nullable: true })
+  houseRules: string | null;
+
+  @Column({ type: 'text', nullable: true })
+  checkInInstructions: string | null;
+
+  @Column({ type: 'varchar', length: 180, nullable: true })
+  wifiName: string | null;
+
+  @Column({ type: 'varchar', length: 180, nullable: true })
+  wifiPassword: string | null;
+
+  @Column({ type: 'varchar', length: 180, nullable: true })
+  emergencyContact: string | null;
+
   @Column()
   ownerId: number;
 

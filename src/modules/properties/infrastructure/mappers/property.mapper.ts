@@ -7,6 +7,9 @@ export class PropertyMapper {
   static toDomain(property: PropertyEntity): Property {
     const domain = new Property({
       ...toPropertySummary(property),
+      checkInInstructions: property.checkInInstructions ?? '',
+      wifiName: property.wifiName ?? '',
+      wifiPassword: property.wifiPassword ?? '',
       rooms: [],
     });
     domain.rooms =
@@ -18,6 +21,9 @@ export class PropertyMapper {
   static toDomainWithoutRooms(property: PropertyEntity): Property {
     return new Property({
       ...toPropertySummary(property),
+      checkInInstructions: property.checkInInstructions ?? '',
+      wifiName: property.wifiName ?? '',
+      wifiPassword: property.wifiPassword ?? '',
       rooms: [],
     });
   }
@@ -36,6 +42,11 @@ export class PropertyMapper {
       checkOutTime: property.checkOutTime,
       cancellationPolicy: property.cancellationPolicy,
       touristTaxPerGuestNight: property.touristTaxPerGuestNight,
+      houseRules: property.houseRules,
+      checkInInstructions: property.checkInInstructions,
+      wifiName: property.wifiName,
+      wifiPassword: property.wifiPassword,
+      emergencyContact: property.emergencyContact,
       ownerId: property.ownerId,
       propertyTypeId: property.propertyTypeId,
       createdAt: property.createdAt,

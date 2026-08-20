@@ -2,6 +2,9 @@ import request from 'supertest';
 import { INestApplication } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { EmailOrmEntity } from '@src/modules/mail/infrastructure/entities/email.orm-entity';
+import { AuthEntity } from '@src/modules/authentication/infrastructure/entity/auth.entity';
+import { Role } from '@src/modules/authentication/infrastructure/entity/role.entity';
+import { PermissionEntity } from '@src/modules/authentication/infrastructure/entity/permission.entity';
 import { HOST_APPLICATION_STATUS } from '@src/modules/host-application/domain/constants/host-application-status.constant';
 import {
   registerAndLoginAsSuperAdmin,
@@ -132,5 +135,78 @@ describe('HostApplicationController', () => {
         comment: 'Dossier incomplet pour le moment.',
       })
       .expect(403);
+  });
+
+  it('autorise un compte avec hosts.moderate à valider une candidature', async () => {
+    const travelerToken = await registerAndLoginAsTraveler(app, dataSource, {
+      email: 'candidate-moderate@test.com',
+      password: '123456',
+      firstName: 'Candidat',
+      lastName: 'Hôte',
+      phoneNumber: '+33601020314',
+    });
+    const moderatorToken = await registerAndLoginAsTraveler(app, dataSource, {
+      email: 'moderator-hosts@test.com',
+      password: '123456',
+      firstName: 'Modo',
+      lastName: 'Hôtes',
+      phoneNumber: '+33601020315',
+    });
+
+    const permissionRepo = dataSource.getRepository(PermissionEntity);
+    const roleRepo = dataSource.getRepository(Role);
+    const authRepo = dataSource.getRepository(AuthEntity);
+    const permission = await permissionRepo.findOne({
+      where: { key: 'hosts.moderate' },
+    });
+    expect(permission).toBeTruthy();
+
+    let role = await roleRepo.findOne({
+      where: { slug: 'host-moderator' },
+      relations: ['permissions'],
+    });
+    if (!role) {
+      role = roleRepo.create({
+        slug: 'host-moderator',
+        name: 'Modérateur hôtes',
+        description: 'Valide les candidatures hôte',
+        permissions: [permission!],
+      });
+    } else {
+      role.permissions = [permission!];
+    }
+    await roleRepo.save(role);
+
+    const auth = await authRepo.findOne({
+      where: { email: 'moderator-hosts@test.com' },
+      relations: ['roles'],
+    });
+    auth!.roles = [...(auth!.roles ?? []), role];
+    await authRepo.save(auth!);
+
+    const relogin = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({ email: 'moderator-hosts@test.com', password: '123456' })
+      .expect(200);
+
+    const created = await request(app.getHttpServer())
+      .post('/host-applications')
+      .set('Authorization', `Bearer ${travelerToken}`)
+      .send({
+        city: 'Lyon',
+        message: 'Je souhaite proposer un loft dans le 6e arrondissement.',
+      })
+      .expect(201);
+
+    const reviewed = await request(app.getHttpServer())
+      .patch(`/host-applications/${created.body.id}/review`)
+      .set('Authorization', `Bearer ${relogin.body.token}`)
+      .send({
+        status: HOST_APPLICATION_STATUS.APPROVED,
+        comment: 'OK',
+      })
+      .expect(200);
+
+    expect(reviewed.body.status).toBe(HOST_APPLICATION_STATUS.APPROVED);
   });
 });

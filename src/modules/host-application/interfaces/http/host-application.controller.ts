@@ -14,10 +14,7 @@ import {
   ApiJwtAuth,
   ApiPaginationQuery,
 } from '@src/shared/swagger/swagger.decorators';
-import {
-  RequirePermissions,
-  RequireSuperAdmin,
-} from '@src/modules/authentication/contracts';
+import { RequirePermissions } from '@src/modules/authentication/contracts';
 import { parsePaginationQuery } from '@src/shared/pagination/parse-pagination-query';
 import type { PaginatedResult } from '@src/shared/pagination/pagination.types';
 import { CommandBus } from '@src/shared/useCase/bus/bus';
@@ -83,7 +80,7 @@ export class HostApplicationController {
   }
 
   @Patch(':id/review')
-  @RequireSuperAdmin()
+  @RequirePermissions('hosts.moderate')
   @ApiOperation({ summary: 'Approuver ou refuser une candidature hôte' })
   review(
     @Req() request: AuthenticatedRequest,

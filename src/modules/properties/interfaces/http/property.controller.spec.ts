@@ -37,6 +37,11 @@ describe('PropertyController', () => {
     checkOutTime: 'Test CheckOutTime',
     cancellationPolicy: 'moderate',
     touristTaxPerGuestNight: 0,
+    houseRules: '',
+    checkInInstructions: '',
+    wifiName: '',
+    wifiPassword: '',
+    emergencyContact: '',
     ownerId: 1,
   } as const;
 

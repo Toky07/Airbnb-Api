@@ -76,6 +76,7 @@ export function setupSwagger(app: INestApplication): void {
     .addTag(SWAGGER_TAGS.RESERVATIONS)
     .addTag(SWAGGER_TAGS.INVOICES)
     .addTag(SWAGGER_TAGS.EMAILS)
+    .addTag(SWAGGER_TAGS.CONTACT)
     .addTag(SWAGGER_TAGS.MESSAGING)
     .addTag(SWAGGER_TAGS.FAVORITES)
     .addTag(SWAGGER_TAGS.REVIEWS)
