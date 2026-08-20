@@ -16,6 +16,12 @@ import type { Auth } from '@src/modules/authentication/domain/entities/user.enti
 
 const JWT_STALE_SKEW_MS = 2000;
 
+/**
+ * Un JWT est considéré comme révoqué si le compte auth a été modifié
+ * (mot de passe, statut, rôles) après son émission.
+ * Les écritures no-op sur `auth` (seed / sync au boot) ne doivent pas
+ * toucher `updatedAt`, sinon toutes les sessions sont déconnectées.
+ */
 function isCredentialRevoked(auth: Auth, issuedAtSeconds?: number): boolean {
   if (!auth.isActive) {
     return true;

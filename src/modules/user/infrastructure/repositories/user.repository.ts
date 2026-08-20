@@ -97,6 +97,43 @@ export class UserRepository implements IUserRepository {
     };
   }
 
+  async findPaginatedByRoleSlug(
+    roleSlug: string,
+    params: PaginationParams,
+  ): Promise<PaginatedResult<User>> {
+    const qb = this.repository
+      .createQueryBuilder('user')
+      .innerJoin('user.auth', 'authFilter')
+      .innerJoin('authFilter.roles', 'roleFilter')
+      .leftJoinAndSelect('user.auth', 'auth')
+      .leftJoinAndSelect('auth.roles', 'roles')
+      .where('roleFilter.slug = :roleSlug', { roleSlug })
+      .orderBy('user.lastName', 'ASC')
+      .addOrderBy('user.firstName', 'ASC');
+
+    if (params.search) {
+      const term = `%${params.search}%`;
+      qb.andWhere(
+        '(user.firstName LIKE :term OR user.lastName LIKE :term OR user.email LIKE :term OR user.phoneNumber LIKE :term)',
+        { term },
+      );
+    }
+
+    const [entities, total] = await qb
+      .skip((params.page - 1) * params.limit)
+      .take(params.limit)
+      .getManyAndCount();
+
+    const enriched = await Promise.all(
+      entities.map((entity) => this.resolveAuthAccount(entity)),
+    );
+
+    return {
+      data: enriched.map((entity) => UserMapper.toDomain(entity)),
+      meta: buildPaginationMeta(total, params.page, params.limit),
+    };
+  }
+
   async delete(id: number): Promise<boolean> {
     const result = await this.repository.delete(Number(id));
     return Boolean(result.affected && result.affected > 0);

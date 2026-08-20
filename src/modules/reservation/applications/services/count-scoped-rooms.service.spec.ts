@@ -1,4 +1,6 @@
+import { Test } from '@nestjs/testing';
 import { describe, expect, it, vi } from 'vitest';
+import { ROOM_REPOSITORY } from '@src/modules/rooms/contracts';
 import { CountScopedRoomsService } from './count-scoped-rooms.service';
 
 describe('CountScopedRoomsService', () => {
@@ -47,6 +49,27 @@ describe('CountScopedRoomsService', () => {
     expect(roomRepository.findPaginated).toHaveBeenCalledWith({
       page: 1,
       limit: 10,
+    });
+  });
+
+  it('injecte le repository via Nest', async () => {
+    const roomRepository = {
+      findPaginated: vi.fn().mockResolvedValue({ meta: { total: 8 } }),
+    };
+    const moduleRef = await Test.createTestingModule({
+      providers: [
+        CountScopedRoomsService,
+        { provide: ROOM_REPOSITORY, useValue: roomRepository },
+      ],
+    }).compile();
+
+    const service = moduleRef.get(CountScopedRoomsService);
+
+    await expect(service.count({ propertyId: 3 })).resolves.toBe(8);
+    expect(roomRepository.findPaginated).toHaveBeenCalledWith({
+      page: 1,
+      limit: 10,
+      propertyId: 3,
     });
   });
 });

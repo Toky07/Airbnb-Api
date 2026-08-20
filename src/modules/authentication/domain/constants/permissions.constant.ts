@@ -130,6 +130,16 @@ export const PERMISSION_DEFINITIONS: PermissionDefinition[] = [
     label: 'Modérer les avis',
     module: 'reviews',
   },
+  {
+    key: 'hosts.read',
+    label: 'Voir les hôtes et candidatures',
+    module: 'hosts',
+  },
+  {
+    key: 'hosts.moderate',
+    label: 'Approuver ou refuser une candidature hôte',
+    module: 'hosts',
+  },
 ];
 
 export const ALL_PERMISSION_KEYS = PERMISSION_DEFINITIONS.map((p) => p.key);
