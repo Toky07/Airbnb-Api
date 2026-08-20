@@ -69,3 +69,10 @@ export const IMPORT_THROTTLE = {
     ttl: getThrottleTtlMs('THROTTLE_IMPORT_TTL_MS', 3_600_000),
   },
 };
+
+export const CONTACT_THROTTLE = {
+  default: {
+    limit: getThrottleLimit('THROTTLE_CONTACT_LIMIT', 5),
+    ttl: getThrottleTtlMs('THROTTLE_CONTACT_TTL_MS', 900_000),
+  },
+};

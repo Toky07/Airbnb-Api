@@ -1,6 +1,40 @@
 import type { RoomProductSummary } from '@src/modules/rooms/contracts';
 import type { ReservationItem } from '@src/modules/reservation/domain/entities/reservation-item.entity';
 
+export type ReservationArrivalGuide = {
+  address: string | null;
+  checkInTime: string | null;
+  checkOutTime: string | null;
+  houseRules: string | null;
+  checkInInstructions: string | null;
+  wifiName: string | null;
+  wifiPassword: string | null;
+  emergencyContact: string | null;
+};
+
+function toArrivalGuide(
+  summary: RoomProductSummary | null | undefined,
+  includeSecrets: boolean,
+): ReservationArrivalGuide | null {
+  if (!summary) {
+    return null;
+  }
+
+  const guide: ReservationArrivalGuide = {
+    address: summary.propertyAddress,
+    checkInTime: summary.checkInTime,
+    checkOutTime: summary.checkOutTime,
+    houseRules: summary.houseRules,
+    checkInInstructions: includeSecrets ? summary.checkInInstructions : null,
+    wifiName: includeSecrets ? summary.wifiName : null,
+    wifiPassword: includeSecrets ? summary.wifiPassword : null,
+    emergencyContact: summary.emergencyContact,
+  };
+
+  const hasContent = Object.values(guide).some((value) => Boolean(value));
+  return hasContent ? guide : null;
+}
+
 export class ReservationItemOutput {
   constructor(
     public readonly id: number,
@@ -21,6 +55,7 @@ export class ReservationItemOutput {
     public readonly imageUrl: string | null = null,
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
+    public readonly arrivalGuide: ReservationArrivalGuide | null = null,
   ) {}
 
   static fromDomain(
@@ -53,12 +88,14 @@ export class ReservationItemOutput {
       product?.imageUrl ?? null,
       item.createdAt!,
       item.updatedAt!,
+      null,
     );
   }
 
   static enrich(
     output: ReservationItemOutput,
     summary?: RoomProductSummary | null,
+    includeSecrets = false,
   ): ReservationItemOutput {
     return new ReservationItemOutput(
       output.id,
@@ -79,6 +116,7 @@ export class ReservationItemOutput {
       summary?.imageUrl ?? output.imageUrl,
       output.createdAt,
       output.updatedAt,
+      toArrivalGuide(summary, includeSecrets) ?? output.arrivalGuide,
     );
   }
 }

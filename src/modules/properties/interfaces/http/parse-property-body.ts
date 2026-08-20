@@ -3,6 +3,7 @@ import {
   parseCancellationPolicy,
 } from '@src/modules/reservation/contracts/cancellation-policy';
 import type { CreatePropertyDto } from '@src/modules/properties/applications/dto/createProperty.dto';
+import { parseArrivalGuide } from '@src/modules/properties/domain/constants/property-arrival-guide';
 
 export function parsePropertyBody(
   body: Record<string, unknown>,
@@ -25,6 +26,7 @@ export function parsePropertyBody(
       body.touristTaxPerGuestNight === ''
         ? 0
         : Number(body.touristTaxPerGuestNight),
+    ...parseArrivalGuide(body),
     ownerId: Number(body.ownerId),
     propertyTypeId:
       body.propertyTypeId === undefined || body.propertyTypeId === ''

@@ -19,6 +19,9 @@ function mapRoomProperty(room: RoomEntity): Property {
   if (room.property?.id != null) {
     return new Property({
       ...toPropertySummary(room.property),
+      checkInInstructions: room.property.checkInInstructions ?? '',
+      wifiName: room.property.wifiName ?? '',
+      wifiPassword: room.property.wifiPassword ?? '',
       rooms: [],
     });
   }

@@ -22,6 +22,8 @@ export type PropertySummary = {
   checkOutTime: string;
   cancellationPolicy: CancellationPolicy;
   touristTaxPerGuestNight: number;
+  houseRules: string;
+  emergencyContact: string;
   ownerId?: number;
   propertyTypeId: number | null;
   propertyType: CategorySummary | null;
@@ -43,6 +45,8 @@ export type PropertySummarySource = {
   checkOutTime: string;
   cancellationPolicy?: unknown;
   touristTaxPerGuestNight?: number | string | null;
+  houseRules?: string | null;
+  emergencyContact?: string | null;
   ownerId: number;
   propertyTypeId?: number | null;
   propertyType?: { id: number; name: string; slug: string } | null;
@@ -95,6 +99,8 @@ export function toPropertySummary(
       parseCancellationPolicy(source.cancellationPolicy) ??
       DEFAULT_CANCELLATION_POLICY,
     touristTaxPerGuestNight: Number(source.touristTaxPerGuestNight ?? 0),
+    houseRules: String(source.houseRules ?? '').trim(),
+    emergencyContact: String(source.emergencyContact ?? '').trim(),
     ...(options?.omitOwnerId ? {} : { ownerId: source.ownerId }),
     propertyTypeId: source.propertyTypeId ?? null,
     propertyType: mapPropertyType(source.propertyType),

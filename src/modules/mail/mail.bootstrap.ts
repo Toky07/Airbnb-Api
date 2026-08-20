@@ -5,6 +5,7 @@ import { SendEmailCommandHandler } from './applications/useCase/handlers/SendEma
 import { RetryEmailCommandHandler } from './applications/useCase/handlers/RetryEmailCommandHandler';
 import { GetEmailQueryHandler } from './applications/useCase/handlers/GetEmailQueryHandler';
 import { ListEmailsQueryHandler } from './applications/useCase/handlers/ListEmailsQueryHandler';
+import { SubmitContactMessageCommandHandler } from './applications/useCase/handlers/SubmitContactMessageCommandHandler';
 
 export class MailBootstrap {
   static create(deps: {
@@ -24,6 +25,8 @@ export class MailBootstrap {
       ),
       getEmailQueryHandler: new GetEmailQueryHandler(deps.emailRepository),
       listEmailsQueryHandler: new ListEmailsQueryHandler(deps.emailRepository),
+      submitContactMessageCommandHandler:
+        new SubmitContactMessageCommandHandler(),
     };
   }
 }

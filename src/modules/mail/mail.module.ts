@@ -5,6 +5,7 @@ import { EmailRepository } from './infrastructure/repositories/email.repository'
 import { EMAIL_REPOSITORY } from './domain/repositories/email.repository';
 import type { IEmailRepository } from './domain/repositories/email.repository';
 import { MailController } from './interfaces/http/mail.controller';
+import { ContactController } from './interfaces/http/contact.controller';
 import { MailService } from './applications/services/mail.service';
 import { LoadEmailAttachmentsFromPathsService } from './applications/services/load-email-attachments-from-paths.service';
 import { MailEvent } from './applications/events/register-mail.event';
@@ -19,10 +20,11 @@ import { SendEmailCommand } from './applications/useCase/commands/SendEmailComma
 import { RetryEmailCommand } from './applications/useCase/commands/RetryEmailCommand';
 import { GetEmailQuery } from './applications/useCase/queries/GetEmailQuery';
 import { ListEmailsQuery } from './applications/useCase/queries/ListEmailsQuery';
+import { SubmitContactMessageCommand } from './applications/useCase/commands/SubmitContactMessageCommand';
 
 @Module({
   imports: [TypeOrmModule.forFeature([EmailOrmEntity])],
-  controllers: [MailController],
+  controllers: [MailController, ContactController],
   providers: [
     EmailRepository,
     {
@@ -63,5 +65,9 @@ export class MailModule implements OnModuleInit {
 
     QueryBus.register(GetEmailQuery, bootstrap.getEmailQueryHandler);
     QueryBus.register(ListEmailsQuery, bootstrap.listEmailsQueryHandler);
+    CommandBus.register(
+      SubmitContactMessageCommand,
+      bootstrap.submitContactMessageCommandHandler,
+    );
   }
 }

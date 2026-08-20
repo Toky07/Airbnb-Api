@@ -12,6 +12,11 @@ export type CreatePropertyDto = {
   checkOutTime: string;
   cancellationPolicy?: CancellationPolicy;
   touristTaxPerGuestNight?: number;
+  houseRules?: string;
+  checkInInstructions?: string;
+  wifiName?: string;
+  wifiPassword?: string;
+  emergencyContact?: string;
   ownerId: number;
   propertyTypeId?: number | null;
   createdAt?: Date;

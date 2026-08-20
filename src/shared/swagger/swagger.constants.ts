@@ -18,6 +18,7 @@ export const SWAGGER_TAGS = {
   RESERVATIONS: 'Réservations',
   INVOICES: 'Factures',
   EMAILS: 'Emails',
+  CONTACT: 'Contact',
   MESSAGING: 'Messagerie',
   FAVORITES: 'Favoris',
   REVIEWS: 'Avis',

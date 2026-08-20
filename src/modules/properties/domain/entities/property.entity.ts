@@ -3,6 +3,10 @@ import type { CategorySummary } from '@src/shared/types/category-summary';
 import type { CancellationPolicy } from '@src/modules/reservation/contracts/cancellation-policy';
 import { DEFAULT_CANCELLATION_POLICY } from '@src/modules/reservation/contracts/cancellation-policy';
 import type { Room } from '@src/modules/rooms/domain/entities/room.entity';
+import {
+  EMPTY_PROPERTY_ARRIVAL_GUIDE,
+  parseArrivalGuide,
+} from '@src/modules/properties/domain/constants/property-arrival-guide';
 
 export class Property {
   public name: string;
@@ -16,6 +20,11 @@ export class Property {
   public checkOutTime: string;
   public cancellationPolicy: CancellationPolicy;
   public touristTaxPerGuestNight: number;
+  public houseRules: string;
+  public checkInInstructions: string;
+  public wifiName: string;
+  public wifiPassword: string;
+  public emergencyContact: string;
   public ownerId: number;
   public propertyTypeId: number | null;
   public propertyType: CategorySummary | null;
@@ -36,6 +45,11 @@ export class Property {
     checkOutTime,
     cancellationPolicy,
     touristTaxPerGuestNight,
+    houseRules,
+    checkInInstructions,
+    wifiName,
+    wifiPassword,
+    emergencyContact,
     ownerId,
     propertyTypeId,
     propertyType,
@@ -61,6 +75,20 @@ export class Property {
     this.checkOutTime = checkOutTime;
     this.cancellationPolicy = cancellationPolicy ?? DEFAULT_CANCELLATION_POLICY;
     this.touristTaxPerGuestNight = touristTaxPerGuestNight ?? 0;
+    const arrival = parseArrivalGuide({
+      houseRules: houseRules ?? EMPTY_PROPERTY_ARRIVAL_GUIDE.houseRules,
+      checkInInstructions:
+        checkInInstructions ?? EMPTY_PROPERTY_ARRIVAL_GUIDE.checkInInstructions,
+      wifiName: wifiName ?? EMPTY_PROPERTY_ARRIVAL_GUIDE.wifiName,
+      wifiPassword: wifiPassword ?? EMPTY_PROPERTY_ARRIVAL_GUIDE.wifiPassword,
+      emergencyContact:
+        emergencyContact ?? EMPTY_PROPERTY_ARRIVAL_GUIDE.emergencyContact,
+    });
+    this.houseRules = arrival.houseRules;
+    this.checkInInstructions = arrival.checkInInstructions;
+    this.wifiName = arrival.wifiName;
+    this.wifiPassword = arrival.wifiPassword;
+    this.emergencyContact = arrival.emergencyContact;
     this.ownerId = ownerId;
     this.propertyTypeId = propertyTypeId ?? null;
     this.propertyType = propertyType ?? null;

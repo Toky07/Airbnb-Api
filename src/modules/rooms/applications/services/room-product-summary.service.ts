@@ -14,6 +14,14 @@ export type RoomProductSummary = {
   propertyId: number | null;
   propertyName: string;
   propertyCity: string | null;
+  propertyAddress: string | null;
+  checkInTime: string | null;
+  checkOutTime: string | null;
+  houseRules: string | null;
+  checkInInstructions: string | null;
+  wifiName: string | null;
+  wifiPassword: string | null;
+  emergencyContact: string | null;
   imageUrl: string | null;
 };
 
@@ -40,6 +48,14 @@ export class RoomProductSummaryService {
       propertyId: room.property?.id ?? null,
       propertyName: room.property?.name ?? 'Établissement',
       propertyCity: room.property?.city ?? null,
+      propertyAddress: room.property?.address ?? null,
+      checkInTime: room.property?.checkInTime ?? null,
+      checkOutTime: room.property?.checkOutTime ?? null,
+      houseRules: room.property?.houseRules || null,
+      checkInInstructions: room.property?.checkInInstructions || null,
+      wifiName: room.property?.wifiName || null,
+      wifiPassword: room.property?.wifiPassword || null,
+      emergencyContact: room.property?.emergencyContact || null,
       imageUrl: medias[0]?.path ?? null,
     };
   }

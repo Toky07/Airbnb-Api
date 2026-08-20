@@ -15,6 +15,7 @@ import { AddReviewsTable1783920447456 } from '@src/database/migrations/178392044
 import { AddMessagingTables1783920447457 } from '@src/database/migrations/1783920447457-AddMessagingTables';
 import { AddHostApplicationsTable1783920447458 } from '@src/database/migrations/1783920447458-AddHostApplicationsTable';
 import { AddStripeConnectFields1783920447459 } from '@src/database/migrations/1783920447459-AddStripeConnectFields';
+import { AddPropertyArrivalGuide1783920447460 } from '@src/database/migrations/1783920447460-AddPropertyArrivalGuide';
 import { TYPEORM_ENTITIES } from '@src/config/typeorm.entities';
 import { EventBus } from '@src/shared/domain/event.bus';
 
@@ -73,6 +74,7 @@ async function createAdminDataSource(): Promise<DataSource> {
       AddMessagingTables1783920447457,
       AddHostApplicationsTable1783920447458,
       AddStripeConnectFields1783920447459,
+      AddPropertyArrivalGuide1783920447460,
     ],
     synchronize: false,
   });
