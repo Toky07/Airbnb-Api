@@ -1,5 +1,7 @@
 import { UnauthorizedException } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
 import { describe, expect, it, vi } from 'vitest';
+import { ResolveHostPropertyIdsService } from './resolve-host-property-ids.service';
 import { ResolveReservationStatsScopeService } from './resolve-reservation-stats-scope.service';
 
 describe('ResolveReservationStatsScopeService', () => {
@@ -43,5 +45,27 @@ describe('ResolveReservationStatsScopeService', () => {
     await expect(
       service.resolve(9, { canReadAll: false, canReadHost: false }),
     ).rejects.toBeInstanceOf(UnauthorizedException);
+  });
+
+  it('injecte ResolveHostPropertyIdsService via Nest', async () => {
+    const resolveHostPropertyIds = {
+      resolve: vi.fn().mockResolvedValue([4, 5]),
+    };
+    const moduleRef = await Test.createTestingModule({
+      providers: [
+        ResolveReservationStatsScopeService,
+        {
+          provide: ResolveHostPropertyIdsService,
+          useValue: resolveHostPropertyIds,
+        },
+      ],
+    }).compile();
+
+    const service = moduleRef.get(ResolveReservationStatsScopeService);
+
+    await expect(
+      service.resolve(12, { canReadAll: false, canReadHost: true }),
+    ).resolves.toEqual({ propertyIds: [4, 5] });
+    expect(resolveHostPropertyIds.resolve).toHaveBeenCalledWith(12);
   });
 });

@@ -1,8 +1,9 @@
-import { UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import type { ReservationStatsScope } from '@src/modules/reservation/domain/repositories/reservation.repository';
 import type { GetReservationStatsQuery } from '@src/modules/reservation/applications/useCase/queries/GetReservationStatsQuery';
 import { ResolveHostPropertyIdsService } from './resolve-host-property-ids.service';
 
+@Injectable()
 export class ResolveReservationStatsScopeService {
   constructor(
     private readonly resolveHostPropertyIds: ResolveHostPropertyIdsService,

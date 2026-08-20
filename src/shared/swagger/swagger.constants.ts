@@ -12,6 +12,7 @@ export const SWAGGER_TAGS = {
   ROOM_TYPES: 'Types de chambre',
   AMENITIES: 'Équipements',
   HOST: 'Espace hôte',
+  HOST_APPLICATIONS: 'Candidatures hôte',
   CART: 'Panier',
   PAYMENTS: 'Paiements',
   RESERVATIONS: 'Réservations',

@@ -70,6 +70,7 @@ export function setupSwagger(app: INestApplication): void {
     .addTag(SWAGGER_TAGS.ROOM_TYPES)
     .addTag(SWAGGER_TAGS.AMENITIES)
     .addTag(SWAGGER_TAGS.HOST)
+    .addTag(SWAGGER_TAGS.HOST_APPLICATIONS)
     .addTag(SWAGGER_TAGS.CART)
     .addTag(SWAGGER_TAGS.PAYMENTS)
     .addTag(SWAGGER_TAGS.RESERVATIONS)

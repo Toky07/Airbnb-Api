@@ -12,6 +12,7 @@ import { AddDynamicPricing1783920447453 } from '@src/database/migrations/1783920
 import { AddFavoritesTable1783920447455 } from '@src/database/migrations/1783920447455-AddFavoritesTable';
 import { AddReviewsTable1783920447456 } from '@src/database/migrations/1783920447456-AddReviewsTable';
 import { AddMessagingTables1783920447457 } from '@src/database/migrations/1783920447457-AddMessagingTables';
+import { AddHostApplicationsTable1783920447458 } from '@src/database/migrations/1783920447458-AddHostApplicationsTable';
 import { TYPEORM_ENTITIES } from '@src/config/typeorm.entities';
 import { EventBus } from '@src/shared/domain/event.bus';
 
@@ -67,6 +68,7 @@ async function createAdminDataSource(): Promise<DataSource> {
       AddFavoritesTable1783920447455,
       AddReviewsTable1783920447456,
       AddMessagingTables1783920447457,
+      AddHostApplicationsTable1783920447458,
     ],
     synchronize: false,
   });

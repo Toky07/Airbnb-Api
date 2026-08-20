@@ -26,6 +26,7 @@ import { ConversationOrmEntity } from '@src/modules/messaging/infrastructure/ent
 import { MessageOrmEntity } from '@src/modules/messaging/infrastructure/entities/message.orm-entity';
 import { FavoriteOrmEntity } from '@src/modules/favorite/infrastructure/entities/favorite.orm-entity';
 import { ReviewOrmEntity } from '@src/modules/review/infrastructure/entities/review.orm-entity';
+import { HostApplicationOrmEntity } from '@src/modules/host-application/infrastructure/entities/host-application.orm-entity';
 
 export const TYPEORM_ENTITIES = [
   AuthEntity,
@@ -56,4 +57,5 @@ export const TYPEORM_ENTITIES = [
   MessageOrmEntity,
   FavoriteOrmEntity,
   ReviewOrmEntity,
+  HostApplicationOrmEntity,
 ];

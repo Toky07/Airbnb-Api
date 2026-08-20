@@ -7,6 +7,7 @@ import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.enti
 import { RESERVATION_STATUS } from '@src/modules/reservation/domain/constants/reservation-status.constant';
 import {
   DEFAULT_REGISTER,
+  registerAndLoginAsHost,
   registerAndLoginAsSuperAdmin,
   registerAndLoginAsTraveler,
 } from '@src/test/controller-test.helpers';
@@ -141,6 +142,32 @@ describe('ReservationController', () => {
     const response = await request(app.getHttpServer())
       .get('/reservations/stats')
       .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        activeCount: expect.any(Number),
+        pendingCount: expect.any(Number),
+        monthlyRevenue: expect.any(Number),
+        occupancyRate: expect.any(Number),
+        totalCount: expect.any(Number),
+        recentActivity: expect.any(Array),
+      }),
+    );
+  });
+
+  it('GET /reservations/stats fonctionne pour un hôte (scope établissements)', async () => {
+    const hostToken = await registerAndLoginAsHost(app, dataSource, {
+      email: 'host-stats@test.com',
+      password: '123456',
+      firstName: 'Host',
+      lastName: 'Stats',
+      phoneNumber: '+33601020321',
+    });
+
+    const response = await request(app.getHttpServer())
+      .get('/reservations/stats')
+      .set('Authorization', `Bearer ${hostToken}`)
       .expect(200);
 
     expect(response.body).toEqual(

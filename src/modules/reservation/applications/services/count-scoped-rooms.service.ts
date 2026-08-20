@@ -1,10 +1,11 @@
-import { Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import {
   ROOM_REPOSITORY,
   type IRoomRepository,
 } from '@src/modules/rooms/contracts';
 import type { ReservationStatsScope } from '@src/modules/reservation/domain/repositories/reservation.repository';
 
+@Injectable()
 export class CountScopedRoomsService {
   constructor(
     @Inject(ROOM_REPOSITORY)

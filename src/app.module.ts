@@ -17,6 +17,7 @@ import { AmenityModule } from './modules/amenity/amenity.module';
 import { MessagingModule } from './modules/messaging/messaging.module';
 import { FavoriteModule } from './modules/favorite/favorite.module';
 import { ReviewModule } from './modules/review/review.module';
+import { HostApplicationModule } from './modules/host-application/host-application.module';
 import { getDatabaseConfig } from './config/database.config';
 import { getCacheConfig } from './config/cache.config';
 import { HealthController } from './health/health.controller';
@@ -46,6 +47,7 @@ import { AbsoluteMediaUrlInterceptor } from './modules/media/interfaces/http/abs
     MessagingModule,
     FavoriteModule,
     ReviewModule,
+    HostApplicationModule,
   ],
   controllers: [HealthController],
   providers: [

@@ -13,6 +13,10 @@ export interface IUserRepository {
   findById(id: number): Promise<User | null>;
   findAll(): Promise<User[]>;
   findPaginated(params: PaginationParams): Promise<PaginatedResult<User>>;
+  findPaginatedByRoleSlug(
+    roleSlug: string,
+    params: PaginationParams,
+  ): Promise<PaginatedResult<User>>;
   delete(id: number): Promise<boolean>;
   linkAuthAccount(userId: number, authId: number): Promise<void>;
   findByAuthId(authId: number): Promise<User | null>;

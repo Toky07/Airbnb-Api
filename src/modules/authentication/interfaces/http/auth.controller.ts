@@ -38,7 +38,6 @@ import { ResetPasswordWithTokenCommand } from '@src/modules/authentication/appli
 import { RequestPasswordResetCommand } from '@src/modules/authentication/applications/useCase/commands/RequestPasswordResetCommand';
 import { ValidatePasswordResetTokenQuery } from '@src/modules/authentication/applications/useCase/queries/ValidatePasswordResetTokenQuery';
 import { GetMeQuery } from '@src/modules/authentication/applications/useCase/queries/GetMeQuery';
-import { BecomeHostCommand } from '@src/modules/authentication/applications/useCase/commands/BecomeHostCommand';
 import { AssignRoleDto } from '@src/modules/authentication/applications/dto/assign-role.dto';
 import { ForgotPasswordDto } from '@src/modules/authentication/applications/dto/forgot-password.dto';
 import { LoginDto } from '@src/modules/authentication/applications/dto/login.dto';
@@ -47,7 +46,6 @@ import { RegisterDto } from '@src/modules/authentication/applications/dto/regist
 import { SuccessResponseDto } from '@src/modules/authentication/applications/dto/success-response.dto';
 import { TokenPasswordDto } from '@src/modules/authentication/applications/dto/token-password.dto';
 import { TokenDto } from '@src/modules/authentication/applications/dto/token.dto';
-import { TokenResponseDto } from '@src/modules/authentication/applications/dto/token-response.dto';
 import { ApiJwtAuth } from '@src/shared/swagger/swagger.decorators';
 import { SWAGGER_TAGS } from '@src/shared/swagger/swagger.constants';
 
@@ -147,23 +145,6 @@ export class AuthController {
       throw new UnauthorizedException();
     }
     return QueryBus.execute(new GetMeQuery(request.user.sub));
-  }
-
-  @Post('become-host')
-  @HttpCode(200)
-  @ApiJwtAuth()
-  @ApiOperation({ summary: 'Passer au rôle hôte — retourne un nouveau JWT' })
-  async becomeHost(
-    @Req() request: { user?: JwtPayload },
-  ): Promise<TokenResponseDto> {
-    if (!request.user?.sub) {
-      throw new UnauthorizedException();
-    }
-
-    const token = await CommandBus.execute<string>(
-      new BecomeHostCommand(request.user.sub),
-    );
-    return { token };
   }
 
   @Put('profile')

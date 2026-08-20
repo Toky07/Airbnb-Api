@@ -27,6 +27,7 @@ import { PaymentModule } from '@src/modules/payment/payment.module';
 import { PropertiesModule } from '@src/modules/properties/properties.module';
 import { ReservationModule } from '@src/modules/reservation/reservation.module';
 import { ReviewModule } from '@src/modules/review/review.module';
+import { HostApplicationModule } from '@src/modules/host-application/host-application.module';
 import { RoomsModule } from '@src/modules/rooms/room.module';
 import { UserModule } from '@src/modules/user/user.module';
 import { TYPEORM_ENTITIES } from '@src/config/typeorm.entities';
@@ -112,6 +113,7 @@ async function bootE2eApp(): Promise<E2eAppContext> {
       MessagingModule,
       FavoriteModule,
       ReviewModule,
+      HostApplicationModule,
     ],
   })
     .overrideProvider(PAYMENT_GATEWAY)
