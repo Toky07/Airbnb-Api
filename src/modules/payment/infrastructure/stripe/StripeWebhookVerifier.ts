@@ -25,6 +25,32 @@ export class StripeWebhookVerifier implements IWebhookVerifier {
     }
 
     const eventType = (event as { type?: string }).type ?? '';
+
+    if (eventType.startsWith('account.')) {
+      const account = (
+        event as {
+          data: {
+            object: {
+              id: string;
+              charges_enabled?: boolean;
+              payouts_enabled?: boolean;
+              details_submitted?: boolean;
+            };
+          };
+        }
+      ).data.object;
+
+      return {
+        type: eventType,
+        paymentIntentId: null,
+        status: '',
+        accountId: account.id,
+        chargesEnabled: Boolean(account.charges_enabled),
+        payoutsEnabled: Boolean(account.payouts_enabled),
+        detailsSubmitted: Boolean(account.details_submitted),
+      };
+    }
+
     if (!eventType.startsWith('payment_intent.')) {
       throw new BadRequestException('Événement Stripe non pris en charge.');
     }

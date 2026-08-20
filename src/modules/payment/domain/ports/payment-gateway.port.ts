@@ -4,6 +4,8 @@ export type CreatePaymentIntentParams = {
   amount: number;
   currency: string;
   metadata: Record<string, string>;
+  applicationFeeAmount?: number;
+  transferDestination?: string;
 };
 
 export type PaymentIntentSnapshot = {
@@ -16,11 +18,19 @@ export type RefundSnapshot = {
   id: string;
 };
 
+export type CreateRefundParams = {
+  refundApplicationFee?: boolean;
+};
+
 export type WebhookEventPayload = {
   type: string;
-  paymentIntentId: string;
+  paymentIntentId: string | null;
   status: string;
   errorMessage?: string | null;
+  accountId?: string | null;
+  chargesEnabled?: boolean;
+  payoutsEnabled?: boolean;
+  detailsSubmitted?: boolean;
 };
 
 export interface IPaymentGateway {
@@ -33,5 +43,6 @@ export interface IPaymentGateway {
   createRefund(
     paymentIntentId: string,
     amount: number,
+    options?: CreateRefundParams,
   ): Promise<RefundSnapshot>;
 }

@@ -181,6 +181,20 @@ export class UserRepository implements IUserRepository {
     return UserMapper.toDomain(enriched);
   }
 
+  async findByStripeAccountId(stripeAccountId: string): Promise<User | null> {
+    const user = await this.repository.findOne({
+      where: { stripeAccountId },
+      relations: [...this.authRelations],
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    const enriched = await this.resolveAuthAccount(user);
+    return UserMapper.toDomain(enriched);
+  }
+
   async updateStatus(userId: number, status: AccountStatus): Promise<void> {
     const result = await this.repository.update(Number(userId), { status });
     if (!result.affected) {

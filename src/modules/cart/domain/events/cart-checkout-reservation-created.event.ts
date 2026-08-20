@@ -13,5 +13,7 @@ export class CartCheckoutReservationCreatedEvent implements DomainEvent {
     public readonly amountInCents: number,
     public readonly holdUntil: string | null = null,
     public readonly pricingBreakdown: PricingBreakdown | null = null,
+    public readonly stripeAccountId: string | null = null,
+    public readonly hostUserId: number | null = null,
   ) {}
 }

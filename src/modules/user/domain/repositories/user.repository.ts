@@ -20,5 +20,6 @@ export interface IUserRepository {
   delete(id: number): Promise<boolean>;
   linkAuthAccount(userId: number, authId: number): Promise<void>;
   findByAuthId(authId: number): Promise<User | null>;
+  findByStripeAccountId(stripeAccountId: string): Promise<User | null>;
   updateStatus(userId: number, status: AccountStatus): Promise<void>;
 }

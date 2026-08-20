@@ -80,6 +80,17 @@ export function getStripeCurrency(env: EnvSource = process.env): string {
   return (readEnv(env, 'STRIPE_CURRENCY') ?? 'eur').toLowerCase();
 }
 
+export function getStripeConnectCountry(env: EnvSource = process.env): string {
+  return (readEnv(env, 'STRIPE_CONNECT_COUNTRY') ?? 'FR').toUpperCase();
+}
+
+export function getAppPublicUrl(env: EnvSource = process.env): string {
+  return (readEnv(env, 'APP_PUBLIC_URL') ?? 'http://localhost:5173').replace(
+    /\/$/,
+    '',
+  );
+}
+
 /** URL publique de l'API (préfixe des images/uploads renvoyés aux clients). */
 export function getApiPublicUrl(env: EnvSource = process.env): string {
   const configured = readEnv(env, 'API_PUBLIC_URL');

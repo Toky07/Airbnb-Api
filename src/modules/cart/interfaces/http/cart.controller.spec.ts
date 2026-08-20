@@ -13,17 +13,21 @@ import { PaymentOrmEntity } from '@src/modules/payment/infrastructure/entities/p
 import { ReservationOrmEntity } from '@src/modules/reservation/infrastructure/entities/reservation.orm-entity';
 import { RESERVATION_STATUS } from '@src/modules/reservation/contracts';
 import {
+  DEFAULT_REGISTER,
+  enableHostStripeConnect,
   registerAndLoginAsHost,
   registerAndLoginAsSuperAdmin,
   registerAndLoginAsTraveler,
 } from '@src/test/controller-test.helpers';
 import { setupE2eApp, type E2eAppContext } from '@src/test/e2e-app';
+import { UserEntity } from '@src/modules/user/infrastructure/entities/user.entity';
 
 describe('CartController', () => {
   let app: INestApplication;
   let dataSource: DataSource;
   let token: string;
   let roomId: number;
+  let ownerUserId: number;
   let paymentIntentCounter = 0;
   let paymentGateway: E2eAppContext['paymentGateway'];
   const sessionId = '11111111-1111-4111-8111-111111111111';
@@ -56,6 +60,12 @@ describe('CartController', () => {
 
     token = await registerAndLoginAsSuperAdmin(app, dataSource);
 
+    const owner = await dataSource.getRepository(UserEntity).findOneByOrFail({
+      email: DEFAULT_REGISTER.email,
+    });
+    ownerUserId = owner.id;
+    await enableHostStripeConnect(dataSource, ownerUserId, 'acct_e2e_host');
+
     const property = await dataSource.getRepository(PropertyEntity).save({
       name: 'Hotel Panier',
       description: 'Description',
@@ -66,7 +76,7 @@ describe('CartController', () => {
       longitude: 0,
       checkInTime: '15:00',
       checkOutTime: '11:00',
-      ownerId: 1,
+      ownerId: ownerUserId,
     });
 
     const room = await dataSource.getRepository(RoomEntity).save({
@@ -206,6 +216,16 @@ describe('CartController', () => {
       where: { id: response.body.paymentId },
     });
     expect(payment?.cartId).toBeTruthy();
+    expect(payment?.stripeAccountId).toBe('acct_e2e_host');
+    expect(payment?.hostUserId).toBe(ownerUserId);
+    expect(payment?.applicationFeeAmount).toBeGreaterThan(0);
+
+    expect(paymentGateway.createPaymentIntent).toHaveBeenCalledWith(
+      expect.objectContaining({
+        transferDestination: 'acct_e2e_host',
+        applicationFeeAmount: expect.any(Number),
+      }),
+    );
 
     const reservation = await dataSource
       .getRepository(ReservationOrmEntity)
@@ -349,6 +369,150 @@ describe('CartController', () => {
       .expect(200);
 
     expect(ownerCart.body.items.length).toBeGreaterThan(0);
+  });
+
+  it('POST /cart/checkout refuse un panier multi-hôtes', async () => {
+    await clearAuthenticatedCart();
+
+    const otherEmail = `cart-multi-host-${Date.now()}@test.com`;
+    await registerAndLoginAsHost(app, dataSource, {
+      email: otherEmail,
+      password: '123456',
+      firstName: 'Other',
+      lastName: 'Host',
+      phoneNumber: '+33601020991',
+    });
+    const otherHost = await dataSource
+      .getRepository(UserEntity)
+      .findOneByOrFail({ email: otherEmail });
+    await enableHostStripeConnect(
+      dataSource,
+      otherHost.id,
+      'acct_e2e_other_host',
+    );
+
+    const otherProperty = await dataSource.getRepository(PropertyEntity).save({
+      name: 'Hotel Autre Hôte',
+      description: 'Description',
+      address: '2 rue Test',
+      city: 'Lyon',
+      country: 'France',
+      latitude: 0,
+      longitude: 0,
+      checkInTime: '15:00',
+      checkOutTime: '11:00',
+      ownerId: otherHost.id,
+    });
+    const otherRoom = await dataSource.getRepository(RoomEntity).save({
+      name: 'Chambre Autre',
+      description: 'Chambre',
+      pricePerNight: 80,
+      maxGuests: 2,
+      bedrooms: 1,
+      bathrooms: 1,
+      beds: 1,
+      quantity: 1,
+      size: 20,
+      status: 'available',
+      property: otherProperty,
+    });
+
+    await request(app.getHttpServer())
+      .post('/cart/items')
+      .set('Authorization', `Bearer ${token}`)
+      .set(CART_SESSION_HEADER, sessionId)
+      .send({
+        itemType: CART_ITEM_TYPE.RESERVATION,
+        roomId,
+        startDate: '2027-03-01',
+        endDate: '2027-03-03',
+        guestCount: 2,
+      })
+      .expect(201);
+
+    await request(app.getHttpServer())
+      .post('/cart/items')
+      .set('Authorization', `Bearer ${token}`)
+      .set(CART_SESSION_HEADER, sessionId)
+      .send({
+        itemType: CART_ITEM_TYPE.RESERVATION,
+        roomId: otherRoom.id,
+        startDate: '2027-04-01',
+        endDate: '2027-04-03',
+        guestCount: 2,
+      })
+      .expect(201);
+
+    const response = await request(app.getHttpServer())
+      .post('/cart/checkout')
+      .set('Authorization', `Bearer ${token}`)
+      .set(CART_SESSION_HEADER, sessionId)
+      .expect(400);
+
+    expect(response.body.message).toMatch(/plusieurs hôtes/i);
+  });
+
+  it('POST /cart/checkout refuse un hôte non onboardé', async () => {
+    await clearAuthenticatedCart();
+
+    const hostEmail = `cart-no-stripe-${Date.now()}@test.com`;
+    await registerAndLoginAsHost(app, dataSource, {
+      email: hostEmail,
+      password: '123456',
+      firstName: 'Sans',
+      lastName: 'Stripe',
+      phoneNumber: '+33601020992',
+    });
+    const host = await dataSource
+      .getRepository(UserEntity)
+      .findOneByOrFail({ email: hostEmail });
+
+    const property = await dataSource.getRepository(PropertyEntity).save({
+      name: 'Hotel Sans Paiement',
+      description: 'Description',
+      address: '3 rue Test',
+      city: 'Nice',
+      country: 'France',
+      latitude: 0,
+      longitude: 0,
+      checkInTime: '15:00',
+      checkOutTime: '11:00',
+      ownerId: host.id,
+    });
+    const unonboardedRoom = await dataSource.getRepository(RoomEntity).save({
+      name: 'Chambre Sans Stripe',
+      description: 'Chambre',
+      pricePerNight: 90,
+      maxGuests: 2,
+      bedrooms: 1,
+      bathrooms: 1,
+      beds: 1,
+      quantity: 1,
+      size: 22,
+      status: 'available',
+      property,
+    });
+
+    await request(app.getHttpServer())
+      .post('/cart/items')
+      .set('Authorization', `Bearer ${token}`)
+      .set(CART_SESSION_HEADER, sessionId)
+      .send({
+        itemType: CART_ITEM_TYPE.RESERVATION,
+        roomId: unonboardedRoom.id,
+        startDate: '2027-05-01',
+        endDate: '2027-05-03',
+        guestCount: 2,
+      })
+      .expect(201);
+
+    const response = await request(app.getHttpServer())
+      .post('/cart/checkout')
+      .set('Authorization', `Bearer ${token}`)
+      .set(CART_SESSION_HEADER, sessionId)
+      .expect(400);
+
+    expect(response.body.message).toMatch(/activé les paiements Stripe/i);
   });
 
   it('DELETE /cart/items/:id supprime un article', async () => {

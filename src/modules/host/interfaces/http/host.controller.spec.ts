@@ -1,13 +1,15 @@
 import request from 'supertest';
 import { INestApplication } from '@nestjs/common';
 import { DataSource } from 'typeorm';
+import { vi } from 'vitest';
 import { PropertyEntity } from '@src/modules/properties/infrastructure/entities/property-entity.entity';
 import { RoomEntity } from '@src/modules/rooms/infrastructure/entities/room.entity';
 import { AmenityOrmEntity } from '@src/modules/amenity/infrastructure/entities/amenity.orm-entity';
 import { AMENITY_SCOPE } from '@src/modules/amenity/contracts';
 import { registerAndLoginAsHost } from '@src/test/controller-test.helpers';
 import { jpegBuffer } from '@src/test/image-fixtures';
-import { setupE2eApp } from '@src/test/e2e-app';
+import { setupE2eApp, type E2eAppContext } from '@src/test/e2e-app';
+import { UserEntity } from '@src/modules/user/infrastructure/entities/user.entity';
 
 describe('Host HTTP (/host)', () => {
   let app: INestApplication;
@@ -15,6 +17,7 @@ describe('Host HTTP (/host)', () => {
   let token: string;
   let propertyId: number;
   let roomId: number;
+  let stripeConnectAccounts: E2eAppContext['stripeConnectAccounts'];
 
   const defaultProperty = {
     name: 'Host Property',
@@ -46,6 +49,7 @@ describe('Host HTTP (/host)', () => {
     const ctx = await setupE2eApp();
     app = ctx.app;
     dataSource = ctx.dataSource;
+    stripeConnectAccounts = ctx.stripeConnectAccounts;
 
     token = await registerAndLoginAsHost(app, dataSource, {
       email: 'host-controller@test.com',
@@ -72,6 +76,75 @@ describe('Host HTTP (/host)', () => {
       }),
     );
     expect(response.body.properties).toEqual([]);
+    expect(response.body.stripe).toEqual(
+      expect.objectContaining({
+        onboardingStatus: 'not_started',
+        chargesEnabled: false,
+        payoutsEnabled: false,
+        hasAccount: false,
+      }),
+    );
+  });
+
+  it('POST /host/stripe/onboarding-link crée un Account Link Express', async () => {
+    stripeConnectAccounts.createExpressAccount = vi.fn().mockResolvedValue({
+      id: 'acct_host_e2e',
+      chargesEnabled: false,
+      payoutsEnabled: false,
+      detailsSubmitted: false,
+    });
+    stripeConnectAccounts.createAccountLink = vi.fn().mockResolvedValue({
+      url: 'https://connect.stripe.com/setup/s/host-e2e',
+    });
+
+    const response = await request(app.getHttpServer())
+      .post('/host/stripe/onboarding-link')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(201);
+
+    expect(response.body.url).toBe(
+      'https://connect.stripe.com/setup/s/host-e2e',
+    );
+
+    const host = await dataSource.getRepository(UserEntity).findOneByOrFail({
+      email: 'host-controller@test.com',
+    });
+    expect(host.stripeAccountId).toBe('acct_host_e2e');
+    expect(host.stripeOnboardingStatus).toBe('pending');
+  });
+
+  it('POST /host/stripe/dashboard-link refuse sans compte Connect', async () => {
+    const otherToken = await registerAndLoginAsHost(app, dataSource, {
+      email: 'host-no-stripe@test.com',
+      password: '123456',
+      firstName: 'Host',
+      lastName: 'NoStripe',
+      phoneNumber: '+33601020306',
+    });
+
+    await request(app.getHttpServer())
+      .post('/host/stripe/dashboard-link')
+      .set('Authorization', `Bearer ${otherToken}`)
+      .expect(400);
+  });
+
+  it('POST /host/stripe/dashboard-link retourne un login link', async () => {
+    await dataSource
+      .getRepository(UserEntity)
+      .update(
+        { email: 'host-controller@test.com' },
+        { stripeAccountId: 'acct_host_e2e' },
+      );
+    stripeConnectAccounts.createLoginLink = vi.fn().mockResolvedValue({
+      url: 'https://connect.stripe.com/express/acct_host_e2e',
+    });
+
+    const response = await request(app.getHttpServer())
+      .post('/host/stripe/dashboard-link')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(201);
+
+    expect(response.body.url).toContain('connect.stripe.com');
   });
 
   it('POST /host/properties creates an owned property', async () => {

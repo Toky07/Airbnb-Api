@@ -22,12 +22,16 @@ import { ListHostRoomBlockedDatesQueryHandler } from './applications/useCase/han
 import { CreateHostRoomRateOverrideCommandHandler } from './applications/useCase/handlers/CreateHostRoomRateOverrideCommandHandler';
 import { DeleteHostRoomRateOverrideCommandHandler } from './applications/useCase/handlers/DeleteHostRoomRateOverrideCommandHandler';
 import { ListHostRoomRateOverridesQueryHandler } from './applications/useCase/handlers/ListHostRoomRateOverridesQueryHandler';
+import { CreateHostStripeOnboardingLinkCommandHandler } from './applications/useCase/handlers/CreateHostStripeOnboardingLinkCommandHandler';
+import { CreateHostStripeDashboardLinkCommandHandler } from './applications/useCase/handlers/CreateHostStripeDashboardLinkCommandHandler';
+import type { IStripeConnectAccounts } from '@src/modules/payment/contracts';
 
 export class HostBootstrap {
   static create(deps: {
     resolveHostUser: ResolveHostUserService;
     resolveHostProperty: ResolveHostPropertyService;
     propertyMediaPresenter: PropertyMediaPresenter;
+    stripeConnectAccounts: IStripeConnectAccounts;
   }) {
     const assertHostRoomOwnership = new AssertHostRoomOwnershipService(
       deps.resolveHostProperty,
@@ -90,6 +94,16 @@ export class HostBootstrap {
         new CreateHostRoomRateOverrideCommandHandler(assertHostRoomOwnership),
       deleteHostRoomRateOverrideCommandHandler:
         new DeleteHostRoomRateOverrideCommandHandler(assertHostRoomOwnership),
+      createHostStripeOnboardingLinkCommandHandler:
+        new CreateHostStripeOnboardingLinkCommandHandler(
+          deps.resolveHostUser,
+          deps.stripeConnectAccounts,
+        ),
+      createHostStripeDashboardLinkCommandHandler:
+        new CreateHostStripeDashboardLinkCommandHandler(
+          deps.resolveHostUser,
+          deps.stripeConnectAccounts,
+        ),
     };
   }
 }

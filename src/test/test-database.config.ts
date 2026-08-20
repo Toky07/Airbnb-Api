@@ -9,10 +9,12 @@ import { AddPropertyTouristTax1783920447450 } from '@src/database/migrations/178
 import { AddPaymentPricingBreakdown1783920447451 } from '@src/database/migrations/1783920447451-AddPaymentPricingBreakdown';
 import { AddInvoiceSequences1783920447452 } from '@src/database/migrations/1783920447452-AddInvoiceSequences';
 import { AddDynamicPricing1783920447453 } from '@src/database/migrations/1783920447453-AddDynamicPricing';
+import { AddPasswordResetTokens1783920447454 } from '@src/database/migrations/1783920447454-AddPasswordResetTokens';
 import { AddFavoritesTable1783920447455 } from '@src/database/migrations/1783920447455-AddFavoritesTable';
 import { AddReviewsTable1783920447456 } from '@src/database/migrations/1783920447456-AddReviewsTable';
 import { AddMessagingTables1783920447457 } from '@src/database/migrations/1783920447457-AddMessagingTables';
 import { AddHostApplicationsTable1783920447458 } from '@src/database/migrations/1783920447458-AddHostApplicationsTable';
+import { AddStripeConnectFields1783920447459 } from '@src/database/migrations/1783920447459-AddStripeConnectFields';
 import { TYPEORM_ENTITIES } from '@src/config/typeorm.entities';
 import { EventBus } from '@src/shared/domain/event.bus';
 
@@ -65,10 +67,12 @@ async function createAdminDataSource(): Promise<DataSource> {
       AddPaymentPricingBreakdown1783920447451,
       AddInvoiceSequences1783920447452,
       AddDynamicPricing1783920447453,
+      AddPasswordResetTokens1783920447454,
       AddFavoritesTable1783920447455,
       AddReviewsTable1783920447456,
       AddMessagingTables1783920447457,
       AddHostApplicationsTable1783920447458,
+      AddStripeConnectFields1783920447459,
     ],
     synchronize: false,
   });

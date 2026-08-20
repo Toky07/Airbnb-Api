@@ -3,6 +3,7 @@ import { PAYMENT_PROVIDER } from '@src/modules/payment/domain/constants/payment-
 import { PAYMENT_STATUS } from '@src/modules/payment/domain/constants/payment-status.constant';
 import { Payment } from '@src/modules/payment/domain/entities/payment.entity';
 import type { IPaymentGateway } from '@src/modules/payment/domain/ports/payment-gateway.port';
+import type { IStripeConnectAccounts } from '@src/modules/payment/domain/ports/stripe-connect-accounts.port';
 import type { IPaymentRepository } from '@src/modules/payment/domain/repositories/payment.repository';
 import type { IWebhookVerifier } from '@src/modules/payment/domain/ports/webhook-verifier.port';
 import { PAYMENT_TYPE } from '@src/modules/payment/domain/types/payment.type';
@@ -66,6 +67,32 @@ export function createPaymentGatewayMock(
     }),
     retrievePaymentIntent: vi.fn(),
     createRefund: vi.fn().mockResolvedValue({ id: 're_test_123' }),
+    ...overrides,
+  };
+}
+
+export function createStripeConnectAccountsMock(
+  overrides: Partial<IStripeConnectAccounts> = {},
+): IStripeConnectAccounts {
+  return {
+    createExpressAccount: vi.fn().mockResolvedValue({
+      id: 'acct_e2e',
+      chargesEnabled: false,
+      payoutsEnabled: false,
+      detailsSubmitted: false,
+    }),
+    retrieveAccount: vi.fn().mockResolvedValue({
+      id: 'acct_e2e',
+      chargesEnabled: false,
+      payoutsEnabled: false,
+      detailsSubmitted: false,
+    }),
+    createAccountLink: vi.fn().mockResolvedValue({
+      url: 'https://connect.stripe.com/setup/s/e2e',
+    }),
+    createLoginLink: vi.fn().mockResolvedValue({
+      url: 'https://connect.stripe.com/express/acct_e2e',
+    }),
     ...overrides,
   };
 }

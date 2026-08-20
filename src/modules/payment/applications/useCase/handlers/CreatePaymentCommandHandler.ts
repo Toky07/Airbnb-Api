@@ -28,7 +28,19 @@ export class CreatePaymentCommandHandler implements ICommandHandler<
         userId: command.userId.toString(),
         propertyType: command.propertyType,
         propertyId: command.propertyId.toString(),
+        ...(command.hostUserId != null
+          ? { hostUserId: command.hostUserId.toString() }
+          : {}),
+        ...(command.transferDestination
+          ? { stripeAccountId: command.transferDestination }
+          : {}),
       },
+      ...(command.transferDestination
+        ? { transferDestination: command.transferDestination }
+        : {}),
+      ...(command.applicationFeeAmount != null
+        ? { applicationFeeAmount: command.applicationFeeAmount }
+        : {}),
     });
 
     const payment = await this.repository.create(
@@ -42,6 +54,9 @@ export class CreatePaymentCommandHandler implements ICommandHandler<
         transactionId: paymentIntent.id,
         cartId: command.cartId,
         pricingBreakdown: command.pricingBreakdown,
+        hostUserId: command.hostUserId,
+        stripeAccountId: command.transferDestination,
+        applicationFeeAmount: command.applicationFeeAmount,
       }),
     );
 

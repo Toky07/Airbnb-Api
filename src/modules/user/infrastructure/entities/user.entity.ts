@@ -36,6 +36,18 @@ export class UserEntity {
   @Column({ type: 'integer', nullable: true })
   authId: number | null = null;
 
+  @Column({ type: 'varchar', nullable: true })
+  stripeAccountId: string | null = null;
+
+  @Column({ type: 'varchar', default: 'not_started' })
+  stripeOnboardingStatus: string;
+
+  @Column({ type: 'boolean', default: false })
+  stripeChargesEnabled: boolean;
+
+  @Column({ type: 'boolean', default: false })
+  stripePayoutsEnabled: boolean;
+
   @ManyToOne(() => AuthEntity, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'authId' })
   auth?: AuthEntity | null;

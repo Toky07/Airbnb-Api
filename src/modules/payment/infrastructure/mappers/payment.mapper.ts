@@ -41,6 +41,9 @@ export class PaymentMapper {
       refundedAmount: entity.refundedAmount ?? 0,
       refundTransactionId: entity.refundTransactionId ?? null,
       pricingBreakdown: parsePricingBreakdown(entity.pricingBreakdown),
+      hostUserId: entity.hostUserId ?? null,
+      stripeAccountId: entity.stripeAccountId ?? null,
+      applicationFeeAmount: entity.applicationFeeAmount ?? null,
     });
   }
 
@@ -64,6 +67,9 @@ export class PaymentMapper {
     entity.refundedAmount = payment.refundedAmount;
     entity.refundTransactionId = payment.refundTransactionId;
     entity.pricingBreakdown = payment.pricingBreakdown;
+    entity.hostUserId = payment.hostUserId;
+    entity.stripeAccountId = payment.stripeAccountId;
+    entity.applicationFeeAmount = payment.applicationFeeAmount;
     return entity;
   }
 }

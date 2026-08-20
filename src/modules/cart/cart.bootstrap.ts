@@ -12,6 +12,7 @@ import { MergeCartCommandHandler } from './applications/useCase/handlers/MergeCa
 import { CheckoutCartCommandHandler } from './applications/useCase/handlers/CheckoutCartCommandHandler';
 import { CompleteCartCheckoutCommandHandler } from './applications/useCase/handlers/CompleteCartCheckoutCommandHandler';
 import type { BuildCartPricingBreakdownService } from './applications/services/build-cart-pricing-breakdown.service';
+import type { ResolveCartConnectDestinationService } from './applications/services/resolve-cart-connect-destination.service';
 
 export class CartBootstrap {
   static create(deps: {
@@ -21,6 +22,7 @@ export class CartBootstrap {
     resolveCartService: ResolveCartService;
     buildCartItemService: BuildCartItemService;
     buildCartPricingBreakdown: BuildCartPricingBreakdownService;
+    resolveCartConnectDestination: ResolveCartConnectDestinationService;
     cartPresenter: CartPresenter;
   }) {
     return {
@@ -54,6 +56,7 @@ export class CartBootstrap {
         deps.resolveCartService,
         deps.buildCartItemService,
         deps.buildCartPricingBreakdown,
+        deps.resolveCartConnectDestination,
       ),
       completeCartCheckoutCommandHandler:
         new CompleteCartCheckoutCommandHandler(

@@ -25,6 +25,10 @@ export {
   type IPaymentGateway,
 } from '@src/modules/payment/domain/ports/payment-gateway.port';
 export {
+  STRIPE_CONNECT_ACCOUNTS,
+  type IStripeConnectAccounts,
+} from '@src/modules/payment/domain/ports/stripe-connect-accounts.port';
+export {
   PAYMENT_PUBLIC_CONFIG,
   type IPaymentPublicConfig,
 } from '@src/modules/payment/domain/ports/payment-public-config.port';

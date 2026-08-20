@@ -4,8 +4,18 @@ import { PhoneNumberVO } from '@src/shared/valueObject/phone.vo';
 import type { UserRoleSummary } from '@src/modules/user/domain/dtos/user.output';
 import type { AccountStatus } from '@src/modules/authentication/contracts';
 import { ACCOUNT_STATUS } from '@src/modules/authentication/contracts';
+import {
+  STRIPE_CONNECT_ONBOARDING_STATUS,
+  type StripeConnectOnboardingStatus,
+} from '@src/modules/user/domain/constants/stripe-connect.constant';
 
 export class User {
+  public stripeAccountId: string | null = null;
+  public stripeOnboardingStatus: StripeConnectOnboardingStatus =
+    STRIPE_CONNECT_ONBOARDING_STATUS.NOT_STARTED;
+  public stripeChargesEnabled = false;
+  public stripePayoutsEnabled = false;
+
   constructor(
     public _firstName: UserNameVO,
     public _lastName: UserNameVO,

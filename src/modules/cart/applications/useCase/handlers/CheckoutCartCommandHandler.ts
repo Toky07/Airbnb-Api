@@ -10,6 +10,7 @@ import { PricingBreakdownOutput } from '@src/shared/pricing/pricing-breakdown.ou
 import type { BuildCartItemService } from '@src/modules/cart/applications/services/build-cart-item.service';
 import type { ResolveCartService } from '@src/modules/cart/applications/services/resolve-cart.service';
 import type { BuildCartPricingBreakdownService } from '@src/modules/cart/applications/services/build-cart-pricing-breakdown.service';
+import type { ResolveCartConnectDestinationService } from '@src/modules/cart/applications/services/resolve-cart-connect-destination.service';
 
 export class CheckoutCartCommandHandler implements ICommandHandler<
   CheckoutCartCommand,
@@ -19,6 +20,7 @@ export class CheckoutCartCommandHandler implements ICommandHandler<
     private readonly resolveCartService: ResolveCartService,
     private readonly buildCartItemService: BuildCartItemService,
     private readonly buildCartPricingBreakdown: BuildCartPricingBreakdownService,
+    private readonly resolveCartConnectDestination: ResolveCartConnectDestinationService,
   ) {}
 
   async execute(
@@ -44,6 +46,8 @@ export class CheckoutCartCommandHandler implements ICommandHandler<
 
     const pricingBreakdown =
       await this.buildCartPricingBreakdown.buildFromCart(cart);
+    const destination =
+      await this.resolveCartConnectDestination.resolveFromCart(cart);
     const correlationId = randomUUID();
     const waitForCompletion =
       EventBus.getInstance().waitOnce<CartCheckoutCompletedEvent>(
@@ -60,6 +64,8 @@ export class CheckoutCartCommandHandler implements ICommandHandler<
           pricingBreakdown.totalCents,
           items,
           pricingBreakdown,
+          destination.stripeAccountId,
+          destination.hostUserId,
         ),
       );
     } catch (error) {

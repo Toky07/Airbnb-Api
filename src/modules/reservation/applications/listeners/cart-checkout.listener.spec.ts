@@ -43,10 +43,14 @@ describe('CartCheckoutListener', () => {
           },
         ],
         samplePricingBreakdown,
+        'acct_test_host',
+        7,
       ),
     );
 
     expect(commandBusExecuteMock).toHaveBeenCalled();
     expect(published[0]?.reservationId).toBe(12);
+    expect(published[0]?.stripeAccountId).toBe('acct_test_host');
+    expect(published[0]?.hostUserId).toBe(7);
   });
 });

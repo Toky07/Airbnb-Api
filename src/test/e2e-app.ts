@@ -19,9 +19,11 @@ import { MailModule } from '@src/modules/mail/mail.module';
 import { MessagingModule } from '@src/modules/messaging/messaging.module';
 import {
   createPaymentGatewayMock,
+  createStripeConnectAccountsMock,
   createWebhookVerifierMock,
 } from '@src/modules/payment/applications/useCase/payment-test.helpers';
 import { PAYMENT_GATEWAY } from '@src/modules/payment/domain/ports/payment-gateway.port';
+import { STRIPE_CONNECT_ACCOUNTS } from '@src/modules/payment/domain/ports/stripe-connect-accounts.port';
 import { StripeWebhookVerifier } from '@src/modules/payment/infrastructure/stripe/StripeWebhookVerifier';
 import { PaymentModule } from '@src/modules/payment/payment.module';
 import { PropertiesModule } from '@src/modules/properties/properties.module';
@@ -45,6 +47,7 @@ export type E2eAppContext = {
   moduleRef: TestingModule;
   paymentGateway: ReturnType<typeof createPaymentGatewayMock>;
   webhookVerifier: ReturnType<typeof createWebhookVerifierMock>;
+  stripeConnectAccounts: ReturnType<typeof createStripeConnectAccountsMock>;
 };
 
 type E2eAppState = {
@@ -70,8 +73,10 @@ function getE2eAppState(): E2eAppState {
 function resetPaymentMocks(context: E2eAppContext): void {
   const freshGateway = createPaymentGatewayMock();
   const freshVerifier = createWebhookVerifierMock();
+  const freshConnect = createStripeConnectAccountsMock();
   Object.assign(context.paymentGateway, freshGateway);
   Object.assign(context.webhookVerifier, freshVerifier);
+  Object.assign(context.stripeConnectAccounts, freshConnect);
 }
 
 async function resetSharedE2eApp(context: E2eAppContext): Promise<void> {
@@ -90,6 +95,7 @@ async function bootE2eApp(): Promise<E2eAppContext> {
 
   const paymentGateway = createPaymentGatewayMock();
   const webhookVerifier = createWebhookVerifierMock();
+  const stripeConnectAccounts = createStripeConnectAccountsMock();
 
   const moduleRef = await Test.createTestingModule({
     imports: [
@@ -118,6 +124,8 @@ async function bootE2eApp(): Promise<E2eAppContext> {
   })
     .overrideProvider(PAYMENT_GATEWAY)
     .useValue(paymentGateway)
+    .overrideProvider(STRIPE_CONNECT_ACCOUNTS)
+    .useValue(stripeConnectAccounts)
     .overrideProvider(StripeWebhookVerifier)
     .useValue(webhookVerifier)
     .compile();
@@ -143,6 +151,7 @@ async function bootE2eApp(): Promise<E2eAppContext> {
     moduleRef,
     paymentGateway,
     webhookVerifier,
+    stripeConnectAccounts,
   };
 }
 

@@ -1,8 +1,13 @@
-import { Module, OnModuleInit } from '@nestjs/common';
+import { Inject, Module, OnModuleInit } from '@nestjs/common';
 import { UserModule } from '@src/modules/user/user.module';
 import { PropertiesModule } from '@src/modules/properties/properties.module';
 import { RoomsModule } from '@src/modules/rooms/room.module';
 import { AmenityModule } from '@src/modules/amenity/amenity.module';
+import { PaymentModule } from '@src/modules/payment/payment.module';
+import {
+  STRIPE_CONNECT_ACCOUNTS,
+  type IStripeConnectAccounts,
+} from '@src/modules/payment/contracts';
 import { PropertyMediaPresenter } from '@src/modules/properties/contracts';
 import { CommandBus } from '@src/shared/useCase/bus/bus';
 import { QueryBus } from '@src/shared/useCase/bus/query-bus';
@@ -10,6 +15,7 @@ import { HostProfileController } from './interfaces/http/host-profile.controller
 import { HostPropertiesController } from './interfaces/http/host-properties.controller';
 import { HostRoomsController } from './interfaces/http/host-rooms.controller';
 import { HostReservationsController } from './interfaces/http/host-reservations.controller';
+import { HostStripeController } from './interfaces/http/host-stripe.controller';
 import { ResolveHostUserService } from './applications/services/resolve-host-user.service';
 import { ResolveHostPropertyService } from './applications/services/resolve-host-property.service';
 import { HostBootstrap } from './host.bootstrap';
@@ -33,14 +39,23 @@ import { ListHostRoomBlockedDatesQuery } from './applications/useCase/queries/Li
 import { CreateHostRoomRateOverrideCommand } from './applications/useCase/commands/CreateHostRoomRateOverrideCommand';
 import { DeleteHostRoomRateOverrideCommand } from './applications/useCase/commands/DeleteHostRoomRateOverrideCommand';
 import { ListHostRoomRateOverridesQuery } from './applications/useCase/queries/ListHostRoomRateOverridesQuery';
+import { CreateHostStripeOnboardingLinkCommand } from './applications/useCase/commands/CreateHostStripeOnboardingLinkCommand';
+import { CreateHostStripeDashboardLinkCommand } from './applications/useCase/commands/CreateHostStripeDashboardLinkCommand';
 
 @Module({
-  imports: [UserModule, PropertiesModule, RoomsModule, AmenityModule],
+  imports: [
+    UserModule,
+    PropertiesModule,
+    RoomsModule,
+    AmenityModule,
+    PaymentModule,
+  ],
   controllers: [
     HostProfileController,
     HostPropertiesController,
     HostRoomsController,
     HostReservationsController,
+    HostStripeController,
   ],
 
   providers: [ResolveHostUserService, ResolveHostPropertyService],
@@ -50,6 +65,8 @@ export class HostModule implements OnModuleInit {
     private readonly resolveHostUser: ResolveHostUserService,
     private readonly resolveHostProperty: ResolveHostPropertyService,
     private readonly propertyMediaPresenter: PropertyMediaPresenter,
+    @Inject(STRIPE_CONNECT_ACCOUNTS)
+    private readonly stripeConnectAccounts: IStripeConnectAccounts,
   ) {}
 
   onModuleInit() {
@@ -57,6 +74,7 @@ export class HostModule implements OnModuleInit {
       resolveHostUser: this.resolveHostUser,
       resolveHostProperty: this.resolveHostProperty,
       propertyMediaPresenter: this.propertyMediaPresenter,
+      stripeConnectAccounts: this.stripeConnectAccounts,
     });
 
     CommandBus.register(
@@ -102,6 +120,14 @@ export class HostModule implements OnModuleInit {
     CommandBus.register(
       DeleteHostRoomRateOverrideCommand,
       bootstrap.deleteHostRoomRateOverrideCommandHandler,
+    );
+    CommandBus.register(
+      CreateHostStripeOnboardingLinkCommand,
+      bootstrap.createHostStripeOnboardingLinkCommandHandler,
+    );
+    CommandBus.register(
+      CreateHostStripeDashboardLinkCommand,
+      bootstrap.createHostStripeDashboardLinkCommandHandler,
     );
 
     QueryBus.register(

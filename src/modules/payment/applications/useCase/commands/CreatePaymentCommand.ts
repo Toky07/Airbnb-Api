@@ -12,5 +12,8 @@ export class CreatePaymentCommand {
     public readonly propertyId: number,
     public readonly cartId: number | null = null,
     public readonly pricingBreakdown: PricingBreakdown | null = null,
+    public readonly transferDestination: string | null = null,
+    public readonly applicationFeeAmount: number | null = null,
+    public readonly hostUserId: number | null = null,
   ) {}
 }

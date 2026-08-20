@@ -281,6 +281,19 @@ export async function registerAndLoginAsTraveler(
   return login.body.token as string;
 }
 
+export async function enableHostStripeConnect(
+  dataSource: DataSource,
+  userId: number,
+  stripeAccountId = 'acct_e2e_host',
+): Promise<void> {
+  await dataSource.getRepository(UserEntity).update(userId, {
+    stripeAccountId,
+    stripeOnboardingStatus: 'complete',
+    stripeChargesEnabled: true,
+    stripePayoutsEnabled: true,
+  });
+}
+
 export async function clearEntitiesForTests(
   dataSource: DataSource,
   entities: Parameters<DataSource['getRepository']>[0][],
