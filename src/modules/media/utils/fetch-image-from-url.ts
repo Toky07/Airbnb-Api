@@ -33,7 +33,6 @@ export async function fetchImageFromUrl(
     
     const response = await fetch(parsed.toString(), {
       method: 'GET',
-      // redirect: 'error',
       signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
     });
 
