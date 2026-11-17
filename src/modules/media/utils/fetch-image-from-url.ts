@@ -19,6 +19,7 @@ export async function fetchImageFromUrl(
   url: string,
 ): Promise<UploadFile | null> {
   const parsed = parseSafeHttpsUrl(url);
+
   if (!parsed) {
     return null;
   }
@@ -29,9 +30,10 @@ export async function fetchImageFromUrl(
   }
 
   try {
+    
     const response = await fetch(parsed.toString(), {
       method: 'GET',
-      redirect: 'error',
+      // redirect: 'error',
       signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
     });
 
@@ -66,7 +68,8 @@ export async function fetchImageFromUrl(
       originalname: `import${extension}`,
       mimetype: contentType === 'image/jpg' ? 'image/jpeg' : contentType,
     });
-  } catch {
+  } catch (error) {
+    console.log(error);
     return null;
   }
 }
