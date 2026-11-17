@@ -30,7 +30,6 @@ export async function fetchImageFromUrl(
   }
 
   try {
-    
     const response = await fetch(parsed.toString(), {
       method: 'GET',
       signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
